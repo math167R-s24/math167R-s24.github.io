@@ -1,0 +1,65 @@
+---
+title: "Midterm Project"
+author: "YOUR NAME HERE"
+date: "2023-10-04"
+format: 
+  html:
+    embed-resources: true
+    code-tools: true
+    code-summary: "Code"
+---
+
+## Instructions
+
+For this project, you will be exploring and visualizing data on Craigslist apartment rental postings in the Bay Area. Your goal is to observe and visualize interesting trends and patterns in the data, and to tell a cohesive and compelling story about the insights you gain. In the first part of the assignment, you will practice generating descriptive statistics and data visualizations to explore changing rental prices in Santa Clara county. In the second part of this assignment you will identify your own questions of interest and investigate them using your choice of data visualizations. Exceptional projects will include creative and unique insights into the data. 
+
+Your projects will be evaluated on the quality of your visualizations and exploratory analyses. This includes, but is not limited to, the quality of your writing, the informativeness and clarity of your visualizations, and your creativity.
+
+The target audience of your report is an educated reader who is uninformed about the details of the data, but is interested in learning more about recent trends in Bay Area housing prices. 
+
+
+### Details
+
+* **If you use this .Rmd as your starting template, please remove all information about requirements and grading**. Your final submission should only include the questions and answers for parts A and B.
+* Final submissions must include .Rmd and .html files.
+* The data are available [here](https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-07-05/rent.csv) from Tidy Tuesday, as prepared by [Dr. Kate Pennington](https://github.com/rfordatascience/tidytuesday/blob/master/data/2022/2022-07-05/readme.md). Note that you can use links within `read_csv()` to read online .csv files. I **strongly** recommend saving a version of the unprocessed .csv on your machine in a `data` subfolder within your project folder so you will be able to work offline.
+
+### Grading Rubric
+
+* Part A (35 points): graded on the correctness of your computations, appropriate use of R functions, and the depth/clarity of your explanations
+* Part B (45 points): graded based on whether your visualizations meet the standards outlined below under Part B.
+* Code style/formatting (20 points): to receive full credit, all code, text, and output in your final report should be correctly formatted. Code should be appropriately commented and styled (ex. appropriate variable names).
+
+## A. Analyzing trends in San Jose rental prices 
+
+1. How many 1 bedroom listings from Santa Clara county are in this dataset?
+
+2. What is the median price for a 1 bedroom listing in Santa Clara county in 2018?
+
+3. Which county has the highest median price for a 1 bedroom listing in 2018?
+
+4. Create two histograms for the prices of 1 bedroom listings in Santa Clara county in 2005 and 2018. Compare and discuss.
+
+5. Create and interpret a line plot with year on the x-axis and median price for a 1 bedroom apartment for Santa Clara county on the y-axis from 2000 to 2018. 
+
+6. Create and interpret a single plot with year on the x-axis and median price for a 1 bedroom apartment on the y-axis, using a separate line for each city in Santa Clara county, for the years 2000 to 2018. 
+
+## B. Open ended data visualization
+
+### Requirements
+
+* Identify three research questions of interest that you want to study using this dataset.
+* For each of your three research questions, generate a data visualization using your dataset. Discuss and interpret your findings. 
+* Your project should include at least two different types of visualizations (e.g. scatterplots, box plots, bar plots, histograms, line plots, etc.).
+* At least one of your plots should display variation over time or location (or both) in some way.
+* Each visualization should include a caption that fully explains how to understand your visualization (i.e. explain all the components, legends, etc.). A good guideline is that someone who has not read your report should be able to look at just a visualization and its caption and fully understand what that visualization is showing.
+* Each visualization must be accompanied by at least one paragraph of text. This text should include an interpretation of your visualization as well as what is interesting about your visualization. A strong visualization will be accompanied by text explaining what patterns or insights it helps us glean from the data. 
+
+Keep in mind: **there are no right answers for this project!**
+These are real data, and I'm hoping for creative and interesting analyses that tell a compelling story about the data rather than cookie cutter reports. Have some fun with it, and good luck!
+
+
+
+
+
+

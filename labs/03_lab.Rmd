@@ -1,0 +1,80 @@
+---
+title: "Lab 3"
+author: "YOUR NAME HERE"
+date: "2023-09-06"
+output: html_document
+---
+
+You should edit this .Rmd using RStudio, then click *Render* in the menu bar of the Source window (above the text of this .Rmd). Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit!
+
+### Collaborators
+
+INSERT NAMES OF ANY COLLABORATORS
+
+```{r}
+# LOAD ANY RELEVANT PACKAGES HERE
+```
+
+## A. Weather Forecast Data
+
+1.  For this lab, we'll be using data on weather forecasts gathered by student at Saint Louis University. You can read about the dataset [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2022/2022-12-20). Download the weather forecasts data using the following code:
+
+    ```{r}
+    weather_forecasts <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-12-20/weather_forecasts.csv')
+    ```
+
+2.  How many rows are in this dataset? How many columns?
+
+    ```{r}
+    # YOUR CODE HERE
+    ```
+
+    <!--# YOUR ANSWER/EXPLANATION HERE -->
+
+3.  How many cities are represented in this dataset?
+
+    ```{r}
+    # YOUR CODE HERE
+    ```
+
+    <!--# YOUR ANSWER/EXPLANATION HERE -->
+    
+4.  Create a new data frame containing only the forecasts for San Jose. You may have to explore the values for the `city` variable.
+
+    ```{r}
+    # YOUR CODE HERE
+    ```
+
+    <!--# YOUR ANSWER/EXPLANATION HERE -->
+
+5. Compute the mean absolute error between `observed_temp` and `forecast_temp` for San Jose.
+
+    ```{r}
+    # YOUR CODE HERE
+    ```
+
+    <!--# YOUR ANSWER/EXPLANATION HERE -->
+    
+6. Compute the mean absolute error between `observed_temp` and `forecast_temp` for San Jose using only forecasts made 48 hours in advance.
+
+    ```{r}
+    # YOUR CODE HERE
+    ```
+
+    <!--# YOUR ANSWER/EXPLANATION HERE -->
+
+7. Compute the mean absolute error between `observed_temp` and `forecast_temp` for San Jose using only forecasts made 12 hours in advance.
+
+    ```{r}
+    # YOUR CODE HERE
+    ```
+
+    <!--# YOUR ANSWER/EXPLANATION HERE -->
+
+8. Compare your answers to 6 and 7. What do you notice? 
+
+    <!--# YOUR ANSWER/EXPLANATION HERE -->
+
+
+
+

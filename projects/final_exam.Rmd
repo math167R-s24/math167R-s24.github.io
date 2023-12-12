@@ -1,0 +1,33 @@
+---
+title: "Final Exam Study Guide"
+date: "2023-12-06"
+format: 
+  html:
+    embed-resources: true
+    code-tools: true
+    code-summary: "Code"
+---
+
+## Instructions
+
+How to use and interpret the following structures:
+
+* functions
+* Conditional evaluation: `if`, `else`, `else if`, `ifelse`
+* `for` and `while` loops
+
+The following concepts:
+* Classes and object-oriented programming
+* Environment and scope
+* Vectorization
+* Recursion
+* Functional programming: `lapply`, `sapply`, and `mapply`
+
+How to **interpret** code and results used for:
+
+* generating visualizations via `ggplot2`
+* performing statistical analyses: `lm()`, `t.test()`
+* generating random variables
+* running simulations
+
+

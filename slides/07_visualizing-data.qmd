@@ -1,0 +1,540 @@
+---
+title: "MATH167R: Data visualization"
+author: "Peter Gao"
+format: 
+  revealjs:
+    theme: [./slides.scss, ../theme.scss]
+editor: visual
+---
+
+## Warm-up
+
+1.  What does the following code do?
+
+    ```{r, echo = T, eval = F}
+    flips <- factor(c("H", "T", "H", "H"), levels = c("H", "T"))
+    sum(as.numeric(flips))
+    ```
+
+## Warm-up
+
+**Answer:**
+
+1.  
+
+    ```{r, echo = T, eval = F}
+    flips <- factor(c("H", "T", "H", "H"), levels = c("H", "T"))
+    sum(as.numeric(flips))
+    ```
+
+## Overview of today
+
+-   Data visualization in base R
+-   Data visualization with `ggplot2`
+-   Principles of data visualization
+
+# Data visualization in base R
+
+## Example: CalEnviroScreen
+
+Passed in 2012, SB 535 requires that 25% of revenue from California's cap-and-trade program be spent to benefit communities identified by CalEPA as "disadvantaged," based on "geographic, socioeconomic, public health, and environmental hazard criteria."
+
+We will begin by downloading the data from [here](https://oehha.ca.gov/media/downloads/calenviroscreen/document/calenviroscreen40shpf2021shp.zip).
+
+![](https://oehha.ca.gov/sites/default/files/media/files/images/misc/ces4resultsmapimage.png)
+
+## Example: CalEnviroScreen {.smaller}
+
+This is a shapefile, which contains data on each census tract in California. To read it into `R`, we will need the `sf` package, which you can install using `install.packages("sf")`.
+
+```{r, echo = T, eval = F}
+library(sf)
+ces_data <- st_read("~/MATH167R/data/calenviroscreen40shpf2021shp/")
+```
+
+```{r, echo = F, eval = T, comment = F, message = F, warning = F, include = F}
+library(sf)
+ces_data <- st_read("~/Dropbox/teaching/math167R-f23/math167R-f23.github.io/data/calenviroscreen40shpf2021shp/")
+```
+
+. . .
+
+```{r, echo = T, eval = T}
+class(ces_data)
+head(ces_data)
+```
+
+## Example: CalEnviroScreen
+
+The CalEnviroScreen data contains information on each tract's different environmental indicators and percentile ranks. We will practice data exploration and visualization using this dataset.
+
+# Univariate visualization
+
+## Summarizing categorical data
+
+```{r, echo = T, eval = T}
+table(ces_data$County)
+```
+
+## Summarizing categorical data {.smaller}
+
+The `barplot` function takes a **named numeric vector** as its first argument:
+
+```{r, echo = T, eval = T}
+barplot(height = table(ces_data$County))
+```
+
+. . .
+
+Is this an effective visualization? Why or why not?
+
+## Summarizing categorical data {.smaller}
+
+```{r, echo = T, eval = T}
+# turn unemployment rate into categorical variable
+ces_data$Unempl_Rate_Factor <- cut(
+  ces_data$Unempl, 
+  breaks = c(0, 5, 10, 15, 20, 25, 100)
+)
+table(ces_data$Unempl_Rate_Factor)
+barplot(height = table(ces_data$Unempl_Rate_Factor))
+```
+
+## Customizing base R plots {.smaller}
+
+Base R plotting functions have many optional arguments allowing customization:
+
+```{r, echo = T, eval = T}
+barplot(
+  height = table(ces_data$Unempl_Rate_Factor), 
+  main = "Distribution of Census Tract Unemployment Rates",
+  col = "red"
+)
+```
+
+## Summarizing numerical data {.smaller}
+
+```{r, echo = T, eval = T}
+hist(
+  x = ces_data$Unempl, 
+  main = "Distribution of Census Tract Unemployment Rates",
+  col = "red"
+)
+```
+
+## Summarizing numerical data {.smaller}
+
+```{r, echo = T, eval = T}
+summary(ces_data$Unempl)
+```
+
+The CalEnviroScreen data uses -999 for missing data. We can use the `replace` function to replace these with NA values.
+
+```{r, echo = T, eval = T}
+hist(
+  x = replace(ces_data$Unempl, ces_data$Unempl == -999, NA), 
+  main = "Distribution of Census Tract Unemployment Rates",
+  xlab = "Unemployment Rate",
+  col = "red"
+)
+```
+
+## Summarizing numerical data: boxplots {.smaller}
+
+```{r, echo = T, eval = T}
+boxplot(
+  x = replace(ces_data$Unempl, ces_data$Unempl == -999, NA), 
+  main = "Distribution of Census Tract Unemployment Rates",
+  xlab = "Unemployment Rate", 
+  horizontal = T,
+  col = "red"
+)
+```
+
+## Multivariate visualization {.smaller}
+
+The `plot` function can be used to obtain scatter plots for two numerical variables:
+
+```{r, echo = T, eval = T}
+# remove spatial information
+ces_data$geometry <- NULL
+
+# replace missing values
+ces_data <- replace(ces_data, ces_data == -999, NA)
+plot(
+  x = ces_data$PolBurdSc, 
+  y = ces_data$PopCharSc
+)
+```
+
+## Multivariate visualization {.smaller}
+
+The `plot` function can be used to obtain scatter plots for two numerical variables:
+
+```{r, echo = T, eval = T}
+plot(
+  x = ces_data$PolBurdSc, 
+  y = ces_data$PopCharSc,
+  xlab = "Pollution Burden",
+  ylab = "Population Characteristics",
+  col = "blue",
+  pch = 16, # change shape of points
+  cex = .5, # change size of points
+)
+```
+
+## Data visualization with `ggplot2` {.smaller}
+
+`ggplot2` is a fantastic package for making complex visualizations that many people find more intuitive to use.
+
+```{r, eval = T, echo = T}
+library(ggplot2)
+```
+
+Plots are built sequentially using layers, so it's easy to edit and fine-tune the plots you generate.
+
+When using `ggplot2`, it is *essential* that your data are tidy! If they are not, the functions probably will not look like you expect.
+
+Let's work through how to build a plot layer by layer.
+
+## Data visualization with `ggplot2` {.smaller}
+
+First, let's initialize a plot. Use the `data` parameter to tell `ggplot` what data frame to use.
+
+-   It should be tidy data, in either a `data.frame` or `tibble`!
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "1"
+ggplot(data = ces_data)
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE, eval = T, fig.height = 3.5, fig.width = 4}
+ggplot(data = ces_data) 
+```
+:::
+:::
+
+## Select variables using `ggplot2` {.smaller}
+
+Next, we match **variables** to **aesthetics** within our plot. For example, let's put Pollution Burden on the x-axis. We do so using the function `aes()` within the initial `ggplot()` call.
+
+-   Possible aesthetics include axes as well as characteristics such as color, size, shape
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "2"
+ggplot(data = ces_data,
+       aes(x = PolBurdSc)) 
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE, eval = T, fig.height = 3.5, fig.width = 4}
+ggplot(data = ces_data,
+       aes(x = PolBurdSc)) 
+```
+:::
+:::
+
+## Map aesthetics to shapes using `ggplot2` {.smaller}
+
+Now `ggplot` knows what to plot, but it doesn't know how to plot it yet. Let's add a new layer that creates a histogram with `geom_histogram()`.
+
+-   This is a new layer! We add layers using the `+` operator.
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "3"
+ggplot(data = ces_data,
+       aes(x = PolBurdSc)) +
+  geom_histogram()
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE, eval = T, fig.height = 3.5, fig.width = 4}
+ggplot(data = ces_data,
+       aes(x = PolBurdSc)) +
+  geom_histogram()
+```
+:::
+:::
+
+## Customizing shapes {.smaller}
+
+We can customize the shape within `geom_histogram()`:
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "3"
+ggplot(data = ces_data,
+       aes(x = PolBurdSc)) +
+  geom_histogram(fill = 'red')
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE, eval = T, fig.height = 3.5, fig.width = 4}
+ggplot(data = ces_data,
+       aes(x = PolBurdSc)) +
+  geom_histogram(fill = 'red')
+```
+:::
+:::
+
+## Adding label and titles {.smaller}
+
+We can finally add axis labels and a title using the `+` operator:
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "4-5"
+ggplot(data = ces_data,
+       aes(x = PolBurdSc)) +
+  geom_histogram(fill = 'red') + 
+  xlab("Pollution Burden Score") +
+  ggtitle("Histogram of Pollution Burden Score")
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE, eval = T, fig.height = 3.5, fig.width = 4}
+ggplot(data = ces_data,
+       aes(x = PolBurdSc)) +
+  geom_histogram(fill = 'red') +
+  xlab("Pollution Burden Score") +
+  ggtitle("Histogram of Pollution Burden Score")
+```
+:::
+:::
+
+## Subsetting our data {.smaller}
+
+Recall we can subset our data using the `dplyr::filter()` function. Note the use of the `%in%` operator here:
+
+```{r, echo = T, eval = T}
+library(dplyr)
+sfba_counties <- c("Alameda", "Contra Costa", "Marin", "Napa", "San Francisco",
+                   "San Mateo", "Santa Clara", "Sonoma", "Solano")
+# require county to be in SF Bay Area
+ces_sfba <- ces_data |>
+  filter(County %in% sfba_counties)
+head(ces_sfba)
+```
+
+## Scatter plots with `ggplot2` {.smaller}
+
+We can easily add another **aesthetic** and change the **shape** to get a multivariate visualization:
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "2-3"
+ggplot(data = ces_sfba,
+       aes(x = PolBurdSc, y = PopCharSc)) +
+  geom_point()
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE, eval = T, fig.height = 3.5, fig.width = 4}
+ggplot(data = ces_sfba,
+       aes(x = PolBurdSc, y = PopCharSc)) +
+  geom_point()
+```
+:::
+:::
+
+## Customizing our scatter plot {.smaller}
+
+We can similarly customize our scatter plots
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "3-6"
+ggplot(data = ces_sfba,
+       aes(x = PolBurdSc, y = PopCharSc)) +
+  geom_point(color = 'red', alpha = 0.5)  +
+  xlab("Pollution Burden Score") +
+  ylab("Population Characteristic Score") +
+  ggtitle("Scatterplot of CalEnviroScreen Scores")
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE, eval = T, fig.height = 3.5, fig.width = 4}
+ggplot(data = ces_sfba,
+       aes(x = PolBurdSc, y = PopCharSc)) +
+  geom_point(color = 'red', alpha = 0.5)  +
+  xlab("Pollution Burden Score") +
+  ylab("Population Characteristic Score") +
+  ggtitle("Scatterplot of CalEnviroScreen Scores")
+```
+:::
+:::
+
+## Beyond two dimensions {.smaller}
+
+We can add even more mappings between aesthetics and variables to explore multivariate relationships:
+
+::: columns
+::: {.column width="55%"}
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "2-3"
+ggplot(data = ces_sfba,
+       aes(x = PolBurdSc, y = PopCharSc, color = County)) +
+  geom_point(alpha = 0.5)  +
+  xlab("Pollution Burden Score") +
+  ylab("Population Characteristic Score") +
+  ggtitle("Scatterplot of CalEnviroScreen Scores")
+```
+:::
+
+::: {.column width="45%"}
+```{r, echo = FALSE, eval = T, fig.height = 3.5, fig.width = 4}
+ggplot(data = ces_sfba,
+       aes(x = PolBurdSc, y = PopCharSc, color = County)) +
+  geom_point(alpha = 0.5)  +
+  xlab("Pollution Burden Score") +
+  ylab("Population Characteristic Score") +
+  ggtitle("Scatterplot of CalEnviroScreen Scores")
+```
+:::
+:::
+
+# General principles for data visualization
+
+## Customizing our scatter plot {.smaller}
+
+We can similarly customize our scatter plots
+
+::: columns
+::: {.column width="50%"}
+**Avoid:**
+
+-   3D plots
+-   Deceptive axes
+-   Excessive labels
+-   Excessive/bad coloring
+-   Fancy shading/effects
+-   Bad variable/axis names
+-   Unreadable labels
+-   Overloaded with information
+:::
+
+::: {.column width="50%"}
+**Strive for:**
+
+-   Simple, clean graphics
+-   Neat and human readable text
+-   Appropriate data range (bar charts should *always* start from 0!)
+-   Consistent intervals
+-   Roughly \~6 colors or less
+-   Size figures appropriately
+:::
+:::
+
+## Some misleading visualizations
+
+<img src="images/bad1.jpg" height="450"/>
+
+**Avoid:** Pie charts! Eugh! The proportions are completely off!
+
+## Some misleading visualizations
+
+<img src="images/bad2.jpg" height="450"/>
+
+**Avoid:** Pie charts! Eugh! Percents don't add up!
+
+## Some misleading visualizations
+
+<img src="images/bad3.png" height="450"/>
+
+**Avoid:** 3d bar charts?!
+
+## Some misleading visualizations
+
+<img src="images/bad4.png" height="450"/>
+
+**Avoid:** Bad use of color
+
+## Some misleading visualizations
+
+<img src="images/bad5.jpg" height="450"/>
+
+**Avoid:** Bad axis, lack of information, 3D bar chart
+
+## Some misleading visualizations
+
+<img src="images/bad6.jpg" height="450"/>
+
+**Avoid:** Four numbers displayed as a cluttered chart, terrible labels, bad axis range
+
+## Some misleading visualizations
+
+<img src="images/bad7.jpg" height="450"/>
+
+**Avoid:** Deceptively flipped y-axis! (and excessive color)
+
+## Some misleading visualizations
+
+<img src="images/bad8.jpg" height="450"/>
+
+(This was presented in Congress!)\]
+
+**Avoid:** Two axes in a single plot, bad axis range
+
+## Some misleading visualizations
+
+<img src="images/bad9.png" height="450"/>
+
+**Avoid:** Deceptive axis range (should start at 0)
+
+## Some misleading visualizations
+
+<img src="images/bad10.png" height="450"/>
+
+(From the Gates Foundation!)
+
+**Avoid:** Inconsistent x-axis intervals
+
+## ggplot cheatsheet
+
+-   Axes: `xlim()`, `ylim()`
+-   Legends: within initial `aes()`, edit within `theme()` or `guides()`
+-   `geom_point()`, `geom_line()`, `geom_histogram()`, `geom_bar()`, `geom_boxplot()`, `geom_text()`
+-   `facet_grid()`, `facet_wrap()` for faceting
+-   `labs()` for labels
+-   `theme_bw()` to make things look nicer
+-   Graphical parameters: `color` for color, `alpha` for opacity, `lwd`/`size` for thickness, `shape` for shape, `fill` for interior color, ...
+
+Find more tips [here!](https://github.com/rstudio/cheatsheets/raw/master/data-visualization.pdf)
+
+## Lab 04
+
+In this lab, we'll practice data visualization with base R and `ggplot2`.

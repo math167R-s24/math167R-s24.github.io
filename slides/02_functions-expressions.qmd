@@ -1,0 +1,20 @@
+---
+title: "MATH167R: Functions and Expressions"
+author: "Peter A. Gao"
+format: 
+  revealjs:
+    theme: [./slides.scss, ../theme.scss]
+editor: visual
+---
+
+## Review
+
+## Warm-up
+
+## Today's goals
+
+## Expressions
+
+## Functions
+
+## In practice

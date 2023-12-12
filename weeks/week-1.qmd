@@ -1,0 +1,9 @@
+---
+title: "Week 1"
+---
+
+## Key Links
+
+[Slides 01](../slides/01_overview.html){.label .label-green}
+
+[Check-in 01](../checkins/01_first-checkin.html){.label .label-purple}

@@ -1,0 +1,421 @@
+---
+title: "MATH167R: Importing and Exploring Data"
+author: "Peter Gao"
+format: 
+  revealjs:
+    theme: [./slides.scss, ../theme.scss]
+editor: visual
+---
+
+## Warm-up
+
+1.  What is the main difference between matrices and data frames?
+
+2.  What does the following code do?
+
+    ```{r, echo = T, eval = F}
+    B <- diag(1, nrow = 4)
+    B <- B + .01
+    print(B[2, 3])
+    ```
+
+## Warm-up
+
+**Answer:**
+
+1.  Matrices only contain one type of data whereas each column of a data frame may contain a different type of data.
+
+2.  
+
+    ```{r, echo = T, eval = T}
+    B <- diag(1, nrow = 4)
+    B <- B + .01
+    B
+    ```
+
+## Overview of today
+
+-   Importing and downloading data
+-   Descriptive statistics and summaries
+-   Filtering and sorting data
+-   Pipe notation
+
+## Importing data
+
+Today we'll use the `flights` data to practice our data exploration skills.
+
+## R Packages
+
+-   Packages bundle together code, data, and documentation in an easy to share way.
+-   They come with code that others have written to extend the functionality of R.
+-   Packages can range from graphical software, to web scraping tools, statistical models for spatio-temporal data, microbial data analysis tools, etc.=
+
+## Downloading packages
+
+-   The most popular package repository is the Comprehensive R Archive Network, or [CRAN](https://cran.r-project.org/)
+-   Other popular repositories include [Bioconductor](https://www.bioconductor.org/) and [Github](https://github.com/)
+
+## Installing packages
+
+If a package is available on CRAN, like most packages we will use for this course, you can install it using `install.packages()`:
+
+```{r, eval = FALSE}
+install.packages("nycflights13")
+```
+
+You can also install by clicking *Install* in the *Packages* tab through RStudio.
+
+For the most part, after you install a package, it is saved on your computer until you update R, and you will not need to re-install it. Thus, you should **never** include a call to `install.packages()` in any `.R` or `.Rmd` file!
+
+## Loading packages
+
+After a package is installed, you can load it into your current R session using `library()`:
+
+```{r, eval = FALSE}
+library(nycflights13)
+```
+
+Note that unlike `install.packages()`, you do not need to include the package name in quotes.
+
+## Loading packages
+
+Loading a package must be done with each new R session, so you should put calls to `library()` in your `.R` and `.Rmd` files.
+
+This can be done in the opening code chunk. If it is a `.Rmd`, you can set the parameter `include = FALSE` to hide the messages and code if the details are unimportant for the reader.
+
+````         
+`r ''````{r, include = FALSE}
+library(nycflights13)
+```
+````
+
+## Exploring data
+
+Once we load the `nycflights13` package, we can access the `flights` data using the following command:
+
+```{r, echo = T}
+library(nycflights13)
+data(flights)
+```
+
+The `flights` data is saved as a special kind of data frame called a tibble. The main difference between tibbles and data frames is that tibbles generally display more nicely.
+
+```{r, echo = T}
+class(flights)
+```
+
+## Exploring data
+
+The `head()` function prints the first $m$ rows ($m=6$ by default):
+
+```{r, echo = T}
+head(flights)
+```
+
+## Exploring data
+
+We can access documentation on the flights dataset using the `?` operator:
+
+```{r, echo = T}
+?flights
+```
+
+. . .
+
+The `nrow()`, `ncol()`, and `dim()` functions provide information about the number of rows and columns:
+
+```{r, echo = T}
+nrow(flights)
+ncol(flights)
+dim(flights)
+```
+
+## Summarizing data
+
+The `summary()` function provides a default way to summarize the dataset.
+
+```{r, echo = T}
+summary(flights)
+```
+
+## Summarizing one column at a time
+
+As we saw last week, the `$` operator allows us to pull a single column from our dataset:
+
+```{r, echo = T}
+flights$origin[1:10]
+```
+
+## Summarizing one column at a time
+
+For character vectors that represent categorical variables, the `unique()` and `table()` functions provide useful summaries:
+
+```{r, echo = T}
+unique(flights$origin)
+table(flights$origin)
+```
+
+## Summarizing one column at a time
+
+For numeric columns, we can use many of the functions we've seen earlier:
+
+```{r, echo = T}
+mean(flights$dep_delay, na.rm = T)
+range(flights$dep_delay, na.rm = T)
+max(flights$dep_delay, na.rm = T)
+```
+
+# Filtering data
+
+## Subsetting a data frame
+
+What if we want to remove all rows with `NA` values? Or what if we only want to look at flights from JFK?
+
+The most basic way to take a subset of (rows of) a data frame is to define an appropriate logical vector:
+
+What do you think the following code does?
+
+```{r, echo = T, eval = F}
+is_delayed <- flights$dep_delay > 60
+head(is_delayed)
+```
+
+```{r, echo = F, eval = T}
+is_delayed <- flights$dep_delay > 60
+head(is_delayed)
+```
+
+## Subsetting a data frame
+
+We can then use this logical vector to index the desired rows:
+
+```{r, echo = T, eval = F}
+delayed_flights <- flights[is_delayed, ]
+nrow(delayed_flights)
+```
+
+## Check your understanding: Subsetting
+
+What do you think the following lines of code do?
+
+```{r, echo = T, eval = F}
+flights[flights$origin == "JFK", ]
+flights[flights$air_time > 120, ]
+flights[!is.na(flights$arr_delay), ]
+flights[complete.cases(flights), ]
+```
+
+## Summarizing subsets of a dataset
+
+Suppose we create three separate datasets--one for each departure airport.
+
+```{r, echo = T, eval = T}
+JFK_flights <- flights[flights$origin == "JFK", ]
+LGA_flights <- flights[flights$origin == "LGA", ]
+EWR_flights <- flights[flights$origin == "EWR", ]
+```
+
+. . .
+
+```{r, echo = T, eval = T}
+mean(JFK_flights$arr_delay, na.rm = T)
+mean(LGA_flights$arr_delay, na.rm = T)
+mean(EWR_flights$arr_delay, na.rm = T)
+```
+
+## Summarizing subsets of a dataset
+
+Other summaries might be more relevant/informative:
+
+```{r, echo = T, eval = T}
+mean(JFK_flights$arr_delay > 30, na.rm = T)
+mean(LGA_flights$arr_delay > 30, na.rm = T)
+mean(EWR_flights$arr_delay > 30, na.rm = T)
+```
+
+. . .
+
+```{r, echo = T, eval = T}
+mean(JFK_flights$distance, na.rm = T)
+mean(LGA_flights$distance, na.rm = T)
+mean(EWR_flights$distance, na.rm = T)
+```
+
+## The tidyverse
+
+The previous code provides a basic way to subset datasets. When doing a lot of descriptive/exploratory analysis, many people prefer using code from the `tidyverse` packages:
+
+-   Reading and saving data: `readr`
+-   Data manipulation: `tidyr`, `dplyr`
+-   Data visualization: `ggplot2`
+-   Working with different data structures: `tibble`, `purrr`, `stringr`, `forcats`
+
+You can install them all using
+
+```{r, eval = FALSE}
+install.packages("tidyverse")
+```
+
+(Remember, you only need to do this once!)
+
+## Tidy Data Principles
+
+There are three rules required for data to be considered tidy
+
+-   Each variable must have its own column
+-   Each observation must have its own row
+-   Each value must have its own cell
+
+Seems simple, but can sometimes be tricky. We will discuss transformating data in the future.
+
+## Name conflicts {.smaller}
+
+Recall that packages are essentially ways for you to install and use functions written by others. Occasionally, some of these functions have the same name and there is a conflict. Whichever package you load more recently using `library` will mask the old function, meaning that R will default to that version.
+
+In general, this is fine, especially with `tidyverse`. These package authors know when they have masked common functions in R, and typically we will prefer `tidyverse` version.
+
+The conflict message is to make sure you know about conflicts. You can (and should) hide this in your R Markdown files by adding the parameter `message=FALSE` or `include=FALSE` to your code chunk when you load packages.
+
+## Subsetting with `filter()`
+
+The `filter()` function from the `dplyr` package provides a way to subset data. The second argument of `filter()` below looks for a logical vector defined **in terms of the variables** in the first argument.
+
+```{r, echo = T, eval = T}
+library(dplyr)
+JFK_flights <- filter(flights, origin == "JFK")
+LGA_flights <- filter(flights, origin == "LGA")
+EWR_flights <- filter(flights, origin == "EWR")
+```
+
+Compare with:
+
+```{r, echo = T, eval = T}
+JFK_flights <- flights[flights$origin == "JFK", ]
+LGA_flights <- flights[flights$origin == "LGA", ]
+EWR_flights <- flights[flights$origin == "EWR", ]
+```
+
+## Descriptive statistics with `summarize()`
+
+The `summarize()` function can similarly be used to compute summary statistics:
+
+```{r, echo = T, eval = T}
+summarize(flights, mean_dep_delay = mean(dep_delay, na.rm = T))
+```
+
+The `summarize()` function can handle more than one statistic at once:
+
+```{r, echo = T, eval = T}
+summarize(flights, 
+          mean_dep_delay = mean(dep_delay, na.rm = T),
+          mean_arr_delay = mean(arr_delay, na.rm = T))
+```
+
+## Pipe notation
+
+**Pipes** use the `|>` operator to take the output from a previous function call and "pipe" it through to the next function.
+
+The object before the pipe is treated as the first argument to the function coming after the pipe.
+
+```{r, echo = T, eval = T}
+JFK_flights <- flights |> filter(origin == "JFK")
+LGA_flights <- flights |> filter(origin == "LGA")
+EWR_flights <- flights |> filter(origin == "EWR")
+```
+
+## Piping `filter()` and `summarize()`
+
+Pipes are useful if we want to combine multiple functions. To see how this can be useful, consider the combining the `filter()` and `summarize()` functions:
+
+```{r, echo = T, eval = T}
+flights |>
+  filter(origin == "JFK") |>
+  summarize(mean_dep_delay = mean(dep_delay, na.rm = T))
+```
+
+## Check your understanding:
+
+What does the following code do?
+
+```{r, echo = T, eval = F}
+flights |>
+  filter(air_time > 120) |>
+  summarize(mean_arr_delay = mean(arr_delay, na.rm = T))
+```
+
+. . .
+
+```{r, echo = F, eval = T}
+flights |>
+  filter(air_time > 120) |>
+  summarize(mean_arr_delay = mean(arr_delay, na.rm = T))
+```
+
+How could you do the same thing with base R?
+
+. . .
+
+```{r, echo = T, eval = T}
+long_flights <- flights[flights$air_time > 120, ]
+mean(long_flights$arr_delay, na.rm = T)
+```
+
+Note that the class of object is slightly different!
+
+# Downloading data from the internet
+
+## Saving Data
+
+You can save single R objects as `.rds` files using `saveRDS()`, multiple R objects as `.RData` or `.rda` files using `save()`, and your entire workspace as `.RData` using `save.image()`.
+
+```{r, eval = FALSE}
+object1 <- 1:5
+object2 <- c("a", "b", "c")
+# save only object1
+saveRDS(object1, file = "object1_only.rds")
+# save object1 and object2
+save(object1, object2, file = "both_objects.RData")
+# save my entire workspace
+save.image(file = "entire_workspace.RData")
+```
+
+## Saving Data
+
+In general, you should use `.RData` for multiple objects, and generally should not use`save.image()`.
+
+`save.image()` should never be a part of your workflow.
+
+## Loading Data
+
+You can load `.rds` files using `readRDS()` and `.Rdata` and `.rda` files using `load()`.
+
+```{r, eval = FALSE}
+# load only object1
+readRDS("object1_only.rds")
+# load object1 and object2
+load("both_objects.RData")
+# load my entire workspace
+load("entire_workspace.RData")
+```
+
+## Notes on Saving and Loading R Data
+
+The values in quotes are all filepaths, and by default, R will search for these objects in your current working directory.
+
+You can change where R searches for images by adjusting this filepath. For example, if you save your data in a `Data` subfolder within your working directory, you might try
+
+```{r, eval = FALSE}
+load("./Data/my_data.RData")
+```
+
+## Other types of data
+
+Often, you will read and write files as **c**omma **s**eparated **v**alues, or `.csv`. You can do this by navigating *File \> Import Dataset* in the menu bar, but generally I recommend doing it manually using the `readr` package. You will need to do so if loading data is part of your work flow, such as if it is required for an R Markdown writeup.
+
+```{r, eval = FALSE}
+library(readr)
+# read a .csv file in a "Data" subfolder
+read_csv("./Data/file.csv")
+# save a .csv file in a "Data" subfolder
+write_csv("./Data/data_output.csv")
+```

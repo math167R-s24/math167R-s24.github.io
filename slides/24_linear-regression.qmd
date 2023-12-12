@@ -1,0 +1,420 @@
+---
+title: "MATH167R: Linear regression"
+author: "Peter Gao"
+format: 
+  revealjs:
+    theme: [./slides.scss, ../theme.scss]
+editor: source
+---
+
+## Overview of today
+
+-   Covariance and correlation
+-   Linear regression
+
+## Relating numerical variables
+
+![](images/Screenshot 2023-10-29 at 10.20.45 AM.png)
+
+## Covariance and correlation
+
+In statistics, correlation and covariance usually refer to a specific type of association.
+
+* If $X$ and $Y$ are linearly associated, then they are correlated.
+
+## Correlation
+
+Correlation can also refer to the correlation coefficient.
+
+The (Pearson) correlation coefficient $R$ is a statistic between $-1$ and 1 that describes the strength and direction of the linear relationship between two variables.
+
+$$R = \frac{1}{n-1}\sum_{i=1}^n\frac{x_i-\overline{x}}{s_x}\frac{y_i-\overline{y}}{s_y}$$
+
+The sign of $R$ indicates the direction of the relationship.
+The absolute value of $R$ indicates the strength.
+
+## Correlation and covariance
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+attach(mtcars)
+cor(mpg, wt)
+cov(mpg, wt)
+```
+
+## Pairs plots for assessing many relationships
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+pairs(~mpg + hp + wt, mtcars)
+```
+
+## Regression methods
+
+Assume we have some data:
+
+-   $X_1,\ldots, X_p$: $p$ **independent variables/explanatory variables/covariates/predictors**
+-   $Y$: the **dependent variables/response/outcome**.
+
+We want to know the relationship between our covariates and our response, we can do this with a method called **regression**. Regression provides us with a statistical method to conduct inference and prediction.
+
+## Regression methods
+
+-   **inference:** assess the relationship between our variables, our statistical model as a whole, predictor importance
+    -   What is the relationship between sleep and GPA?
+    -   Is parents' education or parents' income more important for explaining income?
+-   **prediction:** predict new/future outcomes from new/future covariates
+    -   Can we predict test scores based on hours spent studying?
+
+## Why is it called regression?
+
+![](https://upload.wikimedia.org/wikipedia/commons/b/b2/Galton%27s_correlation_diagram_1875.jpg){fig-align="center"}
+
+## Linear Regression
+
+Given our response $Y$ and our predictors $X_1, \ldots, X_p$, a **linear regression model** takes the form:
+
+$$
+\begin{align}
+Y &= \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \epsilon,\\
+\epsilon &\sim N(0,\sigma^2) 
+\end{align}
+$$
+
+**Note:** If we wish to include a categorical covariate, we can add indicator variables for each category.
+
+## Linear Regression
+
+$$
+\begin{align}
+Y &= \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \epsilon,\\
+\epsilon &\sim N(0,\sigma^2) 
+\end{align}
+$$
+
+-   $Y$: dependent variable, outcome, response
+-   $X_j$: independent variable, covariate, predictor
+-   $\beta_0$: Intercept
+-   $\beta_j$: coefficient, the expected difference in the response between two observations differing by one unit in $X_j$, with all other covariates identical.
+-   $\epsilon$: error, noise, with mean $0$ and variance $\sigma^2$
+
+## Linear Regression
+
+We can fully write out a linear regression model
+
+$$
+\begin{equation}
+\begin{bmatrix} y_1 \\ y_2\\ \vdots \\ y_n \end{bmatrix} = 
+\begin{bmatrix} 1 & x_{1,1} & \cdots & x_{1,k}\\
+1 & x_{2,1} & \cdots & x_{2, k}\\
+\vdots & \vdots & \ddots & \vdots \\
+1 & x_{n,1} & \cdots & x_{n, k}\end{bmatrix}
+\begin{bmatrix} \beta_0 \\ \beta_1 \\ \vdots \\ \beta_{k} \end{bmatrix} +
+\begin{bmatrix} \epsilon_1 \\ \epsilon_2 \\ \vdots \\ \epsilon_{n} \end{bmatrix}
+\end{equation}
+$$
+
+## Matrix Notation
+
+This can also be expressed in matrix form:
+
+$$
+\begin{align}
+\mathbf{Y} &= \mathbf{X}\beta + \epsilon,\\
+\epsilon &\sim N(0,1)
+\end{align}
+$$
+
+-   $\mathbf{Y} \in \mathbb{R}^{n \times 1}$: an n-dimensional vector of the response
+-   $\mathbf{X} \in \mathbb{R}^{n \times (k+1)}$: a $((k+1)\times n)$ matrix of the predictors (including intercept)
+-   $\beta \in \mathbb{R}^{((k+1)\times 1)}$: a $(k+1)$-dimensional vector of regression parameters
+-   $\epsilon \in \mathbb{R}^{n \times 1}$: an n-dimensional vector of the error term
+
+## $\large \epsilon$: Error term
+
+$\epsilon$, pronounced epsilon, represents the **error term** of our model. We can model $Y$ as a linear function of the $X$'s, but in the real world, the relationship won't always be perfect. There is noise! It can come from
+
+-   Measurement error in the $X$'s
+-   Measurement error in the $Y$'s
+-   Unobserved/missing variables in the model
+-   Deviations in the true model from linearity
+-   True randomness
+
+In linear regression, we assume that this error term is normally distributed with mean zero and variance $\sigma^2$.
+
+## $\beta_0$: Intercept
+
+$\beta_0$ is the **intercept term** of our model. Notice that
+
+$$\mathbb{E}[Y|X_1 = X_2 = \cdots = X_p = 0] = \beta_0$$
+
+Thus, $\beta_0$ is the expected value of our response if all the covariates are equal to $0$. This is also known as the y-intercept of our model.
+
+## $X_j$: Independent variable
+
+$X_j$ represents the $j$<sup>th</sup> independent variable in our model. Notice that $$\mathbb{E}[Y|X_1,\ldots, X_p] = \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p$$ What happens to this expectation if we increase $X_j$ by 1 unit, holding everything else constant?
+
+The conditional expectation of $Y$ increases by $\beta_j$.
+
+## $\beta_j$: Coefficient
+
+$\beta_j$ represents the $j$<sup>th</sup> regression coefficient in our model. From the previous slide, we saw that for every 1 unit increase in $X_j$, holding all other variables constant, the expected value of the response increases by $\beta_j$. From this we can derive an interpretation.
+
+**Interpretation of** $\beta_j$: the expected difference in the response between two observations differing by one unit in $X_j$, with all other covariates identical.
+
+## `lm()`: Linear Model
+
+We fit a linear regression model in R using `lm()`. The first argument is a **formula**, which is a type of R object. Formulas typically take the following form: `Y ~ X_1 + X_2 + ... + X_p`.
+
+The dependent variable, `Y` goes on the left-hand side of the tilde `~`, which marks the formula. The independent variables are added on the right-hand side. Using this formula will give us a model in the form of
+
+$$
+\begin{align}
+Y &= \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \epsilon,\\
+\epsilon &\sim N(0,\sigma^2) 
+\end{align}
+$$
+
+```{r, eval = F}
+lm(Y ~ X_1 + X_2 + ... + X_p)
+```
+
+## `lm()`: Linear Model
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+data(mtcars)
+my_lm <- lm(mpg ~ hp + wt, data = mtcars)
+class(my_lm)
+my_lm
+```
+
+## `lm()`: Linear Model
+
+We can see from `names()` that `lm` objects contain a lot more than they print out by default.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+names(my_lm)
+```
+
+## `summary()` Model summaries
+
+`summary()` or `summary.lm()` gives us a summary of our `lm` object in R.
+
+-   The quantiles of the residuals: hopefully, they match a normal distribution.
+-   Coefficients, their standard errors, and their individual significances
+-   (Adjusted) R-squared value: how much of the overall variability in the response is explained by the model?
+-   F-statistic: hypothesis test for the significance of the overall model
+
+## `summary()` Model summaries
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+summary(my_lm)
+```
+
+## `plot()`: Regression model diagnostics
+
+Calling `plot(my_lm)` will return several diagnostic plots. Remember that we want our error term to look normally distributed with mean zero. We won't go into all the details for this class, but here are some tips:
+
+-   **Residuals vs Fitted:** these are your errors (residuals) plotted over the predicted outcome (fitted). Errors should be random, so here you want to see randomly scattered points with no discernable pattern. You want the trend line to be approximately horizontal.
+-   **Normal Q-Q plot:** These are the quantiles of your errors against the quantiles of a normal distribution. In theory, your errors should be normally distributed, so you are hoping that points are mostly along the 45-degree $y=x$ line.
+
+## `plot()`: Regression model diagnostics
+
+-   **Scale-location:** This looks at the magnitude of standardized residuals over the predicted outcome. Similar interpretation as residuals vs fitted. This can make it slightly easier to identify undesireable patterns.
+-   **Residuals vs leverage:** This can help identify highly influential points, such as outliers. If points are outside dotted red lines, then removing them would noticeably alter your results. *Never just remove outliers!* If it's real data, it's valid and removing it will bias your results. It is much more important to understand why outliers are there than to remove them.
+
+## `plot()`: Regression model diagnostics
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| cache: TRUE
+plot(my_lm)
+```
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| cache: TRUE
+plot(my_lm,  which = 1)
+```
+
+## `plot()`: Regression model diagnostics
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| cache: TRUE
+plot(my_lm,  which = 2)
+```
+
+## `plot()`: Regression model diagnostics
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| cache: TRUE
+plot(my_lm,  which = 3)
+```
+
+## `plot()`: Regression model diagnostics
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| cache: TRUE
+plot(my_lm,  which = 5)
+```
+
+## `coef()`: Extract coefficients
+
+Use `coef()` to extract estimated coefficients as a vector.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+coef(my_lm)
+```
+
+## `fitted()` Extract fitted values
+
+Use `fitted()` to extract the fitted/estimated values for the response. This can be useful to compare how our fitted values compare to the estimated values to help assess model fit.
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| cache: TRUE
+library(ggplot2)
+mod_fits <- fitted(my_lm)
+my_df <- data.frame(actual = mtcars$mpg, fitted = mod_fits)
+ggplot(my_df, aes(x = fitted, y = actual)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, col = "red", lty = 2) + 
+  theme_bw(base_size = 15) +
+  labs(x = "Fitted values", y = "Actual values", title = "Actual vs. Fitted") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+## `fitted()` Extract fitted values
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| cache: TRUE
+library(ggplot2)
+mod_fits <- fitted(my_lm)
+my_df <- data.frame(actual = mtcars$mpg, fitted = mod_fits)
+ggplot(my_df, aes(x = fitted, y = actual)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, col = "red", lty = 2) + 
+  theme_bw(base_size = 15) +
+  labs(x = "Fitted values", y = "Actual values", title = "Actual vs. Fitted") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+## `predict()`: Predict new outcomes
+
+Use `predict()` to predict new outcomes given new explanatory variables. For example, pretend we observe two new cars with horsepowers of `100` and `150`, respectively, and weights of `3000` and `3500`, respectively.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+# Note: wt is in 1000s of lbs
+new_obs <- data.frame(hp = c(100, 150), wt = c(3, 3.5))
+predict(my_lm, new_obs)
+```
+
+We'll come back to prediction in future lectures.
+
+## `residuals()`: Compute residuals
+
+Use `residuals()` to compute the residuals for fitted values.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+residuals(my_lm)
+```
+
+## Manipulating formulas
+
+Working with formulas in R can be somewhat confusing, so it is important to understand how formulas work to make sure you are fitting the intended model.
+
+## `- 1`
+
+Use `- 1` to remove an intercept from your model. Only do this if you are very sure that what you are doing is appropriate. I don't recommend doing this in practice.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+no_intercept <- lm(mpg ~ hp + wt - 1, data = mtcars)
+summary(no_intercept)
+```
+
+## `:` operator
+
+Use `X1:X2` to include an interaction effect in your model. This is useful if you have reason to believe two covariates interact, such as gender and education in a wage model. In our case, we'll assume horsepower and weight interact in their effect on mpg.
+
+Typically (always?), if you include an interaction effect, you should also include the marginal effects. You can do this automatically using `X1*X2`.
+
+## `:` operator
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+interact <- lm(mpg ~ hp:wt, data = mtcars)
+summary(interact)
+```
+
+## `*` operator
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+interact <- lm(mpg ~ hp*wt, data = mtcars)
+summary(interact)
+```
+
+## `.` operator
+
+Use `~ .` to include all non-response variables in the input data as independent variables.
+
+```{r}
+include_all <- lm(mpg ~ ., data = mtcars)
+summary(include_all)
+```
+
+## Estimation
+
+How do we choose/estimate $\beta_{(k+1)\times1}$?
+
+Least squares finds the line that minimizes the squared distance between the points and the line, i.e. makes $$\left[y_i - (\beta_0 + \beta_1 x_{i, 1} + \dots + \beta_k x_{i,k})\right]^2$$ as small as possible for all $i = 1, \dots, n$.
+
+The vector $\widehat{\beta}$ that minimizes the sum of the squared distances is ()
+
+$$ \widehat{\beta}=\left(\mathbf{X}^T \mathbf{X} \right)^{-1}\mathbf{X}^T \mathbf{Y}.$$
+
+Note: In statistics, once we have estimated a parameter we put a "hat" on it, e.g. $\widehat{\beta_0}$ is the estimate of the true parameter $\beta_0$.
+
+```{r}
+knitr::knit_exit()
+```

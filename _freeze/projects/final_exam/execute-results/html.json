@@ -1,0 +1,14 @@
+{
+  "hash": "84245395337714a0e2268450d7daa601",
+  "result": {
+    "markdown": "---\ntitle: \"Final Exam Study Guide\"\ndate: \"2023-12-06\"\nformat: \n  html:\n    embed-resources: true\n    code-tools: true\n    code-summary: \"Code\"\n---\n\n\n## Instructions\n\nHow to use and interpret the following structures:\n\n* functions\n* Conditional evaluation: `if`, `else`, `else if`, `ifelse`\n* `for` and `while` loops\n\nThe following concepts:\n* Classes and object-oriented programming\n* Environment and scope\n* Vectorization\n* Recursion\n* Functional programming: `lapply`, `sapply`, and `mapply`\n\nHow to **interpret** code and results used for:\n\n* generating visualizations via `ggplot2`\n* performing statistical analyses: `lm()`, `t.test()`\n* generating random variables\n* running simulations\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

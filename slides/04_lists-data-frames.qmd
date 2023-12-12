@@ -1,0 +1,357 @@
+---
+title: "MATH167R: Vectorized functions and lists"
+author: "Peter Gao"
+format: 
+  revealjs:
+    theme: [./slides.scss, ../theme.scss]
+editor: visual
+---
+
+## Warm-up
+
+Discuss the following lines of code. What do they do?
+
+```{r, echo = T, eval = F}
+x <- c(3 > 4, T, 5 > 6)
+y <- c(1, 0, 1)
+rbind(x, y)
+```
+
+. . .
+
+**Answer:**
+
+```{r, echo = T, eval = T}
+x <- c(3 > 4, T, 5 > 6)
+y <- c(1, 0, 1)
+rbind(x, y)
+```
+
+## Overview of today
+
+-   Vectorized functions
+-   Lists
+-   Data frames
+
+# Vectorized functions
+
+## Vector Arithmetic
+
+**Vectorization**, or applying functions across vectors/arrays, is one of R's most powerful capabilities
+
+```{r, echo = T, eval = T}
+x <- 1:5
+y <- -1:-5
+y
+x + y
+x * y
+```
+
+## Vector Arithmetic
+
+Be careful! R **recycles**, repeating elements of shorter vectors to match longer vectors. This is incredibly useful when done on purpose, but can also easily lead to hard-to-catch bugs in your code!
+
+```{r, echo = T, eval = T, error = T}
+2 * x
+c(1, -1) * x
+c(1, -1) + x
+```
+
+## Vector Arithmetic
+
+We can apply many functions component-wise to vectors, including comparison operators.
+
+```{r, echo = T, eval = T}
+x >= 3
+y < -2
+(x >= 3) & (y < -2)
+x == c(1, 3, 2, 4, 5)
+```
+
+## Boolean Vectors
+
+In code, entries that are `TRUE` or `FALSE` are called **booleans** (logicals in R). These are incredibly important, because they can be used to give your computer conditions. What will the following code do?
+
+```{r, echo = T, eval = F}
+x[x > 3] <- 3
+x
+```
+
+. . .
+
+```{r, echo = F, eval = T}
+x[x > 3] <- 3
+x
+```
+
+## Boolean Vectors
+
+We can also do basic arithmetic with booleans. `TRUE` is encoded as `1` and `FALSE` is encoded as `0`.
+
+```{r, echo = T, eval = F}
+# First reset x
+x <- 1:5
+sum(x >= 3)
+```
+
+. . .
+
+```{r, echo = F, eval = T}
+# First reset x
+x <- 1:5
+sum(x >= 3)
+```
+
+. . .
+
+```{r, echo = T, eval = F}
+mean(x >= 3)
+```
+
+. . .
+
+```{r, echo = F, eval = T}
+mean(x >= 3)
+```
+
+. . .
+
+What is this last quantity telling us?
+
+. . .
+
+By taking the mean, we are looking at the **proportion** of our vector that is `TRUE`!
+
+## Complicated indexing
+
+We can also get more complicated with our indexing.
+
+```{r, echo = T, eval = T}
+# Return the second and third elements of 
+y[c(2, 3)]
+# Return the values of x greater than 3
+x[x >= 3]
+# Values of x that match the index of the values of y that are less than -2
+x[y < -2]
+# which() returns the index of entries that are TRUE
+which(y < -2)
+```
+
+## Complicated indexing
+
+We can compare entire vectors using `identical()`
+
+```{r, echo = T, eval = T}
+identical(x, -rev(y))
+```
+
+What do you think the function `rev()` is doing in the code above?
+
+*Hint:* Use `?rev` to read the help files for the function
+
+# Lists
+
+## Lists
+
+**Lists**, like vectors and matrices, are a class of objects in R. Lists are special because they can store multiple different types of data.
+
+```{r, echo = T, eval = T}
+my_list <- list("some_numbers" = 1:5,
+                "some_characters" = c("a", "b", "c"),
+                "a_matrix" = diag(2))
+my_list
+```
+
+Make sure to store items within a list using the `=` operator for assigning arguments, not `<-`!
+
+## Accessing List Elements
+
+There are three ways to access an item within a list
+
+-   double brackets `[[]]` with its name in quotes
+-   double brackets `[[]]` with its index as a number
+-   dollar sign `$` followed by its name without quotes
+
+```{r, echo = T, eval = T}
+my_list[["some_numbers"]]
+my_list[[1]]
+my_list$some_numbers
+```
+
+## Why double brackets?
+
+If you use a single bracket to index, like we do with matrices and vectors, you will return a **list** with a single element.
+
+```{r, echo = T, eval = T}
+my_list[1]
+my_list[[1]]
+```
+
+Note that this means you can only return a single item in a list using double brackets or the dollar sign! (Why?)
+
+## Why double brackets?
+
+This is a subtle but important difference!
+
+```{r, echo = T, eval = T, error = T}
+my_list[1] + 1
+```
+
+```{r, echo = T, eval = T}
+my_list[[1]] + 1
+```
+
+## Subsetting a list
+
+You can subset a list similarly to vectors and matrices using single brackets.
+
+```{r, echo = T, eval = T}
+my_list[1:2]
+my_list[-2]
+```
+
+## Adding to a list {.smaller}
+
+We can use the same tools we used to access list elements to add to a list. However, if we use double brackets, we must use quotes, otherwise R will search for something that does not yet exist.
+
+```{r, echo = T, eval = T}
+my_list$a_boolean <- FALSE
+my_list[["a_list"]] <- list("recursive" = TRUE)
+my_list
+```
+
+## Names of List Items
+
+Call `names()` to get a vector of list item names.
+
+```{r, echo = T, eval = T}
+names(my_list)
+```
+
+## Why bother?
+
+-   Lists give us **key-value pairs**, also known as **dictionaries** or **associative arrays**
+-   This means we can look up items in a list by name, rather than location
+-   For example, if we know we are looking for `output` within a list, we can always search for it, regardless of how the list was created or what else it contains
+
+# Data Frames
+
+## Data frames
+
+A **data frame** in R is essentially a special type of list, where each item is a vector of equal length. Typically, we say that data has $n$ rows (one for each **observation**) and $p$ columns (one for each **variable**)
+
+Unlike a matrix, columns can have different types. However, many column functions still apply! (such as `colSums`, `summary`, etc.)
+
+## Creating a data frame
+
+An easy way to create a data frame is to use the function `data.frame()`.
+
+Like lists, make sure you define the names using `=` and not `<-`!
+
+```{r, echo = T, eval = T}
+my_data <- data.frame("var1" = 1:3,
+                      "var2" = c("a", "b", "c"),
+                      "var3" = c(TRUE, FALSE, TRUE))
+my_data
+```
+
+## Creating a data frame
+
+If you import or create numeric data as a `matrix`, you can also convert it easily using `as.data.frame()`
+
+```{r, echo = T, eval = T}
+my_matrix <- matrix(1:9, nrow = 3, ncol = 3)
+my_matrix
+as.data.frame(my_matrix)
+```
+
+## Subsetting data frames
+
+We can subset data frames using most of the tools we've learned about subsetting so far. We can use keys or indices.
+
+```{r, echo = T, eval = T}
+my_data$var1
+my_data["var1"]
+my_data[["var1"]]
+```
+
+## Subsetting data frames
+
+```{r, echo = T, eval = T}
+my_data[1]
+my_data[[1]]
+my_data[, 1]
+my_data[1, ]
+```
+
+## Adding to a data frame
+
+We can add to a data frame using `rbind()` and `cbind()`, but be careful with type mismatches! We can also add columns using the column index methods.
+
+```{r, echo = T, eval = T}
+# These all do the same thing
+my_data <- cbind(my_data, "var4" = c(3, 2, 1))
+my_data$var4 <- c(3, 2, 1)
+my_data[, "var4"] <- c(3, 2, 1)
+my_data[["var4"]] <- c(3, 2, 1)
+my_data
+```
+
+## Adding to a data frame
+
+```{r, echo = T, eval = T}
+rbind(my_data, c(1, 2, 3, 4))
+rbind(my_data, list(4, "d", FALSE, 0))
+```
+
+## Investigating a data frame
+
+We can use `str()` to see the structure of a data frame (or any other object!)
+
+```{r, echo = T, eval = T}
+my_data2 <- rbind(my_data, c(1, 2, 3, 4))
+str(my_data2)
+my_data2 <- rbind(my_data, list(4, "d", FALSE, 0))
+str(my_data2)
+```
+
+## Investigating a data frame
+
+Most data frames will have column names describing the variables. They can also include rownames, which we can add using `rownames()`.
+
+```{r, echo = T, eval = T}
+rownames(my_data2) <- c("Obs1", "Obs2", "Obs3", "Obs4")
+my_data2
+```
+
+## Example data frames in R {.smaller}
+
+There are plenty of free datasets available through R and its packages. If you haven't already, run `install.packages("palmerpenguins")` in your console. Then, we can load the `penguins` dataset.
+
+```{r, echo = T, eval = T}
+# load palmer penguins package
+library(palmerpenguins)
+
+# open penguins data as a data frame
+data(penguins)
+penguins <- as.data.frame(penguins)
+```
+
+## Penguins data {.smaller}
+
+We can use the `head` function to look at the first several rows:
+
+```{r, echo = T, eval = T}
+head(penguins)
+```
+
+-   How many columns are in this dataset?
+-   How many rows are in this dataset?
+
+## Penguins data {.smaller}
+
+Using the `$` operator, we can access individual columns.
+
+```{r, echo = T, eval = T}
+penguins$bill_length_mm
+```

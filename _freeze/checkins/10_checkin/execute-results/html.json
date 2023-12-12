@@ -1,0 +1,16 @@
+{
+  "hash": "66b46f3f0e09b80b1d06bde17a4e1ece",
+  "result": {
+    "markdown": "---\ntitle: \"Check-in 10\"\nauthor: \"YOUR NAME HERE\"\ndate: \"2023-11-28\"\ndate-format: \"[Due] MMMM DD, YYYY\"\nformat: \n  html:\n    embed-resources: true\n    code-tools: true\n    code-summary: \"Code\"\n---\n\n\nRemember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.\n\n### Collaborators\n\nINSERT NAMES OF ANY COLLABORATORS\n\n## Part 1. Training and Test Error (10 points)\n\nUse the following code to generate data:\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(ggplot2)\n# generate data\nset.seed(302)\nn <- 30\nx <- sort(runif(n, -3, 3))\ny <- 2*x + 2*rnorm(n)\nx_test <- sort(runif(n, -3, 3))\ny_test <- 2*x_test + 2*rnorm(n)\ndf_train <- data.frame(\"x\" = x, \"y\" = y)\ndf_test <- data.frame(\"x\" = x_test, \"y\" = y_test)\n\n# store a theme\nmy_theme <- theme_bw(base_size = 16) + \n  theme(plot.title = element_text(hjust = 0.5, face = \"bold\"),\n        plot.subtitle = element_text(hjust = 0.5))\n\n# generate plots\ng_train <- ggplot(df_train, aes(x = x, y = y)) + geom_point() +\n  xlim(-3, 3) + ylim(min(y, y_test), max(y, y_test)) + \n  labs(title = \"Training Data\") + my_theme\ng_test <- ggplot(df_test, aes(x = x, y = y)) + geom_point() +\n  xlim(-3, 3) + ylim(min(y, y_test), max(y, y_test)) + \n  labs(title = \"Test Data\") + my_theme\ng_train\n```\n\n::: {.cell-output-display}\n![](10_checkin_files/figure-html/unnamed-chunk-1-1.png){width=672}\n:::\n\n```{.r .cell-code}\ng_test\n```\n\n::: {.cell-output-display}\n![](10_checkin_files/figure-html/unnamed-chunk-1-2.png){width=672}\n:::\n:::\n\n\n**1a.** For $k = 1$ and $k = 5$, fit a degree-k polynomial linear regression model with `y` as the response and `x` as the explanatory variable(s).\n(*Hint: Use *`poly()`*, as in the lecture slides.*)\n\n**1b.** For each model from (a), record the training error. Then predict `y_test` using `x_test` and also record the test error.\n\n**1c.** If you were going to choose a model based on training error, which would you choose? Plot the data, colored by split. Add a line to the plot representing your selection for model fit. Add a subtitle to this plot with the (rounded!) test error.\n(*Hint: See Lecture Slides for example code.*)\n\n**1d.** If you were going to choose a model based on test error, which would you choose? Plot the data, colored by split. Add a line to the plot representing your selection for model fit. Add a subtitle to this plot with the (rounded!) test error.\n\n**1e.** What do you notice about the shape of the curves from part (d) and (e)? Which model do you think has lower bias? Lower variance? Why?",
+    "supporting": [
+      "10_checkin_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

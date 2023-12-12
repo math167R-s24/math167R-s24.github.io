@@ -1,0 +1,306 @@
+---
+title: "MATH167R: Spatial data analysis"
+author: "Peter Gao"
+format: 
+  revealjs:
+    theme: [./slides.scss, ../theme.scss]
+editor: visual
+---
+
+## Overview of today
+
+-   Visualizing spatial data
+-   Merging data
+-   Project work time
+
+## Loading project data
+
+Today we'll practice working with spatial data. In `R`, most basic GIS (geographic information system) tasks can be carried out using the `sf` package, which you can install using `install.packages("sf")`. Today we'll also be using `tidyverse` packages.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+library(sf)
+library(knitr)
+library(tidyverse)
+ba_rent <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-07-05/rent.csv")
+```
+
+## Craigslist rental data
+
+This dataset provides Craigslist rental listings for the Bay Area, from 2000-2018. It was originally collected by Dr. Kate Pennington, whose methodology you can read about [here](https://www.katepennington.org/clmethod).
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+head(ba_rent)
+```
+
+## Craigslist rental data variables
+
+::: {style="height:500px;overflow:auto;"}
+| **variable** | **class** | **description**       |
+|:-------------|:----------|:----------------------|
+| post_id      | character | Unique ID             |
+| date         | double    | date                  |
+| year         | double    | year                  |
+| nhood        | character | neighborhood          |
+| city         | character | city                  |
+| county       | character | county                |
+| price        | double    | price in USD          |
+| beds         | double    | n of beds             |
+| baths        | double    | n of baths            |
+| sqft         | double    | square feet of rental |
+| room_in_apt  | double    | room in apartment     |
+| address      | character | address               |
+| lat          | double    | latitude              |
+| lon          | double    | longitude             |
+| title        | character | title of listing      |
+| descr        | character | description           |
+| details      | character | additional details    |
+:::
+
+## Craigslist rental data
+
+## Basic summaries
+
+**Review**: What does the following code produce?
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+ba_rent |>
+  filter(beds == 2, year == 2010) |>
+  group_by(city) |>
+  summarize(mean_price = mean(price, na.rm = T)) |>
+  arrange(mean_price) |>
+  kable()
+```
+
+. . .
+
+::: {style="height:350px;overflow:auto;"}
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| results: asis
+ba_rent |>
+  filter(beds == 2, year == 2010) |>
+  group_by(city) |>
+  summarize(mean_price = mean(price, na.rm = T)) |>
+  arrange(mean_price) |>
+  kable()
+```
+:::
+
+## Simple features
+
+**Simple Features** is a set of standards for storing and accessing geographic data.
+
+-   Geographic data typically consist of geometries such as points, lines, and polygons
+
+-   In R, the most popular package for working with simple features data is `sf`.
+
+-   Working with spatial data can be extremely memory intensive, so care is needed.
+
+## Working with point data
+
+Our `ba_rent` data frame already has latitude and longitude, but many points are missing:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+summary(ba_rent$lat)
+summary(ba_rent$lon)
+```
+
+. . .
+
+Compare the number of `NA` values with the total rows:
+
+. . .
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+nrow(ba_rent)
+```
+
+## Working with point data
+
+Let's just work with the entries for which we have data from the year 2018.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+ba_rent_geo <- ba_rent |>
+  filter(!is.na(lat) & !is.na(lon))
+nrow(ba_rent_geo)
+```
+
+We have extremely limited data in this time frame.
+
+## Converting data to sf object
+
+When each row in our data frame refers to a point with longitude and latitude, we can use the `st_as_sf` function to convert our data frame to an sf object.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+ba_rent_geo <- ba_rent_geo |>
+  st_as_sf(coords = c("lon", "lat"), crs = st_crs(4326))
+ba_rent_geo
+```
+
+## Visualizing point data
+
+We can easily visualize this data now using the `geom_sf()` function, which automatically handles sf objects.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+ggplot(ba_rent_geo) + geom_sf()
+```
+
+## Visualizing point data
+
+We can add a basemap using the `annotation_map_tile` function from the `ggspatial` package.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+library(ggspatial)
+ggplot(ba_rent_geo) + 
+  annotation_map_tile(zoomin = -1) +
+  geom_sf()
+```
+
+## Removing extra point
+
+We can remove points outside a certain box using the `st_crop` function:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| message: FALSE
+#| warning: FALSE
+#| cache: TRUE
+box = c(xmin = -130, ymin = 36.5, xmax = -120, ymax = 40)
+ba_rent_geo <- ba_rent_geo |>
+  st_crop(box)
+ggplot(ba_rent_geo) + 
+  annotation_map_tile(zoomin = -1) +
+  geom_sf()
+```
+
+## Theme and customization
+
+We can then adjust the color to show `price` and also change the color scale:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| message: FALSE
+#| warning: FALSE
+#| cache: TRUE
+ggplot(ba_rent_geo, aes(color = price)) + 
+  annotation_map_tile(zoomin = -1) +
+  geom_sf(alpha = 0.75, size = 0.75) +
+  scale_color_viridis_c()
+```
+
+## Spatial polygon data
+
+Although we do not have complete coordinate data, we have good information about county:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+sum(is.na(ba_rent$county))
+unique(ba_rent$county)
+```
+
+## Spatial polygon data
+
+We can create a county level summary table for the median rent by county for 2015:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+county_rent_15 <- ba_rent %>%
+  filter(beds == 1, year == 2015, !is.na(county)) |>
+  group_by(county) |>
+  summarize(median_rent = median(price, na.rm = T))
+county_rent_15
+```
+
+## Spatial polygon data
+
+We will then connect this summary table to an sf object. We can load US county data using the `tigris` package.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+#| message: FALSE
+#| warning: FALSE
+#| output: false
+library(tigris)
+ca_counties <- counties("California", cb = TRUE)
+```
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+#| message: FALSE
+#| warning: FALSE
+# convert county names to lower case
+ca_counties <- ca_counties |>
+  mutate(county = stringr::str_to_lower(NAME))
+ca_counties
+```
+
+## Joining spatial data
+
+If we want to keep only the counties for which we have data, we must use a `right_join` starting with `ca_counties`:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| message: FALSE
+#| warning: FALSE
+#| cache: TRUE
+ca_counties <- ca_counties |>
+  right_join(county_rent_15, by = "county")
+ca_counties
+```
+
+## Visualizing polygon data
+
+We can now use the `geom_sf()` function to visualize our data.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+ggplot(ca_counties, aes(fill = median_rent)) +
+  geom_sf()
+```
+
+## Themes and customization
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+ggplot(ca_counties, aes(fill = median_rent)) +
+  geom_sf() +
+  scale_fill_viridis_c(name = "Median Rent") +
+  ggtitle("Median 1BR rent by county, Bay Area, 2015",
+           subtitle = "based on Craigslist rental listings") +
+  theme_minimal()
+```
+
+# Midterm Project

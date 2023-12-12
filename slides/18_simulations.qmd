@@ -1,0 +1,359 @@
+---
+title: "MATH167R: Simulations"
+author: "Peter Gao"
+format: 
+  revealjs:
+    theme: [./slides.scss, ../theme.scss]
+editor: visual
+---
+
+## Overview of today
+
+-   Random variables in R
+-   The `r`, `p`, `d`, and `q` functions
+-   `replicate()`
+-   Writing simulations
+
+## Random variables in R
+
+We have already seen a number of functions for generating random variables such as `sample()` and `rnorm()`.
+
+Today, we will expand on these functions and related functions for studying random variables and begin using them to write various simulations.
+
+## The `r`, `p`, `d`, and `q` functions
+
+1.  `rnorm()` can be used to generate `n` random observations from a normal distribution:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+rnorm(n = 1, mean = 0, sd = 1)
+```
+
+2.  `pnorm()` can be used to compute the distribution function at a value `q`:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+pnorm(q = 1, mean = 0, sd = 1)
+```
+
+3.  `qnorm()` can be used to compute the quantile function at a percentile `p`:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+qnorm(p = .75, mean = 0, sd = 1)
+```
+
+4.  `dnorm()` can be used to compute the density function at a value `x`:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+dnorm(x = .5, mean = 0, sd = 1)
+```
+
+## Exercise
+
+Suppose we perform a two-sided hypothesis test using a normal distribution and obtain a z-score of 1.24. How would we compute the p-value?
+
+. . .
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+2 * (1 - pnorm(q = 1.24, mean = 0, sd = 1))
+```
+
+. . .
+
+Suppose we perform a two-sided hypothesis test using a normal distribution and obtain a z-score of -2.12. How would we compute the p-value?
+
+. . .
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+2 * pnorm(q = 2.12, mean = 0, sd = 1)
+```
+
+## Random seeds
+
+Remember that `set.seed()` can be used to ensure that you obtain the same results each time you run your code.
+
+For example, if you include the command `x <- rnorm(1)` in an .Rmd document with running `set.seed()`, each time you knit, you will produce a different value of `x`.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+set.seed(1022)
+rnorm(n = 1, mean = 0, sd = 1)
+```
+
+## Monte Carlo methods
+
+Monte Carlo methods or Monte Carlo experiments use repeated random sampling to obtain numerical results or to approximate quantities of interest.
+
+Monte Carlo experiments are often used to:
+
+-   approximate integrals
+-   generate draws from a probability distribution
+-   optimize functions stochastically
+
+## Example: Transformations of random variables
+
+Suppose $X\sim N(0, 1)$. What is $E(e^X)$?
+
+We could use the change of variable formula to compute the expectation. Or we could use simulation to approximate this quantity. Asymptotic analysis is needed to study the convergence of our approximation.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| error: TRUE
+n_sim <- 1000
+n <- 100
+exp_X <- numeric(n_sim)
+for (i in 1:n_sim) {
+  exp_X[i] <- exp(rnorm(n))
+}
+mean(exp_X)
+```
+
+## Example: Maximum of random variables
+
+Suppose $X_i\sim \mathrm{Exponential}(1)$ for $1\leq i\leq n$, for some $n$.
+
+-   What is $E(\mathrm{max}(X_1,\ldots, X_n))?$
+-   How does $E(\mathrm{max}(X_1,\ldots, X_n))$ change for different values of $n$?
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+set.seed(1022)
+n_sim <- 1000
+n <- 10
+maxes <- numeric(n_sim)
+for (i in 1:n_sim) {
+  maxes[i] <- max(rexp(n, rate = 1))
+}
+mean(maxes)
+```
+
+. . .
+
+What about for $n=100$? Should the expected maximum be larger or smaller?
+
+## Example: Maximum of random variables
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+n_sim <- 1000
+n <- 100
+maxes <- numeric(n_sim)
+for (i in 1:n_sim) {
+  maxes[i] <- max(rexp(n, rate = 1))
+}
+mean(maxes)
+```
+
+## `replicate()` for repeated evaluation
+
+In the previous code, we have been using `for` loops, which explicitly and repeatedly change global variables.
+
+We can alternatively use the `replicate()` function to repeatedly evaluate an expression and in particular to repeatedly generate data. The data will be automatically organized into a matrix or vector.
+
+## `replicate()` for repeated evaluation
+
+For example, we can generate `n` exponential random variables and take their maximum:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+replicate(10, rexp(10)) # matrix output
+replicate(10, max(rexp(10))) # vector output
+```
+
+## `replicate()` for repeated evaluation
+
+Using `replicate()`, the previous simulation is just:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+maxes <- replicate(1000, max(rexp(n)))
+mean(maxes)
+```
+
+## Example: Maximum of random variables
+
+We can repeat this for many different values of `n`.
+
+```{r declarative.sim}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+n_sim <- 1000
+n_values <- c(10, 25, 50, 100, 250, 500, 1000)
+max_by_n <- c()
+for (n in n_values) {
+  maxes <- numeric(n_sim)
+  for (i in 1:n_sim) {
+    maxes[i] <- max(rexp(n, rate = 1))
+  }
+  max_by_n <- c(max_by_n, mean(maxes))
+}
+max_by_n
+```
+
+## Example: Maximum of random variables
+
+Note that we can write the maximum of exponentials simulation using `replicate()`:
+
+```{r functional.sim}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+max_by_n <- vapply(
+  n_values, 
+  function(n) mean(replicate(n_sim, max(rexp(n, rate = 1)))), 
+  numeric(1)
+)
+max_by_n
+```
+
+## Example: Maximum of random variables
+
+It turns out that $\mathrm{max}(X_1,\ldots, X_n)$ can be modeled using a Gumbel distribution (after being transformed). Below, we plot the empirical mean and approximate the theoretical expectation (for large $n$).
+
+```{r plot_results}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+plot(n_values, max_by_n,
+     type = "l",
+     xlab = "n", ylab = "Maximum",
+     main = paste0("Sample mean of maximums (black)",
+                   "and theoretical expectation (red)"))
+lines(n_values, -digamma(1) + log(n_values), col = "red")
+```
+
+## Random walks
+
+Random walks are stochastic processes that describe a sequence of random steps on some space.
+
+A simple example is the one-dimensional random walk on the integer number line which starts at 0 and for each step, moves forward (+1) or backward (-1) with equal probability.
+
+## Random walks
+
+We can easily simulate a one-dimensional random walk:
+
+```{r random_walk}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+set.seed(123)
+n_steps <- 100
+x <- numeric(n_steps)
+x[1] <- 0
+for (i in 2:n_steps) {
+  x[i] <- x[i - 1] + sample(c(1, -1), 1)
+}
+```
+
+. . . We can then plot our results
+
+```{r random_walk_plot}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+plot(1:n_steps, x, type = "l",
+     xlab = "Step", ylab = "x",
+     main = "A one-dimensional random walk")
+```
+
+## A more functional version with recursion
+
+We can also adopt a more functional approach:
+
+```{r random_walk_functional}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+take_step <- function() {
+  return(sample(c(1, -1), 1))
+}
+walk_randomly <- function(n_steps, start = 0) {
+  if (n_steps <= 1) {
+    return(start)
+  }
+  x <- c(start, walk_randomly(n_steps - 1, start + take_step()))
+  return(x)
+}
+plot(1:100, walk_randomly(100), type = "l",
+     xlab = "Step", ylab = "x",
+     main = "A one-dimensional random walk")
+```
+
+## A two-dimensional random walk
+
+A two-dimensional random walk takes place on the integer grid, where at each step, we can either walk north, south, east, or west.
+
+```{r 2d_random_walk_functional}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+take_step_2d <- function() {
+  steps <- rbind(c(0, 1),
+                 c(0, -1), 
+                 c(1, 0),
+                 c(-1, 0))
+  return(steps[sample(1:4, 1), ])
+}
+walk_randomly_2d <- function(n_steps, start = c(0, 0)) {
+  if (n_steps <= 1) {
+    return(start)
+  }
+  x <- rbind(start, walk_randomly_2d(n_steps - 1, start + take_step_2d()))
+  rownames(x) <- NULL
+  return(x)
+}
+n_steps <- 100
+coords <- walk_randomly_2d(n_steps)
+coords
+```
+
+## A two-dimensional random walk
+
+We can use `geom_path()` to illustrate the path taken by the random walker:
+
+```{r 2d_random_walk_functional_plot}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+library(ggplot2)
+coords_dat <- data.frame(x = coords[, 1],
+                         y = coords[, 2],
+                         step = 1:n_steps)
+ggplot(coords_dat, aes(x = x, y = y, color = step)) + geom_path()
+```
+
+```{r}
+knitr::knit_exit()
+```
+
+## A two-dimensional random walk
+
+We can use the `gganimate` package to animate our visualization:
+
+```{r 2d_random_walk_functional_anim}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+library(gganimate)
+anim_walk <- ggplot(coords_dat, aes(x = x, y = y, color = step)) +
+  geom_path() +
+  transition_reveal(along = step)
+animate(anim_walk)
+```

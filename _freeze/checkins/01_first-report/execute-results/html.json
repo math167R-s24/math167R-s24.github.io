@@ -1,0 +1,14 @@
+{
+  "hash": "c0f67668d2c651a1436caaf9bd948e3a",
+  "result": {
+    "markdown": "---\ntitle: \"Check-in 1: Instructions\"\nauthor: \"Peter Gao\"\ndate: \"2023-08-21\"\noutput: html_document\n---\n\n\n\n\n## A. Running your first R code\n\nYour first check-in has two parts. First, you'll try running and reading some basic R code.\n\n1. On the computer you are using, create a new folder titled \"MATH167R\" or something similar.\n\n2. Within this folder, create a sub-folder named \"checkins\" or something similar.\n\n3. Download \"01_first-R-code.R\" and save it in your checkins folder.\n\n4. Open \"01_first-R-code.R\" in RStudio. It should look something like the code below.\n\n\n::: {.cell}\n\n:::\n\n\n5. \n\n5. Answer the two questions \n\n## B. Compiling your first R Markdown report\n\nNow, we'll use a tool called R Markdown to generate a report that combines code, output, and writing. R Markdown reports are commonly used to share data analysis in a clear and reproducible way.\n\n1. Download 01_first-report.Rmd to your checkins folder and open it in RStudio.\n\n2. \n\n\n::: {.cell}\n\n```{.r .cell-code}\nsummary(cars)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n     speed           dist       \n Min.   : 4.0   Min.   :  2.00  \n 1st Qu.:12.0   1st Qu.: 26.00  \n Median :15.0   Median : 36.00  \n Mean   :15.4   Mean   : 42.98  \n 3rd Qu.:19.0   3rd Qu.: 56.00  \n Max.   :25.0   Max.   :120.00  \n```\n:::\n:::\n\n\nTo receive full points on the first check-in, make sure:\n\n1. You answered the questions on your first R code here.\n2. You submitted your first R Markdown report (in .html form) here.\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

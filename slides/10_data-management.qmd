@@ -1,0 +1,170 @@
+---
+title: "MATH167R: Data Management"
+author: "Peter Gao"
+format: 
+  revealjs:
+    theme: [./slides.scss, ../theme.scss]
+editor: visual
+---
+
+## Overview of today
+
+-   Workflow for downloading and saving data
+-   Organizing output and saving images
+-   Exploratory data analysis
+-   Group lab time
+
+## Downloading data
+
+Up until now, we've mostly been working with small datasets and I have given you code to **download this data from the internet**:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+eggproduction  <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-04-11/egg-production.csv')
+```
+
+If you put this line of code in a chunk in your .Rmd file, each time you **knit/render**, you will have to download this data.
+
+So, if you do not have access to the internet, you will be unable to knit to html.
+
+## Saving data locally
+
+You can instead download the data to a local folder or use the following code to save it locally:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+readr::write_csv(eggproduction, "~/Documents/MATH167R/data/egg-production.csv")
+```
+
+You can subsequently load it locally (no internet needed):
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+eggproduction <- readr::read_csv("~/Documents/MATH167R/data/egg-production.csv")
+```
+
+## Saving data locally
+
+Any R object can be saved as a .rds file (including plots or output).
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+library(tidyverse)
+state_population <- readr::read_csv("https://www2.census.gov/programs-surveys/popest/datasets/2010-2020/national/totals/nst-est2020.csv")
+US_pop_tidy <- state_population |>
+  filter(SUMLEV == "010") |> 
+  select(-POPESTIMATE042020) |>
+  pivot_longer(contains("POPESTIMATE"), 
+               names_to = "Year",
+               values_to = "Population") |>
+  mutate(Year = as.numeric(stringr::str_sub(Year, start = 12)))
+saveRDS(US_pop_tidy, "~/Documents/MATH167R/data/US_pop_tidy.rds")
+```
+
+You can subsequently load it locally using `readRDS()` (no internet needed):
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+US_pop_tidy <- readRDS("~/Documents/MATH167R/data/US_pop_tidy.rds")
+```
+
+## Saving plots locally
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+US_pop_plot <- US_pop_tidy |>
+  ggplot(aes(x = Year, y = Population)) + 
+  geom_line()
+saveRDS(US_pop_plot, "~/Documents/MATH167R/data/US_pop_plot.rds")
+```
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+US_pop_plot <- readRDS("~/Documents/MATH167R/data/US_pop_tidy.rds")
+print(US_pop_plot)
+```
+
+## Saving multiple objects
+
+Using the `save()` function, you can save multiple objects as a .RData file:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+save(US_pop_plot, US_pop_tidy, file = "~/Documents/MATH167R/data/US_pop_combined.RData")
+```
+
+Load these objects using a `load()` call:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+load("~/Documents/MATH167R/data/US_pop_combined.RData")
+print(US_pop_plot)
+```
+
+## Saving plots locally
+
+We can save plots to .pdf files using a call to `pdf()` before the plot code and then `dev.off()` afterwards.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+pdf(file = "~/Documents/MATH167R/results/US_pop_plot.pdf",
+    width = 8, height = 6) # dimensions in inches
+US_pop_plot <- US_pop_tidy |>
+  ggplot(aes(x = Year, y = Population)) + 
+  geom_line() + 
+  ggtitle("US Population, 2010-2020")
+print(US_pop_plot)
+dev.off()
+```
+
+## Generating clean tables using `kable()`
+
+The `kable()` function from the `knitr` package can be sued to generate clean tables for publication. The `kableExtra` package contains many extra functions for formatting tables.
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+state_population <- readr::read_csv("https://www2.census.gov/programs-surveys/popest/datasets/2010-2020/national/totals/nst-est2020.csv")
+
+# code to print the data
+library(knitr)
+kable(state_population, digits = 3, row.names = F) |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "560px")
+```
+
+## Caching code chunks
+
+You can name your chunks and use the code chunk `cache = T` to save the output of a code chunk so you don't have to wait for the code to run every time you knit.
+
+```{r pop_plot}
+#| eval: TRUE
+#| cache: TRUE
+#| echo: fenced
+US_pop_plot <- US_pop_tidy |>
+  ggplot(aes(x = Year, y = Population)) + 
+  geom_line() + 
+  ggtitle("US Population, 2010-2020")
+print(US_pop_plot)
+```
+
+
+## Caching code chunks
+
+However, that means plots/output will *not* automatically update if you change the "upstream" data processing pipeline. You must change the cached chunk or delete the cache to rerun the code.
+
+Before you turn in your assignments, you should clear all the cached files and knit from scratch to make sure no errors have been introduced.
+
+## Group Lab Time
+
+The rest of class is devoted to working in groups on your lab assignment.

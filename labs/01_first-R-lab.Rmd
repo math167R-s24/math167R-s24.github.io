@@ -1,0 +1,63 @@
+---
+title: "Lab 1: Basic Definitions"
+author: "YOUR NAME HERE"
+date: "2023-08-23"
+output: html_document
+---
+
+## A. Combining R code and output
+
+1.  **Explain what the following code does in your own words.**
+
+    ```{r}
+    x <- 1
+    y <- 1
+    print(x + y)
+    ```
+
+    YOUR EXPLANATION HERE
+
+## B. Running an R script
+
+1.  **Download the `01_lab-test-code.R` file and put it in the same folder as this lab. Change the chunk option `eval = F` to `eval = T`. What does this code file do?**
+
+    ```{r, eval = F}
+    source("01_lab-test-code.R")
+    ```
+
+    YOUR EXPLANATION HERE
+
+## C. Exercises
+
+1.  **In contrast to the usual mathematical interpretation of x = x + 1, which has no finite solution, the following assignment evaluates to a finite value. Explain.**
+
+    ```{r}
+    x <- 1
+    x <- x + 1
+    print(x)
+    ```
+
+    YOUR EXPLANATION HERE
+
+2.  **The first expression below evaluates to a numeric value, but the second one causes an error. Explain.**
+
+    ```{r, error = T}
+    T + 1
+    T + "Hello"
+    ```
+
+    YOUR EXPLANATION HERE
+
+3.  **Correct the code below so `example_chr` is an object of the character class.**
+
+    ```{r}
+    # YOUR CODE HERE
+    example_chr <- T
+    class(example_chr)
+    ```
+
+4.  What questions do you have about R, RStudio, and RMarkdown?
+
+    1.  Your first question...
+
+    2.  Your second question...

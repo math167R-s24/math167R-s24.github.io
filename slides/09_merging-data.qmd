@@ -1,0 +1,226 @@
+---
+title: "MATH167R: Merging data"
+author: "Peter Gao"
+format: 
+  revealjs:
+    theme: [./slides.scss, ../theme.scss]
+editor: visual
+---
+
+## Warm-up
+
+Consider the following data:
+
+```{r, echo = T, eval = T}
+library(tidyverse)
+ChickWeight
+```
+
+1.  What does the following code do?
+
+    ```{r, echo = T, eval = F}
+    pivot_wider(ChickWeight,
+                 names_from = "Time", 
+                 values_from = "weight")
+    ```
+
+## Warm-up
+
+```{r, echo = T, eval = T, warning = F}
+library(tidyverse)
+pivot_wider(ChickWeight,
+            names_from = "Time", 
+            values_from = "weight")
+```
+
+## Overview of today
+
+-   Merging datasets
+-   Exploratory analysis
+
+## Joining Data
+
+We can use SQL-like join statements in R!
+
+-   `inner_join(x, y, by = "key")`: match observations only when exact keys are equal
+-   `left_join(x, y, by = "key")`: keep all observations in `x`, match observations in `y` by keys, `NA` otherwise
+-   `right_join(x, y, by = "key")`: keep all observations in `y`, match observations in `x` by keys, `NA` otherwise
+-   `outer_join(x, y, by = "key")`: keep all observations in `x` and `y`, match keys where possible, `NA` otherwise
+
+Usually, `left_join()` will suffice.
+
+## Example: Band members
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+library(tidyverse)
+band_members
+band_instruments
+```
+
+## Example: Band members
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+band_members |> inner_join(band_instruments)
+band_members |> left_join(band_instruments)
+band_members |> right_join(band_instruments)
+band_members |> full_join(band_instruments)
+```
+
+## Example: Band members
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+# To suppress the message about joining variables, supply `by`
+band_members |> inner_join(band_instruments, by = join_by(name))
+```
+
+## Inner join vs. outer join
+
+<img src="images/join-inner.png" height="100"/>
+
+<img src="images/join-outer.png" height="380"/>
+
+Images courtesy of Hadley Wickham. [(Link)](https://r4ds.had.co.nz/relational-data.html)
+
+## Base R
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+# inner join
+merge(band_members, band_instruments, by.x = "name", by.y = "name")
+
+# outer join
+merge(band_members, band_instruments, by.x = "name", by.y = "name", all = T)
+
+# left join
+merge(band_members, band_instruments, by.x = "name", by.y = "name", all.x = T)
+
+# right join
+merge(band_members, band_instruments, by.x = "name", by.y = "name", all.y = T)
+```
+
+## Example: California data
+
+```{r, echo = T, eval = F}
+library(tidycensus)
+
+# the following code loads my local Census API Key, which is used to access 
+# census data
+Sys.getenv("CENSUS_API_KEY")
+
+# 2021 median income by county
+income_2021 <- get_acs(geography = "county", 
+                       variables = c(medincome = "B19013_001"), 
+                       state = "CA", 
+                       year = 2021)
+
+# 2010 median income by county
+income_2010 <- get_acs(geography = "county", 
+                       variables = c(medincome = "B19013_001"), 
+                       state = "CA", 
+                       year = 2010)
+```
+
+```{r, echo = T, eval = T, comment = F, message = F, warning = F, include = F}
+library(tidycensus)
+
+# the following code loads my local Census API Key, which is used to access 
+# census data
+Sys.getenv("CENSUS_API_KEY")
+
+# 2021 median income by county
+income_2021 <- get_acs(geography = "county", 
+                       variables = c(medincome = "B19013_001"), 
+                       state = "CA", 
+                       year = 2021)
+
+# 2010 median income by county
+income_2010 <- get_acs(geography = "county", 
+                       variables = c(medincome = "B19013_001"), 
+                       state = "CA", 
+                       year = 2010)
+```
+
+## Example: California data
+
+```{r, echo = T, eval = T}
+income_2021 <- income_2021 |>
+  pivot_wider(
+    names_from = variable,
+    values_from = c(estimate, moe)
+  ) |>
+  select(-moe_medincome) |>
+  rename(medincome_2021 = estimate_medincome)
+head(income_2021)
+income_2010 <- income_2010 |>
+  pivot_wider(
+    names_from = variable,
+    values_from = c(estimate, moe)
+  ) |>
+  select(-moe_medincome) |>
+  rename(medincome_2010 = estimate_medincome)
+
+```
+
+## Example: California data
+
+```{r, echo = T, eval = F}
+income_combined <- income_2010 |>
+  left_join(income_2021, by = c("GEOID", "NAME"))
+ggplot(income_combined, aes(x = medincome_2010, y = medincome_2021)) +
+  geom_point() + 
+  geom_abline(slope = 1) + 
+  labs(title = "Median income in 2021 vs. 2010, CA Counties",
+       subtitle = "American Community Survey",
+       y = "2021 Median Income",
+       x = "2010 Median Income")
+  
+```
+
+
+## Example: California data
+
+```{r, echo = F, eval = T}
+income_combined <- income_2010 |>
+  left_join(income_2021, by = c("GEOID", "NAME"))
+ggplot(income_combined, aes(x = medincome_2010, y = medincome_2021)) +
+  geom_point() + 
+  geom_abline(slope = 1) + 
+  labs(title = "Median income in 2021 vs. 2010, CA Counties",
+       subtitle = "American Community Survey",
+       y = "2021 Median Income",
+       x = "2010 Median Income")
+  
+```
+
+## Data manipulation cheatsheet
+
+-   `filter()` subset rows
+-   `select()` subset columns, use with `contains()`, `starts_with()`, `ends_with()`, ...
+-   `mutate()` create columns
+-   `group_by()`, `summarize()`, `count()` group and summarize groups
+-   `rename()` rename columns
+-   `pivot_longer()`, `pivot_wider()` reshape data
+-   `inner_join()`, `left_join()`, `right_join()`, `outer_join()` combine data (like SQL)
+
+[Much, much more! (Click me for a cheat sheet)](https://rstudio.com/resources/cheatsheets/)
+
+## Exploratory data analysis
+
+Exploratory data analysis is the process of learning about a dataset by visualizing, summarizing, and transforming it.
+
+By now we've seen most of the skills you need to carry out exploratory data analysis (EDA). As Wickham, Çetinkaya-Rundel, and Grolemund put it, the cycle of EDA looks something like this:
+
+1.  Generate questions about your data.
+
+2.  Explore your questions by visualizing, transforming, and modelling your data.
+
+3.  Use your findings to refine your questions and generate new questions.
+
+You can read their walkthrough of the EDA process [here](https://r4ds.hadley.nz/eda).

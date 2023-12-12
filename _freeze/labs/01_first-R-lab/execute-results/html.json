@@ -1,0 +1,14 @@
+{
+  "hash": "42a44ace1cc5724dc9cd717807211e85",
+  "result": {
+    "markdown": "---\ntitle: \"Lab 1: Basic Definitions\"\nauthor: \"YOUR NAME HERE\"\ndate: \"2023-08-23\"\noutput: html_document\n---\n\n\n## A. Combining R code and output\n\n1.  **Explain what the following code does in your own words.**\n\n\n    ::: {.cell}\n    \n    ```{.r .cell-code}\n    x <- 1\n    y <- 1\n    print(x + y)\n    ```\n    \n    ::: {.cell-output .cell-output-stdout}\n    ```\n    [1] 2\n    ```\n    :::\n    :::\n\n\n    YOUR EXPLANATION HERE\n\n## B. Running an R script\n\n1.  **Download the `01_lab-test-code.R` file and put it in the same folder as this lab. Change the chunk option `eval = F` to `eval = T`. What does this code file do?**\n\n\n    ::: {.cell}\n    \n    ```{.r .cell-code}\n    source(\"01_lab-test-code.R\")\n    ```\n    :::\n\n\n    YOUR EXPLANATION HERE\n\n## C. Exercises\n\n1.  **In contrast to the usual mathematical interpretation of x = x + 1, which has no finite solution, the following assignment evaluates to a finite value. Explain.**\n\n\n    ::: {.cell}\n    \n    ```{.r .cell-code}\n    x <- 1\n    x <- x + 1\n    print(x)\n    ```\n    \n    ::: {.cell-output .cell-output-stdout}\n    ```\n    [1] 2\n    ```\n    :::\n    :::\n\n\n    YOUR EXPLANATION HERE\n\n2.  **The first expression below evaluates to a numeric value, but the second one causes an error. Explain.**\n\n\n    ::: {.cell}\n    \n    ```{.r .cell-code}\n    T + 1\n    ```\n    \n    ::: {.cell-output .cell-output-stdout}\n    ```\n    [1] 2\n    ```\n    :::\n    \n    ```{.r .cell-code}\n    T + \"Hello\"\n    ```\n    \n    ::: {.cell-output .cell-output-error}\n    ```\n    Error in T + \"Hello\": non-numeric argument to binary operator\n    ```\n    :::\n    :::\n\n\n    YOUR EXPLANATION HERE\n\n3.  **Correct the code below so `example_chr` is an object of the character class.**\n\n\n    ::: {.cell}\n    \n    ```{.r .cell-code}\n    # YOUR CODE HERE\n    example_chr <- T\n    class(example_chr)\n    ```\n    \n    ::: {.cell-output .cell-output-stdout}\n    ```\n    [1] \"logical\"\n    ```\n    :::\n    :::\n\n\n4.  What questions do you have about R, RStudio, and RMarkdown?\n\n    1.  Your first question...\n\n    2.  Your second question...\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

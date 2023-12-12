@@ -1,0 +1,754 @@
+---
+title: "MATH167R: Functions, vectors, and matrices"
+author: "Peter Gao"
+format: 
+  revealjs:
+    theme: [./slides.scss, ../theme.scss]
+editor: visual
+---
+
+## Warm-up
+
+Discuss the following lines of code. What do they do?
+
+```{r, echo = T, eval = F}
+x <- TRUE
+y <- 3 > 4
+x <- x & y
+as.numeric(x)
+```
+
+. . .
+
+**Answer:**
+
+```{r, echo = T, eval = T}
+x <- TRUE
+y <- 3 > 4
+x <- x & y
+as.numeric(x)
+```
+
+## Overview of today
+
+-   Functions and arguments
+-   Vectors and matrices
+-   Indexing data
+
+# Functions and Arguments
+
+## Functions {.smaller}
+
+> *"To understand computations in R, two slogans are helpful: Everything that exists is an **object**. Everything that happens is a **function** call."*
+>
+> (Chambers, 2014)
+
+We have already seen some functions, including the `sample` function:
+
+```{r eval = F, echo = T}
+sides <- 1:6
+rolls <- sample(sides, 10, replace = T)
+```
+
+and the `typeof` function:
+
+```{r eval = T, echo = T}
+x <- T
+typeof(x)
+```
+
+**Functions** provide code to execute some task given a set of inputs.
+
+## Functions {.smaller}
+
+A **function call** is a command to execute the code of a function:
+
+`function_name(argument1, argument2, ...)`
+
+**Arguments** or **parameters** are expressions/values that are the inputs to the function.
+
+```{r eval = T, echo = T}
+exp(-1)
+exp(0)
+```
+
+The parentheses following the name of a function are still required even when there are no arguments:
+
+```{r eval = F, echo = T}
+ls()
+```
+
+## Functions {.smaller}
+
+Whenever you are using a function for the first time, it is good idea to access the documentation by typing `?function_name` into the console.
+
+```{r eval = T, echo = T}
+?exp
+```
+
+## Specifying arguments {.smaller}
+
+A **formal argument** is a named argument that is used in the code of a function.
+
+The function `args` displays the formal arguments:
+
+```{r eval = T, echo = T}
+args(sample)
+```
+
+An **actual argument** t is the value specified by the user during a function call:
+
+```{r eval = T, echo = T}
+sides <- c("H", "T")
+sample(x = sides, size = 1, replace = T)
+```
+
+## Matching arguments {.smaller}
+
+The two most common ways to specify arguments are **positional** and **exact**:
+
+-   **Positional**: the actual arguments are matched to the formal arguments in order:
+
+```{r eval = T, echo = T, error = T}
+sample(sides, 1, T)
+sample(1, T, sides)
+```
+
+-   **Exact**: the actual arguments are matched to the formal arguments using names:
+
+```{r eval = T, echo = T}
+sample(size = 1, replace = T, x = sides)
+```
+
+## Check your understanding: functions
+
+How can we use functions to compute (feel free to look online):
+
+-   $\ln 10$
+-   $\log_{10} 10$
+
+. . .
+
+**Answer:**
+
+```{r, echo = T, eval = T}
+log(10)
+log10(10)
+```
+
+# Vectors
+
+## Atomic Vectors
+
+-   Last class, we introduced atomic vectors, but we only considered **vectors of length one**.
+
+-   Generally, atomic vectors are sets of elements of the same type.
+
+-   We create vectors using the function `c()`
+
+    ```{r, echo = T, eval = T}
+    c(16, 3, 0, 7, -2)
+    ```
+
+## Accessing elements of vectors
+
+-   We index vectors using `[index]` after the vector name:
+
+    ```{r, echo = T, eval = T}
+    x <- c(16, 3, 0, 7, -2)
+    x[3]
+    x[4]
+    ```
+
+-   If we use a negative index, we return the vector with that element removed
+
+    ```{r, echo = T, eval = T}
+    x[-4]
+    ```
+
+## Atomic vectors and data types
+
+Note that atomic vectors can only have one type of data. So the following lines work:
+
+```{r, echo = T, eval = T}
+x <- c(1, 2, 3)
+y <- c("a", "b", "c")
+z <- c(T, F, T)
+```
+
+. . .
+
+but when we try
+
+```{r, echo = T, eval = T}
+c(1, "b", 3)
+```
+
+R will force the elements in our vector to be of the same type! This is a common source of bugs.
+
+## Check your understanding: vectors
+
+What do you expect the output of the following chunk to be?
+
+```{r, echo = T, eval = F}
+x <- c(1, 2, 3)
+y <- c("a", "b", "c")
+c(x, y)
+```
+
+. . .
+
+**Answer:**
+
+```{r, echo = T, eval = T, error = T}
+x <- c(1, 2, 3)
+y <- c("a", "b", "c")
+c(x, y)
+```
+
+We can use the `c()` function to concatenate vectors (forcing elements to be the same type).
+
+## Check your understanding: vectors
+
+What do you expect the output of the following chunk to be?
+
+```{r, echo = T, eval = F}
+x <- c(3 > 4, T, 5 > 6)
+x[3]
+```
+
+. . .
+
+**Answer:**
+
+```{r, echo = T, eval = T, error = T}
+x <- c(3 > 4, T, 5 > 6)
+x[3]
+```
+
+R evaluates expressions when creating vectors.
+
+## Useful functions for vectors {.smaller}
+
+-   `max()`, `min()`, `mean()`, `median()`, `sum()`, `sd()`, `var()`
+-   `length()` returns the number of elements in the vector
+-   `head()` and `tail()` return the beginning and end vectors
+-   `sort()` will sort
+-   `summary()` returns a 5-number summary
+-   `any()` and `all()` to check conditions on Boolean vectors
+-   `hist()` will return a crude histogram (we'll learn how to make this nicer later)
+
+If you are unclear about what any of them do, use `?` before the function name to read the documentation. You should get in the habit of checking function documentation a lot!
+
+## Generating vectors {.smaller}
+
+The notation `a:b` generates integers starting at `a` and ending at `b`.
+
+```{r, echo = T, eval = T, error = T}
+1:6
+```
+
+The `rep` function repeats values of the first argument.
+
+```{r, echo = T, eval = T, error = T}
+rep("Hello", times = 3)
+```
+
+The `rnorm` function randomly generates `n` elements with the specified `mean` and `sd`.
+
+```{r, echo = T, eval = T, error = T}
+rnorm(n = 10, mean = 1, sd = 1)
+```
+
+# Matrices
+
+## Matrices
+
+-   **Matrices** are two-dimensional extensions of vectors: they have **rows** and **columns**
+-   We can create a matrix using the function `matrix()`
+
+```{r, echo = T, eval = T, error = T}
+x <- c(1, 2, 3, 4, 5)
+y <- c(5, 4, 3, 2, 1)
+my_matrix <- matrix(c(x, y), nrow = 2, ncol = 5, byrow = TRUE)
+my_matrix
+```
+
+## Constructing matrices
+
+```{r, echo = T, eval = T, error = T}
+# Note: byrow = FALSE is the default
+my_matrix2 <- matrix(c(x, y), nrow = 2, ncol = 5)
+my_matrix2
+```
+
+*Warning:* be careful not to call your matrix `matrix`! Why not?
+
+## Constructing matrices
+
+We can also generate matrices by column binding (`cbind()`) and row binding (`rbind()`) vectors
+
+```{r, echo = T, eval = T, error = T}
+cbind(x, y)
+rbind(x, y)
+```
+
+## Indexing and Subsetting Matrices
+
+Indexing a matrix is similar to indexing a vector, except we must index both the row and column, in that order.
+
+```{r, echo = T, eval = T, error = T}
+my_matrix
+```
+
+What is the output of the following line?
+
+```{r, echo = T, eval = F, error = T}
+my_matrix[2, 3]
+```
+
+. . .
+
+```{r, echo = F, eval = T, error = T}
+my_matrix[2, 3]
+```
+
+. . .
+
+What is the output of the following line?
+
+```{r, echo = T, eval = F, error = T}
+my_matrix[2, c(1, 3, 5)]
+```
+
+. . .
+
+```{r, echo = F, eval = T, error = T}
+my_matrix[2, c(1, 3, 5)]
+```
+
+## Dropping entries
+
+Also similarly to vectors, we can subset using a negative index.
+
+```{r, echo = T, eval = T, error = T}
+my_matrix
+my_matrix[-2, -4]
+# Note: Leaving an index blank includes all indices
+my_matrix[, -c(1, 3, 4, 5)]
+```
+
+## Dropping entries
+
+```{r, echo = T, eval = T, error = T}
+my_matrix[, -c(1, 3, 4, 5)]
+is.matrix(my_matrix[, -c(1, 3, 4, 5)])
+```
+
+What happened here? When subsetting a matrix reduces one dimension to length 1, R automatically coerces it into a vector. We can prevent this by including `drop = FALSE`.
+
+```{r, echo = T, eval = T, error = T}
+my_matrix[, -c(1, 3, 4, 5), drop = FALSE]
+is.matrix(my_matrix[, -c(1, 3, 4, 5), drop = FALSE])
+```
+
+## Filling in a Matrix
+
+We can also fill in an empty matrix using indices. In R, you should always start by initializing an empty matrix of the right size.
+
+```{r, echo = T, eval = T, error = T}
+my_results <- matrix(NA, nrow = 3, ncol = 3)
+my_results
+```
+
+## Filling in a Matrix {.smaller}
+
+Then I can replace a single row (or column) using indices as follows.
+
+```{r, echo = T, eval = T, error = T}
+my_results[2, ] <- c(2, 4, 3)
+my_results
+```
+
+We can also fill in multiple rows (or columns) at once. (Likewise, we can also do subsets of rows/columns, or unique entries). Note that **recycling** applies here.
+
+```{r, echo = T, eval = T, error = T}
+my_results[c(1, 3), ] <- 7
+my_results
+```
+
+## Matrix Data Types
+
+Matrices, like vectors, can only have entries of one type.
+
+```{r, echo = T, eval = T, error = T}
+rbind(c(1, 2, 3), c("a", "b", "c"))
+```
+
+## Matrix functions {.smaller}
+
+Let's create 3 matrices for the purposes of demonstrating matrix functions.
+
+```{r, echo = T, eval = T, error = T}
+mat1 <- matrix(1:6, nrow = 2, ncol = 3, byrow = TRUE)
+mat1
+mat2 <- matrix(1:6, nrow = 3, ncol = 2)
+mat2
+```
+
+```{r, echo = T, eval = T, error = T}
+mat3 <- matrix(5:10, nrow = 2, ncol = 3, byrow = TRUE)
+mat3
+```
+
+## Matrix functions {.smaller}
+
+#### Matrix Sums `+`
+
+```{r, echo = T, eval = T, error = T}
+mat1 + mat3
+```
+
+#### Element-wise Matrix Multiplication `*`
+
+```{r, echo = T, eval = T, error = T}
+mat1 * mat3
+```
+
+#### Matrix Multiplication `%*%`
+
+```{r, echo = T, eval = T, error = T}
+mat_square <- mat1 %*% mat2
+mat_square
+```
+
+## Matrix functions {.smaller}
+
+#### Column Bind Matrices `cbind()`
+
+```{r, echo = T, eval = T, error = T}
+cbind(mat1, mat3)
+```
+
+#### Transpose `t()`
+
+```{r, echo = T, eval = T, error = T}
+t(mat1)
+```
+
+#### Column Sums `colSums()`
+
+```{r, echo = T, eval = T, error = T}
+colSums(mat1)
+```
+
+#### Row Sums `rowSums()`
+
+```{r, echo = T, eval = T, error = T}
+rowSums(mat1)
+```
+
+## Matrix functions {.smaller}
+
+#### Column Means `colMeans()`
+
+```{r, echo = T, eval = T, error = T}
+colMeans(mat1)
+```
+
+#### Row Means `rowMeans()`
+
+```{r, echo = T, eval = T, error = T}
+rowMeans(mat1)
+```
+
+#### Dimensions `dim()`
+
+```{r, echo = T, eval = T, error = T}
+dim(mat1)
+```
+
+## Matrix functions {.smaller}
+
+#### Determinant `det()`
+
+```{r, echo = T, eval = T, error = T}
+det(mat_square)
+```
+
+#### Matrix Inverse `solve()`
+
+```{r, echo = T, eval = T, error = T}
+solve(mat_square)
+```
+
+### Matrix Diagonal `diag()`
+
+```{r, echo = T, eval = T, error = T}
+diag(mat_square)
+```
+
+# Commenting Code and Style
+
+## What is a comment?
+
+-   Computers completely ignore comments (in R, any line preceded by `#`)
+-   Comments do not impact the functionality of your code at all.
+
+## So why do them...
+
+-   Commenting a code allows you to write notes for readers of your code only
+
+-   Usually, that reader is you!
+
+-   Coding without comments is ill-advised, bordering on impossible
+
+-   Sneak peak at functions...
+
+## Example {.smaller}
+
+```{r, echo = T, eval = F, error = T}
+#' Wald-type t test
+#' @param mod an object of class \code{bbdml}
+#' @return Matrix with wald test statistics and p-values. Univariate tests only.
+waldt <- function(mod) {
+  # Covariance matrix
+  covMat <- try(chol2inv(chol(hessian(mod))), silent = TRUE)
+  if (class(covMat) == "try-error") {
+    warning("Singular Hessian! Cannot calculate p-values in this setting.")
+    np <- length(mod$param)
+    se <- tvalue <- pvalue <- rep(NA, np)
+  } else {
+    # Standard errors
+    se <- sqrt(diag(covMat))
+    # test statistic
+    tvalue <- mod$param/se
+    # P-value
+    pvalue <- 2*stats::pt(-abs(tvalue), mod$df.residual)
+  }
+  # make table
+  coef.table <- cbind(mod$param, se, tvalue, pvalue)
+  dimnames(coef.table) <- list(names(mod$param),
+                               c("Estimate", "Std. Error", "t value", "Pr(>|t|)"))
+  return(coef.table)
+}
+```
+
+## Comment Style Guide
+
+-   When starting out, you should comment most lines
+-   Frequent use of comments should allow most comments to be restricted to one line for readability
+-   A comment should go above its corresponding line, be indented equally with the next line, and use a single `#` to mark a comment
+-   Use a string of `-` or `=` to break your code into easily noticeable chunks
+    -   Example: `# Data Manipulation -----------`
+    -   RStudio allows you to collapse chunks marked like this to help with clutter
+
+## Comment Style Guide
+
+-   There are exceptions to every rule! Usually, comments are to help **you**!
+
+#### Example of breaking rules
+
+-   Here's a snippet of a long mathematical function (lots of code omitted with ellipses for space).
+-   Code is divided into major steps marked by easily visible comments
+
+## Example of breaking rules {.smaller}
+
+```{r, echo = T, eval = F, error = T}
+objfun <- function(theta, W, M, X, X_star, np, npstar, link, phi.link) {
+
+  ### STEP 1 - Negative Log-likelihood
+
+  # extract matrix of betas (np x 1), first np entries
+  b      <- utils::head(theta, np)
+  # extract matrix of beta stars (npstar x 1), last npstar entries
+  b_star <- utils::tail(theta, npstar)
+
+  ...
+
+  ### STEP 2 - Gradient
+
+  # define gam
+  gam <- phi/(1 - phi)
+```
+
+## A final plea
+
+-   Being a successful programmer *requires* commenting your code
+-   Want to understand code you wrote \>24 hours ago without comments?
+
+## Who are you to tell me how to type?
+
+We will be using a mix of the [Tidyverse Style Guide](https://style.tidyverse.org/) by Hadley Wickham and the [Google Style Guide](https://google.github.io/styleguide/Rguide.html). Please see the links for details, but I will summarize some main points here and throughout the class as we learn more functionality, such as functions and packages.
+
+You may be graded on following good code style!
+
+## Object Names
+
+Use either underscores (`_`) or big camel case (`BigCamelCase`) to separate words within an object name. Do not use dots `.` to separate words in R functions!
+
+```{r, echo = T, eval = F, error = T}
+# Good
+day_one
+day_1
+DayOne
+
+# Bad
+dayone
+```
+
+## Object Names
+
+Names should be concise, meaningful, and (generally) nouns.
+
+```{r, echo = T, eval = F, error = T}
+# Good
+day_one
+
+# Bad
+first_day_of_the_month
+djm1
+```
+
+## Object Names
+
+It is *very* important that object names do not write over common functions!
+
+```{r, echo = T, eval = F, error = T}
+# Very extra super bad
+c <- 7
+t <- 23
+T <- FALSE
+mean <- "something"
+```
+
+Note: `T` and `F` are R shorthand for `TRUE` and `FALSE`, respectively. In general, spell them out to be as clear as possible.
+
+## Spacing
+
+Put a space after every comma, just like in English writing.
+
+```{r, echo = T, eval = F, error = T}
+# Good
+x[, 1]
+
+# Bad
+x[,1]
+x[ ,1]
+x[ , 1]
+```
+
+Do not put spaces inside or outside parentheses for regular function calls.
+
+```{r, echo = T, eval = F, error = T}
+# Good
+mean(x, na.rm = TRUE)
+
+# Bad
+mean (x, na.rm = TRUE)
+mean( x, na.rm = TRUE )
+```
+
+## Spacing with Operators
+
+Most of the time when you are doing math, conditionals, logicals, or assignment, your operators should be surrounded by spaces. (e.g. for `==`, `+`, `-`, `<-`, etc.)
+
+```{r, echo = T, eval = F, error = T}
+# Good
+height <- (feet * 12) + inches
+mean(x, na.rm = 10)
+
+# Bad
+height<-feet*12+inches
+mean(x, na.rm=10)
+```
+
+There are some exceptions we will learn more about later, such as the power symbol `^`. See the [Tidyverse Style Guide](https://style.tidyverse.org/) for more details!
+
+## Extra Spacing
+
+Adding extra spaces ok if it improves alignment of `=` or `<-`.
+
+```{r, echo = T, eval = F, error = T}
+# Good
+list(
+  total = a + b + c,
+  mean  = (a + b + c) / n
+)
+
+# Also fine
+list(
+  total = a + b + c,
+  mean = (a + b + c) / n
+)
+```
+
+## Long Lines of Code {.smaller}
+
+Strive to limit your code to 80 characters per line. This fits comfortably on a printed page with a reasonably sized font.
+
+If a function call is too long to fit on a single line, use one line each for the function name, each argument, and the closing `)`. This makes the code easier to read and to change later.
+
+```{r, echo = T, eval = F, error = T}
+# Good
+do_something_very_complicated(
+  something = "that",
+  requires = many,
+  arguments = "some of which may be long"
+)
+
+# Bad
+do_something_very_complicated("that", requires, many, arguments,
+                              "some of which may be long"
+                              )
+```
+
+*Tip! Try RStudio \> Preferences \> Code \> Display \> Show Margin with Margin column 80 to give yourself a visual cue!*
+
+## Assignment
+
+We use `<-` instead of `=` for assignment. This is moderately controversial if you find yourself in the right (wrong?) communities.
+
+```{r, echo = T, eval = F, error = T}
+# Good
+x <- 5
+
+# Bad
+x = 5
+```
+
+## Semicolons
+
+In R, semi-colons (`;`) are used to execute pieces of R code on a single line. In general, this is bad practice and should be avoided. Also, you never need to end lines of code with semi-colons!
+
+```{r, echo = T, eval = F, error = T}
+# Bad
+a <- 2; b <- 3
+
+# Also bad
+a <- 2;
+b <- 3;
+
+# Good
+a <- 2
+b <- 3
+```
+
+## Quotes and Strings
+
+Use `"`, not `'`, for quoting text. The only exception is when the text already contains double quotes and no single quotes.
+
+```{r, echo = T, eval = F, error = T}
+# Bad
+'Text'
+'Text with "double" and \'single\' quotes'
+
+# Good
+"Text"
+'Text with "quotes"'
+'<a href="http://style.tidyverse.org">A link</a>'
+```
+
+## Check-in 2
+
+In Check-in 2, we'll practice using functions, vectors, and matrices. We'll also make practice using an .Rmd template.

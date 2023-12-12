@@ -1,0 +1,405 @@
+---
+title: "MATH167R: Programming for data analysis"
+author: "Peter Gao"
+format: 
+  revealjs:
+    theme: [./slides.scss, ../theme.scss]
+editor: visual
+---
+
+## Overview of today
+
+-   Programming for data science
+-   Functional R programming with `apply`, `lapply`, `mapply`
+-   Working with APIs
+-   Looping through many files
+
+## Programming for data science
+
+In the first half of the semester, we covered skills for exploratory data analysis: visualization and descriptive statistics.
+
+Today, we'll combine those skills with programming concepts.
+
+## Motivating example
+
+Each week, the New York Times publishes a list of the bestselling books in the US. Suppose we want to know:
+
+-   How long has the current #1 book been #1?
+
+-   How many different books have been on the bestseller list this month?
+
+Alternatively, suppose that we wish to create a visualization/analysis that we can easily update each week when the data is released.
+
+![](images/bestsellers.png){fig-align="center"}
+
+## Motivating example
+
+Ideally, we can write functions that will allow us to produce results automatically each week for new data:
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+## skeleton 
+update_analysis <- function() {
+  # load new data
+  results <- load_data() |>
+    clean_data() |>
+    update_visualizations() 
+  return(results)
+}
+load_data <- function() {
+  # BODY OF FUNCTION
+}
+clean_data <- function() {
+  # BODY OF FUNCTION
+}
+update_visualizations <- function() {
+  # BODY OF FUNCTION
+}
+```
+
+## Functional programming
+
+Today we'll discuss some tools in R for running these kinds of automated analyses. In particular, we'll focus on using R for **functional programming**.
+
+Functional programming is a paradigm that focuses on writing and composing functions to perform tasks. Functional programming is an example of a **declarative** programming style which focuses on specifying **what** a program should accomplish, rather than **how**. On the other hand, **imperative** programming focuses on describing **how** a program operates.
+
+## Functional programming
+
+The benefits of functional programming include:
+
+-   Tasks are broken up into modular functions that can be analyzed in isolation
+-   Tasks may be easier to optimise or parallelize
+-   Unexpected side effects are avoided
+
+Some downsides include:
+
+-   Functional programming may be less efficient than imperative programming
+-   Less transparency about how tasks are executed
+
+## Functional programming
+
+Many functional languages require functions to be pure, meaning that:
+
+-   The output of a function depends only on the inputs, so if you call it with the same inputs, you get the same outputs.
+-   Functions have no side effects like changing the values of variables in the global environment.
+
+R doesn't require functions to be pure, but writing pure functions can help make your code understandable, at least in terms of clarifying **what** each function does.
+
+## Imperative vs. declarative
+
+### Imperative programming: `for` loop
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+out <- 0
+x <- 1:10
+for (i in x) {
+  out <- out + i
+}
+out
+```
+
+### Declarative programming
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+sum(x)
+```
+
+## Example: a complicated `for` loop
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+# Not the most transparent code
+library(palmerpenguins)
+data(penguins)
+penguins$centered_mass <- NA
+for (i in unique(penguins$species)) {
+  current_data <- penguins[penguins$species == i,]
+  species_mean_mass <- mean(current_data$body_mass_g, na.rm = T)
+  penguins$centered_mass[penguins$species == i] <- 
+    current_data$body_mass_g - species_mean_mass
+}
+```
+
+## Example: a functional programming approach
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| message: FALSE
+#| warning: FALSE
+library(tidyverse)
+penguins <- penguins |>
+  group_by(species) |>
+  mutate(centered_mass = body_mass_g - mean(body_mass_g, na.rm = T)) |>
+  ungroup()
+```
+
+## Functionals
+
+Functionals are functions that takes a function (and potentially other parameters) as input and returns a vector as output. For example, here is a simple functional. What do you think the following code does?
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+randomize <- function(f) f(runif(1000))
+randomize(mean)
+```
+
+. . .
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+randomize <- function(f) f(runif(1000))
+randomize(mean)
+```
+
+. . .
+
+Functionals are often used to replace `for` loops.
+
+The main drawback of `for` loops is that they are not expressive, meaning that they do not clearly commmunicate a high level goal. Functionals can more clearly communicate their purpose.
+
+## `lapply()`: Apply a function to every element of a list
+
+The `lapply()` function takes two arguments, `X` (an atomic vector or list), and a function `FUN` that can be applied to element of `X`. `lapply()` returns a list.
+
+Remember, we can think of every data frame as a list of columns.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+lapply(penguins, class)
+```
+
+## `lapply()`: Apply a function to every element of a list
+
+Note that `lapply()` always returns a list. We can use the `unlist()` function to turn this into a vector (but be careful).
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+unlist(lapply(penguins, class))
+```
+
+## `lapply()`: Apply a function to every element of a list
+
+`lapply()` is especially helpful when we have datasets of different sizes:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+# Create 20 random datasets
+l <- replicate(20, runif(sample(1:10, 1)), simplify = FALSE)
+l
+```
+
+## `lapply()`: Apply a function to every element of a list
+
+We can use `lapply()` to summarize all of our datasets:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+# Print the length of each dataset
+unlist(lapply(l, length))
+```
+
+## `vapply()`
+
+There are many other variants of `lapply()`, including `mapply()`, `sapply()`, and `vapply()`. The only one we will cover today is `vapply()`, which returns a vector or matrix instead of a list. When we use `vapply()`, we specify an additional parameter, `FUN.VALUE` which specifies a template for the return value from `FUN`.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+# Print the length of each dataset
+vapply(l, length, FUN.VALUE = numeric(1))
+```
+
+## Back to our motivating example
+
+![](images/bestsellers.png){fig-align="center"}
+
+First, let's get the data for each week over the last three months. To do so, we need to access the New York Times API (application programming interface)
+
+APIs allow programs to interact--one of the most common usages is for automatically downloading data using code.
+
+## APIs for getting data
+
+To use the New York Times API, we need to:
+
+-   Make an account and obtain an API key (an ID that will tell the New York Times who is downloading their data)
+-   Review the documentation to identify the relevant **endpoints**.
+-   Review any rules about usage/limits.
+
+## API endpoints
+
+APIs provide endpoints, which are addresses from which we can obtain the relevant data.
+
+![](images/bestsellers-api-info.png)
+
+## API rate limits
+
+In order to prevent users from abusing these services, many APIs have limits on how quickly a user can download data.
+
+![](images/bestsellers-api.png)
+
+## Downloading the current list
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+library(tidyverse)
+library(jsonlite)
+api_key <- readLines("~/Dropbox/teaching/math167R-f23/internal/nyt-key.txt")
+current_list <- jsonlite::fromJSON(
+  paste0(
+    "https://api.nytimes.com/svc/books/v3/lists/2023-10-22/hardcover-fiction.json?api-key=",
+    api_key
+  )
+)$results$books
+```
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| cache: TRUE
+current_list |>
+  select(title, author, publisher, rank, rank_last_week, weeks_on_list) |>
+  knitr::kable(digits = 3, row.names = F) |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "360px")
+```
+
+## Downloading the past three months' data
+
+```{r download.data}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+dates <- seq(as.Date("2023-10-22"), as.Date("2023-08-01"), by = -7)
+bestseller_lists <- lapply(
+  dates,
+  function(x) {
+    # slow down execution by waiting 12 seconds
+    Sys.sleep(12)
+    jsonlite::fromJSON(
+      paste0(
+        "https://api.nytimes.com/svc/books/v3/lists/",
+        x,
+        "/hardcover-fiction.json?api-key=",
+        api_key
+      )
+    )$results$books
+  }
+)
+names(bestseller_lists) <- dates
+```
+
+## Looping through many data files
+
+What if we want to get the #1 book for the last 12 weeks?
+
+. . .
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+vapply(bestseller_lists, function(x) x$title[1], character(1))
+```
+
+. . .
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+vapply(bestseller_lists, function(x) x$title[1], character(1))
+```
+
+## Looping through many data files
+
+Suppose we wish to see the performance of the current #1 book over the last 12 weeks:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+top_book_data <- 
+  lapply(bestseller_lists, function(x) x[x$title == "FOURTH WING", ])
+top_book_data
+```
+
+## Looping through many data files
+
+We can use the `bind_rows()` to create a data frame combining all the entries in this list. The `.id` argument creates a column from the list's names. We can convert these names into a `Date` variable.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+top_book_data <- bind_rows(top_book_data, .id = "date")
+top_book_data$date <- as.Date(top_book_data$date)
+```
+
+## Looping through many data files
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+library(ggplot2)
+ggplot(top_book_data, aes(x = date, y = rank)) + 
+  geom_line() + 
+  scale_y_continuous(breaks = 1:20, trans = "reverse") +
+  xlab("Date") +
+  ylab("Rank") +
+  ggtitle(paste0("NYT Best Seller Rank of ", top_book_data$title[1])) 
+```
+
+## Looping through many data files
+
+We can also pull the top 5 books from each list:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+top_5s <- lapply(bestseller_lists, function(x) x[1:5, ])
+top_5s
+```
+
+## Updating results for new data
+
+Finally, we can combine some of these functions into a larger function that we can run every week to update our results.
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+download_data <- function() {
+  # automatically pull today's date
+  dates <- seq(Sys.Date(), by = -7, length.out = 12)
+  bestseller_lists <- lapply(
+    dates,
+    function(x) {
+      # slow down execution by waiting 12 seconds
+      Sys.sleep(12)
+      jsonlite::fromJSON(
+        paste0(
+          "https://api.nytimes.com/svc/books/v3/lists/",
+          x,
+          "/hardcover-fiction.json?api-key=",
+          api_key
+        )
+      )$results$books
+    }
+  )
+  names(bestseller_lists) <- dates
+  return(bestseller_lists)
+}
+generate_plot <- function() {
+  # Add code here . . .
+}
+```

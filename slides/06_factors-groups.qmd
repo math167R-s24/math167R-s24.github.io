@@ -1,0 +1,338 @@
+---
+title: "MATH167R: Factors and Categorical Data"
+author: "Peter Gao"
+format: 
+  revealjs:
+    theme: [./slides.scss, ../theme.scss]
+editor: visual
+---
+
+## Warm-up
+
+1.  What does the following code do? How would you write it without a pipe?
+
+    ```{r, echo = T, eval = F}
+    "hello" |> print()
+    1:6 |> sample(1)
+    ```
+
+## Warm-up
+
+**Answer:**
+
+1.  
+
+    ```{r, echo = T, eval = F}
+    "hello" |> print()
+    1:6 |> sample(1)
+    ```
+
+    ```{r, echo = T, eval = F}
+    print("hello")
+    sample(1:6, 1)
+    ```
+
+## Overview of today
+
+-   Classes and attributes
+-   Factors for categorical data
+-   Advanced descriptive statistics and summaries
+
+## Objects revisited
+
+Remember John Chambers' quote: "Everything that exists in R is an object." This is roughly correct; however, it's important to remember that in R objects come in many shapes/flavors.
+
+```{r, eval = T, echo = T}
+diamonds <- ggplot2::diamonds
+summary(diamonds$carat)
+summary(diamonds$cut)
+```
+
+Why do these return two types of output?
+
+## Polymorphism {.smaller}
+
+Loosely speaking, `carat` and `cut` are stored as different types of data. In this code, R is using two versions of `summary()`: one meant for categorical data and one meant for numerical data.
+
+This is confusing because we need to remember that `summary()` works differently depending on the input, but it can also be powerful because the user doesn't have to remember many different functions (ex. `summary_numeric()` or `summary_character()`).
+
+This is **polymorphism** in action: A common functional interface can be used for different types of input.
+
+## Object-oriented programming {.smaller}
+
+In object-oriented programming, developers define different **classes** of objects with various **methods** (like `summary()`). This means that if a developer wants to create a new class of object (ex. for a new data type), users should still be able to use common functions like `print()` or `summary()`.
+
+R developers often use object-oriented programming, but the implementation takes many forms, so we won't go into detail in this course. What is important to remember is that the class(es) of an object determine(s) what you can do with it.
+
+## Classes
+
+```{r, eval = T, echo = T}
+weather_forecasts <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-12-20/weather_forecasts.csv')
+class(weather_forecasts$date)
+summary(weather_forecasts$date)
+```
+
+Here, we see that the `date` variable has the class `Date`, which has its own version of `summary()`.
+
+## Classes vs. data types
+
+We previously only discussed four basic data types: logical, integer, double, and character.
+
+-   Type (as accessed via `typeof()`) describes the underlying data type.
+
+-   Class (as accessed via `class()`) describes an attribute that determines what you can do with this object.
+
+```{r, eval = T, echo = T}
+class(weather_forecasts$date)
+typeof(weather_forecasts$date)
+```
+
+## Attributes {.smaller}
+
+In R, objects can be associated with **attributes** such as class, that provide information on the values contained within.
+
+```{r, eval = T, echo = T}
+attributes(head(weather_forecasts))
+```
+
+## Factors: categorical data
+
+**Factors** are a class of object for categorical data that uses integer representation.
+
+This can be efficient to store character vectors, because each string is only entered once. Because of this, creating data frames (but not tibbles!) in R often default to set strings as factors.
+
+## An example: months of the year {.smaller}
+
+Here's an example from *R for Data Science*:
+
+Imagine we have a variable that represents month of the year:
+
+```{r, echo = T, eval = T}
+x1 <- c("Dec", "Apr", "Jan", "Mar")
+```
+
+Some issues:
+
+-   Potential for typos
+
+```{r, echo = T, eval = T}
+x2 <- c("Dec", "Apr", "Jam", "Mar")
+```
+
+-   Not sorting in a reasonable way
+
+```{r, echo = T, eval = T}
+sort(x1)
+```
+
+## An example: months of the year {.smaller}
+
+We can represent this variable using a factor by defining its **levels**, or the valid values this variable can take:
+
+```{r, echo = T, eval = T}
+month_levels <- c(
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+)
+```
+
+We can create a factor using the `factor()` function:
+
+```{r, echo = T, eval = T}
+y1 <- factor(x1, levels = month_levels)
+y1
+sort(y1)
+```
+
+## An example: months of the year {.smaller}
+
+Note that factors are stored as integers but displayed using their levels:
+
+```{r, echo = T, eval = T}
+class(y1)
+typeof(y1)
+y1
+as.numeric(y1)
+attributes(y1)
+```
+
+## Movies data
+
+As an example of how factors work, let's look at an example using Tidy Tuesday data on movie profits.
+
+```{r, warning = F, message = F, cache = T, echo = T}
+movies <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-10-23/movie_profit.csv")
+knitr::kable(movies[1:20,], digits = 3, row.names = F) |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "300px")
+```
+
+## Movies genre
+
+```{r, warning = F, message = F, cache = T, echo = T}
+genre_char <- movies$genre
+genre_fct <- as.factor(movies$genre)
+head(genre_char)
+head(genre_fct)
+```
+
+```{r, warning = F, message = F, cache = T, echo = T}
+class(genre_fct)
+typeof(genre_fct)
+```
+
+## Size of character and factors
+
+Generally, the factor representation saves space in memory:
+
+```{r, warning = F, message = F, cache = T, echo = T}
+object.size(genre_char)
+object.size(genre_fct) 
+```
+
+# The `forcats` package
+
+The `forcats` package provides helpful functions for working with factors. Consider the following example:
+
+```{r, echo = T, eval = T}
+library(forcats)
+color_levels <- c(
+  "red", "blue", "yellow"
+)
+color_var <- c("red", "yellow", "blue")
+color_fct_1 <- factor(color_var, levels = color_levels)
+```
+
+## `fct_recode()`: recode levels
+
+```{r, echo = T, eval = T}
+fct_recode(color_fct_1, ruby = "red")
+fct_recode(color_fct_1, ruby = "red", sapphire = "blue", topaz = "yellow", w = "d")
+```
+
+## `fct_collapse()`: collapse levels
+
+```{r, echo = T, eval = T}
+color_fct_1
+fct_collapse(color_fct_1, purple = c("red", "blue"))
+```
+
+## `fct_other()`: replace w/ "Other"
+
+```{r, echo = T, eval = T}
+color_fct_1
+fct_other(color_fct_1, keep = "red")
+```
+
+## `forcats` cheatsheet {.smaller}
+
+-   Create a factor: `factor(..., levels = ...)`
+-   Count levels: `fct_count()`
+-   Unique levels: `fct_unique()`
+-   Combine factor vectors: `fct_c()`
+-   Relevel: `fct_relevel()`
+-   Drop levels: `fct_drop()`
+-   Add levels: `fct_expand()`
+-   Recode levels: `fct_recode()`
+-   Collapse levels: `fct_collapse()`
+-   Other
+
+## Takeaways
+
+-   Don't memorize these functions--read the documentation!
+-   Be efficient! Often someone has written a function that does exactly what you want to do.
+
+# Data manipulation and grouping
+
+## Mutating variables
+
+The `mutate()` function from the `tidyverse` gives a convenient way to add/change columns in a data frame.
+
+```{r, echo = T, eval = T, message = F, warning = F}
+library(tidyverse)
+movies <- movies |>
+  mutate(genre = as.factor(genre)) |>
+  mutate(return = worldwide_gross / production_budget)
+```
+
+## Movies data
+
+```{r, warning = F, message = F, cache = T, fig.height = 5, fig.width = 6, echo = T, eval = T}
+movies$genre = as.factor(movies$genre)
+movies <- movies |>
+  mutate(genre = fct_collapse(genre,
+                              AA = c("Action", "Adventure"))) |>
+  mutate(genre = fct_recode(genre, Scary = "Horror"))
+```
+
+## Summarizing variables
+
+Recall that the `summarize()` function can be used to calculate statistics on our entire data frame:
+
+```{r, echo = T, eval = T}
+movies |>
+  summarize(max_gross = max(worldwide_gross, na.rm = T))
+```
+
+## Summaries by group
+
+What if we want to learn the max gross for each genre? When we have a character/factor column, we can use the `group_by` function in combination with `summarize()` to calculate group-specific statistics:
+
+```{r, echo = T, eval = F}
+movies |>
+  group_by(genre) |>
+  summarize(highest_gross = max(worldwide_gross)) |>
+  ungroup()
+```
+
+## Challenge
+
+What do you think this code returns?
+
+```{r, echo = T, eval = F}
+movies |>
+  group_by(genre) |>
+  summarize(highest_gross = movie[which.max(worldwide_gross)]) |>
+  ungroup()
+```
+
+. . .
+
+```{r, echo = F, eval = T}
+movies |>
+  group_by(genre) |>
+  summarize(highest_gross = movie[which.max(worldwide_gross)]) |>
+  ungroup()
+```
+
+## Challenge
+
+What do you think this code returns?
+
+```{r, echo = T, eval = F}
+movies |>
+  group_by(genre, mpaa_rating) |>
+  summarize(highest_gross = movie[which.max(worldwide_gross)]) |>
+  ungroup()
+```
+
+. . .
+
+```{r, echo = F, eval = T}
+movies |>
+  group_by(genre, mpaa_rating) |>
+  summarize(highest_gross = movie[which.max(worldwide_gross)]) |>
+  ungroup()
+```
+
+## Movies data
+
+```{r, warning = F, message = F, cache = T, echo = T, eval = T}
+genre_medians <- movies |>
+  group_by(genre) |>
+  summarize(median_budget = median(production_budget),
+            median_domestic = median(domestic_gross),
+            median_ww = median(worldwide_gross),
+            median_return = median(return)) |>
+  ungroup()
+```

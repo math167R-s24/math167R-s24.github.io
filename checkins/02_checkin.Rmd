@@ -1,0 +1,58 @@
+---
+title: "Check-in 2"
+author: "YOUR NAME HERE"
+date: "2023-08-28"
+output: html_document
+---
+
+You should edit this .Rmd using RStudio, then click *Render* in the menu bar of the Source window (above the text of this .Rmd). Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit!
+
+### Collaborators
+
+INSERT NAMES OF ANY COLLABORATORS
+
+## A. Functions
+
+Work with one or two other students,
+
+**1.** In words, what does the following line of code do?
+
+```{r, eval = T}
+sample(1:6, 1)
+```
+
+<!-- REPLACE THIS LINE WITH YOUR ANSWER -->
+
+**2.** Run the line of code in RStudio. What do you get? What did your groupmates get? What happens to the result each time you knit the document?
+
+<!-- REPLACE THIS LINE WITH YOUR ANSWER -->
+
+**3.** Below, we introduce the `set.seed` function. What do the two lines of code below do? What does the `456` mean? What happens to the result each time you knit the document?
+
+```{r, eval = T}
+set.seed(456)
+sample(1:6, 1)
+```
+
+<!-- REPLACE THIS LINE WITH YOUR ANSWER -->
+
+## B. Vectors and Matrices
+
+**4.** Write a line of code to generate a vector of length 100 whose entries are 1, 2, ..., 100.
+
+```{r, eval = T}
+# REPLACE WITH YOUR CODE
+```
+
+**5.** Write a line of code to generate the following matrix:
+
+`1 2 3`
+
+`4 5 6`
+
+`7 8 9`
+
+
+```{r, eval = T}
+# REPLACE WITH YOUR CODE
+```

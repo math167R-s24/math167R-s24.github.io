@@ -1,0 +1,14 @@
+{
+  "hash": "8dc7d4cb46789b700d6de134a5c68a41",
+  "result": {
+    "markdown": "---\ntitle: \"Check-in 2\"\nauthor: \"YOUR NAME HERE\"\ndate: \"2023-08-28\"\noutput: html_document\n---\n\n\nYou should edit this .Rmd using RStudio, then click *Render* in the menu bar of the Source window (above the text of this .Rmd). Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit!\n\n### Collaborators\n\nINSERT NAMES OF ANY COLLABORATORS\n\n## A. Functions\n\nWork with one or two other students,\n\n**1.** In words, what does the following line of code do?\n\n\n::: {.cell}\n\n```{.r .cell-code}\nsample(1:6, 1)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[1] 1\n```\n:::\n:::\n\n\n<!-- REPLACE THIS LINE WITH YOUR ANSWER -->\n\n**2.** Run the line of code in RStudio. What do you get? What did your groupmates get? What happens to the result each time you knit the document?\n\n<!-- REPLACE THIS LINE WITH YOUR ANSWER -->\n\n**3.** Below, we introduce the `set.seed` function. What do the two lines of code below do? What does the `456` mean? What happens to the result each time you knit the document?\n\n\n::: {.cell}\n\n```{.r .cell-code}\nset.seed(456)\nsample(1:6, 1)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[1] 5\n```\n:::\n:::\n\n\n<!-- REPLACE THIS LINE WITH YOUR ANSWER -->\n\n## B. Vectors and Matrices\n\n**4.** Write a line of code to generate a vector of length 100 whose entries are 1, 2, ..., 100.\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# REPLACE WITH YOUR CODE\n```\n:::\n\n\n**5.** Write a line of code to generate the following matrix:\n\n`1 2 3`\n\n`4 5 6`\n\n`7 8 9`\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# REPLACE WITH YOUR CODE\n```\n:::",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

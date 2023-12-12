@@ -1,0 +1,93 @@
+---
+title: "Lab 4"
+author: "YOUR NAME HERE"
+date: "2023-09-13"
+format: 
+  html:
+    embed-resources: true
+    code-tools: true
+    code-summary: "Code"
+---
+
+Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.
+
+### Collaborators
+
+INSERT NAMES OF ANY COLLABORATORS
+
+```{r}
+# LOAD ANY RELEVANT PACKAGES HERE
+```
+
+## A. Penguins visualizations
+
+1.  For this lab, we'll be using the `palmerpenguins` data. Use the following code to load the data.
+
+```{r}
+library(palmerpenguins)
+data(penguins)
+```
+
+2.  Create and interpret a histogram of `bill_length_mm` using base R code. Be sure to use meaningful axis labels and titles.
+
+```{r}
+# YOUR CODE HERE
+```
+
+<!--# YOUR ANSWER/EXPLANATION HERE -->
+
+3.  Create and interpret a histogram of `bill_length_mm` using ggplot2. Be sure to use meaningful axis labels and titles.
+
+```{r}
+# YOUR CODE HERE
+```
+
+4.  Create and interpret a scatterplot of `bill_length_mm` versus `bill_depth_mm` using base R code. Be sure to use meaningful axis labels and titles.
+
+```{r}
+# YOUR CODE HERE
+```
+
+<!--# YOUR ANSWER/EXPLANATION HERE -->
+
+5. Create and interpret a scatterplot of `bill_length_mm` versus `bill_depth_mm` using ggplot2. Be sure to use meaningful axis labels and titles.
+
+```{r}
+# YOUR CODE HERE
+```
+
+<!--# YOUR ANSWER/EXPLANATION HERE -->
+
+6. Update your `ggplot2` scatterplot of `bill_length_mm` versus `bill_depth_mm` using ggplot2 so that the color of a point represents the corresponding penguin's species. What do you notice?
+
+```{r}
+# YOUR CODE HERE
+```
+
+<!--# YOUR ANSWER/EXPLANATION HERE -->
+
+## B. Your choice of data
+
+7. Find and download a dataset from the Tidy Tuesday project (https://github.com/rfordatascience/tidytuesday). 
+
+```{r}
+# YOUR CODE HERE
+```
+
+8. Create and interpret a univariate visualization for a variable of your choice. 
+
+```{r}
+# YOUR CODE HERE
+```
+
+<!--# YOUR ANSWER/EXPLANATION HERE -->
+
+9. Create and interpret a multivariate visualization for a variable of your choice. 
+
+```{r}
+# YOUR CODE HERE
+```
+
+<!--# YOUR ANSWER/EXPLANATION HERE -->
+
+

@@ -1,0 +1,48 @@
+---
+title: "Lab 6"
+author: "YOUR NAME HERE"
+date: "2023-10-11"
+format: 
+  html:
+    embed-resources: true
+    code-tools: true
+    code-summary: "Code"
+---
+
+Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.
+
+### Collaborators
+
+
+```{r}
+# LOAD ANY RELEVANT PACKAGES HERE
+```
+
+## A. Basic functions
+
+1. Write a function `is_even()` that takes as input a single integer `x` and returns a logical that represents whether `x` is an even number or not. This function should check to make sure the input is an integer. If the input is not an integer, the function should stop with an informative error message.
+
+2. Evaluate your function with even integer input.
+
+3. Evaluate your function with odd numeric input.
+
+4. Trigger your custom error message. Note: You will need to add the chunk option `error = TRUE` to your R Markdown code chunk. If you do not, your document will not compile.
+
+5. Write a function `get_factors()` that takes a single positive integer input `x` and outputs all of its factors as a vector. For example, since 10 is divisible by 1, 2, 5, and 10 itself, `get_factors(10)` should return a numeric vector containing 1, 2, 5, and 10.
+
+## B. Thresholding functions
+
+6. The hard-threshold function is defined as
+
+$$f_\lambda(x) =\begin{cases}
+x & |x|\geq \lambda\\
+0 & |x|<\lambda
+\end{cases}$$
+
+Write an R function that takes two arguments as input: a numeric input `x` and a threshold `lambda`. Your function should return the value of $f_\lambda(x)$ and work for vector input `x` of any length.
+
+7. For $\lambda=4$, demonstrate your function on the vector c(-5, -3, 0, 3, 5).
+
+(Hint: the output should be the vector `-5, 0, 0, 0, 5`)
+
+8. For $\lambda=2$,  demonstrate your function on the vector c(-7, -5, -3, 0, 3, 5, 7).

@@ -1,0 +1,14 @@
+{
+  "hash": "497624eb4560ea8ccbee911030f07a53",
+  "result": {
+    "markdown": "---\ntitle: \"Check-in 7\"\nauthor: \"YOUR NAME HERE\"\ndate: \"2023-10-23\"\nformat: \n  html:\n    embed-resources: true\n    code-tools: true\n    code-summary: \"Code\"\n---\n\n\nRemember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.\n\n### Collaborators\n\nINSERT NAMES OF ANY COLLABORATORS\n\nUse the following code to create a list of four matrices:\n\n\n::: {.cell}\n\n```{.r .cell-code}\nset.seed(100)\nmatrix_list <- list(\n  A = diag(5),\n  B = matrix(rnorm(9), nrow = 3, ncol = 3),\n  C = matrix(c(1, 2, 3, 4), nrow = 2, ncol = 2),\n  D = diag(c(1:5))\n)\n```\n:::\n\n\n1. Use the `lapply` function to create a list of length four containing the inverse of these four matrices.\n\n2. Use the `sapply` function to create a vector of length four containing the determinants of these four matrices.\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

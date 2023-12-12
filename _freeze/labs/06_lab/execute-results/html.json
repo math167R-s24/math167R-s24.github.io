@@ -1,0 +1,16 @@
+{
+  "hash": "d98aee9c64f1394e46fcbf2b3329c72e",
+  "result": {
+    "markdown": "---\ntitle: \"Lab 6\"\nauthor: \"YOUR NAME HERE\"\ndate: \"2023-10-11\"\nformat: \n  html:\n    embed-resources: true\n    code-tools: true\n    code-summary: \"Code\"\n---\n\n\nRemember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.\n\n### Collaborators\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# LOAD ANY RELEVANT PACKAGES HERE\n```\n:::\n\n\n## A. Basic functions\n\n1. Write a function `is_even()` that takes as input a single integer `x` and returns a logical that represents whether `x` is an even number or not. This function should check to make sure the input is an integer. If the input is not an integer, the function should stop with an informative error message.\n\n2. Evaluate your function with even integer input.\n\n3. Evaluate your function with odd numeric input.\n\n4. Trigger your custom error message. Note: You will need to add the chunk option `error = TRUE` to your R Markdown code chunk. If you do not, your document will not compile.\n\n5. Write a function `get_factors()` that takes a single positive integer input `x` and outputs all of its factors as a vector. For example, since 10 is divisible by 1, 2, 5, and 10 itself, `get_factors(10)` should return a numeric vector containing 1, 2, 5, and 10.\n\n## B. Thresholding functions\n\n6. The hard-threshold function is defined as\n\n$$f_\\lambda(x) =\\begin{cases}\nx & |x|\\geq \\lambda\\\\\n0 & |x|<\\lambda\n\\end{cases}$$\n\nWrite an R function that takes two arguments as input: a numeric input `x` and a threshold `lambda`. Your function should return the value of $f_\\lambda(x)$ and work for vector input `x` of any length.\n\n7. For $\\lambda=4$, demonstrate your function on the vector c(-5, -3, 0, 3, 5).\n\n(Hint: the output should be the vector `-5, 0, 0, 0, 5`)\n\n8. For $\\lambda=2$,  demonstrate your function on the vector c(-7, -5, -3, 0, 3, 5, 7).",
+    "supporting": [
+      "06_lab_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

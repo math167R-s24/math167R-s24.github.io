@@ -1,0 +1,30 @@
+---
+title: "Check-in 1: Instructions"
+author: "Peter Gao"
+date: "2023-08-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## A. Running your first R code
+
+1. On the computer you are using, create a new folder titled "MATH167R" or something similar.
+
+2. Within this folder, create a sub-folder named "checkins" or something similar.
+
+3. Download "[01_first-R-code.R](../static/01_first-R-code.R)" and save it in your checkins folder.
+
+4. Open "01_first-R-code.R" in RStudio. It should look something like the code below.
+
+```{r, file='../static/01_first-R-code.R', eval = F}
+```
+
+5. Run the code line by line and answer the two questions on the [Check-in 1 assignment](https://sjsu.instructure.com/courses/1571636/quizzes/1690553) on Canvas.
+
+
+6. For complete credit for Check-in 1, please also complete the pre-course survey and NameCoach recording (links on Canvas).
+
+7. If you would like to find others to work with, please also reply to the Piazza post.

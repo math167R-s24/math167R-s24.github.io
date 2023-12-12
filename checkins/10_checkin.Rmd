@@ -1,0 +1,61 @@
+---
+title: "Check-in 10"
+author: "YOUR NAME HERE"
+date: "2023-11-28"
+date-format: "[Due] MMMM DD, YYYY"
+format: 
+  html:
+    embed-resources: true
+    code-tools: true
+    code-summary: "Code"
+---
+
+Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.
+
+### Collaborators
+
+INSERT NAMES OF ANY COLLABORATORS
+
+## Part 1. Training and Test Error (10 points)
+
+Use the following code to generate data:
+
+```{r, message = FALSE}
+library(ggplot2)
+# generate data
+set.seed(302)
+n <- 30
+x <- sort(runif(n, -3, 3))
+y <- 2*x + 2*rnorm(n)
+x_test <- sort(runif(n, -3, 3))
+y_test <- 2*x_test + 2*rnorm(n)
+df_train <- data.frame("x" = x, "y" = y)
+df_test <- data.frame("x" = x_test, "y" = y_test)
+
+# store a theme
+my_theme <- theme_bw(base_size = 16) + 
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5))
+
+# generate plots
+g_train <- ggplot(df_train, aes(x = x, y = y)) + geom_point() +
+  xlim(-3, 3) + ylim(min(y, y_test), max(y, y_test)) + 
+  labs(title = "Training Data") + my_theme
+g_test <- ggplot(df_test, aes(x = x, y = y)) + geom_point() +
+  xlim(-3, 3) + ylim(min(y, y_test), max(y, y_test)) + 
+  labs(title = "Test Data") + my_theme
+g_train
+g_test
+```
+
+**1a.** For $k = 1$ and $k = 5$, fit a degree-k polynomial linear regression model with `y` as the response and `x` as the explanatory variable(s).
+(*Hint: Use *`poly()`*, as in the lecture slides.*)
+
+**1b.** For each model from (a), record the training error. Then predict `y_test` using `x_test` and also record the test error.
+
+**1c.** If you were going to choose a model based on training error, which would you choose? Plot the data, colored by split. Add a line to the plot representing your selection for model fit. Add a subtitle to this plot with the (rounded!) test error.
+(*Hint: See Lecture Slides for example code.*)
+
+**1d.** If you were going to choose a model based on test error, which would you choose? Plot the data, colored by split. Add a line to the plot representing your selection for model fit. Add a subtitle to this plot with the (rounded!) test error.
+
+**1e.** What do you notice about the shape of the curves from part (d) and (e)? Which model do you think has lower bias? Lower variance? Why?

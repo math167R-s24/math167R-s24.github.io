@@ -1,0 +1,61 @@
+---
+title: "Lab 10"
+author: "YOUR NAME HERE"
+date: 2023-11-29
+date-format: "[Due] MMMM DD, YYYY"
+format: 
+  html:
+    embed-resources: true
+    code-tools: true
+    code-summary: "Code"
+---
+
+Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.
+
+### Collaborators
+
+```{r}
+# LOAD ANY RELEVANT PACKAGES HERE
+```
+
+## A. Hypothesis Testing
+
+1. Use the following code to obtain the Hawaiian Airlines and Alaska Airlines flights from the `nycflights13` package.
+
+```{r, warning = F, message = F}
+library(tidyverse)
+library(nycflights13)
+data("flights")
+flights_sample <- flights |> 
+  filter(carrier %in% c("HA", "AS"))
+```
+
+2. Compute a 95% confidence interval for the mean `arr_delay` for Alaska Airlines flights. Interpret your results.
+
+3. Compute a 95% confidence interval for the mean `arr_delay` for Hawaiian Airlines flights. Interpret your results.
+
+4. Compute a 95% confidence interval for the proportion of flights for which `arr_delay > 0` for Hawaiian Airlines flights. Interpret your results.
+
+5. Consider the null hypothesis that the mean `arr_delay` for Alaska is equal to the mean `arr_delay` for Hawaiian and the alternative hypothesis that the mean `arr_delay` values are different for the two airlines. Perform an appropriate hypothesis test and interpret your results.
+
+## B. Linear Regression
+
+6. Researchers at the University of Texas in Austin, Texas tried to figure out what causes differences in instructor teaching evaluation scores. Use the following code to load data on 463 courses. A full description of the data can be found [here](https://www.openintro.org/book/statdata/?data=evals).
+
+```{r, warning = F, message = F}
+evals <- readr::read_csv("https://www.openintro.org/book/statdata/evals.csv")
+```
+
+7. Carry out a linear regression with `score` as the response variable and `age` as the single explanatory variable. Interpret your results.
+
+8. Extend your regression model by adding an additional explanatory variable. What happens to your results? Are the new $p$-values appropriate to use?
+
+## C. Power simulation
+
+9. For this question, you will write a simulation to estimate the power of a one-sample $t$-test for a population mean for varying effect sizes, $\alpha$, and sample sizes. In particular, assume that we are testing the hypotheses $H_0: \mu = 0$ and $H_a: \mu \not=0$.
+
+    a. Write a function that takes four inputs: `mu`, `sigma`, `alpha`, and `n`. Your function should randomly simulate a sample of `n` normal random variables with mean `mu` and standard deviation `sigma` and then compute the appropriate test $t$-statistic, treating the mean and standard deviation as unknown. You should then compare your test statistic with a $t$ distribution and obtain the $P$-value of your hypothesis test. Based on `alpha`, return `TRUE` if the null hypothesis is rejected and `FALSE` if the null hypothesis is not rejected.
+    
+    b. Run your function 1000 times to estimate the power when `mu = 1`, `sigma = 1`, `alpha = .05` and `n = 10`.
+  
+    c. Run your function 1000 times to estimate the power when `mu = 0.5`, `sigma = 1`, `alpha = .05` and `n = 10`. Compare with your results from (b).
