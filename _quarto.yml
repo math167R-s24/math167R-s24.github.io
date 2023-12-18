@@ -5,11 +5,11 @@ project:
 website:
   title: "MATH167R"
   page-navigation: true
-  description: "Homepage for MATH167R, Fall 2023 at SJSU"
+  description: "Homepage for MATH167R, Spring 2024 at SJSU"
   open-graph: true
   page-footer:
     right: "Built with [Quarto](https://quarto.org/) based on the website for [STA 210](https://sta210-s22.github.io/website/)."
-    left: "&copy; Copyright 2023, Peter A. Gao"
+    left: "&copy; Copyright 2024, Peter A. Gao"
 
   sidebar:    
     background: "#0055A2"
@@ -23,10 +23,14 @@ website:
             text: Syllabus
           - href: index.qmd
             text: Schedule
-      - section: "Weekly materials"
-        contents:
-          - href: weeks/week-1.qmd
-            text: "Week 1"
+          - href: resources.qmd
+            text: Resources
+          - href: https://forms.gle/TEtqMjmJDKmJieR47
+            text: Feedback
+          - href: license.qmd
+            text: License
+
+
 
 format:
   html:
@@ -41,4 +45,7 @@ format:
 
 freeze: auto
 
+format-links: false
+
+draft: true
 

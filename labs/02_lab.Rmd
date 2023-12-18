@@ -3,6 +3,7 @@ title: "Lab 2"
 author: "YOUR NAME HERE"
 date: "2023-08-30"
 output: html_document
+
 ---
 
 You should edit this .Rmd using RStudio, then click *Render* in the menu bar of the Source window (above the text of this .Rmd). Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit!

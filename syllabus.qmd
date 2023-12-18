@@ -3,6 +3,7 @@ title: "Syllabus"
 editor: 
   markdown: 
     wrap: 72
+draft: false
 ---
 
 ## Course information
