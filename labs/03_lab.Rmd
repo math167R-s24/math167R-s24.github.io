@@ -1,8 +1,14 @@
 ---
-title: "Lab 3"
+title: "Lab 3: Descriptive Statistics"
 author: "YOUR NAME HERE"
-date: "2023-09-06"
-output: html_document
+date: 2024-02-14
+date-format: "[Due] MMMM DD, YYYY"
+format: 
+  html:
+    embed-resources: true
+    code-tools: true
+    code-summary: "Code"
+
 ---
 
 You should edit this .Rmd using RStudio, then click *Render* in the menu bar of the Source window (above the text of this .Rmd). Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit!
@@ -19,62 +25,78 @@ INSERT NAMES OF ANY COLLABORATORS
 
 1.  For this lab, we'll be using data on weather forecasts gathered by student at Saint Louis University. You can read about the dataset [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2022/2022-12-20). Download the weather forecasts data using the following code:
 
-    ```{r}
-    weather_forecasts <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-12-20/weather_forecasts.csv')
-    ```
+```{r}
+weather_forecasts <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-12-20/weather_forecasts.csv')
+```
 
 2.  How many rows are in this dataset? How many columns?
 
-    ```{r}
-    # YOUR CODE HERE
-    ```
+```{r}
+# YOUR CODE HERE
+```
 
-    <!--# YOUR ANSWER/EXPLANATION HERE -->
+<!--# YOUR ANSWER/EXPLANATION HERE -->
 
 3.  How many cities are represented in this dataset?
 
-    ```{r}
-    # YOUR CODE HERE
-    ```
+```{r}
+# YOUR CODE HERE
+```
 
-    <!--# YOUR ANSWER/EXPLANATION HERE -->
-    
+<!--# YOUR ANSWER/EXPLANATION HERE -->
+
 4.  Create a new data frame containing only the forecasts for San Jose. You may have to explore the values for the `city` variable.
 
-    ```{r}
-    # YOUR CODE HERE
-    ```
+```{r}
+# YOUR CODE HERE
+```
 
-    <!--# YOUR ANSWER/EXPLANATION HERE -->
+<!--# YOUR ANSWER/EXPLANATION HERE -->
 
 5. Compute the mean absolute error between `observed_temp` and `forecast_temp` for San Jose.
 
-    ```{r}
-    # YOUR CODE HERE
-    ```
+```{r}
+# YOUR CODE HERE
+```
 
-    <!--# YOUR ANSWER/EXPLANATION HERE -->
-    
+<!--# YOUR ANSWER/EXPLANATION HERE -->
+
 6. Compute the mean absolute error between `observed_temp` and `forecast_temp` for San Jose using only forecasts made 48 hours in advance.
 
-    ```{r}
-    # YOUR CODE HERE
-    ```
+```{r}
+# YOUR CODE HERE
+```
 
-    <!--# YOUR ANSWER/EXPLANATION HERE -->
+<!--# YOUR ANSWER/EXPLANATION HERE -->
 
 7. Compute the mean absolute error between `observed_temp` and `forecast_temp` for San Jose using only forecasts made 12 hours in advance.
 
-    ```{r}
-    # YOUR CODE HERE
-    ```
+```{r}
+# YOUR CODE HERE
+```
 
-    <!--# YOUR ANSWER/EXPLANATION HERE -->
+<!--# YOUR ANSWER/EXPLANATION HERE -->
 
-8. Compare your answers to 6 and 7. What do you notice? 
+8. Compare your answers to 6 and 7. What do you notice? How does this compare to your expectation?
 
-    <!--# YOUR ANSWER/EXPLANATION HERE -->
+<!--# YOUR ANSWER/EXPLANATION HERE -->
 
+9. Pick two cities in this dataset. Investigate whether the forecast accuracy is better for one city than for the other, using an appropriate statistic. Discuss your findings.
 
+<!--# YOUR ANSWER/EXPLANATION HERE -->
 
+## B. Find your own data
 
+For this component, pick a [Tidy Tuesday dataset](https://github.com/rfordatascience/tidytuesday/tree/master/data/2023) and complete the following activity.
+
+10. Provide a brief description of your dataset. Identify one question you could try to answer using this dataset.
+
+<!--# YOUR ANSWER/EXPLANATION HERE -->
+
+11. Open your dataset in R and compute one or more descriptive statistics that shed light on your question. Discuss your findings.
+
+<!--# YOUR ANSWER/EXPLANATION HERE -->
+
+12. Are there any limitations of your analysis? Could additional data or more complicated methods improve your analysis? Discuss.
+
+<!--# YOUR ANSWER/EXPLANATION HERE -->

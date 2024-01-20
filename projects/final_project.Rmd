@@ -28,7 +28,7 @@ Your projects will be evaluated on your use of code to perform your analysis as 
 3.  For each of your three research questions, generate at least one data visualization or descriptive statistic. Discuss and interpret your findings.
 4.  For at least one of your research questions, perform a statistical analysis (ex. hypothesis test, confidence interval, linear regression). Discuss and interpret your findings.
 5.  Final submissions must include .Rmd and .html files.
-6.  If you are an undergraduate interested in participating in a competition and potentially presenting at the Electronic Undergraduate Statistics Conference, you may consider using this project to submit to the [Undergraduate Class Project Competition](https://www.causeweb.org/usproc/usclap).
+6.  
 
 ## Part One: Project Proposal (10 points), due 10/13
 

@@ -8,22 +8,23 @@ draft: false
 
 ## Course information
 
-+-----------------+-------------------------------------------------+
-| **Instructor**  | Peter Gao                                       |
-+-----------------+-------------------------------------------------+
-| **Lectures**    | Weekly on Monday and Wednesday, 10:30-11:45am   |
-|                 | in MH234                                        |
-+-----------------+-------------------------------------------------+
-| **Office        | Monday and Wednesday, 1:30-2:30pm in MH311 or   |
-| Hours**         | email for an appointment                        |
-+-----------------+-------------------------------------------------+
-| **Email**       | peter.gao \[at sjsu\]                           |
-|                 |                                                 |
-|                 | *I will make every effort to respond to emails  |
-|                 | within a day, but please feel free to send me a |
-|                 | reminder after 48 hours have passed. Please     |
-|                 | include \[MATH 167R\] in your subject line.*    |
-+-----------------+-------------------------------------------------+
++-----------------+------------------------------------------------+
+| **Instructor**  | Peter Gao                                      |
++-----------------+------------------------------------------------+
+| **Lectures**    | Weekly on Monday and Wednesday, 12-1:15pm      |
+|                 | (Section 01) and 1:30-2:45pm (Section 02) in   |
+|                 | MH235.                                         |
++-----------------+------------------------------------------------+
+| **Office        | Monday and Wednesday, 10:30-11:30am in MH311   |
+| Hours**         | or email for an appointment                    |
++-----------------+------------------------------------------------+
+| **Email**       | peter.gao \[at sjsu\]                          |
+|                 |                                                |
+|                 | *I will make every effort to respond to emails |
+|                 | within a day, but please feel free to send me  |
+|                 | a reminder after 48 hours have passed. Please  |
+|                 | include \[MATH 167R\] in your subject line.*   |
++-----------------+------------------------------------------------+
 
 ## Learning objectives
 

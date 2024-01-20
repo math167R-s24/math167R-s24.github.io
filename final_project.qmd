@@ -1,0 +1,108 @@
+---
+title: "Final Project: A Data Analysis Narrative"
+date: "2024-05-10"
+format: 
+  html:
+    embed-resources: true
+    code-tools: true
+    code-summary: "Code"
+---
+ 
+ 
+## Overview
+
+This course culminates with a data analysis narrative project in which you will use the data exploration, visualization, and analysis skills you have learned this semester to study a research question of your choice and then create a narrative about your exploration. Examples of research questions that can lead to successful projects may include but are not limited to:
+
+- **What factors (country of origin, roasting process) influence the ratings of coffee beans by food critics?** using data on [coffee ratings](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-07-07/readme.md).
+- **What neighborhood characteristics are most heavily correlated with local average household income?** using data from the [Opportunity Atlas](https://www.opportunityatlas.org).
+- **What variables are most predictive of an MLB pitcher's win rate?** using MLB pitching data.
+
+The best projects will start with an interesting and rich research question which motivates the choice of dataset (instead of starting with the data and trying to make up a research topic based on the data). You will use your selected dataset to conduct an exploratory data analysis, create data visualizations, and carry out an inferential analysis (like a hypothesis test or regression analysis) to explore your research question(s). Your chosen visualizations and methods should provide compelling evidence about your research questions.
+
+During the semester, you will submit multiple checkpoint assignments, including a written project proposal which must be approved by the instructor. At the end of the semester, you will deliver a short oral presentation on your project and submit a written report of your results as well as a brief reflection and self-evaluation.
+
+This project is intentionally open-ended: there are no predetermined right answers. Exceptional projects will demonstrate mastery of the course material and involve more than a superficial review of material covered in class or application using a toy dataset. If you are an undergraduate interested in participating in a competition and potentially presenting at the Electronic Undergraduate Statistics Conference, you may consider using this project to submit to the [Undergraduate Class Project Competition](https://www.causeweb.org/usproc/usclap).
+
+## Part One: Project Proposal (10 points)
+
+To begin your project, identify a research topic and dataset. In particular, your project should meet the following minimum requirements:
+
+### Requirements
+
+1. Identify your main research question/topic of interest. (ex. **What factors influence the ratings of coffee beans by food critics?**)
+2. Choose a dataset or multiple datasets with at least 100 observations and 10 variables (exceptions can be made with instructor approval). Your dataset must include both quantitative and categorical variables.
+3.  Identify three subtopics or subquestions related to your main research topic that you want to study using this dataset. **Your subquestions should refer explicitly to variables in your dataset**. (ex. if your dataset includes information on coffee ratings and country of origin, an appropriate subquestion could be **Are South American coffee beans scored differently from African coffee beans?**)
+
+### Submission
+
+You will submit a 2-3 page project proposal (pdf format) with the following information:
+
+- Your project title
+- Your main research question/topic of interest.
+- A brief description of your dataset (where it is from, how it can be obtained, why you chose it). 
+- A **data dictionary** in the following format (if there are more than 10 variables, you can choose the 10 variables that interest you most):
+
+    | Variable name | Variable type | Description   |
+    |---------------|---------------|---------------|
+    | ex. `dob`     | Date          | date of birth |
+    | ex. `city`    | character     | city of birth |
+    | . . .         | . . .         | . . .         |
+
+- An overview of your three subquestions, with explicit reference to the relevant variables in your dataset.
+- A list of three to five outside references you plan to consult for background research on your topic.
+- Any questions you have for me.
+
+You are encouraged to meet with the instructor to discuss potential project topics and datasets **before** beginning your project proposal. If you wish to use a dataset discussed in class, you should obtain instructor approval.
+
+## Part Two: Inferential analysis (10 points)
+
+For at least one of your subquestions, perform an inferential analysis (ex. hypothesis test, confidence interval, linear regression) and discuss your findings. For the second checkpoint assignment, you will prepare a written report on your inferential analysis. You will receive instructor feedback on your writeup, which you should incorporate into your final report. 
+
+### Submission
+
+You will submit a 1-2 page writeup (pdf format) with the following information:
+
+- An introduction of the subquestion you are exploring via this inferential analysis.
+- A description of your data analysis plan, including any steps needed to clean or transform the data and the method you intend to use.
+- An outline of any assumptions needed for your method to be valid. For each assumption, discuss why your data satisfies this assumption.
+- A description of the results of your analysis and interpretation of the results.
+
+## Part Three: Final Report (60 points)
+
+Finally, you will submit a written final report on your project. This final report will include the inferential analysis (part two) and summarize your work and findings.
+    
+### Submission
+
+You will submit a written report (pdf format). There is no explicit page limit/requirement, but a report of 5-7 single-spaced pages, not including figures/references/code, should be sufficient for most projects. The target audience of your report is a classmate who may not be familiar with your selected dataset or topic.
+
+The structure of your report may depend on your selected project topic, but should include the following information at a minimum.
+
+-   **Introduction and background**: 
+    - Introduce main topic, your dataset, and subquestions of interest. 
+    - Discuss any previous research/findings or relevant context on your question of interest. 
+-   **Exploratory data analysis**: 
+    - For each of your three subquestions, generate at least one data visualization or descriptive statistic. 
+    - Discuss and interpret your findings.
+-   **Inferential analysis**:
+    - For at least one of your subquestions, perform a basic statistical analysis (ex. confidence interval, hypothesis test, linear regression). 
+    - Discuss and interpret your findings.
+-   **Conclusions and future questions**: 
+    - Summarize your conclusions and discuss any questions you might interested in exploring in the future. 
+    - Discuss any potential limitations of your analysis. Were there missing data in your dataset? Are there additional data or variables that would be helpful for answering your questions.
+-    **Code appendix**: Your report should not include any code in the main text. All code should be included in an appendix at the end of your report. All code should be appropriately commented and styled according to one of the style guides discussed in class.
+
+## Part Four: Class Presentation (15 points)
+
+At the end of the semester, you will deliver a brief lightning talk in class. You should rehearse your presentation in advance and it should include:
+
+-   A quick introduction to your dataset and research questions of interest.
+-   An overview of your favorite visualization/descriptive summary/result from your project.
+
+## Part Five: Reflection and Self-evaluation (5 points)
+
+You will complete a 1-2 page reflection and self-evaluation on your work for this final project and course. Briefly answer the following questions:
+
+1. Describe at least one aspect of your work for this class of which you are proud. Are there any ways in which you grew this semester?
+2. Describe at least one aspect of your work which you could have improved.  
+3. Are there other topics related to programming in R and data science that you wish we had covered?
+

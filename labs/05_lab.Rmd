@@ -19,49 +19,99 @@ For this lab, please work with one to two other students. List their names here.
 # LOAD ANY RELEVANT PACKAGES HERE
 ```
 
-## A. 
+## A. Basic functions
 
-1. Download the median age by state tables for 2010 and 2020 from the Canvas assignment [here](https://sjsu.instructure.com/courses/1571636/assignments/6775084). You can use the `read_csv` function from the `readr` package to open these files and save them as `age_2010` and `age_2020`.
- 
-```{r, eval = F, echo = T}
+1. Write a function `is_even()` that takes as input a single integer `x` and returns a logical that represents whether `x` is an even number or not. This function should check to make sure the input is an integer. If the input is not an integer, the function should stop with an informative error message.
 
+2. Evaluate your function with even numeric input.
+
+3. Evaluate your function with odd numeric input.
+
+4. Trigger your custom error message. Note: You will need to add the chunk option `error = TRUE` to your R Markdown code chunk. If you do not, your document will not compile.
+
+5. Write a function `get_factors()` that takes a single positive integer input `x` and outputs all of its factors as a vector. For example, since 10 is divisible by 1, 2, 5, and 10 itself, `get_factors(10)` should return a numeric vector containing 1, 2, 5, and 10.
+
+## B. Thresholding functions
+
+6. The hard-threshold function is defined as
+
+$$f_\lambda(x) =\begin{cases}
+x & |x|\geq \lambda\\
+0 & |x|<\lambda
+\end{cases}$$
+
+Write an R function that takes two arguments as input: a numeric input `x` and a threshold `lambda`. Your function should return the value of $f_\lambda(x)$ and work for vector input `x` of any length.
+
+7. For $\lambda=4$, demonstrate your function on the vector c(-5, -3, 0, 3, 5).
+
+(Hint: the output should be the vector `-5, 0, 0, 0, 5`)
+
+8. For $\lambda=2$,  demonstrate your function on the vector c(-7, -5, -3, 0, 3, 5, 7).
+
+
+## C. Skewness and Kurtosis
+
+Skewness describes how asymmetrical the distribution of a numerical variable is around its mean. Given observations $x_1,\ldots, x_n$, we can calculate the sample skewness $s$ of a variable using the following formula:
+
+$$s = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^3}{\left[\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right]^{3/2}}$$
+Kurtosis is a measure of the "tailedness" of the distribution of a numerical variable is around its mean. Higher values of kurtosis indicate more extreme outliers. Given observations $x_1,\ldots, x_n$, we can calculate the sample kurtosis $k$ of a variable using the following formula:
+
+$$k = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^4}{\left[\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right]^{2}}-3$$
+
+9. Write a function `skewness()` that takes as input a numeric vector `x` and returns the sample skewness. There are functions in R that compute skewness, but you cannot use any of them--write your own implementation.
+
+10. Write a function `kurtosis()` that takes as input a numeric vector `x` and returns the sample skewness. There are functions in R that compute kurtosis, but you cannot use any of them--write your own implementation.
+
+11. Use your function to compute the sample skewness of the `arr_delay` variable in the `flights` dataset contained in the `nycflights13` package.
+
+12. Use your function to compute the sample kurtosis of the `arr_delay` variable in the `flights` dataset contained in the `nycflights13` package.
+
+
+## D. Finding an error
+
+Suppose you have two teams of runners participating in a 5k. We wish to write a function that takes as input two vectors representing the times of the runners in each team and returns a list of two vectors representing the ranks of each team's runners.
+
+For example, if the first team's times are `c(16.8, 21.2, 19.1)` and the second team's times are `c(17.2, 18.1, 20.0)`, the function should return `c(1, 6, 4)` for the first team and `c(2, 3, 5)` for the second team. 
+
+Below is a draft version of the function `get_runner_ranks()`. However, there is an error somewhere. Use any method we discussed in class to identify the error.
+
+```{r, error = T, echo = T, eval = T}
+get_runner_ranks <- function(x, y) {
+  # combine all runner times
+  combined_times <- c(x, y) 
+  
+  # sort all runner times from fastest to slowest
+  sort(combined_times, decreasing = T)
+  
+  # create ranks vectors
+  ranks_x <- numeric(length(x))
+  ranks_y <- numeric(length(y))
+  
+  for (i in seq_along(ranks_x)) {
+    # look up rank of time i in x in combined_times
+    ranks_x[i] <- match(x[i], combined_times)
+  }
+  
+  for (i in seq_along(ranks_y)) {
+    # look up rank of time i in y in combined_times
+    ranks_y[i] <- match(y[i], combined_times)
+  }
+  
+  # return a list of first team and second team ranks
+  return(list(x = ranks_x, y = ranks_y))
+}
 ```
 
-2. Create a scatter plot with each state as a point, with 2020 median age on the y-axis and 2010 median age on the x-axis. You may use any of the functions we have discussed in class. Note that there are many possible solutions. My solution used `pivot_wider()`, `left_join()`, and `ggplot()`, but you are welcome to use any solution you wish.
+13. Below, write a corrected version of `get_runner_ranks()` and compute `get_runner_ranks(c(16.8, 21.2, 19.1), c(17.2, 18.1, 20.0))`.
 
-
-**Note**: the following commands were used to download this data using the `tidycensus` package. You do not need to run the following code: it is only provided in case you are curious about downloading data from the U.S. Census using R. In your final report, be sure that the following code chunk is set to `eval = F` and `echo = F`.
-
-```{r, eval = F, echo = T}
-library(tidycensus)
-
-# the following code loads my local Census API Key, which is used to access 
-# census data
-Sys.getenv("CENSUS_API_KEY")
-
-# 2010 median age by state
-age_2010 <- get_decennial(geography = "state", 
-                          variables = "P013I001", 
-                          year = 2010,
-                          sumfile = "sf1")
-
-# 2020 median age by state
-age_2020 <- get_decennial(geography = "state",
-                          variables = "P13_001N",
-                          year = 2020,
-                          sumfile = "dhc")
-
-
-# write to csv files
-write.csv(age_2010, "~/Documents/MATH167R/data/median_age_by_state_2010.csv")
-write.csv(age_2020, "~/Documents/MATH167R/data/median_age_by_state_2020.csv")
+```{r, error = T, echo = T, eval = T}
+get_runner_ranks <- function(x, y) {
+  # YOUR CODE HERE
+}
 ```
 
-## B. Your choice of data
+14. Explain in your own words what the error was.
 
-3. As a group, identify a dataset of interest and open it in R. Provide a brief one paragraph description of the dataset and explain why you chose it.
+## E. Download data from an API
 
-4. State three possible research questions you could explore using this dataset.
-
-5. For each of your three research questions, generate a descriptive statistic or data visualization using your dataset. Discuss and interpret your findings.
 

@@ -35,24 +35,3 @@ sample(1:6, 1)
 ```
 
 <!-- REPLACE THIS LINE WITH YOUR ANSWER -->
-
-## B. Vectors and Matrices
-
-**4.** Write a line of code to generate a vector of length 100 whose entries are 1, 2, ..., 100.
-
-```{r, eval = T}
-# REPLACE WITH YOUR CODE
-```
-
-**5.** Write a line of code to generate the following matrix:
-
-`1 2 3`
-
-`4 5 6`
-
-`7 8 9`
-
-
-```{r, eval = T}
-# REPLACE WITH YOUR CODE
-```
