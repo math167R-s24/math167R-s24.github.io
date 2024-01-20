@@ -8,23 +8,24 @@ draft: false
 
 ## Course information
 
-+-----------------+------------------------------------------------+
-| **Instructor**  | Peter Gao                                      |
-+-----------------+------------------------------------------------+
-| **Lectures**    | Weekly on Monday and Wednesday, 12-1:15pm      |
-|                 | (Section 01) and 1:30-2:45pm (Section 02) in   |
-|                 | MH235.                                         |
-+-----------------+------------------------------------------------+
-| **Office        | Monday and Wednesday, 10:30-11:30am in MH311   |
-| Hours**         | or email for an appointment                    |
-+-----------------+------------------------------------------------+
-| **Email**       | peter.gao \[at sjsu\]                          |
-|                 |                                                |
-|                 | *I will make every effort to respond to emails |
-|                 | within a day, but please feel free to send me  |
-|                 | a reminder after 48 hours have passed. Please  |
-|                 | include \[MATH 167R\] in your subject line.*   |
-+-----------------+------------------------------------------------+
++----------------+-----------------------------------------------+
+| **Instructor** | Peter Gao                                     |
++----------------+-----------------------------------------------+
+| **Lectures**   | Weekly on Monday and Wednesday, 12-1:15pm     |
+|                | (Section 01) and 1:30-2:45pm (Section 02) in  |
+|                | MH235.                                        |
++----------------+-----------------------------------------------+
+| **Office       | Monday and Wednesday, 10:30-11:30am in MH311  |
+| Hours**        | or email for an appointment                   |
++----------------+-----------------------------------------------+
+| **Email**      | peter.gao \[at sjsu\]                         |
+|                |                                               |
+|                | *I will make every effort to respond to       |
+|                | emails within a day, but please feel free to  |
+|                | send me a reminder after 48 hours have        |
+|                | passed. Please include \[MATH 167R\] in your  |
+|                | subject line.*                                |
++----------------+-----------------------------------------------+
 
 ## Learning objectives
 
@@ -78,11 +79,6 @@ available to students.
 
 ## Course requirements and grading
 
-Typically, each 75 minute class session will be broken up into a 50
-minute lecture and a 25 minute lab. Lab time will be an opportunity for
-you to practice coding, work collaboratively on assignments, and ask for
-help.
-
 -   **Check-ins**: On most Mondays, you will be assigned short check-in
     assignments. These are designed to be completed during lab or
     shortly after and will usually be due at the start of the next
@@ -123,15 +119,13 @@ help.
 
 Your final grade will be calculated as follows:
 
--   15%: Check-ins
+-   10%: Check-ins
 
--   30%: Labs
-
--   15%: Midterm exam
+-   40%: Labs
 
 -   20%: Final exam
 
--   20%: Class project
+-   30%: Final project
 
 | Letter Grade | Raw Percentage |
 |--------------|----------------|

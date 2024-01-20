@@ -163,11 +163,10 @@ Posts may not include substantial amounts of code that can be used for a solutio
 
 ## Office Hours (aka drop-in hours)
 
-+-------------+----------------------------------------------------------+
-| In-person   | MW 10:30-11:30am in MH311 or email for an appointment \| |
-+-------------+----------------------------------------------------------+
-| Zoom        | By appointment                                           |
-+-------------+----------------------------------------------------------+
+|           |                                                          |
+|-----------|----------------------------------------------------------|
+| In-person | MW 10:30-11:30am in MH311 or email for an appointment \| |
+| Zoom      | By appointment                                           |
 
 Come by:
 
