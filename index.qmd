@@ -8,7 +8,7 @@ draft: false
 ::: column-screen-inset-right
 | Week | Date   | Topic                                 | Slides | Check-in | Lab |
 |:----:|--------|---------------------------------------|:------:|:--------:|:---:|
-|  1   | W 1/24 | Course Overview and Introduction to R |   [Slides 01](slides/01_overview.html){.label .label-green}       |          |     |
+|  1   | W 1/24 | Course Overview and Introduction to R |   [Slides 01](slides/01_overview.html){.label .label-green}       |          |  [Lab 01](labs/01_lab.Rmd){.label .label-red}   |
 |  2   | M 1/29 | R fundamentals                        |      [Slides 02](slides/02_objects-classes.html){.label .label-green}  |          |     |
 |      | W 1/31 | R fundamentals                        |        |          |     |
 |  3   | M 2/5  | R fundamentals                        |        |          |     |
