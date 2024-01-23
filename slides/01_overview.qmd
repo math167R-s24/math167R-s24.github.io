@@ -89,7 +89,7 @@ Your final grade will be calculated as follows:
 
 ## Assignments
 
--   **Labs**: On most Wednesdays, you will be assigned Labs. These are extended, more complicated assignments that you will likely not be able to complete during class. They will typically be due the next Wednesday.
+-   **Labs**: Throughout the semester, you will be assigned Labs. These are extended, more complicated assignments that you will likely not be able to complete during class. You will typically have two weeks for a lab assignment. At the end of the quarter, your lowest lab grade will be dropped.
 
 ## Assignments
 
@@ -163,10 +163,10 @@ Posts may not include substantial amounts of code that can be used for a solutio
 
 ## Office Hours (aka drop-in hours)
 
-|           |                                                          |
-|-----------|----------------------------------------------------------|
-| In-person | MW 10:30-11:30am in MH311 or email for an appointment \| |
-| Zoom      | By appointment                                           |
+|           |                                                       |
+|-----------|-------------------------------------------------------|
+| In-person | MW 10:30-11:30am in MH311 or email for an appointment |
+| Zoom      | By appointment                                        |
 
 Come by:
 
@@ -189,7 +189,7 @@ example line of code
 
 ## Getting to know each other
 
-Form groups of 2-3 and discuss the following:
+Form groups of 4-5 and discuss the following:
 
 1.  Introduce yourself (names, major/program)
 
