@@ -67,5 +67,12 @@ RStudio is like Microsoft Word/Google Docs for writing R code--it has useful too
 
 10. The top left pane is the **Source** pane. When you want to write more than one line of code at a time, it's a good idea to organize your code in a single file. At the top of the RStudio window, click `File -> New File -> R Script` to open an untitled `.R` file. Copy and paste the following code into your R file. Then highlight the code and click `Run` (which will be in the top left corner of the Source pane). What do you see?
 
+```{r, eval = F}
+library(ggplot2)
+mpg_plot <- ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_point(aes(color = class))
+mpg_plot
+```
+
 When you are finished, remember to write up your solutions, save them in a pdf file, and submit to Gradescope.
 
