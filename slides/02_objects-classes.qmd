@@ -20,10 +20,19 @@ rolls <- sample(sides, 100, replace = T)
 print(sum(rolls == 1))
 ```
 
+. . .
+
+```{r eval = T, echo = F}
+sides <- 1:6
+rolls <- sample(sides, 100, replace = T)
+print(sum(rolls == 1))
+```
+
 ## Overview of today
 
 -   Basic definitions: objects, expressions, functions, data types
--   R Markdown and file management
+-   File paths and file management
+-   R Markdown
 
 # Basic definitions
 
@@ -47,7 +56,7 @@ We saw last class that we can use R to perform basic mathematical operations:
 3 + 5
 ```
 
-***Definition***: an **expression** is a symbol or a combination of symbols that evaluates to a value.
+**Definition:** an **expression** is a symbol or a combination of symbols that evaluates to a value.
 
 ```{r echo = T, eval = T}
 1 + 2
@@ -55,7 +64,7 @@ We saw last class that we can use R to perform basic mathematical operations:
 
 ## Objects
 
-***Definition***: An **object** is created when R evaluates an expression. The object is accessible only by name.
+**Definition:** An **object** is created when R evaluates an expression. The object is accessible only by name.
 
 -   An anonymous object gets deleted from the computer memory by a process called **garbage collection**.
 -   A special object named `.Last.value` contains the value of the last evaluated expression (in console only).
@@ -69,14 +78,14 @@ x <- 1 + 2
 x
 ```
 
-***Definition***: **Assignment** is an operation to **bind** an object to name, using the symbol `<-`.
+**Definition:** **Assignment** is an operation to **bind** an object to name, using the symbol `<-`.
 
--   `=` and `<-` are not generally equivalent. However, they are equivalent when they are used as assignment operators.
+**Note:** `=` and `<-` are not generally equivalent. However, they are equivalent when they are used as assignment operators.
 
-    ```{r echo = T, eval = T}
-    x = 1 + 2
-    x
-    ```
+```{r echo = T, eval = T}
+x = 1 + 2
+x
+```
 
 ## Check your understanding: Assignment
 
@@ -179,25 +188,25 @@ typeof(example_chr)
 
 ## Coercion
 
--   You can explicitly change the type of an object:
+You can explicitly change the type of an object:
 
-    ```{r, eval = T, echo = T}
-    as.numeric(example_lgc)
-    as.numeric(example_chr)
-    ```
+```{{r, eval = T, echo = T}}
+as.numeric(example_lgc)
+as.numeric(example_chr)
+```
 
--   When elements of different types are mixed in an atomic vector, R automatically converts all of them to the same type.
+When elements of different types are mixed in an atomic vector, R automatically converts all of them to the same type.
 
--   **Order of precedence**, from the highest to the lowest: character, numeric, integer, logical.
+**Order of precedence**, from the highest to the lowest: character, numeric, integer, logical.
 
-    ```{r, eval = T, echo = T}
-    c(TRUE, "hello", 1)
-    ```
+```{{r, eval = T, echo = T}}
+c(TRUE, "hello", 1)
+```
 
 ## Special values
 
 | Value            | Usual meaning                                          |
-|-------------------|-----------------------------------------------------|
+|---------------------|---------------------------------------------------|
 | `NA`             | Missing values                                         |
 | `NaN`            | a computed value that is not a number (try `1/0`)      |
 | `NULL`           | an object with no value                                |
@@ -213,7 +222,7 @@ During an assignment, the binding between an object and its name is stored in an
 
 . . .
 
-When R starts, a **global** environment (sometimes called a **workspace)** is created; every subsequent assignment that takes place at the command prompt adds objects to this environment.
+When R starts, a **global** environment (sometimes called a **workspace**) is created; every subsequent assignment that takes place at the command prompt adds objects to this environment.
 
 ## Environment
 
@@ -239,12 +248,12 @@ Types of operators:
 
 ## Arithmetic Operators {.smaller}
 
-| Operator | Operation      | Example    | Result     |
-|----------|----------------|------------|------------|
-| `+`      | Addition       | `> 3 + 4`  | `[1] 7`    |
-| `-`      | Subtraction    | `> 3 - 4`  | `[1] -1`   |
-| `*`      | Multiplication | `> 3 * 4`  | `[1] 12`   |
-| `/`      | Division       | `> 3 / 4`  | `[1] 0.75` |
+| Operator | Operation      | Example   | Result     |
+|----------|----------------|-----------|------------|
+| `+`      | Addition       | `> 3 + 4` | `[1] 7`    |
+| `-`      | Subtraction    | `> 3 - 4` | `[1] -1`   |
+| `*`      | Multiplication | `> 3 * 4` | `[1] 12`   |
+| `/`      | Division       | `> 3 / 4` | `[1] 0.75` |
 
 ## Arithmetic Operators {.smaller}
 
@@ -307,7 +316,7 @@ TRUE & (FALSE | TRUE)
 -   The command `getwd()` gets the working directory, which usually is:
 
     -   `/Users/USERNAME` on Apple
-    -   `C:\Users\USERNAME\Documents` on Windows
+    -   `C:\Users\USERNAME` on Windows
 
 -   Files on a computer are grouped into folders, which are organized in a hierarchy.
 
@@ -345,7 +354,13 @@ In this class, I encourage you to organize all your code/assignments/files into 
 
 Once you create this folder, you can create an **RStudio Project**, which will create a file that tells RStudio that all the code in the folder is associated with a single project.
 
-Any code in the project folder assumes that the working directory is the project root directory. This ensures that the project can be moved around your computer or onto another computer and none of the paths will break.
+Any code in the project folder assumes that the working directory is the project root directory. This ensures that the project can be moved around your computer or onto another computer and none of the paths will break. **This solves the issue of everyone having differing home directories**.
+
+## Project-based workflow
+
+1.  Create a folder called `MATH167R` on your computer.
+2.  In RStudio, click `File > New Project > Existing Directory` and select your `MATH167R` folder. This will create an `.Rproj` file that indicates to R where the working directory for this project should be.
+3.  (Optional) Create a shortcut to this `.Rproj` file to easily open your work for this class.
 
 ## Example file structure for MATH167R
 
@@ -375,7 +390,6 @@ Tips from [Jenny Bryan](https://github.com/jennybc/how-to-name-files):
 
 ::: columns
 ::: {.column width="50%"}
-
 **Bad:**
 
 -   `newfinal2actualFINALnew.docx`
@@ -384,7 +398,6 @@ Tips from [Jenny Bryan](https://github.com/jennybc/how-to-name-files):
 :::
 
 ::: {.column width="50%"}
-
 **Better:**
 
 -   `01_lab1.Rmd`
@@ -408,13 +421,30 @@ R Markdown files (see examples [here](https://rmarkdown.rstudio.com/gallery.html
 
 ## Your first RMarkdown file
 
-Open `01_first-R-lab.Rmd` in RStudio. At the top of the file, you should see the following header:
+1.  Open [this link](checkins/01_checkin.html). At the top right corner of this website, click "Code" to get the code for this document.
+
+At the top of the file, you should see the following header:
 
 ```         
 ---
-title: "Lab 1: Basic Definitions"
+title: "Check-in 1: R Markdown"
 author: "YOUR NAME HERE"
-date: "2023-08-21"
+date: "2024-01-29"
+output: html_document
+---
+```
+
+This header contains **metadata** about the document that follows: the name of the file, the author, the date, and what kind of output it will create. **Highlight all this code and copy it to your clipboard.**
+
+## Your first RMarkdown file
+
+2.  In RStudio, click `File > New File > R Markdown > OK` to accept all default options. A new .Rmd file should open. Replace everything in the new file with your copied code.
+
+```         
+---
+title: "Check-in 1: R Markdown"
+author: "YOUR NAME HERE"
+date: "2024-01-29"
 output: html_document
 ---
 ```
@@ -423,11 +453,11 @@ This header contains **metadata** about the document that follows: the name of t
 
 ## Source Editor
 
-![](images/Screen%20Shot%202023-08-19%20at%206.28.06%20PM.png)
+![](images/Screenshot 2024-01-25 at 9.28.24 AM.png)
 
 ## Visual Editor
 
-![](images/Screen%20Shot%202023-08-19%20at%206.29.01%20PM.png)
+![](images/Screenshot 2024-01-25 at 9.29.11 AM.png)
 
 ## Code chunks
 
@@ -439,16 +469,15 @@ Chunk output can be customized with optional arguments set in the `{}` of a ch
 
 -   R Markdown handles all the tricky file management--just put the file you want to access in the same folder as your .Rmd file
 -   This can be confusing/frustrating---patience is key!
--   Try downloading the sample code `01_lab-test-code.R` from \[here\](../static/01_lab-test-code.R) and putting it in the same folder as your Lab 01 R Markdown report.
 
 ## R Markdown
 
 Remember the following:
 
--   R Markdown produces fully reproducible reports -- each time you render, you run the analyis from the beginning
+-   R Markdown produces fully reproducible reports -- each time you render, you run the analysis from the beginning of the document.
 -   Code goes in chunks, while the explanation/narrative goes outside of chunks
 -   RStudio now provides a visual editor for a familiar / Google docs-like editing experience
 
-## Lab 1
+## Check-in 1
 
-In Lab 1, we'll make sure R and RStudio are properly installed and updated, practice assigning objects, and generate your first R Markdown report (in a properly organized directory).
+No due date, but in your interest to do this ASAP to make sure R Markdown is working!

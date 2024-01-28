@@ -32,31 +32,27 @@ getwd()
 
 <!-- REPLACE THIS LINE WITH YOUR ANSWER -->
 
-3. Create your own code chunk below this question containing the line of code `print("Hello MATH167R!")`. Then Render/Knit your Rmd document. If you have done this correctly, RStudio should produce an html document.
+3. Every time you Render/Knit your Rmd document, **all** of the code is run in a **new** R session. Any code run in the interactive session **does not affect** your rendered html file. Create a code chunk below that sets the value of `x` to be your favorite number and then uses `print(x)` to print it out.
 
 <!-- REPLACE THIS LINE WITH YOUR ANSWER -->
 
-4. Every time you Render/Knit your Rmd document, **all** of the code is run in a **new** R session. Any code run in the interactive session **does not affect** your rendered html file. Create a code chunk below that sets the value of `x` to be your favorite number and then uses `print(x)` to print it out.
+4. Download [this dataset](https://www.openintro.org/data/csv/cars.csv) to your `data` folder, then use a code chunk with the code `cars <- read.csv("YOUR PATH HERE")` to open the file. You will need to replace the text `YOUR PATH HERE` with the correct location of the dataset to open this successfully.
 
 <!-- REPLACE THIS LINE WITH YOUR ANSWER -->
 
-5. Download [this dataset](https://www.openintro.org/data/csv/cars.csv) to your `data` folder, then use a code chunk with the code `cars <- read.csv("YOUR PATH HERE")` to open the file. You will need to replace the text `YOUR PATH HERE` with the correct location of the dataset to open this successfully.
-
-<!-- REPLACE THIS LINE WITH YOUR ANSWER -->
-
-6. Run the code `head(cars)` in a code chunk to display the first few rows of this dataset.
+5. Run the code `head(cars)` in a code chunk to display the first few rows of this dataset.
 
 <!-- REPLACE THIS LINE WITH YOUR ANSWER -->
 
 ## B. Vectors and Matrices
 
-7. Write a line of code to generate a vector of length 100 whose entries are 1, 2, ..., 100.
+6. Write a line of code to generate a vector of length 100 whose entries are 1, 2, ..., 100.
 
 ```{r, eval = T}
 # REPLACE WITH YOUR CODE
 ```
 
-8. Write a line of code to generate the following matrix:
+7. Write a line of code to generate the following matrix:
 
 `1 2 3`
 
@@ -81,7 +77,7 @@ data(penguins)
 penguins <- as.data.frame(penguins)
 ```
 
-9. Using the `mean()` function, compute the mean body mass of penguins in the dataset, dropping any missing values.
+8. Using the `mean()` function, compute the mean body mass of penguins in the dataset, dropping any missing values.
 
 ```{r, eval = T}
 # YOUR CODE HERE
@@ -89,7 +85,7 @@ penguins <- as.data.frame(penguins)
 
 <!-- REPLACE THIS LINE WITH YOUR ANSWER -->
 
-10. Using the `max` function, compute the maximum flipper length of penguins in the dataset, dropping any missing values.
+9. Using the `max` function, compute the maximum flipper length of penguins in the dataset, dropping any missing values.
 
 ```{r, eval = T}
 # YOUR CODE HERE
@@ -97,7 +93,7 @@ penguins <- as.data.frame(penguins)
 
 <!-- REPLACE THIS LINE WITH YOUR ANSWER -->
 
-11. Using the `hist` function, create a histogram of the ratio of the penguins' bill length to bill depth, dropping any missing values. What is the shape of the reuslting distribution?
+10. Using the `hist` function, create a histogram of the ratio of the penguins' bill length to bill depth, dropping any missing values. What is the shape of the reuslting distribution?
 
 ```{r, eval = T}
 # YOUR CODE HERE
