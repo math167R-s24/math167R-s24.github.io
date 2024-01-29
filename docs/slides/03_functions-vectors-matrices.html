@@ -515,7 +515,7 @@ NULL</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">sample</span>(sides, <span class="dv">1</span>, T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "T"</code></pre>
+<pre><code>[1] "H"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">sample</span>(<span class="dv">1</span>, T, sides)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
@@ -688,8 +688,8 @@ NULL</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a><span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">mean =</span> <span class="dv">1</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1]  0.2022239  0.9686525  0.4108615  1.3539095  1.5192795 -0.3639306
- [7]  1.1966418  2.1696930  1.6868541  1.0336442</code></pre>
+<pre><code> [1]  1.0334186  1.2893213  1.8097966  1.2287419  2.6956954 -0.1966823
+ [7]  1.2522572 -0.4786321  1.2067770  1.4449909</code></pre>
 </div>
 </div>
 </section></section>
@@ -773,11 +773,20 @@ y    5    4    3    2    1</code></pre>
 </div>
 </div>
 </div>
-<div class="fragment">
+</section>
+<section id="indexing-and-subsetting-matrices-1" class="slide level2">
+<h2>Indexing and Subsetting Matrices</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a>my_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    2    3    4    5
+[2,]    5    4    3    2    1</code></pre>
+</div>
+</div>
 <p>What is the output of the following line?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a>my_matrix[<span class="dv">2</span>, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a>my_matrix[<span class="dv">2</span>, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <div class="cell">
@@ -791,18 +800,18 @@ y    5    4    3    2    1</code></pre>
 <h2>Dropping entries</h2>
 <p>Also similarly to vectors, we can subset using a negative index.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a>my_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a>my_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4] [,5]
 [1,]    1    2    3    4    5
 [2,]    5    4    3    2    1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a>my_matrix[<span class="sc">-</span><span class="dv">2</span>, <span class="sc">-</span><span class="dv">4</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a>my_matrix[<span class="sc">-</span><span class="dv">2</span>, <span class="sc">-</span><span class="dv">4</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1 2 3 5</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a><span class="co"># Note: Leaving an index blank includes all indices</span></span>
-<span id="cb68-2"><a href="#cb68-2"></a>my_matrix[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a><span class="co"># Note: Leaving an index blank includes all indices</span></span>
+<span id="cb70-2"><a href="#cb70-2"></a>my_matrix[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2 4</code></pre>
 </div>
@@ -811,24 +820,27 @@ y    5    4    3    2    1</code></pre>
 <section id="dropping-entries-1" class="slide level2">
 <h2>Dropping entries</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a>my_matrix[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a>my_matrix[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2 4</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a><span class="fu">is.matrix</span>(my_matrix[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1"></a><span class="fu">is.matrix</span>(my_matrix[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] FALSE</code></pre>
 </div>
 </div>
 <p>What happened here? When subsetting a matrix reduces one dimension to length 1, R automatically coerces it into a vector. We can prevent this by including <code>drop = FALSE</code>.</p>
+</section>
+<section id="dropping-entries-2" class="slide level2">
+<h2>Dropping entries</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1"></a>my_matrix[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a>my_matrix[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1]
 [1,]    2
 [2,]    4</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a><span class="fu">is.matrix</span>(my_matrix[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), <span class="at">drop =</span> <span class="cn">FALSE</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1"></a><span class="fu">is.matrix</span>(my_matrix[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), <span class="at">drop =</span> <span class="cn">FALSE</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
@@ -838,8 +850,8 @@ y    5    4    3    2    1</code></pre>
 <h2>Filling in a Matrix</h2>
 <p>We can also fill in an empty matrix using indices. In R, you should always start by initializing an empty matrix of the right size.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1"></a>my_results <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
-<span id="cb78-2"><a href="#cb78-2"></a>my_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1"></a>my_results <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
+<span id="cb80-2"><a href="#cb80-2"></a>my_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3]
 [1,]   NA   NA   NA
@@ -852,8 +864,8 @@ y    5    4    3    2    1</code></pre>
 <h2>Filling in a Matrix</h2>
 <p>Then I can replace a single row (or column) using indices as follows.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1"></a>my_results[<span class="dv">2</span>, ] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">3</span>)</span>
-<span id="cb80-2"><a href="#cb80-2"></a>my_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1"></a>my_results[<span class="dv">2</span>, ] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">3</span>)</span>
+<span id="cb82-2"><a href="#cb82-2"></a>my_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3]
 [1,]   NA   NA   NA
@@ -863,8 +875,8 @@ y    5    4    3    2    1</code></pre>
 </div>
 <p>We can also fill in multiple rows (or columns) at once. (Likewise, we can also do subsets of rows/columns, or unique entries). Note that <strong>recycling</strong> applies here.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1"></a>my_results[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>), ] <span class="ot">&lt;-</span> <span class="dv">7</span></span>
-<span id="cb82-2"><a href="#cb82-2"></a>my_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1"></a>my_results[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>), ] <span class="ot">&lt;-</span> <span class="dv">7</span></span>
+<span id="cb84-2"><a href="#cb84-2"></a>my_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3]
 [1,]    7    7    7
@@ -877,7 +889,7 @@ y    5    4    3    2    1</code></pre>
 <h2>Matrix Data Types</h2>
 <p>Matrices, like vectors, can only have entries of one type.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1"></a><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1"></a><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3]
 [1,] "1"  "2"  "3" 
@@ -889,15 +901,15 @@ y    5    4    3    2    1</code></pre>
 <h2>Matrix functions</h2>
 <p>Let’s create 3 matrices for the purposes of demonstrating matrix functions.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1"></a>mat1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb86-2"><a href="#cb86-2"></a>mat1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1"></a>mat1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb88-2"><a href="#cb88-2"></a>mat1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3]
 [1,]    1    2    3
 [2,]    4    5    6</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1"></a>mat2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
-<span id="cb88-2"><a href="#cb88-2"></a>mat2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1"></a>mat2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
+<span id="cb90-2"><a href="#cb90-2"></a>mat2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2]
 [1,]    1    4
@@ -906,8 +918,8 @@ y    5    4    3    2    1</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1"></a>mat3 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb90-2"><a href="#cb90-2"></a>mat3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1"></a>mat3 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb92-2"><a href="#cb92-2"></a>mat3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3]
 [1,]    5    6    7
@@ -919,7 +931,7 @@ y    5    4    3    2    1</code></pre>
 <h2>Matrix functions</h2>
 <p><strong>Matrix Sums</strong> <code>+</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1"></a>mat1 <span class="sc">+</span> mat3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1"></a>mat1 <span class="sc">+</span> mat3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3]
 [1,]    6    8   10
@@ -928,38 +940,41 @@ y    5    4    3    2    1</code></pre>
 </div>
 <p><strong>Element-wise Matrix Multiplication</strong> <code>*</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1"></a>mat1 <span class="sc">*</span> mat3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1"></a>mat1 <span class="sc">*</span> mat3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3]
 [1,]    5   12   21
 [2,]   32   45   60</code></pre>
 </div>
 </div>
+</section>
+<section id="matrix-functions-2" class="slide level2 smaller">
+<h2>Matrix functions</h2>
 <p><strong>Matrix Multiplication</strong> <code>%*%</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1"></a>mat_square <span class="ot">&lt;-</span> mat1 <span class="sc">%*%</span> mat2</span>
-<span id="cb96-2"><a href="#cb96-2"></a>mat_square</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1"></a>mat_square <span class="ot">&lt;-</span> mat1 <span class="sc">%*%</span> mat2</span>
+<span id="cb98-2"><a href="#cb98-2"></a>mat_square</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2]
 [1,]   14   32
 [2,]   32   77</code></pre>
 </div>
 </div>
-</section>
-<section id="matrix-functions-2" class="slide level2 smaller">
-<h2>Matrix functions</h2>
 <p><strong>Column Bind Matrices</strong> <code>cbind()</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1"></a><span class="fu">cbind</span>(mat1, mat3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1"></a><span class="fu">cbind</span>(mat1, mat3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4] [,5] [,6]
 [1,]    1    2    3    5    6    7
 [2,]    4    5    6    8    9   10</code></pre>
 </div>
 </div>
+</section>
+<section id="matrix-functions-3" class="slide level2 smaller">
+<h2>Matrix functions</h2>
 <p><strong>Transpose</strong> <code>t()</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1"></a><span class="fu">t</span>(mat1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1"></a><span class="fu">t</span>(mat1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2]
 [1,]    1    4
@@ -969,55 +984,58 @@ y    5    4    3    2    1</code></pre>
 </div>
 <p><strong>Column Sums</strong> <code>colSums()</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1"></a><span class="fu">colSums</span>(mat1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1"></a><span class="fu">colSums</span>(mat1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 5 7 9</code></pre>
 </div>
 </div>
+</section>
+<section id="matrix-functions-4" class="slide level2 smaller">
+<h2>Matrix functions</h2>
 <p><strong>Row Sums</strong> <code>rowSums()</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1"></a><span class="fu">rowSums</span>(mat1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1"></a><span class="fu">rowSums</span>(mat1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  6 15</code></pre>
 </div>
 </div>
-</section>
-<section id="matrix-functions-3" class="slide level2 smaller">
-<h2>Matrix functions</h2>
 <p><strong>Column Means</strong> <code>colMeans()</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1"></a><span class="fu">colMeans</span>(mat1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1"></a><span class="fu">colMeans</span>(mat1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2.5 3.5 4.5</code></pre>
 </div>
 </div>
+</section>
+<section id="matrix-functions-5" class="slide level2 smaller">
+<h2>Matrix functions</h2>
 <p><strong>Row Means</strong> <code>rowMeans()</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1"></a><span class="fu">rowMeans</span>(mat1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1"></a><span class="fu">rowMeans</span>(mat1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2 5</code></pre>
 </div>
 </div>
 <p><strong>Dimensions</strong> <code>dim()</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1"></a><span class="fu">dim</span>(mat1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1"></a><span class="fu">dim</span>(mat1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2 3</code></pre>
 </div>
 </div>
 </section>
-<section id="matrix-functions-4" class="slide level2 smaller">
+<section id="matrix-functions-6" class="slide level2 smaller">
 <h2>Matrix functions</h2>
 <p><strong>Determinant</strong> <code>det()</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1"></a><span class="fu">det</span>(mat_square)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1"></a><span class="fu">det</span>(mat_square)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 54</code></pre>
 </div>
 </div>
 <p><strong>Matrix Inverse</strong> <code>solve()</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1"></a><span class="fu">solve</span>(mat_square)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1"></a><span class="fu">solve</span>(mat_square)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           [,1]       [,2]
 [1,]  1.4259259 -0.5925926
@@ -1026,7 +1044,7 @@ y    5    4    3    2    1</code></pre>
 </div>
 <p><strong>Matrix Diagonal</strong> <code>diag()</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1"></a><span class="fu">diag</span>(mat_square)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1"></a><span class="fu">diag</span>(mat_square)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 14 77</code></pre>
 </div>
@@ -1056,82 +1074,69 @@ y    5    4    3    2    1</code></pre>
 <section id="example" class="slide level2 smaller">
 <h2>Example</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1"></a><span class="co">#' Wald-type t test</span></span>
-<span id="cb118-2"><a href="#cb118-2"></a><span class="co">#' @param mod an object of class \code{bbdml}</span></span>
-<span id="cb118-3"><a href="#cb118-3"></a><span class="co">#' @return Matrix with wald test statistics and p-values. Univariate tests only.</span></span>
-<span id="cb118-4"><a href="#cb118-4"></a>waldt <span class="ot">&lt;-</span> <span class="cf">function</span>(mod) {</span>
-<span id="cb118-5"><a href="#cb118-5"></a>  <span class="co"># Covariance matrix</span></span>
-<span id="cb118-6"><a href="#cb118-6"></a>  covMat <span class="ot">&lt;-</span> <span class="fu">try</span>(<span class="fu">chol2inv</span>(<span class="fu">chol</span>(<span class="fu">hessian</span>(mod))), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb118-7"><a href="#cb118-7"></a>  <span class="cf">if</span> (<span class="fu">class</span>(covMat) <span class="sc">==</span> <span class="st">"try-error"</span>) {</span>
-<span id="cb118-8"><a href="#cb118-8"></a>    <span class="fu">warning</span>(<span class="st">"Singular Hessian! Cannot calculate p-values in this setting."</span>)</span>
-<span id="cb118-9"><a href="#cb118-9"></a>    np <span class="ot">&lt;-</span> <span class="fu">length</span>(mod<span class="sc">$</span>param)</span>
-<span id="cb118-10"><a href="#cb118-10"></a>    se <span class="ot">&lt;-</span> tvalue <span class="ot">&lt;-</span> pvalue <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, np)</span>
-<span id="cb118-11"><a href="#cb118-11"></a>  } <span class="cf">else</span> {</span>
-<span id="cb118-12"><a href="#cb118-12"></a>    <span class="co"># Standard errors</span></span>
-<span id="cb118-13"><a href="#cb118-13"></a>    se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(covMat))</span>
-<span id="cb118-14"><a href="#cb118-14"></a>    <span class="co"># test statistic</span></span>
-<span id="cb118-15"><a href="#cb118-15"></a>    tvalue <span class="ot">&lt;-</span> mod<span class="sc">$</span>param<span class="sc">/</span>se</span>
-<span id="cb118-16"><a href="#cb118-16"></a>    <span class="co"># P-value</span></span>
-<span id="cb118-17"><a href="#cb118-17"></a>    pvalue <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>stats<span class="sc">::</span><span class="fu">pt</span>(<span class="sc">-</span><span class="fu">abs</span>(tvalue), mod<span class="sc">$</span>df.residual)</span>
-<span id="cb118-18"><a href="#cb118-18"></a>  }</span>
-<span id="cb118-19"><a href="#cb118-19"></a>  <span class="co"># make table</span></span>
-<span id="cb118-20"><a href="#cb118-20"></a>  coef.table <span class="ot">&lt;-</span> <span class="fu">cbind</span>(mod<span class="sc">$</span>param, se, tvalue, pvalue)</span>
-<span id="cb118-21"><a href="#cb118-21"></a>  <span class="fu">dimnames</span>(coef.table) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">names</span>(mod<span class="sc">$</span>param),</span>
-<span id="cb118-22"><a href="#cb118-22"></a>                               <span class="fu">c</span>(<span class="st">"Estimate"</span>, <span class="st">"Std. Error"</span>, <span class="st">"t value"</span>, <span class="st">"Pr(&gt;|t|)"</span>))</span>
-<span id="cb118-23"><a href="#cb118-23"></a>  <span class="fu">return</span>(coef.table)</span>
-<span id="cb118-24"><a href="#cb118-24"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1"></a><span class="co">#' Wald-type t test</span></span>
+<span id="cb120-2"><a href="#cb120-2"></a><span class="co">#' @param mod an object of class \code{bbdml}</span></span>
+<span id="cb120-3"><a href="#cb120-3"></a><span class="co">#' @return Matrix with wald test statistics and p-values. Univariate tests only.</span></span>
+<span id="cb120-4"><a href="#cb120-4"></a>waldt <span class="ot">&lt;-</span> <span class="cf">function</span>(mod) {</span>
+<span id="cb120-5"><a href="#cb120-5"></a>  <span class="co"># Covariance matrix</span></span>
+<span id="cb120-6"><a href="#cb120-6"></a>  covMat <span class="ot">&lt;-</span> <span class="fu">try</span>(<span class="fu">chol2inv</span>(<span class="fu">chol</span>(<span class="fu">hessian</span>(mod))), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb120-7"><a href="#cb120-7"></a>  <span class="cf">if</span> (<span class="fu">class</span>(covMat) <span class="sc">==</span> <span class="st">"try-error"</span>) {</span>
+<span id="cb120-8"><a href="#cb120-8"></a>    <span class="fu">warning</span>(<span class="st">"Singular Hessian! Cannot calculate p-values in this setting."</span>)</span>
+<span id="cb120-9"><a href="#cb120-9"></a>    np <span class="ot">&lt;-</span> <span class="fu">length</span>(mod<span class="sc">$</span>param)</span>
+<span id="cb120-10"><a href="#cb120-10"></a>    se <span class="ot">&lt;-</span> tvalue <span class="ot">&lt;-</span> pvalue <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, np)</span>
+<span id="cb120-11"><a href="#cb120-11"></a>  } <span class="cf">else</span> {</span>
+<span id="cb120-12"><a href="#cb120-12"></a>    <span class="co"># Standard errors</span></span>
+<span id="cb120-13"><a href="#cb120-13"></a>    se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(covMat))</span>
+<span id="cb120-14"><a href="#cb120-14"></a>    <span class="co"># test statistic</span></span>
+<span id="cb120-15"><a href="#cb120-15"></a>    tvalue <span class="ot">&lt;-</span> mod<span class="sc">$</span>param<span class="sc">/</span>se</span>
+<span id="cb120-16"><a href="#cb120-16"></a>    <span class="co"># P-value</span></span>
+<span id="cb120-17"><a href="#cb120-17"></a>    pvalue <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>stats<span class="sc">::</span><span class="fu">pt</span>(<span class="sc">-</span><span class="fu">abs</span>(tvalue), mod<span class="sc">$</span>df.residual)</span>
+<span id="cb120-18"><a href="#cb120-18"></a>  }</span>
+<span id="cb120-19"><a href="#cb120-19"></a>  <span class="co"># make table</span></span>
+<span id="cb120-20"><a href="#cb120-20"></a>  coef.table <span class="ot">&lt;-</span> <span class="fu">cbind</span>(mod<span class="sc">$</span>param, se, tvalue, pvalue)</span>
+<span id="cb120-21"><a href="#cb120-21"></a>  <span class="fu">dimnames</span>(coef.table) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">names</span>(mod<span class="sc">$</span>param),</span>
+<span id="cb120-22"><a href="#cb120-22"></a>                               <span class="fu">c</span>(<span class="st">"Estimate"</span>, <span class="st">"Std. Error"</span>, <span class="st">"t value"</span>, <span class="st">"Pr(&gt;|t|)"</span>))</span>
+<span id="cb120-23"><a href="#cb120-23"></a>  <span class="fu">return</span>(coef.table)</span>
+<span id="cb120-24"><a href="#cb120-24"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="comment-style-guide" class="slide level2">
 <h2>Comment Style Guide</h2>
-<ul>
-<li>When starting out, you should comment most lines</li>
-<li>Frequent use of comments should allow most comments to be restricted to one line for readability</li>
-<li>A comment should go above its corresponding line, be indented equally with the next line, and use a single <code>#</code> to mark a comment</li>
-<li>Use a string of <code>-</code> or <code>=</code> to break your code into easily noticeable chunks
-<ul>
-<li>Example: <code># Data Manipulation -----------</code></li>
-<li>RStudio allows you to collapse chunks marked like this to help with clutter</li>
-</ul></li>
-</ul>
+<p>Frequent use of comments should allow most comments to be restricted to one line for readability</p>
+<p>A comment should go above its corresponding line, be indented equally with the next line, and use a single <code>#</code> to mark a comment</p>
+<p>Use a string of <code>-</code> or <code>=</code> to break your code into easily noticeable chunks - Example: <code># Data Manipulation -----------</code> - RStudio allows you to collapse chunks marked like this to help with clutter</p>
 </section>
 <section id="comment-style-guide-1" class="slide level2">
 <h2>Comment Style Guide</h2>
-<ul>
-<li>There are exceptions to every rule! Usually, comments are to help <strong>you</strong>!</li>
-</ul>
+<p>There are exceptions to every rule! Usually, comments are to help <strong>you</strong>!</p>
 <p><strong>Example of breaking rules</strong></p>
-<ul>
-<li>Here’s a snippet of a long mathematical function (lots of code omitted with ellipses for space).</li>
-<li>Code is divided into major steps marked by easily visible comments</li>
-</ul>
+<p>Here’s a snippet of a long mathematical function (lots of code omitted with ellipses for space).</p>
+<p>Code is divided into major steps marked by easily visible comments</p>
 </section>
 <section id="example-of-breaking-rules" class="slide level2 smaller">
 <h2>Example of breaking rules</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1"></a>objfun <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, W, M, X, X_star, np, npstar, link, phi.link) {</span>
-<span id="cb119-2"><a href="#cb119-2"></a></span>
-<span id="cb119-3"><a href="#cb119-3"></a>  <span class="do">### STEP 1 - Negative Log-likelihood</span></span>
-<span id="cb119-4"><a href="#cb119-4"></a></span>
-<span id="cb119-5"><a href="#cb119-5"></a>  <span class="co"># extract matrix of betas (np x 1), first np entries</span></span>
-<span id="cb119-6"><a href="#cb119-6"></a>  b      <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">head</span>(theta, np)</span>
-<span id="cb119-7"><a href="#cb119-7"></a>  <span class="co"># extract matrix of beta stars (npstar x 1), last npstar entries</span></span>
-<span id="cb119-8"><a href="#cb119-8"></a>  b_star <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">tail</span>(theta, npstar)</span>
-<span id="cb119-9"><a href="#cb119-9"></a></span>
-<span id="cb119-10"><a href="#cb119-10"></a>  ...</span>
-<span id="cb119-11"><a href="#cb119-11"></a></span>
-<span id="cb119-12"><a href="#cb119-12"></a>  <span class="do">### STEP 2 - Gradient</span></span>
-<span id="cb119-13"><a href="#cb119-13"></a></span>
-<span id="cb119-14"><a href="#cb119-14"></a>  <span class="co"># define gam</span></span>
-<span id="cb119-15"><a href="#cb119-15"></a>  gam <span class="ot">&lt;-</span> phi<span class="sc">/</span>(<span class="dv">1</span> <span class="sc">-</span> phi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1"></a>objfun <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, W, M, X, X_star, np, npstar, link, phi.link) {</span>
+<span id="cb121-2"><a href="#cb121-2"></a></span>
+<span id="cb121-3"><a href="#cb121-3"></a>  <span class="do">### STEP 1 - Negative Log-likelihood</span></span>
+<span id="cb121-4"><a href="#cb121-4"></a></span>
+<span id="cb121-5"><a href="#cb121-5"></a>  <span class="co"># extract matrix of betas (np x 1), first np entries</span></span>
+<span id="cb121-6"><a href="#cb121-6"></a>  b      <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">head</span>(theta, np)</span>
+<span id="cb121-7"><a href="#cb121-7"></a>  <span class="co"># extract matrix of beta stars (npstar x 1), last npstar entries</span></span>
+<span id="cb121-8"><a href="#cb121-8"></a>  b_star <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">tail</span>(theta, npstar)</span>
+<span id="cb121-9"><a href="#cb121-9"></a></span>
+<span id="cb121-10"><a href="#cb121-10"></a>  ...</span>
+<span id="cb121-11"><a href="#cb121-11"></a></span>
+<span id="cb121-12"><a href="#cb121-12"></a>  <span class="do">### STEP 2 - Gradient</span></span>
+<span id="cb121-13"><a href="#cb121-13"></a></span>
+<span id="cb121-14"><a href="#cb121-14"></a>  <span class="co"># define gam</span></span>
+<span id="cb121-15"><a href="#cb121-15"></a>  gam <span class="ot">&lt;-</span> phi<span class="sc">/</span>(<span class="dv">1</span> <span class="sc">-</span> phi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="a-final-plea" class="slide level2">
 <h2>A final plea</h2>
-<ul>
-<li>Being a successful programmer <em>requires</em> commenting your code</li>
-<li>Want to understand code you wrote &gt;24 hours ago without comments?</li>
-</ul>
+<p>Being a successful programmer <em>requires</em> commenting your code</p>
+<p>Want to understand code you wrote &gt;24 hours ago without comments?</p>
 </section>
 <section id="what-style" class="slide level2">
 <h2>What style</h2>
@@ -1142,36 +1147,36 @@ y    5    4    3    2    1</code></pre>
 <h2>Object Names</h2>
 <p>Use either underscores (<code>_</code>) or big camel case (<code>BigCamelCase</code>) to separate words within an object name. Do not use dots <code>.</code> to separate words in R functions!</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1"></a><span class="co"># Good</span></span>
-<span id="cb120-2"><a href="#cb120-2"></a>day_one</span>
-<span id="cb120-3"><a href="#cb120-3"></a>day_1</span>
-<span id="cb120-4"><a href="#cb120-4"></a>DayOne</span>
-<span id="cb120-5"><a href="#cb120-5"></a></span>
-<span id="cb120-6"><a href="#cb120-6"></a><span class="co"># Bad</span></span>
-<span id="cb120-7"><a href="#cb120-7"></a>dayone</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1"></a><span class="co"># Good</span></span>
+<span id="cb122-2"><a href="#cb122-2"></a>day_one</span>
+<span id="cb122-3"><a href="#cb122-3"></a>day_1</span>
+<span id="cb122-4"><a href="#cb122-4"></a>DayOne</span>
+<span id="cb122-5"><a href="#cb122-5"></a></span>
+<span id="cb122-6"><a href="#cb122-6"></a><span class="co"># Bad</span></span>
+<span id="cb122-7"><a href="#cb122-7"></a>dayone</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="object-names-1" class="slide level2">
 <h2>Object Names</h2>
 <p>Names should be concise, meaningful, and (generally) nouns.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1"></a><span class="co"># Good</span></span>
-<span id="cb121-2"><a href="#cb121-2"></a>day_one</span>
-<span id="cb121-3"><a href="#cb121-3"></a></span>
-<span id="cb121-4"><a href="#cb121-4"></a><span class="co"># Bad</span></span>
-<span id="cb121-5"><a href="#cb121-5"></a>first_day_of_the_month</span>
-<span id="cb121-6"><a href="#cb121-6"></a>djm1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1"></a><span class="co"># Good</span></span>
+<span id="cb123-2"><a href="#cb123-2"></a>day_one</span>
+<span id="cb123-3"><a href="#cb123-3"></a></span>
+<span id="cb123-4"><a href="#cb123-4"></a><span class="co"># Bad</span></span>
+<span id="cb123-5"><a href="#cb123-5"></a>first_day_of_the_month</span>
+<span id="cb123-6"><a href="#cb123-6"></a>djm1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="object-names-2" class="slide level2">
 <h2>Object Names</h2>
 <p>It is <em>very</em> important that object names do not write over common functions!</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1"></a><span class="co"># Very extra super bad</span></span>
-<span id="cb122-2"><a href="#cb122-2"></a>c <span class="ot">&lt;-</span> <span class="dv">7</span></span>
-<span id="cb122-3"><a href="#cb122-3"></a>t <span class="ot">&lt;-</span> <span class="dv">23</span></span>
-<span id="cb122-4"><a href="#cb122-4"></a>T <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
-<span id="cb122-5"><a href="#cb122-5"></a>mean <span class="ot">&lt;-</span> <span class="st">"something"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb124"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1"></a><span class="co"># Very extra super bad</span></span>
+<span id="cb124-2"><a href="#cb124-2"></a>c <span class="ot">&lt;-</span> <span class="dv">7</span></span>
+<span id="cb124-3"><a href="#cb124-3"></a>t <span class="ot">&lt;-</span> <span class="dv">23</span></span>
+<span id="cb124-4"><a href="#cb124-4"></a>T <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb124-5"><a href="#cb124-5"></a>mean <span class="ot">&lt;-</span> <span class="st">"something"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Note: <code>T</code> and <code>F</code> are R shorthand for <code>TRUE</code> and <code>FALSE</code>, respectively. In general, spell them out to be as clear as possible.</p>
 </section>
@@ -1179,35 +1184,35 @@ y    5    4    3    2    1</code></pre>
 <h2>Spacing</h2>
 <p>Put a space after every comma, just like in English writing.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1"></a><span class="co"># Good</span></span>
-<span id="cb123-2"><a href="#cb123-2"></a>x[, <span class="dv">1</span>]</span>
-<span id="cb123-3"><a href="#cb123-3"></a></span>
-<span id="cb123-4"><a href="#cb123-4"></a><span class="co"># Bad</span></span>
-<span id="cb123-5"><a href="#cb123-5"></a>x[,<span class="dv">1</span>]</span>
-<span id="cb123-6"><a href="#cb123-6"></a>x[ ,<span class="dv">1</span>]</span>
-<span id="cb123-7"><a href="#cb123-7"></a>x[ , <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb125"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb125-1"><a href="#cb125-1"></a><span class="co"># Good</span></span>
+<span id="cb125-2"><a href="#cb125-2"></a>x[, <span class="dv">1</span>]</span>
+<span id="cb125-3"><a href="#cb125-3"></a></span>
+<span id="cb125-4"><a href="#cb125-4"></a><span class="co"># Bad</span></span>
+<span id="cb125-5"><a href="#cb125-5"></a>x[,<span class="dv">1</span>]</span>
+<span id="cb125-6"><a href="#cb125-6"></a>x[ ,<span class="dv">1</span>]</span>
+<span id="cb125-7"><a href="#cb125-7"></a>x[ , <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Do not put spaces inside or outside parentheses for regular function calls.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb124"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1"></a><span class="co"># Good</span></span>
-<span id="cb124-2"><a href="#cb124-2"></a><span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb124-3"><a href="#cb124-3"></a></span>
-<span id="cb124-4"><a href="#cb124-4"></a><span class="co"># Bad</span></span>
-<span id="cb124-5"><a href="#cb124-5"></a><span class="fu">mean</span> (x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb124-6"><a href="#cb124-6"></a><span class="fu">mean</span>( x, <span class="at">na.rm =</span> <span class="cn">TRUE</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1"></a><span class="co"># Good</span></span>
+<span id="cb126-2"><a href="#cb126-2"></a><span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb126-3"><a href="#cb126-3"></a></span>
+<span id="cb126-4"><a href="#cb126-4"></a><span class="co"># Bad</span></span>
+<span id="cb126-5"><a href="#cb126-5"></a><span class="fu">mean</span> (x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb126-6"><a href="#cb126-6"></a><span class="fu">mean</span>( x, <span class="at">na.rm =</span> <span class="cn">TRUE</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="spacing-with-operators" class="slide level2">
 <h2>Spacing with Operators</h2>
 <p>Most of the time when you are doing math, conditionals, logicals, or assignment, your operators should be surrounded by spaces. (e.g.&nbsp;for <code>==</code>, <code>+</code>, <code>-</code>, <code>&lt;-</code>, etc.)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb125"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb125-1"><a href="#cb125-1"></a><span class="co"># Good</span></span>
-<span id="cb125-2"><a href="#cb125-2"></a>height <span class="ot">&lt;-</span> (feet <span class="sc">*</span> <span class="dv">12</span>) <span class="sc">+</span> inches</span>
-<span id="cb125-3"><a href="#cb125-3"></a><span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="dv">10</span>)</span>
-<span id="cb125-4"><a href="#cb125-4"></a></span>
-<span id="cb125-5"><a href="#cb125-5"></a><span class="co"># Bad</span></span>
-<span id="cb125-6"><a href="#cb125-6"></a>height<span class="ot">&lt;-</span>feet<span class="sc">*</span><span class="dv">12</span><span class="sc">+</span>inches</span>
-<span id="cb125-7"><a href="#cb125-7"></a><span class="fu">mean</span>(x, <span class="at">na.rm=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1"></a><span class="co"># Good</span></span>
+<span id="cb127-2"><a href="#cb127-2"></a>height <span class="ot">&lt;-</span> (feet <span class="sc">*</span> <span class="dv">12</span>) <span class="sc">+</span> inches</span>
+<span id="cb127-3"><a href="#cb127-3"></a><span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="dv">10</span>)</span>
+<span id="cb127-4"><a href="#cb127-4"></a></span>
+<span id="cb127-5"><a href="#cb127-5"></a><span class="co"># Bad</span></span>
+<span id="cb127-6"><a href="#cb127-6"></a>height<span class="ot">&lt;-</span>feet<span class="sc">*</span><span class="dv">12</span><span class="sc">+</span>inches</span>
+<span id="cb127-7"><a href="#cb127-7"></a><span class="fu">mean</span>(x, <span class="at">na.rm=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>There are some exceptions we will learn more about later, such as the power symbol <code>^</code>. See the <a href="https://style.tidyverse.org/">Tidyverse Style Guide</a> for more details!</p>
 </section>
@@ -1215,17 +1220,17 @@ y    5    4    3    2    1</code></pre>
 <h2>Extra Spacing</h2>
 <p>Adding extra spaces ok if it improves alignment of <code>=</code> or <code>&lt;-</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1"></a><span class="co"># Good</span></span>
-<span id="cb126-2"><a href="#cb126-2"></a><span class="fu">list</span>(</span>
-<span id="cb126-3"><a href="#cb126-3"></a>  <span class="at">total =</span> a <span class="sc">+</span> b <span class="sc">+</span> c,</span>
-<span id="cb126-4"><a href="#cb126-4"></a>  <span class="at">mean  =</span> (a <span class="sc">+</span> b <span class="sc">+</span> c) <span class="sc">/</span> n</span>
-<span id="cb126-5"><a href="#cb126-5"></a>)</span>
-<span id="cb126-6"><a href="#cb126-6"></a></span>
-<span id="cb126-7"><a href="#cb126-7"></a><span class="co"># Also fine</span></span>
-<span id="cb126-8"><a href="#cb126-8"></a><span class="fu">list</span>(</span>
-<span id="cb126-9"><a href="#cb126-9"></a>  <span class="at">total =</span> a <span class="sc">+</span> b <span class="sc">+</span> c,</span>
-<span id="cb126-10"><a href="#cb126-10"></a>  <span class="at">mean =</span> (a <span class="sc">+</span> b <span class="sc">+</span> c) <span class="sc">/</span> n</span>
-<span id="cb126-11"><a href="#cb126-11"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb128"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1"></a><span class="co"># Good</span></span>
+<span id="cb128-2"><a href="#cb128-2"></a><span class="fu">list</span>(</span>
+<span id="cb128-3"><a href="#cb128-3"></a>  <span class="at">total =</span> a <span class="sc">+</span> b <span class="sc">+</span> c,</span>
+<span id="cb128-4"><a href="#cb128-4"></a>  <span class="at">mean  =</span> (a <span class="sc">+</span> b <span class="sc">+</span> c) <span class="sc">/</span> n</span>
+<span id="cb128-5"><a href="#cb128-5"></a>)</span>
+<span id="cb128-6"><a href="#cb128-6"></a></span>
+<span id="cb128-7"><a href="#cb128-7"></a><span class="co"># Also fine</span></span>
+<span id="cb128-8"><a href="#cb128-8"></a><span class="fu">list</span>(</span>
+<span id="cb128-9"><a href="#cb128-9"></a>  <span class="at">total =</span> a <span class="sc">+</span> b <span class="sc">+</span> c,</span>
+<span id="cb128-10"><a href="#cb128-10"></a>  <span class="at">mean =</span> (a <span class="sc">+</span> b <span class="sc">+</span> c) <span class="sc">/</span> n</span>
+<span id="cb128-11"><a href="#cb128-11"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="long-lines-of-code" class="slide level2 smaller">
@@ -1233,17 +1238,17 @@ y    5    4    3    2    1</code></pre>
 <p>Strive to limit your code to 80 characters per line. This fits comfortably on a printed page with a reasonably sized font.</p>
 <p>If a function call is too long to fit on a single line, use one line each for the function name, each argument, and the closing <code>)</code>. This makes the code easier to read and to change later.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1"></a><span class="co"># Good</span></span>
-<span id="cb127-2"><a href="#cb127-2"></a><span class="fu">do_something_very_complicated</span>(</span>
-<span id="cb127-3"><a href="#cb127-3"></a>  <span class="at">something =</span> <span class="st">"that"</span>,</span>
-<span id="cb127-4"><a href="#cb127-4"></a>  <span class="at">requires =</span> many,</span>
-<span id="cb127-5"><a href="#cb127-5"></a>  <span class="at">arguments =</span> <span class="st">"some of which may be long"</span></span>
-<span id="cb127-6"><a href="#cb127-6"></a>)</span>
-<span id="cb127-7"><a href="#cb127-7"></a></span>
-<span id="cb127-8"><a href="#cb127-8"></a><span class="co"># Bad</span></span>
-<span id="cb127-9"><a href="#cb127-9"></a><span class="fu">do_something_very_complicated</span>(<span class="st">"that"</span>, requires, many, arguments,</span>
-<span id="cb127-10"><a href="#cb127-10"></a>                              <span class="st">"some of which may be long"</span></span>
-<span id="cb127-11"><a href="#cb127-11"></a>                              )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb129"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1"></a><span class="co"># Good</span></span>
+<span id="cb129-2"><a href="#cb129-2"></a><span class="fu">do_something_very_complicated</span>(</span>
+<span id="cb129-3"><a href="#cb129-3"></a>  <span class="at">something =</span> <span class="st">"that"</span>,</span>
+<span id="cb129-4"><a href="#cb129-4"></a>  <span class="at">requires =</span> many,</span>
+<span id="cb129-5"><a href="#cb129-5"></a>  <span class="at">arguments =</span> <span class="st">"some of which may be long"</span></span>
+<span id="cb129-6"><a href="#cb129-6"></a>)</span>
+<span id="cb129-7"><a href="#cb129-7"></a></span>
+<span id="cb129-8"><a href="#cb129-8"></a><span class="co"># Bad</span></span>
+<span id="cb129-9"><a href="#cb129-9"></a><span class="fu">do_something_very_complicated</span>(<span class="st">"that"</span>, requires, many, arguments,</span>
+<span id="cb129-10"><a href="#cb129-10"></a>                              <span class="st">"some of which may be long"</span></span>
+<span id="cb129-11"><a href="#cb129-11"></a>                              )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><em>Tip! Try RStudio &gt; Preferences &gt; Code &gt; Display &gt; Show Margin with Margin column 80 to give yourself a visual cue!</em></p>
 </section>
@@ -1251,41 +1256,41 @@ y    5    4    3    2    1</code></pre>
 <h2>Assignment</h2>
 <p>We use <code>&lt;-</code> instead of <code>=</code> for assignment. This is moderately controversial if you find yourself in the right (wrong?) communities.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb128"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1"></a><span class="co"># Good</span></span>
-<span id="cb128-2"><a href="#cb128-2"></a>x <span class="ot">&lt;-</span> <span class="dv">5</span></span>
-<span id="cb128-3"><a href="#cb128-3"></a></span>
-<span id="cb128-4"><a href="#cb128-4"></a><span class="co"># Bad</span></span>
-<span id="cb128-5"><a href="#cb128-5"></a>x <span class="ot">=</span> <span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb130"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1"></a><span class="co"># Good</span></span>
+<span id="cb130-2"><a href="#cb130-2"></a>x <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb130-3"><a href="#cb130-3"></a></span>
+<span id="cb130-4"><a href="#cb130-4"></a><span class="co"># Bad</span></span>
+<span id="cb130-5"><a href="#cb130-5"></a>x <span class="ot">=</span> <span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="semicolons" class="slide level2">
 <h2>Semicolons</h2>
 <p>In R, semi-colons (<code>;</code>) are used to execute pieces of R code on a single line. In general, this is bad practice and should be avoided. Also, you never need to end lines of code with semi-colons!</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb129"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1"></a><span class="co"># Bad</span></span>
-<span id="cb129-2"><a href="#cb129-2"></a>a <span class="ot">&lt;-</span> <span class="dv">2</span>; b <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb129-3"><a href="#cb129-3"></a></span>
-<span id="cb129-4"><a href="#cb129-4"></a><span class="co"># Also bad</span></span>
-<span id="cb129-5"><a href="#cb129-5"></a>a <span class="ot">&lt;-</span> <span class="dv">2</span>;</span>
-<span id="cb129-6"><a href="#cb129-6"></a>b <span class="ot">&lt;-</span> <span class="dv">3</span>;</span>
-<span id="cb129-7"><a href="#cb129-7"></a></span>
-<span id="cb129-8"><a href="#cb129-8"></a><span class="co"># Good</span></span>
-<span id="cb129-9"><a href="#cb129-9"></a>a <span class="ot">&lt;-</span> <span class="dv">2</span></span>
-<span id="cb129-10"><a href="#cb129-10"></a>b <span class="ot">&lt;-</span> <span class="dv">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb131"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a href="#cb131-1"></a><span class="co"># Bad</span></span>
+<span id="cb131-2"><a href="#cb131-2"></a>a <span class="ot">&lt;-</span> <span class="dv">2</span>; b <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb131-3"><a href="#cb131-3"></a></span>
+<span id="cb131-4"><a href="#cb131-4"></a><span class="co"># Also bad</span></span>
+<span id="cb131-5"><a href="#cb131-5"></a>a <span class="ot">&lt;-</span> <span class="dv">2</span>;</span>
+<span id="cb131-6"><a href="#cb131-6"></a>b <span class="ot">&lt;-</span> <span class="dv">3</span>;</span>
+<span id="cb131-7"><a href="#cb131-7"></a></span>
+<span id="cb131-8"><a href="#cb131-8"></a><span class="co"># Good</span></span>
+<span id="cb131-9"><a href="#cb131-9"></a>a <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb131-10"><a href="#cb131-10"></a>b <span class="ot">&lt;-</span> <span class="dv">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="quotes-and-strings" class="slide level2">
 <h2>Quotes and Strings</h2>
 <p>Use <code>"</code>, not <code>'</code>, for quoting text. The only exception is when the text already contains double quotes and no single quotes.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb130"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1"></a><span class="co"># Bad</span></span>
-<span id="cb130-2"><a href="#cb130-2"></a><span class="st">'Text'</span></span>
-<span id="cb130-3"><a href="#cb130-3"></a><span class="st">'Text with "double" and </span><span class="sc">\'</span><span class="st">single</span><span class="sc">\'</span><span class="st"> quotes'</span></span>
-<span id="cb130-4"><a href="#cb130-4"></a></span>
-<span id="cb130-5"><a href="#cb130-5"></a><span class="co"># Good</span></span>
-<span id="cb130-6"><a href="#cb130-6"></a><span class="st">"Text"</span></span>
-<span id="cb130-7"><a href="#cb130-7"></a><span class="st">'Text with "quotes"'</span></span>
-<span id="cb130-8"><a href="#cb130-8"></a><span class="st">'&lt;a href="http://style.tidyverse.org"&gt;A link&lt;/a&gt;'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb132"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1"></a><span class="co"># Bad</span></span>
+<span id="cb132-2"><a href="#cb132-2"></a><span class="st">'Text'</span></span>
+<span id="cb132-3"><a href="#cb132-3"></a><span class="st">'Text with "double" and </span><span class="sc">\'</span><span class="st">single</span><span class="sc">\'</span><span class="st"> quotes'</span></span>
+<span id="cb132-4"><a href="#cb132-4"></a></span>
+<span id="cb132-5"><a href="#cb132-5"></a><span class="co"># Good</span></span>
+<span id="cb132-6"><a href="#cb132-6"></a><span class="st">"Text"</span></span>
+<span id="cb132-7"><a href="#cb132-7"></a><span class="st">'Text with "quotes"'</span></span>
+<span id="cb132-8"><a href="#cb132-8"></a><span class="st">'&lt;a href="http://style.tidyverse.org"&gt;A link&lt;/a&gt;'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 <div class="footer footer-default">

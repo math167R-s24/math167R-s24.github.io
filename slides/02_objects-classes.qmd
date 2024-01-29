@@ -171,8 +171,6 @@ from *Advanced R*, Hadley Wickham.
 ```{r, eval = T, echo = T}
 example_lgc <- T
 example_int <- 1L
-example_dbl <- 1.0
-example_chr <- "Hello"
 ```
 
 The `typeof` function can be used to get the data type of an object.
@@ -182,6 +180,20 @@ The `typeof` function can be used to get the data type of an object.
 ```{r, eval = T, echo = T}
 typeof(example_lgc)
 typeof(example_int)
+```
+
+## Atomic vectors
+
+```{r, eval = T, echo = T}
+example_dbl <- 1.0
+example_chr <- "Hello"
+```
+
+The `typeof` function can be used to get the data type of an object.
+
+. . .
+
+```{r, eval = T, echo = T}
 typeof(example_dbl)
 typeof(example_chr)
 ```
@@ -206,7 +218,7 @@ c(TRUE, "hello", 1)
 ## Special values
 
 | Value            | Usual meaning                                          |
-|---------------------|---------------------------------------------------|
+|----------------------|--------------------------------------------------|
 | `NA`             | Missing values                                         |
 | `NaN`            | a computed value that is not a number (try `1/0`)      |
 | `NULL`           | an object with no value                                |
@@ -453,11 +465,11 @@ This header contains **metadata** about the document that follows: the name of t
 
 ## Source Editor
 
-![](images/Screenshot 2024-01-25 at 9.28.24 AM.png)
+![](images/Screenshot%202024-01-25%20at%209.28.24%20AM.png)
 
 ## Visual Editor
 
-![](images/Screenshot 2024-01-25 at 9.29.11 AM.png)
+![](images/Screenshot%202024-01-25%20at%209.29.11%20AM.png)
 
 ## Code chunks
 
@@ -480,4 +492,4 @@ Remember the following:
 
 ## Check-in 1
 
-No due date, but in your interest to do this ASAP to make sure R Markdown is working!
+Not due for a while, but in your interest to do this ASAP to make sure R Markdown is working!

@@ -313,7 +313,11 @@ my_matrix[2, 3]
 my_matrix[2, 3]
 ```
 
-. . .
+## Indexing and Subsetting Matrices
+
+```{r, echo = T, eval = T, error = T}
+my_matrix
+```
 
 What is the output of the following line?
 
@@ -346,6 +350,8 @@ is.matrix(my_matrix[, -c(1, 3, 4, 5)])
 ```
 
 What happened here? When subsetting a matrix reduces one dimension to length 1, R automatically coerces it into a vector. We can prevent this by including `drop = FALSE`.
+
+## Dropping entries
 
 ```{r, echo = T, eval = T, error = T}
 my_matrix[, -c(1, 3, 4, 5), drop = FALSE]
@@ -415,6 +421,8 @@ mat1 + mat3
 mat1 * mat3
 ```
 
+## Matrix functions {.smaller}
+
 **Matrix Multiplication** `%*%`
 
 ```{r, echo = T, eval = T, error = T}
@@ -422,13 +430,15 @@ mat_square <- mat1 %*% mat2
 mat_square
 ```
 
-## Matrix functions {.smaller}
+
 
 **Column Bind Matrices** `cbind()`
 
 ```{r, echo = T, eval = T, error = T}
 cbind(mat1, mat3)
 ```
+
+## Matrix functions {.smaller}
 
 **Transpose** `t()`
 
@@ -442,19 +452,22 @@ t(mat1)
 colSums(mat1)
 ```
 
+## Matrix functions {.smaller}
+
 **Row Sums** `rowSums()`
 
 ```{r, echo = T, eval = T, error = T}
 rowSums(mat1)
 ```
 
-## Matrix functions {.smaller}
 
 **Column Means** `colMeans()`
 
 ```{r, echo = T, eval = T, error = T}
 colMeans(mat1)
 ```
+
+## Matrix functions {.smaller}
 
 **Row Means** `rowMeans()`
 
@@ -536,21 +549,23 @@ waldt <- function(mod) {
 
 ## Comment Style Guide
 
--   When starting out, you should comment most lines
--   Frequent use of comments should allow most comments to be restricted to one line for readability
--   A comment should go above its corresponding line, be indented equally with the next line, and use a single `#` to mark a comment
--   Use a string of `-` or `=` to break your code into easily noticeable chunks
-    -   Example: `# Data Manipulation -----------`
-    -   RStudio allows you to collapse chunks marked like this to help with clutter
+Frequent use of comments should allow most comments to be restricted to one line for readability
+
+A comment should go above its corresponding line, be indented equally with the next line, and use a single `#` to mark a comment
+
+Use a string of `-` or `=` to break your code into easily noticeable chunks
+- Example: `# Data Manipulation -----------`
+- RStudio allows you to collapse chunks marked like this to help with clutter
 
 ## Comment Style Guide
 
--   There are exceptions to every rule! Usually, comments are to help **you**!
+There are exceptions to every rule! Usually, comments are to help **you**!
 
 **Example of breaking rules**
 
--   Here's a snippet of a long mathematical function (lots of code omitted with ellipses for space).
--   Code is divided into major steps marked by easily visible comments
+Here's a snippet of a long mathematical function (lots of code omitted with ellipses for space).
+
+Code is divided into major steps marked by easily visible comments
 
 ## Example of breaking rules {.smaller}
 
@@ -574,8 +589,9 @@ objfun <- function(theta, W, M, X, X_star, np, npstar, link, phi.link) {
 
 ## A final plea
 
--   Being a successful programmer *requires* commenting your code
--   Want to understand code you wrote \>24 hours ago without comments?
+Being a successful programmer *requires* commenting your code
+
+Want to understand code you wrote \>24 hours ago without comments?
 
 ## What style
 
