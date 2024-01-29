@@ -202,7 +202,7 @@ typeof(example_chr)
 
 You can explicitly change the type of an object:
 
-```{{r, eval = T, echo = T}}
+```{r, eval = T, echo = T}
 as.numeric(example_lgc)
 as.numeric(example_chr)
 ```
@@ -211,7 +211,7 @@ When elements of different types are mixed in an atomic vector, R automatically 
 
 **Order of precedence**, from the highest to the lowest: character, numeric, integer, logical.
 
-```{{r, eval = T, echo = T}}
+```{r, eval = T, echo = T}
 c(TRUE, "hello", 1)
 ```
 
@@ -220,7 +220,7 @@ c(TRUE, "hello", 1)
 | Value            | Usual meaning                                          |
 |----------------------|--------------------------------------------------|
 | `NA`             | Missing values                                         |
-| `NaN`            | a computed value that is not a number (try `1/0`)      |
+| `NaN`            | a computed value that is not a number     |
 | `NULL`           | an object with no value                                |
 | `-Inf` and `Inf` | a computed value that is large (or large and negative) |
 
@@ -279,7 +279,7 @@ Types of operators:
 | Operator | Operation | Example          |     | Result      |
 |----------|-----------|------------------|-----|-------------|
 | `&`      | AND       | `> TRUE & FALSE` |     | `[1] FALSE` |
-| `|`      | OR        | `> TRUE & FALSE` |     | `[1] TRUE`  |
+| `|`      | OR        | `> TRUE | FALSE` |     | `[1] TRUE`  |
 | `!`      | NOT       | `> !TRUE`        |     | `[1] FALSE` |
 
 ## Relational Operators {.smaller}
