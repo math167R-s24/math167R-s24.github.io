@@ -143,7 +143,7 @@ z <- "Hello"
 
 . . .
 
-However, we need to be careful because not all operations work with all types of data:
+Note: be careful because not all operations work with all types of data:
 
 ```{r, eval = T, echo = T, error = T}
 x + z
