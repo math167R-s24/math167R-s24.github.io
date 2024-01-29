@@ -207,6 +207,8 @@ as.numeric(example_lgc)
 as.numeric(example_chr)
 ```
 
+## Coercion
+
 When elements of different types are mixed in an atomic vector, R automatically converts all of them to the same type.
 
 **Order of precedence**, from the highest to the lowest: character, numeric, integer, logical.
