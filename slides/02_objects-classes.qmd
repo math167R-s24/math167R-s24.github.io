@@ -220,9 +220,9 @@ c(TRUE, "hello", 1)
 ## Special values
 
 | Value            | Usual meaning                                          |
-|----------------------|--------------------------------------------------|
+|-----------------------|-------------------------------------------------|
 | `NA`             | Missing values                                         |
-| `NaN`            | a computed value that is not a number     |
+| `NaN`            | a computed value that is not a number                  |
 | `NULL`           | an object with no value                                |
 | `-Inf` and `Inf` | a computed value that is large (or large and negative) |
 
@@ -294,12 +294,6 @@ Types of operators:
 | `<=`     | less than or equal to    | `> 2 <= 1` | `[1] FALSE` |
 | `<`      | less than                | `> 2 < 1`  | `[1] FALSE` |
 | `!=`     | not equal to             | `> 2 != 1` | `[1] TRUE`  |
-
-## Relational Operators {.smaller}
-
-| Operator | Operation    | Example    | Result     |
-|----------|--------------|------------|------------|
-| `!=`     | not equal to | `> 2 != 1` | `[1] TRUE` |
 
 ## Check your understanding: Operators
 

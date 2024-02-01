@@ -1,8 +1,6 @@
 ---
 title: "Lab 2: R Markdown and Basic Objects"
 author: "YOUR NAME HERE"
-date: 2024-02-07
-date-format: "[Due] MMMM DD, YYYY"
 format: 
   html:
     embed-resources: true
@@ -11,7 +9,7 @@ format:
 
 ---
 
-In this lab, you will familiarize yourself with R Markdown, file management, and basic objects and functions. **Follow the instructions below and submit both an Rmd and a pdf document with your code and answers to the following questions on Gradescope.** You may find a template file by clicking "Code" in the top right corner of this page.
+In this lab, you will familiarize yourself with R Markdown, file management, and basic objects and functions. **Follow the instructions below and submit a pdf document with your code and answers to the following questions on Gradescope.** You may find a template file by clicking "Code" in the top right corner of this page.
 
 Your final submission should clearly include all code needed to generate your answers and should be formatted according to the guidelines outlined in class. In particular, make sure:
 

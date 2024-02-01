@@ -1,7 +1,6 @@
 ---
 title: "Check-in 1: R Markdown"
 author: "YOUR NAME HERE"
-date: "2024-01-29"
 output: html_document
 format: 
   html:

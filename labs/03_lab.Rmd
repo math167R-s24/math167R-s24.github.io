@@ -89,11 +89,11 @@ weather_forecasts <- readr::read_csv('https://raw.githubusercontent.com/rfordata
 
 For this component, pick a [Tidy Tuesday dataset](https://github.com/rfordatascience/tidytuesday/tree/master/data/2023) and complete the following activity.
 
-10. Provide a brief description of your dataset. Identify one question you could try to answer using this dataset.
+10. Provide a brief description of your dataset. Identify at least two questions you could try to answer using this dataset.
 
 <!--# YOUR ANSWER/EXPLANATION HERE -->
 
-11. Open your dataset in R and compute one or more descriptive statistics that shed light on your question. Discuss your findings.
+11. Open your dataset in R and compute one or more descriptive statistics that shed light on your questions. Discuss your findings.
 
 <!--# YOUR ANSWER/EXPLANATION HERE -->
 

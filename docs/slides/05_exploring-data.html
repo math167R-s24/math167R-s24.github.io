@@ -860,17 +860,17 @@ library(nycflights13)
 <h1>Downloading data from the internet</h1>
 
 </section>
-<section id="saving-data" class="slide level2">
-<h2>Saving Data</h2>
+<section id="saving-r-output" class="slide level2">
+<h2>Saving R Output</h2>
 <p>You can save single R objects as <code>.rds</code> files using <code>saveRDS()</code>, multiple R objects as <code>.RData</code> or <code>.rda</code> files using <code>save()</code>, and your entire workspace as <code>.RData</code> using <code>save.image()</code>.</p>
 </section>
-<section id="saving-data-1" class="slide level2">
-<h2>Saving Data</h2>
-<p>In general, you should use <code>.RData</code> for multiple objects, and generally should not use<code>save.image()</code>.</p>
-<p><code>save.image()</code> should never be a part of your workflow.</p>
+<section id="saving-r-output-1" class="slide level2">
+<h2>Saving R Output</h2>
+<p>In general, you should use <code>.RData</code> for multiple objects, and generally should not use <code>save.image()</code>.</p>
+<p><code>save.image()</code> should never be a part of your workflow as it is not generally reproducible.</p>
 </section>
-<section id="loading-data" class="slide level2">
-<h2>Loading Data</h2>
+<section id="loading-r-output" class="slide level2">
+<h2>Loading R Output</h2>
 <p>You can load <code>.rds</code> files using <code>readRDS()</code> and <code>.Rdata</code> and <code>.rda</code> files using <code>load()</code>.</p>
 </section>
 <section id="notes-on-saving-and-loading-r-data" class="slide level2">
@@ -881,6 +881,14 @@ library(nycflights13)
 <section id="other-types-of-data" class="slide level2">
 <h2>Other types of data</h2>
 <p>Often, you will read and write files as <strong>c</strong>omma <strong>s</strong>eparated <strong>v</strong>alues, or <code>.csv</code>. You can do this by navigating <em>File &gt; Import Dataset</em> in the menu bar, but generally I recommend doing it manually using the <code>readr</code> package. You will need to do so if loading data is part of your work flow, such as if it is required for an R Markdown writeup.</p>
+</section>
+<section id="loading-tidy-tuesday-data" class="slide level2">
+<h2>Loading Tidy Tuesday data</h2>
+<p>Two approaches:</p>
+<ol type="1">
+<li>Load directly from the internet using a link.</li>
+<li>Download to your computer and then load locally.</li>
+</ol>
 
 <div class="footer footer-default">
 

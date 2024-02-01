@@ -1,8 +1,6 @@
 ---
 title: "Lab 1: R and RStudio"
 author: "YOUR NAME HERE"
-date: 2024-1-31
-date-format: "[Due] MMMM DD, YYYY"
 format: 
   html:
     embed-resources: true
@@ -65,7 +63,7 @@ RStudio is like Microsoft Word/Google Docs for writing R code--it has useful too
 
 9. The bottom right pane is the **Output** pane, which will often be used to display results/visualizations of your R code. There are many tabs here, but click on the **Files** tab. What do you see? In your own words, explain what you think the **Files** tab shows.
 
-10. The top left pane is the **Source** pane. When you want to write more than one line of code at a time, it's a good idea to organize your code in a single file. At the top of the RStudio window, click `File -> New File -> R Script` to open an untitled `.R` file. Copy and paste the following code into your R file. Then highlight the code and click `Run` (which will be in the top left corner of the Source pane). What do you see?
+10. Before this question, run the following line in the **Console**: `install.packages("ggplot2")`. This will install some additional R function for visualization. The top left pane is the **Source** pane. When you want to write more than one line of code at a time, it's a good idea to organize your code in a single file. At the top of the RStudio window, click `File -> New File -> R Script` to open an untitled `.R` file. Copy and paste the following code into your R file. Then highlight the code and click `Run` (which will be in the top left corner of the Source pane). What do you see?
 
 ```{r, eval = F}
 library(ggplot2)

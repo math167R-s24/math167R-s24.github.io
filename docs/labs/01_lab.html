@@ -4703,12 +4703,6 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
           </div>
   </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">Due January 31, 2024</p>
-    </div>
-  </div>
   
     
   </div>
@@ -4761,7 +4755,7 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
 <ol start="8" type="1">
 <li><p>In the <strong>Console</strong>, type the command <code>x &lt;- 10</code>. What do you see in your environment pane?</p></li>
 <li><p>The bottom right pane is the <strong>Output</strong> pane, which will often be used to display results/visualizations of your R code. There are many tabs here, but click on the <strong>Files</strong> tab. What do you see? In your own words, explain what you think the <strong>Files</strong> tab shows.</p></li>
-<li><p>The top left pane is the <strong>Source</strong> pane. When you want to write more than one line of code at a time, it’s a good idea to organize your code in a single file. At the top of the RStudio window, click <code>File -&gt; New File -&gt; R Script</code> to open an untitled <code>.R</code> file. Copy and paste the following code into your R file. Then highlight the code and click <code>Run</code> (which will be in the top left corner of the Source pane). What do you see?</p></li>
+<li><p>Before this question, run the following line in the <strong>Console</strong>: <code>install.packages(&quot;ggplot2&quot;)</code>. This will install some additional R function for visualization. The top left pane is the <strong>Source</strong> pane. When you want to write more than one line of code at a time, it’s a good idea to organize your code in a single file. At the top of the RStudio window, click <code>File -&gt; New File -&gt; R Script</code> to open an untitled <code>.R</code> file. Copy and paste the following code into your R file. Then highlight the code and click <code>Run</code> (which will be in the top left corner of the Source pane). What do you see?</p></li>
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
@@ -5064,80 +5058,78 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Lab 1: R and RStudio&quot;</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> &quot;YOUR NAME HERE&quot;</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2024-1-31</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="an">date-format:</span><span class="co"> &quot;[Due] MMMM DD, YYYY&quot;</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-summary: &quot;Code&quot;</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-summary: &quot;Code&quot;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>In this introductory lab, you will familiarize yourself with the R console and R Studio layout. Before you begin, you should install both R and RStudio using the instructions in the lecture slides. **Follow the instructions below and submit a pdf document with your answers to the following questions on Gradescope.**</span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>In this introductory lab, you will familiarize yourself with the R console and R Studio layout. Before you begin, you should install both R and RStudio using the instructions in the lecture slides. **Follow the instructions below and submit a pdf document with your answers to the following questions on Gradescope.**</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part A. Introduction to R</span></span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part A. Introduction to R</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>Open R (not RStudio). You should see a window that looks something like this (your version number may differ slightly):</span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>Open R (not RStudio). You should see a window that looks something like this (your version number may differ slightly):</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="al">![](figures/console.png)</span></span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="al">![](figures/console.png)</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>At the bottom of this window, you should see a <span class="in">`&gt;`</span> symbol. This is called a prompt and indicates that R is waiting for instructions (in the form of code). Type <span class="in">`100 + 100`</span> and then press return or enter. R should produce the following output: <span class="in">`[1] 200`</span>. For now, ignore the <span class="in">`[1]`</span>. This is R&#39;s way of letting us know that the answer is a **single** value: 200.</span>
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>At the bottom of this window, you should see a <span class="in">`&gt;`</span> symbol. This is called a prompt and indicates that R is waiting for instructions (in the form of code). Type <span class="in">`100 + 100`</span> and then press return or enter. R should produce the following output: <span class="in">`[1] 200`</span>. For now, ignore the <span class="in">`[1]`</span>. This is R&#39;s way of letting us know that the answer is a **single** value: 200.</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Compute $2^{1023}$ by typing the line: <span class="in">`2 ^ 1023`</span>. What is the resulting value? Do you trust R&#39;s answer?</span>
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Compute $2^{1023}$ by typing the line: <span class="in">`2 ^ 1023`</span>. What is the resulting value? Do you trust R&#39;s answer?</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Compute $2^{1024}$ by typing the line: <span class="in">`2 ^ 1024`</span>. What is the resulting value? Do you trust R&#39;s answer?</span>
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Compute $2^{1024}$ by typing the line: <span class="in">`2 ^ 1024`</span>. What is the resulting value? Do you trust R&#39;s answer?</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>We can save values as objects by giving them names. Try this out by typing <span class="in">`x &lt;- 10`</span> and then pressing return/enter.</span>
 <span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>We can save values as objects by giving them names. Try this out by typing <span class="in">`x &lt;- 10`</span> and then pressing return/enter.</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>What does the command <span class="in">`print(x)`</span> produce? Try to predict what the answer will be before you run the code.</span>
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>What does the command <span class="in">`print(x)`</span> produce? Try to predict what the answer will be before you run the code.</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>What does the command <span class="in">`x + 10`</span> produce? Try to predict what the answer will be before you run the code.</span>
 <span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>What does the command <span class="in">`x + 10`</span> produce? Try to predict what the answer will be before you run the code.</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Run the following two lines of code, one after the other. What is the result? Try to predict what the answer will be before you run the code.</span>
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Run the following two lines of code, one after the other. What is the result? Try to predict what the answer will be before you run the code.</span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = F}</span></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> x <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>x <span class="sc">*</span> x</span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = F}</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> x <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>x <span class="sc">*</span> x</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Run the following lines of code, one after the other. What is the result? In your own words, explain what this code is doing.</span>
 <span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Run the following lines of code, one after the other. What is the result? In your own words, explain what this code is doing.</span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = F}</span></span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>sides <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;H&quot;</span>, <span class="st">&quot;T&quot;</span>)</span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>flip1 <span class="ot">&lt;-</span> <span class="fu">sample</span>(sides, <span class="dv">1</span>, <span class="at">replace =</span> T)</span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(flip1)</span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = F}</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>sides <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;H&quot;</span>, <span class="st">&quot;T&quot;</span>)</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>flip1 <span class="ot">&lt;-</span> <span class="fu">sample</span>(sides, <span class="dv">1</span>, <span class="at">replace =</span> T)</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(flip1)</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>Run the following lines of code, one after the other. What is the result? In your own words, explain what this code is doing.</span>
 <span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>Run the following lines of code, one after the other. What is the result? In your own words, explain what this code is doing.</span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = F}</span></span>
-<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>sides <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;H&quot;</span>, <span class="st">&quot;T&quot;</span>)</span>
-<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>flip10 <span class="ot">&lt;-</span> <span class="fu">sample</span>(sides, <span class="dv">10</span>, <span class="at">replace =</span> T)</span>
-<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(flip10)</span>
-<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = F}</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>sides <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;H&quot;</span>, <span class="st">&quot;T&quot;</span>)</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>flip10 <span class="ot">&lt;-</span> <span class="fu">sample</span>(sides, <span class="dv">10</span>, <span class="at">replace =</span> T)</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(flip10)</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part B. Introduction to RStudio</span></span>
 <span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part B. Introduction to RStudio</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>Now, open RStudio. It should look some thing like this image, from the official <span class="co">[</span><span class="ot">RStudio Guide</span><span class="co">](https://docs.posit.co/ide/user/ide/get-started/)</span>:</span>
 <span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>Now, open RStudio. It should look some thing like this image, from the official <span class="co">[</span><span class="ot">RStudio Guide</span><span class="co">](https://docs.posit.co/ide/user/ide/get-started/)</span>:</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a><span class="al">![](https://docs.posit.co/ide/user/ide/get-started/images/rstudio-panes-labeled.jpeg)</span></span>
 <span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a><span class="al">![](https://docs.posit.co/ide/user/ide/get-started/images/rstudio-panes-labeled.jpeg)</span></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>RStudio is like Microsoft Word/Google Docs for writing R code--it has useful tools (analogous to spell check) for programmers. In the lower left corner is your Console. This should look like the R window you were working in for Part A. The Console is meant for brief **interactive** R commands. The top right corner should be your **Environment** pane, which displays R objects that you have created. Right now your environment should be empty.</span>
 <span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>RStudio is like Microsoft Word/Google Docs for writing R code--it has useful tools (analogous to spell check) for programmers. In the lower left corner is your Console. This should look like the R window you were working in for Part A. The Console is meant for brief **interactive** R commands. The top right corner should be your **Environment** pane, which displays R objects that you have created. Right now your environment should be empty.</span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="ss">8. </span>In the **Console**, type the command <span class="in">`x &lt;- 10`</span>. What do you see in your environment pane?</span>
 <span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a><span class="ss">8. </span>In the **Console**, type the command <span class="in">`x &lt;- 10`</span>. What do you see in your environment pane?</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a><span class="ss">9. </span>The bottom right pane is the **Output** pane, which will often be used to display results/visualizations of your R code. There are many tabs here, but click on the **Files** tab. What do you see? In your own words, explain what you think the **Files** tab shows.</span>
 <span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a><span class="ss">9. </span>The bottom right pane is the **Output** pane, which will often be used to display results/visualizations of your R code. There are many tabs here, but click on the **Files** tab. What do you see? In your own words, explain what you think the **Files** tab shows.</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>Before this question, run the following line in the **Console**: `install.packages(&quot;ggplot2&quot;)`. This will install some additional R function for visualization. The top left pane is the **Source** pane. When you want to write more than one line of code at a time, it&#39;s a good idea to organize your code in a single file. At the top of the RStudio window, click <span class="in">`File -&gt; New File -&gt; R Script`</span> to open an untitled <span class="in">`.R`</span> file. Copy and paste the following code into your R file. Then highlight the code and click <span class="in">`Run`</span> (which will be in the top left corner of the Source pane). What do you see?</span>
 <span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>The top left pane is the **Source** pane. When you want to write more than one line of code at a time, it&#39;s a good idea to organize your code in a single file. At the top of the RStudio window, click <span class="in">`File -&gt; New File -&gt; R Script`</span> to open an untitled <span class="in">`.R`</span> file. Copy and paste the following code into your R file. Then highlight the code and click <span class="in">`Run`</span> (which will be in the top left corner of the Source pane). What do you see?</span>
-<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = F}</span></span>
-<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>mpg_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span> </span>
-<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> class))</span>
-<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>mpg_plot</span>
-<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>When you are finished, remember to write up your solutions, save them in a pdf file, and submit to Gradescope.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = F}</span></span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>mpg_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span> </span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> class))</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>mpg_plot</span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>When you are finished, remember to write up your solutions, save them in a pdf file, and submit to Gradescope.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

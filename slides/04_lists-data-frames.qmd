@@ -37,7 +37,9 @@ rbind(x, y)
 
 ## Vector Arithmetic
 
-**Vectorization**, or applying functions across vectors/arrays, is one of R's most powerful capabilities
+**Vectorization**: applying a function repeatedly to every entry in a vector/array
+
+Vectorization allows us to quickly carry out computations for every individual in a dataset.
 
 ```{r, echo = T, eval = T}
 x <- 1:5
@@ -49,7 +51,7 @@ x * y
 
 ## Vector Arithmetic
 
-Be careful! R **recycles**, repeating elements of shorter vectors to match longer vectors. This is incredibly useful when done on purpose, but can also easily lead to hard-to-catch bugs in your code!
+Note that R **recycles**, repeating elements of shorter vectors to match longer vectors. This is incredibly useful when done on purpose, but can also easily lead to hard-to-catch bugs in your code!
 
 ```{r, echo = T, eval = T, error = T}
 2 * x
@@ -120,7 +122,7 @@ What is this last quantity telling us?
 
 . . .
 
-By taking the mean, we are looking at the **proportion** of our vector that is `TRUE`!
+By taking the mean, we are looking at the **proportion** of our vector that is `TRUE`.
 
 ## Complicated indexing
 
@@ -162,7 +164,7 @@ my_list <- list("some_numbers" = 1:5,
 my_list
 ```
 
-Make sure to store items within a list using the `=` operator for assigning arguments, not `<-`!
+Make sure to store items within a list using the `=` operator for assigning arguments, not the assignment arrow `<-`
 
 ## Accessing List Elements
 
@@ -241,6 +243,57 @@ names(my_list)
 A **data frame** in R is essentially a special type of list, where each item is a vector of equal length. Typically, we say that data has $n$ rows (one for each **observation**) and $p$ columns (one for each **variable**)
 
 Unlike a matrix, columns can have different types. However, many column functions still apply! (such as `colSums`, `summary`, etc.)
+
+
+## Example data frames in R {.smaller}
+
+There are plenty of free datasets available through R and its packages. If you haven't already, run `install.packages("palmerpenguins")` in your console. Then, we can load the `penguins` dataset.
+
+```{r, echo = T, eval = T}
+# load palmer penguins package
+library(palmerpenguins)
+
+# open penguins data as a data frame
+data(penguins)
+penguins <- as.data.frame(penguins)
+```
+
+## Penguins data {.smaller}
+
+We can use the `head` function to look at the first several rows:
+
+```{r, echo = T, eval = T}
+head(penguins)
+```
+
+-   How many columns are in this dataset?
+-   How many rows are in this dataset?
+
+## Penguins data {.smaller}
+
+Using the `$` operator, we can access individual columns.
+
+```{r, echo = T, eval = T}
+penguins$bill_length_mm
+```
+
+We can then use any of our useful functions for vectors to summarize this column (ex. `max()`, `min()`, `mean()`, `median()`, `sum()`, `sd()`, `var()`, `length()`).
+
+
+## Penguins data {.smaller}
+
+
+```{r, echo = T, eval = T}
+mean(penguins$bill_length_mm)
+```
+
+. . .
+
+Note that we may have to drop missing values, using the argument `na.rm = T`.
+
+```{r, echo = T, eval = T}
+mean(penguins$bill_length_mm, na.rm = T)
+```
 
 ## Creating a data frame
 
@@ -324,34 +377,4 @@ rownames(my_data2) <- c("Obs1", "Obs2", "Obs3", "Obs4")
 my_data2
 ```
 
-## Example data frames in R {.smaller}
 
-There are plenty of free datasets available through R and its packages. If you haven't already, run `install.packages("palmerpenguins")` in your console. Then, we can load the `penguins` dataset.
-
-```{r, echo = T, eval = T}
-# load palmer penguins package
-library(palmerpenguins)
-
-# open penguins data as a data frame
-data(penguins)
-penguins <- as.data.frame(penguins)
-```
-
-## Penguins data {.smaller}
-
-We can use the `head` function to look at the first several rows:
-
-```{r, echo = T, eval = T}
-head(penguins)
-```
-
--   How many columns are in this dataset?
--   How many rows are in this dataset?
-
-## Penguins data {.smaller}
-
-Using the `$` operator, we can access individual columns.
-
-```{r, echo = T, eval = T}
-penguins$bill_length_mm
-```

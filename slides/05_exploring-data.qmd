@@ -364,7 +364,7 @@ Note that the class of object is slightly different!
 
 # Downloading data from the internet
 
-## Saving Data
+## Saving R Output
 
 You can save single R objects as `.rds` files using `saveRDS()`, multiple R objects as `.RData` or `.rda` files using `save()`, and your entire workspace as `.RData` using `save.image()`.
 
@@ -379,13 +379,13 @@ save(object1, object2, file = "both_objects.RData")
 save.image(file = "entire_workspace.RData")
 ```
 
-## Saving Data
+## Saving R Output
 
-In general, you should use `.RData` for multiple objects, and generally should not use`save.image()`.
+In general, you should use `.RData` for multiple objects, and generally should not use `save.image()`.
 
-`save.image()` should never be a part of your workflow.
+`save.image()` should never be a part of your workflow as it is not generally reproducible.
 
-## Loading Data
+## Loading R Output
 
 You can load `.rds` files using `readRDS()` and `.Rdata` and `.rda` files using `load()`.
 
@@ -419,3 +419,10 @@ read_csv("./Data/file.csv")
 # save a .csv file in a "Data" subfolder
 write_csv("./Data/data_output.csv")
 ```
+
+## Loading Tidy Tuesday data
+
+Two approaches:
+
+1.  Load directly from the internet using a link.
+2.  Download to your computer and then load locally.

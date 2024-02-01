@@ -440,7 +440,8 @@ y    1    0    1</code></pre>
 </section>
 <section id="vector-arithmetic" class="slide level2">
 <h2>Vector Arithmetic</h2>
-<p><strong>Vectorization</strong>, or applying functions across vectors/arrays, is one of R’s most powerful capabilities</p>
+<p><strong>Vectorization</strong>: applying a function repeatedly to every entry in a vector/array</p>
+<p>Vectorization allows us to quickly carry out computations for every individual in a dataset.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>y <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span><span class="sc">:-</span><span class="dv">5</span></span>
@@ -460,7 +461,7 @@ y    1    0    1</code></pre>
 </section>
 <section id="vector-arithmetic-1" class="slide level2">
 <h2>Vector Arithmetic</h2>
-<p>Be careful! R <strong>recycles</strong>, repeating elements of shorter vectors to match longer vectors. This is incredibly useful when done on purpose, but can also easily lead to hard-to-catch bugs in your code!</p>
+<p>Note that R <strong>recycles</strong>, repeating elements of shorter vectors to match longer vectors. This is incredibly useful when done on purpose, but can also easily lead to hard-to-catch bugs in your code!</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="dv">2</span> <span class="sc">*</span> x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -544,7 +545,7 @@ y    1    0    1</code></pre>
 <p>What is this last quantity telling us?</p>
 </div>
 <div class="fragment">
-<p>By taking the mean, we are looking at the <strong>proportion</strong> of our vector that is <code>TRUE</code>!</p>
+<p>By taking the mean, we are looking at the <strong>proportion</strong> of our vector that is <code>TRUE</code>.</p>
 </div>
 </section>
 <section id="complicated-indexing" class="slide level2">
@@ -611,7 +612,7 @@ $a_matrix
 [2,]    0    1</code></pre>
 </div>
 </div>
-<p>Make sure to store items within a list using the <code>=</code> operator for assigning arguments, not <code>&lt;-</code>!</p>
+<p>Make sure to store items within a list using the <code>=</code> operator for assigning arguments, not the assignment arrow <code>&lt;-</code></p>
 </section>
 <section id="accessing-list-elements" class="slide level2">
 <h2>Accessing List Elements</h2>
@@ -749,185 +750,23 @@ $a_list$recursive
 <p>A <strong>data frame</strong> in R is essentially a special type of list, where each item is a vector of equal length. Typically, we say that data has <span class="math inline">\(n\)</span> rows (one for each <strong>observation</strong>) and <span class="math inline">\(p\)</span> columns (one for each <strong>variable</strong>)</p>
 <p>Unlike a matrix, columns can have different types. However, many column functions still apply! (such as <code>colSums</code>, <code>summary</code>, etc.)</p>
 </section>
-<section id="creating-a-data-frame" class="slide level2">
-<h2>Creating a data frame</h2>
-<p>An easy way to create a data frame is to use the function <code>data.frame()</code>.</p>
-<p>Like lists, make sure you define the names using <code>=</code> and not <code>&lt;-</code>!</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a>my_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">"var1"</span> <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
-<span id="cb64-2"><a href="#cb64-2"></a>                      <span class="st">"var2"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>),</span>
-<span id="cb64-3"><a href="#cb64-3"></a>                      <span class="st">"var3"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>))</span>
-<span id="cb64-4"><a href="#cb64-4"></a>my_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  var1 var2  var3
-1    1    a  TRUE
-2    2    b FALSE
-3    3    c  TRUE</code></pre>
-</div>
-</div>
-</section>
-<section id="creating-a-data-frame-1" class="slide level2">
-<h2>Creating a data frame</h2>
-<p>If you import or create numeric data as a <code>matrix</code>, you can also convert it easily using <code>as.data.frame()</code></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a>my_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>, <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
-<span id="cb66-2"><a href="#cb66-2"></a>my_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>     [,1] [,2] [,3]
-[1,]    1    4    7
-[2,]    2    5    8
-[3,]    3    6    9</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a><span class="fu">as.data.frame</span>(my_matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  V1 V2 V3
-1  1  4  7
-2  2  5  8
-3  3  6  9</code></pre>
-</div>
-</div>
-</section>
-<section id="subsetting-data-frames" class="slide level2">
-<h2>Subsetting data frames</h2>
-<p>We can subset data frames using most of the tools we’ve learned about subsetting so far. We can use keys or indices.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a>my_data<span class="sc">$</span>var1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1 2 3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a>my_data[<span class="st">"var1"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  var1
-1    1
-2    2
-3    3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1"></a>my_data[[<span class="st">"var1"</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1 2 3</code></pre>
-</div>
-</div>
-</section>
-<section id="subsetting-data-frames-1" class="slide level2">
-<h2>Subsetting data frames</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a>my_data[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  var1
-1    1
-2    2
-3    3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1"></a>my_data[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1 2 3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1"></a>my_data[, <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1 2 3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1"></a>my_data[<span class="dv">1</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  var1 var2 var3
-1    1    a TRUE</code></pre>
-</div>
-</div>
-</section>
-<section id="adding-to-a-data-frame" class="slide level2">
-<h2>Adding to a data frame</h2>
-<p>We can add to a data frame using <code>rbind()</code> and <code>cbind()</code>, but be careful with type mismatches! We can also add columns using the column index methods.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1"></a><span class="co"># These all do the same thing</span></span>
-<span id="cb84-2"><a href="#cb84-2"></a>my_data <span class="ot">&lt;-</span> <span class="fu">cbind</span>(my_data, <span class="st">"var4"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>))</span>
-<span id="cb84-3"><a href="#cb84-3"></a>my_data<span class="sc">$</span>var4 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
-<span id="cb84-4"><a href="#cb84-4"></a>my_data[, <span class="st">"var4"</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
-<span id="cb84-5"><a href="#cb84-5"></a>my_data[[<span class="st">"var4"</span>]] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
-<span id="cb84-6"><a href="#cb84-6"></a>my_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  var1 var2  var3 var4
-1    1    a  TRUE    3
-2    2    b FALSE    2
-3    3    c  TRUE    1</code></pre>
-</div>
-</div>
-</section>
-<section id="adding-to-a-data-frame-1" class="slide level2">
-<h2>Adding to a data frame</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1"></a><span class="fu">rbind</span>(my_data, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  var1 var2 var3 var4
-1    1    a    1    3
-2    2    b    0    2
-3    3    c    1    1
-4    1    2    3    4</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1"></a><span class="fu">rbind</span>(my_data, <span class="fu">list</span>(<span class="dv">4</span>, <span class="st">"d"</span>, <span class="cn">FALSE</span>, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  var1 var2  var3 var4
-1    1    a  TRUE    3
-2    2    b FALSE    2
-3    3    c  TRUE    1
-4    4    d FALSE    0</code></pre>
-</div>
-</div>
-</section>
-<section id="investigating-a-data-frame" class="slide level2">
-<h2>Investigating a data frame</h2>
-<p>We can use <code>str()</code> to see the structure of a data frame (or any other object!)</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1"></a>my_data2 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(my_data, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>))</span>
-<span id="cb90-2"><a href="#cb90-2"></a><span class="fu">str</span>(my_data2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   4 obs. of  4 variables:
- $ var1: num  1 2 3 1
- $ var2: chr  "a" "b" "c" "2"
- $ var3: num  1 0 1 3
- $ var4: num  3 2 1 4</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1"></a>my_data2 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(my_data, <span class="fu">list</span>(<span class="dv">4</span>, <span class="st">"d"</span>, <span class="cn">FALSE</span>, <span class="dv">0</span>))</span>
-<span id="cb92-2"><a href="#cb92-2"></a><span class="fu">str</span>(my_data2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   4 obs. of  4 variables:
- $ var1: num  1 2 3 4
- $ var2: chr  "a" "b" "c" "d"
- $ var3: logi  TRUE FALSE TRUE FALSE
- $ var4: num  3 2 1 0</code></pre>
-</div>
-</div>
-</section>
-<section id="investigating-a-data-frame-1" class="slide level2">
-<h2>Investigating a data frame</h2>
-<p>Most data frames will have column names describing the variables. They can also include rownames, which we can add using <code>rownames()</code>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1"></a><span class="fu">rownames</span>(my_data2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Obs1"</span>, <span class="st">"Obs2"</span>, <span class="st">"Obs3"</span>, <span class="st">"Obs4"</span>)</span>
-<span id="cb94-2"><a href="#cb94-2"></a>my_data2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>     var1 var2  var3 var4
-Obs1    1    a  TRUE    3
-Obs2    2    b FALSE    2
-Obs3    3    c  TRUE    1
-Obs4    4    d FALSE    0</code></pre>
-</div>
-</div>
-</section>
 <section id="example-data-frames-in-r" class="slide level2 smaller">
 <h2>Example data frames in R</h2>
 <p>There are plenty of free datasets available through R and its packages. If you haven’t already, run <code>install.packages("palmerpenguins")</code> in your console. Then, we can load the <code>penguins</code> dataset.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1"></a><span class="co"># load palmer penguins package</span></span>
-<span id="cb96-2"><a href="#cb96-2"></a><span class="fu">library</span>(palmerpenguins)</span>
-<span id="cb96-3"><a href="#cb96-3"></a></span>
-<span id="cb96-4"><a href="#cb96-4"></a><span class="co"># open penguins data as a data frame</span></span>
-<span id="cb96-5"><a href="#cb96-5"></a><span class="fu">data</span>(penguins)</span>
-<span id="cb96-6"><a href="#cb96-6"></a>penguins <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a><span class="co"># load palmer penguins package</span></span>
+<span id="cb64-2"><a href="#cb64-2"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb64-3"><a href="#cb64-3"></a></span>
+<span id="cb64-4"><a href="#cb64-4"></a><span class="co"># open penguins data as a data frame</span></span>
+<span id="cb64-5"><a href="#cb64-5"></a><span class="fu">data</span>(penguins)</span>
+<span id="cb64-6"><a href="#cb64-6"></a>penguins <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="penguins-data" class="slide level2 smaller">
 <h2>Penguins data</h2>
 <p>We can use the <code>head</code> function to look at the first several rows:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1"></a><span class="fu">head</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1"></a><span class="fu">head</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  species    island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
 1  Adelie Torgersen           39.1          18.7               181        3750
@@ -954,7 +793,7 @@ Obs4    4    d FALSE    0</code></pre>
 <h2>Penguins data</h2>
 <p>Using the <code>$</code> operator, we can access individual columns.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1"></a>penguins<span class="sc">$</span>bill_length_mm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1"></a>penguins<span class="sc">$</span>bill_length_mm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  [1] 39.1 39.5 40.3   NA 36.7 39.3 38.9 39.2 34.1 42.0 37.8 37.8 41.1 38.6 34.6
  [16] 36.6 38.7 42.5 34.4 46.0 37.8 37.7 35.9 38.2 38.8 35.3 40.6 40.5 37.9 40.5
@@ -979,6 +818,187 @@ Obs4    4    d FALSE    0</code></pre>
 [301] 46.7 52.0 50.5 49.5 46.4 52.8 40.9 54.2 42.5 51.0 49.7 47.5 47.6 52.0 46.9
 [316] 53.5 49.0 46.2 50.9 45.5 50.9 50.8 50.1 49.0 51.5 49.8 48.1 51.4 45.7 50.7
 [331] 42.5 52.2 45.2 49.3 50.2 45.6 51.9 46.8 45.7 55.8 43.5 49.6 50.8 50.2</code></pre>
+</div>
+</div>
+<p>We can then use any of our useful functions for vectors to summarize this column (ex. <code>max()</code>, <code>min()</code>, <code>mean()</code>, <code>median()</code>, <code>sum()</code>, <code>sd()</code>, <code>var()</code>, <code>length()</code>).</p>
+</section>
+<section id="penguins-data-2" class="slide level2 smaller">
+<h2>Penguins data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1"></a><span class="fu">mean</span>(penguins<span class="sc">$</span>bill_length_mm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Note that we may have to drop missing values, using the argument <code>na.rm = T</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1"></a><span class="fu">mean</span>(penguins<span class="sc">$</span>bill_length_mm, <span class="at">na.rm =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 43.92193</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="creating-a-data-frame" class="slide level2">
+<h2>Creating a data frame</h2>
+<p>An easy way to create a data frame is to use the function <code>data.frame()</code>.</p>
+<p>Like lists, make sure you define the names using <code>=</code> and not <code>&lt;-</code>!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1"></a>my_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">"var1"</span> <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb73-2"><a href="#cb73-2"></a>                      <span class="st">"var2"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>),</span>
+<span id="cb73-3"><a href="#cb73-3"></a>                      <span class="st">"var3"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>))</span>
+<span id="cb73-4"><a href="#cb73-4"></a>my_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  var1 var2  var3
+1    1    a  TRUE
+2    2    b FALSE
+3    3    c  TRUE</code></pre>
+</div>
+</div>
+</section>
+<section id="creating-a-data-frame-1" class="slide level2">
+<h2>Creating a data frame</h2>
+<p>If you import or create numeric data as a <code>matrix</code>, you can also convert it easily using <code>as.data.frame()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1"></a>my_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>, <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
+<span id="cb75-2"><a href="#cb75-2"></a>my_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3]
+[1,]    1    4    7
+[2,]    2    5    8
+[3,]    3    6    9</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1"></a><span class="fu">as.data.frame</span>(my_matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  V1 V2 V3
+1  1  4  7
+2  2  5  8
+3  3  6  9</code></pre>
+</div>
+</div>
+</section>
+<section id="subsetting-data-frames" class="slide level2">
+<h2>Subsetting data frames</h2>
+<p>We can subset data frames using most of the tools we’ve learned about subsetting so far. We can use keys or indices.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1"></a>my_data<span class="sc">$</span>var1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1"></a>my_data[<span class="st">"var1"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  var1
+1    1
+2    2
+3    3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1"></a>my_data[[<span class="st">"var1"</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3</code></pre>
+</div>
+</div>
+</section>
+<section id="subsetting-data-frames-1" class="slide level2">
+<h2>Subsetting data frames</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1"></a>my_data[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  var1
+1    1
+2    2
+3    3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1"></a>my_data[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1"></a>my_data[, <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1"></a>my_data[<span class="dv">1</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  var1 var2 var3
+1    1    a TRUE</code></pre>
+</div>
+</div>
+</section>
+<section id="adding-to-a-data-frame" class="slide level2">
+<h2>Adding to a data frame</h2>
+<p>We can add to a data frame using <code>rbind()</code> and <code>cbind()</code>, but be careful with type mismatches! We can also add columns using the column index methods.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1"></a><span class="co"># These all do the same thing</span></span>
+<span id="cb93-2"><a href="#cb93-2"></a>my_data <span class="ot">&lt;-</span> <span class="fu">cbind</span>(my_data, <span class="st">"var4"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb93-3"><a href="#cb93-3"></a>my_data<span class="sc">$</span>var4 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb93-4"><a href="#cb93-4"></a>my_data[, <span class="st">"var4"</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb93-5"><a href="#cb93-5"></a>my_data[[<span class="st">"var4"</span>]] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb93-6"><a href="#cb93-6"></a>my_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  var1 var2  var3 var4
+1    1    a  TRUE    3
+2    2    b FALSE    2
+3    3    c  TRUE    1</code></pre>
+</div>
+</div>
+</section>
+<section id="adding-to-a-data-frame-1" class="slide level2">
+<h2>Adding to a data frame</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1"></a><span class="fu">rbind</span>(my_data, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  var1 var2 var3 var4
+1    1    a    1    3
+2    2    b    0    2
+3    3    c    1    1
+4    1    2    3    4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1"></a><span class="fu">rbind</span>(my_data, <span class="fu">list</span>(<span class="dv">4</span>, <span class="st">"d"</span>, <span class="cn">FALSE</span>, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  var1 var2  var3 var4
+1    1    a  TRUE    3
+2    2    b FALSE    2
+3    3    c  TRUE    1
+4    4    d FALSE    0</code></pre>
+</div>
+</div>
+</section>
+<section id="investigating-a-data-frame" class="slide level2">
+<h2>Investigating a data frame</h2>
+<p>We can use <code>str()</code> to see the structure of a data frame (or any other object!)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1"></a>my_data2 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(my_data, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>))</span>
+<span id="cb99-2"><a href="#cb99-2"></a><span class="fu">str</span>(my_data2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   4 obs. of  4 variables:
+ $ var1: num  1 2 3 1
+ $ var2: chr  "a" "b" "c" "2"
+ $ var3: num  1 0 1 3
+ $ var4: num  3 2 1 4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1"></a>my_data2 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(my_data, <span class="fu">list</span>(<span class="dv">4</span>, <span class="st">"d"</span>, <span class="cn">FALSE</span>, <span class="dv">0</span>))</span>
+<span id="cb101-2"><a href="#cb101-2"></a><span class="fu">str</span>(my_data2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   4 obs. of  4 variables:
+ $ var1: num  1 2 3 4
+ $ var2: chr  "a" "b" "c" "d"
+ $ var3: logi  TRUE FALSE TRUE FALSE
+ $ var4: num  3 2 1 0</code></pre>
+</div>
+</div>
+</section>
+<section id="investigating-a-data-frame-1" class="slide level2">
+<h2>Investigating a data frame</h2>
+<p>Most data frames will have column names describing the variables. They can also include rownames, which we can add using <code>rownames()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1"></a><span class="fu">rownames</span>(my_data2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Obs1"</span>, <span class="st">"Obs2"</span>, <span class="st">"Obs3"</span>, <span class="st">"Obs4"</span>)</span>
+<span id="cb103-2"><a href="#cb103-2"></a>my_data2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     var1 var2  var3 var4
+Obs1    1    a  TRUE    3
+Obs2    2    b FALSE    2
+Obs3    3    c  TRUE    1
+Obs4    4    d FALSE    0</code></pre>
 </div>
 </div>
 
