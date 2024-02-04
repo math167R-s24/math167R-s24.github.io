@@ -11,8 +11,8 @@ draft: false
 |  1   | W 1/24 | Course Overview and Introduction to R |   [Slides 01](slides/01_overview.html){.label .label-green}       |          |  [Lab 01](labs/01_lab.html){.label .label-red}   |
 |  2   | M 1/29 | R fundamentals                        |      [Slides 02](slides/02_objects-classes.html){.label .label-green}  |    [Check-in 01](checkins/01_checkin.html){.label .label-purple}        |     |
 |      | W 1/31 | R fundamentals                        | [Slides 03](slides/03_functions-vectors-matrices.html){.label .label-green}        |         | [Lab 02](labs/02_lab.html){.label .label-red}     |
-|  3   | M 2/5  | R fundamentals                        |        |          |     |
-|      | W 2/7  | Exploring data with R                 |        |          |     |
+|  3   | M 2/5  | R fundamentals                        |   [Slides 04](slides/04_lists-data-frames.html){.label .label-green}     |          |     |
+|      | W 2/7  | Exploring data with R                 |  [Slides 05](slides/05_exploring-data.html){.label .label-green}      |          | [Lab 03](labs/03_lab.html){.label .label-red}     |
 |  4   | M 2/12 | Exploring data with R                 |        |          |     |
 |      | W 2/14 | Data visualization                    |        |          |     |
 |  5   | M 2/19 | Data visualization                    |        |          |     |
