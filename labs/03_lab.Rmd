@@ -11,15 +11,14 @@ format:
 
 ---
 
-You should edit this .Rmd using RStudio, then click *Render* in the menu bar of the Source window (above the text of this .Rmd). Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit!
+**Follow the instructions below and use R Markdown to create a pdf document with your code and answers to the following questions on Gradescope.** You may find a template file by clicking "Code" in the top right corner of this page.
 
-### Collaborators
+Your final submission should clearly include all code needed to generate your answers and should be formatted according to the guidelines outlined in class. In particular, make sure:
 
-INSERT NAMES OF ANY COLLABORATORS
+1. Code and output are clearly organized by question.
+2. Unnecessary messages, warning, and output are removed.
 
-```{r}
-# LOAD ANY RELEVANT PACKAGES HERE
-```
+You may collaborate with your classmates and consult external resources, but you should write and submit your own answer. **Any classmates with whom you collaborate should be credited at the top of your submission. Similarly, if you consult any external references, you should cite them clearly and explicitly.**
 
 ## A. Weather Forecast Data
 
