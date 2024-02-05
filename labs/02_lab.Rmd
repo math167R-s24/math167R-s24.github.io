@@ -20,7 +20,7 @@ You may collaborate with your classmates and consult external resources, but you
 
 ## A. File paths and Introduction to R Markdown
 
-1. Create a `MATH167R` directory somewhere on your computer that will contain all your work for this class. Within the `MATH167R` folder, create subdirectories for `labs`, `checkins`, and `data`. Save this .Rmd document in your `data` folder and then Render/Knit your Rmd document. The following code chunk should print the location of your Rmd. document:
+1. Create a `MATH167R` directory somewhere on your computer that will contain all your work for this class. Within the `MATH167R` folder, create subdirectories for `labs`, `checkins`, and `data`. Save this .Rmd document in your `labs` folder and then Render/Knit your Rmd document. The following code chunk should print the location of your Rmd. document:
 
 ```{r, eval = T}
 getwd()
