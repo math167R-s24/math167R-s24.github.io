@@ -714,7 +714,9 @@ library(nycflights13)
 <pre><code>[1] 0.172821</code></pre>
 </div>
 </div>
-<div class="fragment">
+</section>
+<section id="summarizing-subsets-of-a-dataset-2" class="slide level2">
+<h2>Summarizing subsets of a dataset</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a><span class="fu">mean</span>(JFK_flights<span class="sc">$</span>distance, <span class="at">na.rm =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -727,7 +729,6 @@ library(nycflights13)
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a><span class="fu">mean</span>(EWR_flights<span class="sc">$</span>distance, <span class="at">na.rm =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1056.743</code></pre>
-</div>
 </div>
 </div>
 </section>
@@ -787,6 +788,9 @@ library(nycflights13)
 1           12.6</code></pre>
 </div>
 </div>
+</section>
+<section id="descriptive-statistics-with-summarize-1" class="slide level2">
+<h2>Descriptive statistics with <code>summarize()</code></h2>
 <p>The <code>summarize()</code> function can handle more than one statistic at once:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a><span class="fu">summarize</span>(flights, </span>

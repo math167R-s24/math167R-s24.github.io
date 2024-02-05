@@ -133,6 +133,13 @@ We can also get more complicated with our indexing.
 y[c(2, 3)]
 # Return the values of x greater than 3
 x[x >= 3]
+```
+
+## Complicated indexing
+
+We can also get more complicated with our indexing.
+
+```{r, echo = T, eval = T}
 # Values of x that match the index of the values of y that are less than -2
 x[y < -2]
 # which() returns the index of entries that are TRUE
@@ -173,6 +180,8 @@ There are three ways to access an item within a list
 -   double brackets `[[]]` with its name in quotes
 -   double brackets `[[]]` with its index as a number
 -   dollar sign `$` followed by its name without quotes
+
+## Accessing List Elements
 
 ```{r, echo = T, eval = T}
 my_list[["some_numbers"]]
@@ -216,6 +225,8 @@ my_list[-2]
 
 We can use the same tools we used to access list elements to add to a list. However, if we use double brackets, we must use quotes, otherwise R will search for something that does not yet exist.
 
+## Adding to a list {.smaller}
+
 ```{r, echo = T, eval = T}
 my_list$a_boolean <- FALSE
 my_list[["a_list"]] <- list("recursive" = TRUE)
@@ -243,7 +254,6 @@ names(my_list)
 A **data frame** in R is essentially a special type of list, where each item is a vector of equal length. Typically, we say that data has $n$ rows (one for each **observation**) and $p$ columns (one for each **variable**)
 
 Unlike a matrix, columns can have different types. However, many column functions still apply! (such as `colSums`, `summary`, etc.)
-
 
 ## Example data frames in R {.smaller}
 
@@ -274,14 +284,12 @@ head(penguins)
 Using the `$` operator, we can access individual columns.
 
 ```{r, echo = T, eval = T}
-penguins$bill_length_mm
+head(penguins$bill_length_mm)
 ```
 
 We can then use any of our useful functions for vectors to summarize this column (ex. `max()`, `min()`, `mean()`, `median()`, `sum()`, `sd()`, `var()`, `length()`).
 
-
 ## Penguins data {.smaller}
-
 
 ```{r, echo = T, eval = T}
 mean(penguins$bill_length_mm)
@@ -376,5 +384,3 @@ Most data frames will have column names describing the variables. They can also 
 rownames(my_data2) <- c("Obs1", "Obs2", "Obs3", "Obs4")
 my_data2
 ```
-
-

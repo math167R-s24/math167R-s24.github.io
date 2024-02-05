@@ -233,7 +233,7 @@ mean(LGA_flights$arr_delay > 30, na.rm = T)
 mean(EWR_flights$arr_delay > 30, na.rm = T)
 ```
 
-. . .
+## Summarizing subsets of a dataset
 
 ```{r, echo = T, eval = T}
 mean(JFK_flights$distance, na.rm = T)
@@ -302,6 +302,8 @@ The `summarize()` function can similarly be used to compute summary statistics:
 ```{r, echo = T, eval = T}
 summarize(flights, mean_dep_delay = mean(dep_delay, na.rm = T))
 ```
+
+## Descriptive statistics with `summarize()`
 
 The `summarize()` function can handle more than one statistic at once:
 
