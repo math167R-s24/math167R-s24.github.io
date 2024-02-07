@@ -428,3 +428,26 @@ Two approaches:
 
 1.  Load directly from the internet using a link.
 2.  Download to your computer and then load locally.
+
+## Discussion: Exploratory Data Analysis
+
+1.  Better than EDA: start with a question, collect data, and explore your question
+2.  EDA: Start with a dataset and use descriptive statistics/visualization to explore your dataset and develop research questions.
+
+## Discussion: What can/should we compute?
+
+1.  If I've waited 20 minutes for my flight, how much longer should I expect to wait? (Is waiting for a plane memoryless?)
+2.  Bonus: If my plane is delayed for a mechanical issue---is it still safe to get on the flight?
+
+## Another example
+
+Yesterday's TidyTuesday featured a very simple dataset on UNESCO World Heritage sites. You can find code to download it [here](https://github.com/rfordatascience/tidytuesday/blob/master/data/2024/2024-02-06/readme.md).
+
+This dataset has been used for the [1 Dataset, 100 Visualizations project](https://100.datavizproject.com) --- take a look and think about which of these visualizations are the most effective.
+
+## Activity
+
+Using this dataset...
+
+1.  What is one question you could answer with this dataset? What questions could you answer if you could incorporate other variables/datasets?
+2.  What would you compute to answer your question?
