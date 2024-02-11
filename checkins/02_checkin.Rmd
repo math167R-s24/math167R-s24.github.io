@@ -1,37 +1,66 @@
 ---
 title: "Check-in 2"
 author: "YOUR NAME HERE"
-date: "2023-08-28"
-output: html_document
+date: ""
+format: 
+  html:
+    embed-resources: true
+    code-tools: true
+    code-summary: "Code"
 ---
 
-You should edit this .Rmd using RStudio, then click *Render* in the menu bar of the Source window (above the text of this .Rmd). Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit!
+Remember, **follow the instructions below and use R Markdown to create a pdf document with your code and answers to the following questions on Gradescope.** You may find a template file by clicking "Code" in the top right corner of this page.
 
 ### Collaborators
 
 INSERT NAMES OF ANY COLLABORATORS
 
-## A. Functions
+## A. Flights Data
 
-Work with one or two other students,
+**1.**  For this lab, we'll be using the `flights` data. You can load this data using the following code:
 
-**1.** In words, what does the following line of code do?
-
-```{r, eval = T}
-sample(1:6, 1)
+```{r}
+library(nycflights13)
+data(flights)
 ```
 
-<!-- REPLACE THIS LINE WITH YOUR ANSWER -->
+**2.** Use the `mutate()` function to turn `origin` into a factor.
 
-**2.** Run the line of code in RStudio. What do you get? What did your groupmates get? What happens to the result each time you knit the document?
-
-<!-- REPLACE THIS LINE WITH YOUR ANSWER -->
-
-**3.** Below, we introduce the `set.seed` function. What do the two lines of code below do? What does the `456` mean? What happens to the result each time you knit the document?
-
-```{r, eval = T}
-set.seed(456)
-sample(1:6, 1)
+```{r}
+# YOUR CODE HERE
 ```
 
-<!-- REPLACE THIS LINE WITH YOUR ANSWER -->
+**3.** Compute the mean `arr_delay` for each origin airport. Which airport has the longest delays on average? You can drop missing rows.
+
+```{r}
+# YOUR CODE HERE
+```
+
+<!--# YOUR ANSWER/EXPLANATION HERE -->
+
+
+**4.** Use the `mutate()` function to turn `month` into a factor.
+
+```{r}
+# YOUR CODE HERE
+```
+
+<!--# YOUR ANSWER/EXPLANATION HERE -->
+
+
+**5.** Compute the mean `arr_delay` by month. What do you notice?
+
+```{r}
+# YOUR CODE HERE
+```
+
+<!--# YOUR ANSWER/EXPLANATION HERE -->
+
+
+**6.** Compute the mean `arr_delay` by month AND airport. What do you notice?
+
+```{r}
+# YOUR CODE HERE
+```
+
+<!--# YOUR ANSWER/EXPLANATION HERE -->

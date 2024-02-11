@@ -190,7 +190,7 @@ object.size(genre_char)
 object.size(genre_fct) 
 ```
 
-# The `forcats` package
+## The `forcats` package
 
 The `forcats` package provides helpful functions for working with factors. Consider the following example:
 

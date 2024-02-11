@@ -742,6 +742,9 @@ library(nycflights13)
 <li>Working with different data structures: <code>tibble</code>, <code>purrr</code>, <code>stringr</code>, <code>forcats</code></li>
 </ul>
 <p>You can install them all using</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>(Remember, you only need to do this once!)</p>
 </section>
 <section id="tidy-data-principles" class="slide level2">
@@ -764,23 +767,23 @@ library(nycflights13)
 <h2>Subsetting with <code>filter()</code></h2>
 <p>The <code>filter()</code> function from the <code>dplyr</code> package provides a way to subset data. The second argument of <code>filter()</code> below looks for a logical vector defined <strong>in terms of the variables</strong> in the first argument.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb54-2"><a href="#cb54-2"></a>JFK_flights <span class="ot">&lt;-</span> <span class="fu">filter</span>(flights, origin <span class="sc">==</span> <span class="st">"JFK"</span>)</span>
-<span id="cb54-3"><a href="#cb54-3"></a>LGA_flights <span class="ot">&lt;-</span> <span class="fu">filter</span>(flights, origin <span class="sc">==</span> <span class="st">"LGA"</span>)</span>
-<span id="cb54-4"><a href="#cb54-4"></a>EWR_flights <span class="ot">&lt;-</span> <span class="fu">filter</span>(flights, origin <span class="sc">==</span> <span class="st">"EWR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb55-2"><a href="#cb55-2"></a>JFK_flights <span class="ot">&lt;-</span> <span class="fu">filter</span>(flights, origin <span class="sc">==</span> <span class="st">"JFK"</span>)</span>
+<span id="cb55-3"><a href="#cb55-3"></a>LGA_flights <span class="ot">&lt;-</span> <span class="fu">filter</span>(flights, origin <span class="sc">==</span> <span class="st">"LGA"</span>)</span>
+<span id="cb55-4"><a href="#cb55-4"></a>EWR_flights <span class="ot">&lt;-</span> <span class="fu">filter</span>(flights, origin <span class="sc">==</span> <span class="st">"EWR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Compare with:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a>JFK_flights <span class="ot">&lt;-</span> flights[flights<span class="sc">$</span>origin <span class="sc">==</span> <span class="st">"JFK"</span>, ]</span>
-<span id="cb55-2"><a href="#cb55-2"></a>LGA_flights <span class="ot">&lt;-</span> flights[flights<span class="sc">$</span>origin <span class="sc">==</span> <span class="st">"LGA"</span>, ]</span>
-<span id="cb55-3"><a href="#cb55-3"></a>EWR_flights <span class="ot">&lt;-</span> flights[flights<span class="sc">$</span>origin <span class="sc">==</span> <span class="st">"EWR"</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a>JFK_flights <span class="ot">&lt;-</span> flights[flights<span class="sc">$</span>origin <span class="sc">==</span> <span class="st">"JFK"</span>, ]</span>
+<span id="cb56-2"><a href="#cb56-2"></a>LGA_flights <span class="ot">&lt;-</span> flights[flights<span class="sc">$</span>origin <span class="sc">==</span> <span class="st">"LGA"</span>, ]</span>
+<span id="cb56-3"><a href="#cb56-3"></a>EWR_flights <span class="ot">&lt;-</span> flights[flights<span class="sc">$</span>origin <span class="sc">==</span> <span class="st">"EWR"</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="descriptive-statistics-with-summarize" class="slide level2">
 <h2>Descriptive statistics with <code>summarize()</code></h2>
 <p>The <code>summarize()</code> function can similarly be used to compute summary statistics:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a><span class="fu">summarize</span>(flights, <span class="at">mean_dep_delay =</span> <span class="fu">mean</span>(dep_delay, <span class="at">na.rm =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a><span class="fu">summarize</span>(flights, <span class="at">mean_dep_delay =</span> <span class="fu">mean</span>(dep_delay, <span class="at">na.rm =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 1
   mean_dep_delay
@@ -793,9 +796,9 @@ library(nycflights13)
 <h2>Descriptive statistics with <code>summarize()</code></h2>
 <p>The <code>summarize()</code> function can handle more than one statistic at once:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a><span class="fu">summarize</span>(flights, </span>
-<span id="cb58-2"><a href="#cb58-2"></a>          <span class="at">mean_dep_delay =</span> <span class="fu">mean</span>(dep_delay, <span class="at">na.rm =</span> T),</span>
-<span id="cb58-3"><a href="#cb58-3"></a>          <span class="at">mean_arr_delay =</span> <span class="fu">mean</span>(arr_delay, <span class="at">na.rm =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a><span class="fu">summarize</span>(flights, </span>
+<span id="cb59-2"><a href="#cb59-2"></a>          <span class="at">mean_dep_delay =</span> <span class="fu">mean</span>(dep_delay, <span class="at">na.rm =</span> T),</span>
+<span id="cb59-3"><a href="#cb59-3"></a>          <span class="at">mean_arr_delay =</span> <span class="fu">mean</span>(arr_delay, <span class="at">na.rm =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 2
   mean_dep_delay mean_arr_delay
@@ -809,18 +812,18 @@ library(nycflights13)
 <p><strong>Pipes</strong> use the <code>|&gt;</code> operator to take the output from a previous function call and “pipe” it through to the next function.</p>
 <p>The object before the pipe is treated as the first argument to the function coming after the pipe.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a>JFK_flights <span class="ot">&lt;-</span> flights <span class="sc">|&gt;</span> <span class="fu">filter</span>(origin <span class="sc">==</span> <span class="st">"JFK"</span>)</span>
-<span id="cb60-2"><a href="#cb60-2"></a>LGA_flights <span class="ot">&lt;-</span> flights <span class="sc">|&gt;</span> <span class="fu">filter</span>(origin <span class="sc">==</span> <span class="st">"LGA"</span>)</span>
-<span id="cb60-3"><a href="#cb60-3"></a>EWR_flights <span class="ot">&lt;-</span> flights <span class="sc">|&gt;</span> <span class="fu">filter</span>(origin <span class="sc">==</span> <span class="st">"EWR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a>JFK_flights <span class="ot">&lt;-</span> flights <span class="sc">|&gt;</span> <span class="fu">filter</span>(origin <span class="sc">==</span> <span class="st">"JFK"</span>)</span>
+<span id="cb61-2"><a href="#cb61-2"></a>LGA_flights <span class="ot">&lt;-</span> flights <span class="sc">|&gt;</span> <span class="fu">filter</span>(origin <span class="sc">==</span> <span class="st">"LGA"</span>)</span>
+<span id="cb61-3"><a href="#cb61-3"></a>EWR_flights <span class="ot">&lt;-</span> flights <span class="sc">|&gt;</span> <span class="fu">filter</span>(origin <span class="sc">==</span> <span class="st">"EWR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="piping-filter-and-summarize" class="slide level2">
 <h2>Piping <code>filter()</code> and <code>summarize()</code></h2>
 <p>Pipes are useful if we want to combine multiple functions. To see how this can be useful, consider the combining the <code>filter()</code> and <code>summarize()</code> functions:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a>flights <span class="sc">|&gt;</span></span>
-<span id="cb61-2"><a href="#cb61-2"></a>  <span class="fu">filter</span>(origin <span class="sc">==</span> <span class="st">"JFK"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb61-3"><a href="#cb61-3"></a>  <span class="fu">summarize</span>(<span class="at">mean_dep_delay =</span> <span class="fu">mean</span>(dep_delay, <span class="at">na.rm =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a>flights <span class="sc">|&gt;</span></span>
+<span id="cb62-2"><a href="#cb62-2"></a>  <span class="fu">filter</span>(origin <span class="sc">==</span> <span class="st">"JFK"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb62-3"><a href="#cb62-3"></a>  <span class="fu">summarize</span>(<span class="at">mean_dep_delay =</span> <span class="fu">mean</span>(dep_delay, <span class="at">na.rm =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 1
   mean_dep_delay
@@ -833,9 +836,9 @@ library(nycflights13)
 <h2>Check your understanding:</h2>
 <p>What does the following code do?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a>flights <span class="sc">|&gt;</span></span>
-<span id="cb63-2"><a href="#cb63-2"></a>  <span class="fu">filter</span>(air_time <span class="sc">&gt;</span> <span class="dv">120</span>) <span class="sc">|&gt;</span></span>
-<span id="cb63-3"><a href="#cb63-3"></a>  <span class="fu">summarize</span>(<span class="at">mean_arr_delay =</span> <span class="fu">mean</span>(arr_delay, <span class="at">na.rm =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a>flights <span class="sc">|&gt;</span></span>
+<span id="cb64-2"><a href="#cb64-2"></a>  <span class="fu">filter</span>(air_time <span class="sc">&gt;</span> <span class="dv">120</span>) <span class="sc">|&gt;</span></span>
+<span id="cb64-3"><a href="#cb64-3"></a>  <span class="fu">summarize</span>(<span class="at">mean_arr_delay =</span> <span class="fu">mean</span>(arr_delay, <span class="at">na.rm =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <div class="cell">
@@ -850,8 +853,8 @@ library(nycflights13)
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1"></a>long_flights <span class="ot">&lt;-</span> flights[flights<span class="sc">$</span>air_time <span class="sc">&gt;</span> <span class="dv">120</span>, ]</span>
-<span id="cb65-2"><a href="#cb65-2"></a><span class="fu">mean</span>(long_flights<span class="sc">$</span>arr_delay, <span class="at">na.rm =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a>long_flights <span class="ot">&lt;-</span> flights[flights<span class="sc">$</span>air_time <span class="sc">&gt;</span> <span class="dv">120</span>, ]</span>
+<span id="cb66-2"><a href="#cb66-2"></a><span class="fu">mean</span>(long_flights<span class="sc">$</span>arr_delay, <span class="at">na.rm =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 5.689161</code></pre>
 </div>
@@ -876,15 +879,33 @@ library(nycflights13)
 <section id="loading-r-output" class="slide level2">
 <h2>Loading R Output</h2>
 <p>You can load <code>.rds</code> files using <code>readRDS()</code> and <code>.Rdata</code> and <code>.rda</code> files using <code>load()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a><span class="co"># load only object1</span></span>
+<span id="cb68-2"><a href="#cb68-2"></a><span class="fu">readRDS</span>(<span class="st">"object1_only.rds"</span>)</span>
+<span id="cb68-3"><a href="#cb68-3"></a><span class="co"># load object1 and object2</span></span>
+<span id="cb68-4"><a href="#cb68-4"></a><span class="fu">load</span>(<span class="st">"both_objects.RData"</span>)</span>
+<span id="cb68-5"><a href="#cb68-5"></a><span class="co"># load my entire workspace</span></span>
+<span id="cb68-6"><a href="#cb68-6"></a><span class="fu">load</span>(<span class="st">"entire_workspace.RData"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="notes-on-saving-and-loading-r-data" class="slide level2">
 <h2>Notes on Saving and Loading R Data</h2>
 <p>The values in quotes are all filepaths, and by default, R will search for these objects in your current working directory.</p>
 <p>You can change where R searches for images by adjusting this filepath. For example, if you save your data in a <code>Data</code> subfolder within your working directory, you might try</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1"></a><span class="fu">load</span>(<span class="st">"./Data/my_data.RData"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="other-types-of-data" class="slide level2">
 <h2>Other types of data</h2>
 <p>Often, you will read and write files as <strong>c</strong>omma <strong>s</strong>eparated <strong>v</strong>alues, or <code>.csv</code>. You can do this by navigating <em>File &gt; Import Dataset</em> in the menu bar, but generally I recommend doing it manually using the <code>readr</code> package. You will need to do so if loading data is part of your work flow, such as if it is required for an R Markdown writeup.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb70-2"><a href="#cb70-2"></a><span class="co"># read a .csv file in a "Data" subfolder</span></span>
+<span id="cb70-3"><a href="#cb70-3"></a><span class="fu">read_csv</span>(<span class="st">"./Data/file.csv"</span>)</span>
+<span id="cb70-4"><a href="#cb70-4"></a><span class="co"># save a .csv file in a "Data" subfolder</span></span>
+<span id="cb70-5"><a href="#cb70-5"></a><span class="fu">write_csv</span>(<span class="st">"./Data/data_output.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="loading-tidy-tuesday-data" class="slide level2">
 <h2>Loading Tidy Tuesday data</h2>

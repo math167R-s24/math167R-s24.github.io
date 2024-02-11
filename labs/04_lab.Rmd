@@ -1,7 +1,7 @@
 ---
 title: "Lab 4: Data Visualization"
 author: "YOUR NAME HERE"
-date: "2023-09-13"
+date: ""
 format: 
   html:
     embed-resources: true
@@ -9,7 +9,7 @@ format:
     code-summary: "Code"
 ---
 
-Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.
+Remember, **follow the instructions below and use R Markdown to create a pdf document with your code and answers to the following questions on Gradescope.** You may find a template file by clicking "Code" in the top right corner of this page.
 
 ### Collaborators
 

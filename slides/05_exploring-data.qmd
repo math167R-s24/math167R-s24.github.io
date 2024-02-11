@@ -252,7 +252,7 @@ The previous code provides a basic way to subset datasets. When doing a lot of d
 
 You can install them all using
 
-```{r, eval = FALSE}
+```{r, echo = T, eval = FALSE}
 install.packages("tidyverse")
 ```
 
@@ -370,7 +370,7 @@ Note that the class of object is slightly different!
 
 You can save single R objects as `.rds` files using `saveRDS()`, multiple R objects as `.RData` or `.rda` files using `save()`, and your entire workspace as `.RData` using `save.image()`.
 
-```{r, eval = FALSE}
+```{r, eecho = T, val = FALSE}
 object1 <- 1:5
 object2 <- c("a", "b", "c")
 # save only object1
@@ -391,7 +391,7 @@ In general, you should use `.RData` for multiple objects, and generally should n
 
 You can load `.rds` files using `readRDS()` and `.Rdata` and `.rda` files using `load()`.
 
-```{r, eval = FALSE}
+```{r,echo = T,  eval = FALSE}
 # load only object1
 readRDS("object1_only.rds")
 # load object1 and object2
@@ -406,7 +406,7 @@ The values in quotes are all filepaths, and by default, R will search for these 
 
 You can change where R searches for images by adjusting this filepath. For example, if you save your data in a `Data` subfolder within your working directory, you might try
 
-```{r, eval = FALSE}
+```{r, echo = T,  eval = FALSE}
 load("./Data/my_data.RData")
 ```
 
@@ -414,7 +414,7 @@ load("./Data/my_data.RData")
 
 Often, you will read and write files as **c**omma **s**eparated **v**alues, or `.csv`. You can do this by navigating *File \> Import Dataset* in the menu bar, but generally I recommend doing it manually using the `readr` package. You will need to do so if loading data is part of your work flow, such as if it is required for an R Markdown writeup.
 
-```{r, eval = FALSE}
+```{r, echo = T, eval = FALSE}
 library(readr)
 # read a .csv file in a "Data" subfolder
 read_csv("./Data/file.csv")
