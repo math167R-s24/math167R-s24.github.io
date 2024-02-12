@@ -152,6 +152,13 @@ Note that factors are stored as integers but displayed using their levels:
 class(y1)
 typeof(y1)
 y1
+```
+
+## An example: months of the year {.smaller}
+
+Note that factors are stored as integers but displayed using their levels:
+
+```{r, echo = T, eval = T}
 as.numeric(y1)
 attributes(y1)
 ```
