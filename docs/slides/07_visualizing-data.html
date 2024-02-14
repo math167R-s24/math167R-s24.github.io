@@ -384,6 +384,9 @@
       margin-right: 0; 
     }
   </style>
+  
+  <script src="../site_libs/kePrint-0.0.1/kePrint.js"></script>
+  <link href="../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 <meta property="og:title" content="MATH167R - MATH167R: Data visualization">
 <meta property="og:site-name" content="MATH167R">
 </head>
@@ -408,20 +411,36 @@ Peter Gao
 <ol type="1">
 <li><p>What does the following code do?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>flips <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">"H"</span>, <span class="st">"T"</span>, <span class="st">"H"</span>, <span class="st">"H"</span>), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"H"</span>, <span class="st">"T"</span>))</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">sum</span>(<span class="fu">as.numeric</span>(flips))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">data</span>(penguins)</span>
+<span id="cb1-4"><a href="#cb1-4"></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb1-5"><a href="#cb1-5"></a>  <span class="fu">group_by</span>(species, island) <span class="sc">|&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>  <span class="fu">summarize</span>(<span class="at">mean_body_mass =</span> <span class="fu">mean</span>(body_mass_g, <span class="at">na.rm =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 </ol>
 </section>
 <section id="warm-up-1" class="slide level2">
 <h2>Warm-up</h2>
-<p><strong>Answer:</strong></p>
-<ol type="1">
-<li><div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>flips <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">"H"</span>, <span class="st">"T"</span>, <span class="st">"H"</span>, <span class="st">"H"</span>), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"H"</span>, <span class="st">"T"</span>))</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">sum</span>(<span class="fu">as.numeric</span>(flips))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></li>
-</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="fu">data</span>(penguins)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb2-5"><a href="#cb2-5"></a>  <span class="fu">group_by</span>(species, island) <span class="sc">|&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>  <span class="fu">summarize</span>(<span class="at">mean_body_mass =</span> <span class="fu">mean</span>(body_mass_g, <span class="at">na.rm =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+# Groups:   species [3]
+  species   island    mean_body_mass
+  &lt;fct&gt;     &lt;fct&gt;              &lt;dbl&gt;
+1 Adelie    Biscoe             3710.
+2 Adelie    Dream              3688.
+3 Adelie    Torgersen          3706.
+4 Chinstrap Dream              3733.
+5 Gentoo    Biscoe             5076.</code></pre>
+</div>
+</div>
 </section>
 <section id="overview-of-today" class="slide level2">
 <h2>Overview of today</h2>
@@ -431,179 +450,348 @@ Peter Gao
 <li>Principles of data visualization</li>
 </ul>
 </section>
-<section>
-<section id="data-visualization-in-base-r" class="title-slide slide level1 center">
-<h1>Data visualization in base R</h1>
-
+<section id="data-visualization" class="slide level2">
+<h2>Data visualization</h2>
 </section>
-<section id="example-calenviroscreen" class="slide level2">
-<h2>Example: CalEnviroScreen</h2>
-<p>Passed in 2012, SB 535 requires that 25% of revenue from California’s cap-and-trade program be spent to benefit communities identified by CalEPA as “disadvantaged,” based on “geographic, socioeconomic, public health, and environmental hazard criteria.”</p>
-<p>We will begin by downloading the data from <a href="https://oehha.ca.gov/media/downloads/calenviroscreen/document/calenviroscreen40shpf2021shp.zip">here</a>.</p>
+<section id="why-look-at-data" class="slide level2">
+<h2>Why look at data?</h2>
 
-<img data-src="https://oehha.ca.gov/sites/default/files/media/files/images/misc/ces4resultsmapimage.png" class="r-stretch"></section>
-<section id="example-calenviroscreen-1" class="slide level2 smaller">
-<h2>Example: CalEnviroScreen</h2>
-<p>This is a shapefile, which contains data on each census tract in California. To read it into <code>R</code>, we will need the <code>sf</code> package, which you can install using <code>install.packages("sf")</code>.</p>
+<img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section>
+<section id="why-look-at-data-1" class="slide level2">
+<h2>Why look at data?</h2>
+<p>All of these datasets have the same means for <code>x</code> and <code>y</code>, and (approximately) the same correlation:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb3-2"><a href="#cb3-2"></a>ces_data <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">"~/MATH167R/data/calenviroscreen40shpf2021shp/"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="fragment">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">class</span>(ces_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "sf"         "data.frame"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">head</span>(ces_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Simple feature collection with 6 features and 66 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -44775.05 ymin: -350085.7 xmax: -36182.83 ymax: -340029.8
-Projected CRS: NAD83 / California Albers
-       Tract   ZIP        County   ApproxLoc TotPop19   CIscore  CIscoreP
-1 6083002103 93454 Santa Barbara Santa Maria     4495 36.019653 69.162885
-2 6083002402 93455 Santa Barbara Santa Maria    13173 37.030667 70.637922
-3 6083002102 93454 Santa Barbara Santa Maria     2398 31.213140 61.069087
-4 6083002010 93455 Santa Barbara      Orcutt     4496  6.639331  5.988401
-5 6083002009 93455 Santa Barbara      Orcutt     4008 14.022852 23.121533
-6 6083002008 93455 Santa Barbara      Orcutt     7074  9.958479 12.808875
-       Ozone   OzoneP    PM2_5   PM2_5_P   DieselPM DieselPM_P   Pesticide
-1 0.03419029 10.56627 7.567724 10.031114 0.15457283   52.40821  1705.21702
-2 0.03521715 11.56192 7.624775 10.454263 0.10608759   39.36528 31524.11322
-3 0.03419029 10.56627 7.548835  9.931549 0.19047418   60.31114  2328.79749
-4 0.03624400 13.61543 7.660570 10.653391 0.09138437   34.27505  3237.52248
-5 0.03624400 13.61543 7.663210 10.690728 0.05097617   18.48164    14.98837
-6 0.03624400 13.61543 7.724757 11.126322 0.09044842   33.80212  6973.79475
-  PesticideP   Tox_Rel Tox_Rel_P   Traffic TrafficP DrinkWat DrinkWatP     Lead
-1   92.03448 13.685390  9.914979 1089.7315  63.4000 246.3727  11.16523 39.31056
-2   99.58621 14.766173 10.265066  486.0378  19.9000 441.0587  52.82877 44.64199
-3   93.82759 16.020654 10.515129  779.3813  42.7500 246.3727  11.16523 66.73806
-4   95.41379  6.183637  7.864466  744.7093  39.9250 335.2215  32.55901 18.81221
-5   63.24138  5.847123  7.714429  544.0408  24.3625 335.2215  32.55901 48.55917
-6   97.75862  7.395100  8.214554  717.6585  37.6000 336.4334  32.73386 35.56429
-    Lead_P Cleanup  CleanupP GWThreat GWThreatP HazWaste HazWasteP ImpWatBod
-1 36.11846     1.0 17.077268    73.15 94.720239    0.440  64.76506         9
-2 43.80592    13.5 72.396417   304.00 99.767558    2.800  95.55261        10
-3 75.07246     0.1  2.071669     7.50 39.448780    0.135  23.71939         9
-4 11.07750     0.0  0.000000     0.30  2.108584    0.200  35.61880         0
-5 49.51481     0.1  2.071669     0.00  0.000000    0.210  37.68365         0
-6 31.24134     0.1  2.071669     1.50 10.642537    0.100  16.63799         0
-  ImpWatBodP SolWaste SolWasteP PollBurd PolBurdSc  PolBurdP Asthma  AsthmaP
-1   77.29945        0   0.00000 40.72736  4.972803 45.003111  82.18 86.65254
-2   82.96934       18  97.64032 53.86904  6.577399 79.962663  48.80 54.79811
-3   77.29945        4  70.42383 40.37582  4.929880 43.858121  82.18 86.65254
-4    0.00000        0   0.00000 22.96380  2.803875  6.098320  41.11 43.34497
-5    0.00000        1  35.71592 23.37974  2.854662  6.583696  41.11 43.34497
-6    0.00000        0   0.00000 24.13117  2.946411  7.380212  41.11 43.34497
-  LowBirtWt  LowBirWP Cardiovas CardiovasP Educatn  EducatP Ling_Isol
-1      6.01 75.327175     12.69   52.00648    30.4 80.66312      18.2
-2      4.00 26.635874      7.60   10.81755    44.0 92.87522      18.2
-3      4.95 51.013600     12.69   52.00648    30.2 80.46064      13.3
-4      2.65  5.683859     10.31   32.41525     2.9 10.31384       0.0
-5      6.22 79.278933     10.31   32.41525    10.1 42.29309       4.3
-6      4.43 36.656402     10.31   32.41525     7.2 30.86560       1.7
-  Ling_IsolP Poverty  PovertyP Unempl  UnemplP HousBurd HousBurdP  PopChar
-1   83.84084    57.5 89.660804    3.1 18.31078     21.6  69.15082 69.82700
-2   83.84084    51.0 83.040201    7.2 69.13066     19.3  60.10139 54.27409
-3   72.25606    29.4 52.876884    4.3 35.02082     17.9  53.62484 61.03603
-4    0.00000     8.8  7.550251    6.1 58.35502     10.6  16.31179 22.82710
-5   33.30627    20.4 35.150754   12.1 92.39979      9.5  12.00253 47.35510
-6   13.30356    15.6 23.304020    5.6 52.52473     11.0  18.46641 32.58254
-  PopCharSc PopCharP Child_10 Pop_10_64 Elderly65 Hispanic   White AfricanAm
-1  7.243330 79.82854  18.4427   69.0545   12.5028  68.9210 20.8899    0.4004
-2  5.629987 56.55572  19.6462   75.0019    5.3519  78.6229 13.2240    2.5051
-3  6.331420 67.18356  15.0959   72.0183   12.8857  65.7214 30.6088    0.9591
-4  2.367913 10.74130  12.1441   73.4431   14.4128  22.9537 69.1948    0.9342
-5  4.912263 46.28089  12.8244   68.2884   18.8872  33.4082 59.7804    0.6986
-6  3.379868 23.82753  15.6630   68.4761   15.8609  33.4040 58.4111    2.6859
-  NativeAm OtherMult Shape_Leng Shape_Area   AAPI
-1   0.2670    1.3126   6999.358    2847611 8.2091
-2   0.0000    0.9489  19100.578   16352921 4.6990
-3   0.0000    2.1685   4970.986    1352329 0.5421
-4   0.7117    2.5356   6558.956    2417717 3.6699
-5   1.4721    1.3723   6570.369    2608422 3.2685
-6   0.0000    2.7000   8840.458    3302911 2.7990
-                        geometry
-1 MULTIPOLYGON (((-39795.07 -...
-2 MULTIPOLYGON (((-39795.07 -...
-3 MULTIPOLYGON (((-38115.75 -...
-4 MULTIPOLYGON (((-37341.66 -...
-5 MULTIPOLYGON (((-39465.11 -...
-6 MULTIPOLYGON (((-38569.1 -3...</code></pre>
-</div>
+<pre><code># A tibble: 13 × 4
+   dataset    mean_x mean_y correlation
+   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;
+ 1 away         54.3   47.8        -0.1
+ 2 bullseye     54.3   47.8        -0.1
+ 3 circle       54.3   47.8        -0.1
+ 4 dino         54.3   47.8        -0.1
+ 5 dots         54.3   47.8        -0.1
+ 6 h_lines      54.3   47.8        -0.1
+ 7 high_lines   54.3   47.8        -0.1
+ 8 slant_down   54.3   47.8        -0.1
+ 9 slant_up     54.3   47.8        -0.1
+10 star         54.3   47.8        -0.1
+11 v_lines      54.3   47.8        -0.1
+12 wide_lines   54.3   47.8        -0.1
+13 x_shape      54.3   47.8        -0.1</code></pre>
 </div>
 </div>
 </section>
-<section id="example-calenviroscreen-2" class="slide level2">
-<h2>Example: CalEnviroScreen</h2>
-<p>The CalEnviroScreen data contains information on each tract’s different environmental indicators and percentile ranks. We will practice data exploration and visualization using this dataset.</p>
-</section></section>
-<section>
-<section id="univariate-visualization" class="title-slide slide level1 center">
-<h1>Univariate visualization</h1>
+<section id="why-look-at-data-2" class="slide level2">
+<h2>Why look at data?</h2>
 
+<img data-src="https://socviz.co/assets/ch-01-jackman-outlier.png" class="r-stretch quarto-figure-center"><p>from Jackson (1980) as reproduced in Kieran Healy’s <em>Data Visualization.</em></p>
 </section>
-<section id="summarizing-categorical-data" class="slide level2">
-<h2>Summarizing categorical data</h2>
+<section id="what-makes-a-good-data-visualization" class="slide level2">
+<h2>What makes a good data visualization?</h2>
+<ol type="1">
+<li>Legibility: Is it easy for the viewer to understand and interpret your visual?</li>
+<li>Integrity: Does the visual accurately communicate some insight about the data?</li>
+<li>Beauty: Is the visual appealing and uncluttered?</li>
+</ol>
+<p>Other Readings:</p>
+<ul>
+<li><a href="https://informationisbeautiful.net/visualizations/what-makes-a-good-data-visualization/">Information is Beautiful</a></li>
+</ul>
+</section>
+<section id="legibility" class="slide level2">
+<h2>Legibility</h2>
+
+<img data-src="https://socviz.co/assets/ch-01-perception-adelson-checkershow.jpg" class="r-stretch quarto-figure-center"><p>from Edward H. Adelson as reproduced in Kieran Healy’s <em>Data Visualization.</em></p>
+</section>
+<section id="legibility-1" class="slide level2">
+<h2>Legibility</h2>
+
+<img data-src="https://socviz.co/dataviz-pdfl_files/figure-html4/ch-01-dual-search-1.png" class="r-stretch quarto-figure-center"></section>
+<section id="legibility-2" class="slide level2">
+<h2>Legibility</h2>
+
+<img data-src="https://socviz.co/dataviz-pdfl_files/figure-html4/ch-01-multichannel-1.png" class="r-stretch"><p>from Kieran Healy’s <em>Data Visualization.</em></p>
+</section>
+<section id="integrity" class="slide level2">
+<h2>Integrity</h2>
+
+<img data-src="https://socviz.co/assets/ch-01-democracy-nyt-version.png" class="r-stretch quarto-figure-center"></section>
+<section id="integrity-1" class="slide level2">
+<h2>Integrity</h2>
+
+<img data-src="https://socviz.co/assets/ch-01-democracy-voeten-version-2.png" class="r-stretch"></section>
+<section id="example-movies-data" class="slide level2 smaller">
+<h2>Example: Movies data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">table</span>(ces_data<span class="sc">$</span>County)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>movies <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-10-23/movie_profit.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="07_visualizing-data_cache/revealjs/unnamed-chunk-6_3987ae01e2d11d81e3fcb4e9a11cf6c8">
+<div class="cell-output-display">
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; ">
+<table class="table table-striped" data-quarto-postprocess="true" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">...1</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">release_date</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">movie</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">production_budget</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">domestic_gross</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">worldwide_gross</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">distributor</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">mpaa_rating</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">genre</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">6/22/2007</td>
+<td style="text-align: left;">Evan Almighty</td>
+<td style="text-align: right;">1.75e+08</td>
+<td style="text-align: right;">100289690</td>
+<td style="text-align: right;">174131329</td>
+<td style="text-align: left;">Universal</td>
+<td style="text-align: left;">PG</td>
+<td style="text-align: left;">Comedy</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">7/28/1995</td>
+<td style="text-align: left;">Waterworld</td>
+<td style="text-align: right;">1.75e+08</td>
+<td style="text-align: right;">88246220</td>
+<td style="text-align: right;">264246220</td>
+<td style="text-align: left;">Universal</td>
+<td style="text-align: left;">PG-13</td>
+<td style="text-align: left;">Action</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">5/12/2017</td>
+<td style="text-align: left;">King Arthur: Legend of the Sword</td>
+<td style="text-align: right;">1.75e+08</td>
+<td style="text-align: right;">39175066</td>
+<td style="text-align: right;">139950708</td>
+<td style="text-align: left;">Warner&nbsp;Bros.</td>
+<td style="text-align: left;">PG-13</td>
+<td style="text-align: left;">Adventure</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">12/25/2013</td>
+<td style="text-align: left;">47 Ronin</td>
+<td style="text-align: right;">1.75e+08</td>
+<td style="text-align: right;">38362475</td>
+<td style="text-align: right;">151716815</td>
+<td style="text-align: left;">Universal</td>
+<td style="text-align: left;">PG-13</td>
+<td style="text-align: left;">Action</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">6/22/2018</td>
+<td style="text-align: left;">Jurassic World: Fallen Kingdom</td>
+<td style="text-align: right;">1.70e+08</td>
+<td style="text-align: right;">416769345</td>
+<td style="text-align: right;">1304866322</td>
+<td style="text-align: left;">Universal</td>
+<td style="text-align: left;">PG-13</td>
+<td style="text-align: left;">Action</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">8/1/2014</td>
+<td style="text-align: left;">Guardians of the Galaxy</td>
+<td style="text-align: right;">1.70e+08</td>
+<td style="text-align: right;">333172112</td>
+<td style="text-align: right;">771051335</td>
+<td style="text-align: left;">Walt&nbsp;Disney</td>
+<td style="text-align: left;">PG-13</td>
+<td style="text-align: left;">Action</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">5/7/2010</td>
+<td style="text-align: left;">Iron Man 2</td>
+<td style="text-align: right;">1.70e+08</td>
+<td style="text-align: right;">312433331</td>
+<td style="text-align: right;">621156389</td>
+<td style="text-align: left;">Paramount&nbsp;Pictures</td>
+<td style="text-align: left;">PG-13</td>
+<td style="text-align: left;">Action</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">4/4/2014</td>
+<td style="text-align: left;">Captain America: The Winter Soldier</td>
+<td style="text-align: right;">1.70e+08</td>
+<td style="text-align: right;">259746958</td>
+<td style="text-align: right;">714401889</td>
+<td style="text-align: left;">Walt&nbsp;Disney</td>
+<td style="text-align: left;">PG-13</td>
+<td style="text-align: left;">Action</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">7/11/2014</td>
+<td style="text-align: left;">Dawn of the Planet of the Apes</td>
+<td style="text-align: right;">1.70e+08</td>
+<td style="text-align: right;">208545589</td>
+<td style="text-align: right;">710644566</td>
+<td style="text-align: left;">20th&nbsp;Century&nbsp;Fox</td>
+<td style="text-align: left;">PG-13</td>
+<td style="text-align: left;">Adventure</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">11/10/2004</td>
+<td style="text-align: left;">The Polar Express</td>
+<td style="text-align: right;">1.70e+08</td>
+<td style="text-align: right;">186493587</td>
+<td style="text-align: right;">310634169</td>
+<td style="text-align: left;">Warner&nbsp;Bros.</td>
+<td style="text-align: left;">G</td>
+<td style="text-align: left;">Adventure</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">11</td>
+<td style="text-align: left;">6/1/2012</td>
+<td style="text-align: left;">Snow White and the Huntsman</td>
+<td style="text-align: right;">1.70e+08</td>
+<td style="text-align: right;">155136755</td>
+<td style="text-align: right;">401021746</td>
+<td style="text-align: left;">Universal</td>
+<td style="text-align: left;">PG-13</td>
+<td style="text-align: left;">Adventure</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">12</td>
+<td style="text-align: left;">7/1/2003</td>
+<td style="text-align: left;">Terminator 3: Rise of the Machines</td>
+<td style="text-align: right;">1.70e+08</td>
+<td style="text-align: right;">150358296</td>
+<td style="text-align: right;">433058296</td>
+<td style="text-align: left;">Warner&nbsp;Bros.</td>
+<td style="text-align: left;">R</td>
+<td style="text-align: left;">Action</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">13</td>
+<td style="text-align: left;">5/7/2004</td>
+<td style="text-align: left;">Van Helsing</td>
+<td style="text-align: right;">1.70e+08</td>
+<td style="text-align: right;">120150546</td>
+<td style="text-align: right;">300150546</td>
+<td style="text-align: left;">Universal</td>
+<td style="text-align: left;">PG-13</td>
+<td style="text-align: left;">Action</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">14</td>
+<td style="text-align: left;">5/22/2015</td>
+<td style="text-align: left;">Tomorrowland</td>
+<td style="text-align: right;">1.70e+08</td>
+<td style="text-align: right;">93436322</td>
+<td style="text-align: right;">207283457</td>
+<td style="text-align: left;">Walt&nbsp;Disney</td>
+<td style="text-align: left;">PG</td>
+<td style="text-align: left;">Adventure</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">5/27/2016</td>
+<td style="text-align: left;">Alice Through the Looking Glass</td>
+<td style="text-align: right;">1.70e+08</td>
+<td style="text-align: right;">77042381</td>
+<td style="text-align: right;">276934087</td>
+<td style="text-align: left;">Walt&nbsp;Disney</td>
+<td style="text-align: left;">PG</td>
+<td style="text-align: left;">Adventure</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">16</td>
+<td style="text-align: left;">5/21/2010</td>
+<td style="text-align: left;">Shrek Forever After</td>
+<td style="text-align: right;">1.65e+08</td>
+<td style="text-align: right;">238736787</td>
+<td style="text-align: right;">756244673</td>
+<td style="text-align: left;">Paramount&nbsp;Pictures</td>
+<td style="text-align: left;">PG</td>
+<td style="text-align: left;">Adventure</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">17</td>
+<td style="text-align: left;">11/4/2016</td>
+<td style="text-align: left;">Doctor Strange</td>
+<td style="text-align: right;">1.65e+08</td>
+<td style="text-align: right;">232641920</td>
+<td style="text-align: right;">676486457</td>
+<td style="text-align: left;">Walt&nbsp;Disney</td>
+<td style="text-align: left;">PG-13</td>
+<td style="text-align: left;">Action</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18</td>
+<td style="text-align: left;">11/7/2014</td>
+<td style="text-align: left;">Big Hero 6</td>
+<td style="text-align: right;">1.65e+08</td>
+<td style="text-align: right;">222527828</td>
+<td style="text-align: right;">652127828</td>
+<td style="text-align: left;">Walt&nbsp;Disney</td>
+<td style="text-align: left;">PG</td>
+<td style="text-align: left;">Adventure</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">19</td>
+<td style="text-align: left;">3/26/2010</td>
+<td style="text-align: left;">How to Train Your Dragon</td>
+<td style="text-align: right;">1.65e+08</td>
+<td style="text-align: right;">217581232</td>
+<td style="text-align: right;">494870992</td>
+<td style="text-align: left;">Paramount&nbsp;Pictures</td>
+<td style="text-align: left;">PG</td>
+<td style="text-align: left;">Adventure</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">20</td>
+<td style="text-align: left;">11/2/2012</td>
+<td style="text-align: left;">Wreck-It Ralph</td>
+<td style="text-align: right;">1.65e+08</td>
+<td style="text-align: right;">189412677</td>
+<td style="text-align: right;">496511521</td>
+<td style="text-align: left;">Walt&nbsp;Disney</td>
+<td style="text-align: left;">PG</td>
+<td style="text-align: left;">Adventure</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</div>
+</div>
+</section>
+<section id="univariate-visualizations" class="slide level2">
+<h2>Univariate visualizations</h2>
+<p>Univariate visualizations describe <strong>one</strong> variable at a time.</p>
+<p>For categorical variables, usually bar plots or pie charts are used.</p>
+<p>For numerical variables, usually histograms, box plots, or density plots are used.</p>
+</section>
+<section id="summarizing-categorical-data-with-a-table" class="slide level2">
+<h2>Summarizing categorical data with a table</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">table</span>(movies<span class="sc">$</span>genre)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-        Alameda          Alpine          Amador           Butte       Calaveras 
-            360               1               9              51              10 
-         Colusa    Contra Costa       Del Norte       El Dorado          Fresno 
-              5             207               7              42             199 
-          Glenn        Humboldt        Imperial            Inyo            Kern 
-              6              30              31               6             151 
-          Kings            Lake          Lassen     Los Angeles          Madera 
-             27              15               9            2343              23 
-          Marin        Mariposa       Mendocino          Merced           Modoc 
-             55               6              20              49               4 
-           Mono        Monterey            Napa          Nevada          Orange 
-              3              93              40              20             582 
-         Placer          Plumas       Riverside      Sacramento      San Benito 
-             84               7             453             317              11 
- San Bernardino       San Diego   San Francisco     San Joaquin San Luis Obispo 
-            369             627             195             139              53 
-      San Mateo   Santa Barbara     Santa Clara      Santa Cruz          Shasta 
-            157              89             372              52              48 
-         Sierra        Siskiyou          Solano          Sonoma      Stanislaus 
-              1              14              96              99              94 
-         Sutter          Tehama         Trinity          Tulare        Tuolumne 
-             21              11               5              78              11 
-        Ventura            Yolo            Yuba 
-            173              41              14 </code></pre>
+   Action Adventure    Comedy     Drama    Horror 
+      573       481       813      1236       298 </code></pre>
 </div>
 </div>
 </section>
-<section id="summarizing-categorical-data-1" class="slide level2 smaller">
-<h2>Summarizing categorical data</h2>
+<section id="visualizing-a-categorical-variable" class="slide level2 smaller">
+<h2>Visualizing a categorical variable</h2>
 <p>The <code>barplot</code> function takes a <strong>named numeric vector</strong> as its first argument:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">barplot</span>(<span class="at">height =</span> <span class="fu">table</span>(ces_data<span class="sc">$</span>County))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"><div class="fragment">
-<p>Is this an effective visualization? Why or why not?</p>
-</div>
-</section>
-<section id="summarizing-categorical-data-2" class="slide level2 smaller">
-<h2>Summarizing categorical data</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># turn unemployment rate into categorical variable</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>ces_data<span class="sc">$</span>Unempl_Rate_Factor <span class="ot">&lt;-</span> <span class="fu">cut</span>(</span>
-<span id="cb11-3"><a href="#cb11-3"></a>  ces_data<span class="sc">$</span>Unempl, </span>
-<span id="cb11-4"><a href="#cb11-4"></a>  <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">100</span>)</span>
-<span id="cb11-5"><a href="#cb11-5"></a>)</span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="fu">table</span>(ces_data<span class="sc">$</span>Unempl_Rate_Factor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-   (0,5]   (5,10]  (10,15]  (15,20]  (20,25] (25,100] 
-    3408     3215      816      186       43       16 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">barplot</span>(<span class="at">height =</span> <span class="fu">table</span>(ces_data<span class="sc">$</span>Unempl_Rate_Factor))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">barplot</span>(<span class="at">height =</span> <span class="fu">table</span>(movies<span class="sc">$</span>genre))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"></section>
@@ -611,98 +799,138 @@ Projected CRS: NAD83 / California Albers
 <h2>Customizing base R plots</h2>
 <p>Base R plotting functions have many optional arguments allowing customization:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">barplot</span>(</span>
-<span id="cb14-2"><a href="#cb14-2"></a>  <span class="at">height =</span> <span class="fu">table</span>(ces_data<span class="sc">$</span>Unempl_Rate_Factor), </span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="at">main =</span> <span class="st">"Distribution of Census Tract Unemployment Rates"</span>,</span>
-<span id="cb14-4"><a href="#cb14-4"></a>  <span class="at">col =</span> <span class="st">"red"</span></span>
-<span id="cb14-5"><a href="#cb14-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">barplot</span>(</span>
+<span id="cb9-2"><a href="#cb9-2"></a>  <span class="at">height =</span> <span class="fu">table</span>(movies<span class="sc">$</span>genre), </span>
+<span id="cb9-3"><a href="#cb9-3"></a>  <span class="at">main =</span> <span class="st">"Distribution of Movie Genres in Tidy Tuesday dataset"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4"></a>  <span class="at">col =</span> <span class="st">"red"</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"></section>
-<section id="summarizing-numerical-data" class="slide level2 smaller">
-<h2>Summarizing numerical data</h2>
+<section id="visualizing-a-categorical-variable-1" class="slide level2 smaller">
+<h2>Visualizing a categorical variable</h2>
+<p>The <code>pie</code> function takes a <strong>named numeric vector</strong> as its first argument:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">hist</span>(</span>
-<span id="cb15-2"><a href="#cb15-2"></a>  <span class="at">x =</span> ces_data<span class="sc">$</span>Unempl, </span>
-<span id="cb15-3"><a href="#cb15-3"></a>  <span class="at">main =</span> <span class="st">"Distribution of Census Tract Unemployment Rates"</span>,</span>
-<span id="cb15-4"><a href="#cb15-4"></a>  <span class="at">col =</span> <span class="st">"red"</span></span>
-<span id="cb15-5"><a href="#cb15-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">pie</span>(<span class="at">x =</span> <span class="fu">table</span>(movies<span class="sc">$</span>genre))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
-<section id="summarizing-numerical-data-1" class="slide level2 smaller">
-<h2>Summarizing numerical data</h2>
+<section id="summarizing-a-numerical-variable" class="slide level2 smaller">
+<h2>Summarizing a numerical variable</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">summary</span>(ces_data<span class="sc">$</span>Unempl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">summary</span>(movies<span class="sc">$</span>worldwide_gross)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
--999.00    3.40    5.30  -35.64    7.80   43.90 </code></pre>
+<pre><code>     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+0.000e+00 1.062e+07 4.016e+07 9.412e+07 1.176e+08 1.305e+09 </code></pre>
 </div>
 </div>
-<p>The CalEnviroScreen data uses -999 for missing data. We can use the <code>replace</code> function to replace these with NA values.</p>
+</section>
+<section id="visualizing-a-numerical-variable" class="slide level2 smaller">
+<h2>Visualizing a numerical variable</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">hist</span>(</span>
-<span id="cb18-2"><a href="#cb18-2"></a>  <span class="at">x =</span> <span class="fu">replace</span>(ces_data<span class="sc">$</span>Unempl, ces_data<span class="sc">$</span>Unempl <span class="sc">==</span> <span class="sc">-</span><span class="dv">999</span>, <span class="cn">NA</span>), </span>
-<span id="cb18-3"><a href="#cb18-3"></a>  <span class="at">main =</span> <span class="st">"Distribution of Census Tract Unemployment Rates"</span>,</span>
-<span id="cb18-4"><a href="#cb18-4"></a>  <span class="at">xlab =</span> <span class="st">"Unemployment Rate"</span>,</span>
-<span id="cb18-5"><a href="#cb18-5"></a>  <span class="at">col =</span> <span class="st">"red"</span></span>
-<span id="cb18-6"><a href="#cb18-6"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">hist</span>(</span>
+<span id="cb13-2"><a href="#cb13-2"></a>  <span class="at">x =</span> movies<span class="sc">$</span>worldwide_gross, </span>
+<span id="cb13-3"><a href="#cb13-3"></a>  <span class="at">main =</span> <span class="st">"Distribution of Worldwide Gross of Movies"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4"></a>  <span class="at">col =</span> <span class="st">"red"</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
-<section id="summarizing-numerical-data-boxplots" class="slide level2 smaller">
-<h2>Summarizing numerical data: boxplots</h2>
+<img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"><p>What shape does this distribution have?</p>
+</section>
+<section id="visualizing-a-numerical-variable-1" class="slide level2 smaller">
+<h2>Visualizing a numerical variable</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">boxplot</span>(</span>
-<span id="cb19-2"><a href="#cb19-2"></a>  <span class="at">x =</span> <span class="fu">replace</span>(ces_data<span class="sc">$</span>Unempl, ces_data<span class="sc">$</span>Unempl <span class="sc">==</span> <span class="sc">-</span><span class="dv">999</span>, <span class="cn">NA</span>), </span>
-<span id="cb19-3"><a href="#cb19-3"></a>  <span class="at">main =</span> <span class="st">"Distribution of Census Tract Unemployment Rates"</span>,</span>
-<span id="cb19-4"><a href="#cb19-4"></a>  <span class="at">xlab =</span> <span class="st">"Unemployment Rate"</span>, </span>
-<span id="cb19-5"><a href="#cb19-5"></a>  <span class="at">horizontal =</span> T,</span>
-<span id="cb19-6"><a href="#cb19-6"></a>  <span class="at">col =</span> <span class="st">"red"</span></span>
-<span id="cb19-7"><a href="#cb19-7"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">boxplot</span>(</span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="at">x =</span> movies<span class="sc">$</span>worldwide_gross, </span>
+<span id="cb14-3"><a href="#cb14-3"></a>  <span class="at">main =</span> <span class="st">"Distribution of Worldwide Gross"</span>,</span>
+<span id="cb14-4"><a href="#cb14-4"></a>  <span class="at">xlab =</span> <span class="st">"Worldwide Gross ($)"</span>,</span>
+<span id="cb14-5"><a href="#cb14-5"></a>  <span class="at">col =</span> <span class="st">"red"</span>,</span>
+<span id="cb14-6"><a href="#cb14-6"></a>  <span class="at">horizontal =</span> T</span>
+<span id="cb14-7"><a href="#cb14-7"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
-<section id="multivariate-visualization" class="slide level2 smaller">
-<h2>Multivariate visualization</h2>
-<p>The <code>plot</code> function can be used to obtain scatter plots for two numerical variables:</p>
+<section id="visualizing-a-numerical-variable-2" class="slide level2 smaller">
+<h2>Visualizing a numerical variable</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># remove spatial information</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a>ces_data<span class="sc">$</span>geometry <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb20-3"><a href="#cb20-3"></a></span>
-<span id="cb20-4"><a href="#cb20-4"></a><span class="co"># replace missing values</span></span>
-<span id="cb20-5"><a href="#cb20-5"></a>ces_data <span class="ot">&lt;-</span> <span class="fu">replace</span>(ces_data, ces_data <span class="sc">==</span> <span class="sc">-</span><span class="dv">999</span>, <span class="cn">NA</span>)</span>
-<span id="cb20-6"><a href="#cb20-6"></a><span class="fu">plot</span>(</span>
-<span id="cb20-7"><a href="#cb20-7"></a>  <span class="at">x =</span> ces_data<span class="sc">$</span>PolBurdSc, </span>
-<span id="cb20-8"><a href="#cb20-8"></a>  <span class="at">y =</span> ces_data<span class="sc">$</span>PopCharSc</span>
-<span id="cb20-9"><a href="#cb20-9"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">boxplot</span>(</span>
+<span id="cb15-2"><a href="#cb15-2"></a>  <span class="at">x =</span> movies<span class="sc">$</span>production_budget, </span>
+<span id="cb15-3"><a href="#cb15-3"></a>  <span class="at">main =</span> <span class="st">"Distribution of Production Budget"</span>,</span>
+<span id="cb15-4"><a href="#cb15-4"></a>  <span class="at">xlab =</span> <span class="st">"Budget ($)"</span>,</span>
+<span id="cb15-5"><a href="#cb15-5"></a>  <span class="at">col =</span> <span class="st">"red"</span>,</span>
+<span id="cb15-6"><a href="#cb15-6"></a>  <span class="at">horizontal =</span> T</span>
+<span id="cb15-7"><a href="#cb15-7"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"></section>
-<section id="multivariate-visualization-1" class="slide level2 smaller">
-<h2>Multivariate visualization</h2>
+<section id="multivariate-visualizations" class="slide level2">
+<h2>Multivariate visualizations</h2>
+<p>How might we plot the relationship between a numerical variable and a categorical variable?</p>
+<p>How about between two categorical variables? Between two numerical variables?</p>
+<p>What if we want to visualize three variables at once?</p>
+</section>
+<section id="visualizing-two-numerical-variables" class="slide level2 smaller">
+<h2>Visualizing two numerical variables</h2>
 <p>The <code>plot</code> function can be used to obtain scatter plots for two numerical variables:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">plot</span>(</span>
-<span id="cb21-2"><a href="#cb21-2"></a>  <span class="at">x =</span> ces_data<span class="sc">$</span>PolBurdSc, </span>
-<span id="cb21-3"><a href="#cb21-3"></a>  <span class="at">y =</span> ces_data<span class="sc">$</span>PopCharSc,</span>
-<span id="cb21-4"><a href="#cb21-4"></a>  <span class="at">xlab =</span> <span class="st">"Pollution Burden"</span>,</span>
-<span id="cb21-5"><a href="#cb21-5"></a>  <span class="at">ylab =</span> <span class="st">"Population Characteristics"</span>,</span>
-<span id="cb21-6"><a href="#cb21-6"></a>  <span class="at">col =</span> <span class="st">"blue"</span>,</span>
-<span id="cb21-7"><a href="#cb21-7"></a>  <span class="at">pch =</span> <span class="dv">16</span>, <span class="co"># change shape of points</span></span>
-<span id="cb21-8"><a href="#cb21-8"></a>  <span class="at">cex =</span> .<span class="dv">5</span>, <span class="co"># change size of points</span></span>
-<span id="cb21-9"><a href="#cb21-9"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">plot</span>(</span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="at">x =</span> movies<span class="sc">$</span>production_budget, </span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="at">y =</span> movies<span class="sc">$</span>worldwide_gross, </span>
+<span id="cb16-4"><a href="#cb16-4"></a>  <span class="at">main =</span> <span class="st">"Worldwide Gross vs. Production Budget"</span>,</span>
+<span id="cb16-5"><a href="#cb16-5"></a>  <span class="at">xlab =</span> <span class="st">"Budget ($)"</span>,</span>
+<span id="cb16-6"><a href="#cb16-6"></a>  <span class="at">ylab =</span> <span class="st">"Worldwide Gross ($)"</span>,</span>
+<span id="cb16-7"><a href="#cb16-7"></a>  <span class="at">col =</span> <span class="st">"blue"</span>,</span>
+<span id="cb16-8"><a href="#cb16-8"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualizing-two-numerical-variables-1" class="slide level2 smaller">
+<h2>Visualizing two numerical variables</h2>
+
+<img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-16-1.png" width="960" class="r-stretch"></section>
+<section id="visualizing-a-numerical-variable-and-a-categorical-variable" class="slide level2">
+<h2>Visualizing a numerical variable and a categorical variable</h2>
+<p>The <code>plot</code> function can be used to obtain stacked boxplots for two numerical variables:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">boxplot</span>(worldwide_gross <span class="sc">~</span> genre,</span>
+<span id="cb17-2"><a href="#cb17-2"></a>        <span class="at">data =</span> movies, </span>
+<span id="cb17-3"><a href="#cb17-3"></a>        <span class="at">main =</span> <span class="st">"Distribution of Worldwide Gross by Genre"</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a>        <span class="at">xlab =</span> <span class="st">"Worldwide Gross ($)"</span>,</span>
+<span id="cb17-5"><a href="#cb17-5"></a>        <span class="at">ylab =</span> <span class="st">""</span>,</span>
+<span id="cb17-6"><a href="#cb17-6"></a>        <span class="at">horizontal =</span> T,</span>
+<span id="cb17-7"><a href="#cb17-7"></a>        <span class="at">las =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualizing-two-categorical-variables" class="slide level2">
+<h2>Visualizing two categorical variables</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">table</span>(movies<span class="sc">$</span>genre, movies<span class="sc">$</span>mpaa_rating)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           
+              G  PG PG-13   R
+  Action      1  34   225 286
+  Adventure  67 309    83  14
+  Comedy      6  79   328 367
+  Drama      11 144   398 645
+  Horror      0   7    58 202</code></pre>
+</div>
+</div>
+</section>
+<section id="visualizing-two-categorical-variables-1" class="slide level2">
+<h2>Visualizing two categorical variables</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">barplot</span>(<span class="fu">table</span>(movies<span class="sc">$</span>genre, movies<span class="sc">$</span>mpaa_rating),</span>
+<span id="cb20-2"><a href="#cb20-2"></a>        <span class="at">legend =</span>  <span class="fu">c</span>(<span class="st">"Action"</span>, <span class="st">"Adventure"</span>, <span class="st">"Comedy"</span>, <span class="st">"Drama"</span>, <span class="st">"Horror"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section>
+<img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
 <section id="data-visualization-with-ggplot2" class="slide level2 smaller">
 <h2>Data visualization with <code>ggplot2</code></h2>
 <p><code>ggplot2</code> is a fantastic package for making complex visualizations that many people find more intuitive to use.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Plots are built sequentially using layers, so it’s easy to edit and fine-tune the plots you generate.</p>
-<p>When using <code>ggplot2</code>, it is <em>essential</em> that your data are tidy! If they are not, the functions probably will not look like you expect.</p>
+<p>When using <code>ggplot2</code>, it is <em>essential</em> that your data are properly formatted If they are not, the results probably will not look like you expect.</p>
 <p>Let’s work through how to build a plot layer by layer.</p>
 </section>
 <section id="data-visualization-with-ggplot2-1" class="slide level2 smaller">
@@ -714,12 +942,12 @@ Projected CRS: NAD83 / California Albers
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23" data-code-line-numbers="1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ces_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22" data-code-line-numbers="1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> movies)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-18-1.png" width="384"></p>
+<p><img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-22-1.png" width="384"></p>
 </div>
 </div>
 </div>
@@ -734,13 +962,13 @@ Projected CRS: NAD83 / California Albers
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ces_data,</span>
-<span id="cb24-2"><a href="#cb24-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> PolBurdSc)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> movies,</span>
+<span id="cb23-2"><a href="#cb23-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> production_budget)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-20-1.png" width="384"></p>
+<p><img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-24-1.png" width="384"></p>
 </div>
 </div>
 </div>
@@ -755,14 +983,14 @@ Projected CRS: NAD83 / California Albers
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ces_data,</span>
-<span id="cb25-2"><a href="#cb25-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> PolBurdSc)) <span class="sc">+</span></span>
-<span id="cb25-3"><a href="#cb25-3"></a>  <span class="fu">geom_histogram</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> movies,</span>
+<span id="cb24-2"><a href="#cb24-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> production_budget)) <span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">geom_histogram</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-22-1.png" width="384"></p>
+<p><img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-26-1.png" width="384"></p>
 </div>
 </div>
 </div>
@@ -774,14 +1002,14 @@ Projected CRS: NAD83 / California Albers
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ces_data,</span>
-<span id="cb26-2"><a href="#cb26-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> PolBurdSc)) <span class="sc">+</span></span>
-<span id="cb26-3"><a href="#cb26-3"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill =</span> <span class="st">'red'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> movies,</span>
+<span id="cb25-2"><a href="#cb25-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> production_budget)) <span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill =</span> <span class="st">'red'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-24-1.png" width="384"></p>
+<p><img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-28-1.png" width="384"></p>
 </div>
 </div>
 </div>
@@ -793,16 +1021,16 @@ Projected CRS: NAD83 / California Albers
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27" data-code-line-numbers="4-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ces_data,</span>
-<span id="cb27-2"><a href="#cb27-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> PolBurdSc)) <span class="sc">+</span></span>
-<span id="cb27-3"><a href="#cb27-3"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill =</span> <span class="st">'red'</span>) <span class="sc">+</span> </span>
-<span id="cb27-4"><a href="#cb27-4"></a>  <span class="fu">xlab</span>(<span class="st">"Pollution Burden Score"</span>) <span class="sc">+</span></span>
-<span id="cb27-5"><a href="#cb27-5"></a>  <span class="fu">ggtitle</span>(<span class="st">"Histogram of Pollution Burden Score"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26" data-code-line-numbers="4-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> movies,</span>
+<span id="cb26-2"><a href="#cb26-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> production_budget)) <span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill =</span> <span class="st">'red'</span>) <span class="sc">+</span> </span>
+<span id="cb26-4"><a href="#cb26-4"></a>  <span class="fu">xlab</span>(<span class="st">"Budget ($)"</span>) <span class="sc">+</span></span>
+<span id="cb26-5"><a href="#cb26-5"></a>  <span class="fu">ggtitle</span>(<span class="st">"Distribution of Production Budgets"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-26-1.png" width="384"></p>
+<p><img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-30-1.png" width="384"></p>
 </div>
 </div>
 </div>
@@ -810,96 +1038,42 @@ Projected CRS: NAD83 / California Albers
 </section>
 <section id="subsetting-our-data" class="slide level2 smaller">
 <h2>Subsetting our data</h2>
-<p>Recall we can subset our data using the <code>dplyr::filter()</code> function. Note the use of the <code>%in%</code> operator here:</p>
+<p>Recall we can subset our data using the <code>dplyr::filter()</code> function from <code>tidyverse</code>. Note the use of the <code>%in%</code> operator here:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb28-2"><a href="#cb28-2"></a>sfba_counties <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Alameda"</span>, <span class="st">"Contra Costa"</span>, <span class="st">"Marin"</span>, <span class="st">"Napa"</span>, <span class="st">"San Francisco"</span>,</span>
-<span id="cb28-3"><a href="#cb28-3"></a>                   <span class="st">"San Mateo"</span>, <span class="st">"Santa Clara"</span>, <span class="st">"Sonoma"</span>, <span class="st">"Solano"</span>)</span>
-<span id="cb28-4"><a href="#cb28-4"></a><span class="co"># require county to be in SF Bay Area</span></span>
-<span id="cb28-5"><a href="#cb28-5"></a>ces_sfba <span class="ot">&lt;-</span> ces_data <span class="sc">|&gt;</span></span>
-<span id="cb28-6"><a href="#cb28-6"></a>  <span class="fu">filter</span>(County <span class="sc">%in%</span> sfba_counties)</span>
-<span id="cb28-7"><a href="#cb28-7"></a><span class="fu">head</span>(ces_sfba)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># remember you may need to run library(tidyverse)</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a>select_genres <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Action"</span>, <span class="st">"Comedy"</span>)</span>
+<span id="cb27-3"><a href="#cb27-3"></a><span class="co"># require county to be in SF Bay Area</span></span>
+<span id="cb27-4"><a href="#cb27-4"></a>action_comedy <span class="ot">&lt;-</span> movies <span class="sc">|&gt;</span></span>
+<span id="cb27-5"><a href="#cb27-5"></a>  <span class="fu">filter</span>(genre <span class="sc">%in%</span> select_genres)</span>
+<span id="cb27-6"><a href="#cb27-6"></a><span class="fu">head</span>(action_comedy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       Tract   ZIP      County     ApproxLoc TotPop19   CIscore  CIscoreP
-1 6085509201 94043 Santa Clara Mountain View     5524 12.788826 19.919314
-2 6085510500 94022 Santa Clara     Los Altos     4541  4.122372  1.714574
-3 6085509401 94306 Santa Clara     Palo Alto     3806 10.481222 14.044377
-4 6085509303 94043 Santa Clara Mountain View     3563 14.221995 23.562784
-5 6085503306 95122 Santa Clara      San Jose     4373 23.715224 45.978316
-6 6085503211 95121 Santa Clara      San Jose     4592 23.614422 45.688351
-       Ozone   OzoneP    PM2_5  PM2_5_P  DieselPM DieselPM_P Pesticide
-1 0.03716809 14.92222 8.232423 16.91350 0.6305833   93.91413         0
-2 0.03624400 13.61543 8.095511 14.76042 0.1860035   59.51462         0
-3 0.03624400 13.61543 8.181223 16.10454 0.4533547   87.66646         0
-4 0.03624400 13.61543 8.317675 18.56876 0.4539156   87.71624         0
-5 0.04125212 24.87866 8.835374 33.69011 0.1114884   40.72184         0
-6 0.04125212 24.87866 8.768682 31.98507 0.2847047   74.71064         0
-  PesticideP  Tox_Rel Tox_Rel_P   Traffic TrafficP DrinkWat DrinkWatP     Lead
-1          0 169.3650  31.44536 1646.1402  81.0375 428.4671  49.50668 21.88574
-2          0 195.1733  34.27107 1016.7001  59.0000 399.4475  43.36206 29.89372
-3          0 152.8043  29.56989 1293.1250  72.0750 509.0032  61.39628 41.26271
-4          0 146.4173  28.78220  912.1028  52.4875 428.4671  49.50668 32.28908
-5          0 143.2963  28.51963 1584.2238  79.7625 291.5255  22.74260 47.27127
-6          0 147.3003  28.94474 3469.8027  97.6875 291.5255  22.74260 39.04452
-    Lead_P Cleanup CleanupP GWThreat GWThreatP HazWaste HazWasteP ImpWatBod
-1 14.45495   65.50 97.79769   101.80  96.77901     0.58  73.60688         5
-2 23.79332    9.35 59.07055    10.00  47.43483     0.30  50.13898         0
-3 38.95400   10.40 62.03807     6.00  35.01577     0.30  50.13898         0
-4 26.96912   40.95 93.76633    39.05  85.55537     0.08  10.54931         4
-5 47.62445    3.50 33.87458     0.00   0.00000     0.15  26.67108         0
-6 35.68998    2.45 27.93953     5.75  32.77436     0.12  20.31767         3
-  ImpWatBodP SolWaste SolWasteP PollBurd PolBurdSc PolBurdP Asthma    AsthmaP
-1   51.21798        0         0 46.47630  5.674747 60.89608  19.22  8.1879362
-2    0.00000        0         0 31.13603  3.801704 20.13690   7.95  0.2367896
-3    0.00000        0         0 36.42799  4.447850 32.86870  12.05  1.6076770
-4   43.78412        0         0 38.71417  4.726992 39.34039  19.77  9.0353938
-5    0.00000        0         0 27.19803  3.320874 12.39577  57.49 66.1764706
-6   33.15834        0         0 33.99926  4.151303 26.57125  39.81 41.3010967
-  LowBirtWt  LowBirWP Cardiovas CardiovasP Educatn   EducatP Ling_Isol
-1      3.97 25.904542      8.52 17.3354935     2.5  8.415591       4.6
-2      3.16 10.944316      4.43  0.3614158     2.9 10.313845       2.7
-3      3.83 22.645625      6.26  4.4366899     7.9 33.890154      10.7
-4      2.72  6.209905      8.77 19.2048853    11.0 45.178436      14.7
-5      5.88 72.850911     12.25 48.2178465    40.0 89.977221      16.5
-6      5.15 56.351039     10.14 30.9322034    28.2 77.866363      25.3
-  Ling_IsolP Poverty PovertyP Unempl   UnemplP HousBurd HousBurdP  PopChar
-1   35.33631    14.7 21.26884    4.1 32.274857     14.2  34.24588 21.72548
-2   21.42374     7.4  4.91206    4.2 33.576262     10.3  15.06971 10.45331
-3   64.40655    11.8 14.27136    4.8 41.840187     12.3  24.94297 22.71679
-4   76.64095    20.3 34.92462    2.2  7.769391     21.3  68.11153 29.00419
-5   80.38977    26.2 46.82161    7.7 73.412285     27.4  85.75412 68.84304
-6   92.61064    18.7 31.25628    8.7 79.724102     17.7  52.61090 54.83755
-  PopCharSc  PopCharP Child_10 Pop_10_64 Elderly65 Hispanic   White AfricanAm
-1  2.253638  9.543621  10.7350   79.8878    9.3773   7.1687 52.4982    8.0920
-2  1.084349  1.159859  11.9577   60.8897   27.1526   2.1801 63.5543    0.2202
-3  2.356469 10.602622  13.8466   79.4009    6.7525  15.1077 33.9201    3.4419
-4  3.008677 18.557741   9.7390   70.5866   19.6744  15.2961 36.4861    4.2661
-5  7.141261 78.618255  10.4276   75.8290   13.7434  59.5472  2.7212    1.1434
-6  5.688436 57.387796   9.3859   73.6280   16.9861  28.2012 11.0409    1.4373
-  NativeAm OtherMult Shape_Leng Shape_Area    AAPI Unempl_Rate_Factor
-1   0.2715    3.4938   5862.187  1581581.5 28.4757              (0,5]
-2   0.0000    3.6336   7610.539  2592144.4 30.4118              (0,5]
-3   0.0000    4.1776   3401.365   666126.6 43.3526              (0,5]
-4   0.0000    8.4199   3211.309   575854.6 35.5319              (0,5]
-5   0.2058    1.0748   5951.985  1670328.7 35.3076             (5,10]
-6   0.0000    2.6568   4245.476  1076751.1 56.6638             (5,10]</code></pre>
+<pre><code># A tibble: 6 × 9
+   ...1 release_date movie      production_budget domestic_gross worldwide_gross
+  &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;                  &lt;dbl&gt;          &lt;dbl&gt;           &lt;dbl&gt;
+1     1 6/22/2007    Evan Almi…         175000000      100289690       174131329
+2     2 7/28/1995    Waterworld         175000000       88246220       264246220
+3     4 12/25/2013   47 Ronin           175000000       38362475       151716815
+4     5 6/22/2018    Jurassic …         170000000      416769345      1304866322
+5     6 8/1/2014     Guardians…         170000000      333172112       771051335
+6     7 5/7/2010     Iron Man 2         170000000      312433331       621156389
+# ℹ 3 more variables: distributor &lt;chr&gt;, mpaa_rating &lt;chr&gt;, genre &lt;chr&gt;</code></pre>
 </div>
 </div>
 </section>
 <section id="scatter-plots-with-ggplot2" class="slide level2 smaller">
 <h2>Scatter plots with <code>ggplot2</code></h2>
-<p>We can easily add another <strong>aesthetic</strong> and change the <strong>shape</strong> to get a multivariate visualization:</p>
+<p>We can easily add another <strong>variable/aesthetic</strong> pair and change the <strong>shape</strong> to get a multivariate visualization:</p>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30" data-code-line-numbers="2-3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ces_sfba,</span>
-<span id="cb30-2"><a href="#cb30-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> PolBurdSc, <span class="at">y =</span> PopCharSc)) <span class="sc">+</span></span>
-<span id="cb30-3"><a href="#cb30-3"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29" data-code-line-numbers="2-3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> action_comedy,</span>
+<span id="cb29-2"><a href="#cb29-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> production_budget, <span class="at">y =</span> worldwide_gross)) <span class="sc">+</span></span>
+<span id="cb29-3"><a href="#cb29-3"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-29-1.png" width="384"></p>
+<p><img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-33-1.png" width="384"></p>
 </div>
 </div>
 </div>
@@ -911,17 +1085,17 @@ Projected CRS: NAD83 / California Albers
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31" data-code-line-numbers="3-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ces_sfba,</span>
-<span id="cb31-2"><a href="#cb31-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> PolBurdSc, <span class="at">y =</span> PopCharSc)) <span class="sc">+</span></span>
-<span id="cb31-3"><a href="#cb31-3"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">'red'</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)  <span class="sc">+</span></span>
-<span id="cb31-4"><a href="#cb31-4"></a>  <span class="fu">xlab</span>(<span class="st">"Pollution Burden Score"</span>) <span class="sc">+</span></span>
-<span id="cb31-5"><a href="#cb31-5"></a>  <span class="fu">ylab</span>(<span class="st">"Population Characteristic Score"</span>) <span class="sc">+</span></span>
-<span id="cb31-6"><a href="#cb31-6"></a>  <span class="fu">ggtitle</span>(<span class="st">"Scatterplot of CalEnviroScreen Scores"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30" data-code-line-numbers="3-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> action_comedy,</span>
+<span id="cb30-2"><a href="#cb30-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> production_budget, <span class="at">y =</span> worldwide_gross)) <span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">'red'</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)  <span class="sc">+</span></span>
+<span id="cb30-4"><a href="#cb30-4"></a>  <span class="fu">xlab</span>(<span class="st">"Production Budget ($)"</span>) <span class="sc">+</span></span>
+<span id="cb30-5"><a href="#cb30-5"></a>  <span class="fu">ylab</span>(<span class="st">"Worldwide Gross ($)"</span>) <span class="sc">+</span></span>
+<span id="cb30-6"><a href="#cb30-6"></a>  <span class="fu">ggtitle</span>(<span class="st">"Worldwide Gross vs. Budget for </span><span class="sc">\n</span><span class="st">Action/Comedy Movies"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-31-1.png" width="384"></p>
+<p><img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-35-1.png" width="384"></p>
 </div>
 </div>
 </div>
@@ -933,30 +1107,77 @@ Projected CRS: NAD83 / California Albers
 <div class="columns">
 <div class="column" style="width:55%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32" data-code-line-numbers="2-3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ces_sfba,</span>
-<span id="cb32-2"><a href="#cb32-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> PolBurdSc, <span class="at">y =</span> PopCharSc, <span class="at">color =</span> County)) <span class="sc">+</span></span>
-<span id="cb32-3"><a href="#cb32-3"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)  <span class="sc">+</span></span>
-<span id="cb32-4"><a href="#cb32-4"></a>  <span class="fu">xlab</span>(<span class="st">"Pollution Burden Score"</span>) <span class="sc">+</span></span>
-<span id="cb32-5"><a href="#cb32-5"></a>  <span class="fu">ylab</span>(<span class="st">"Population Characteristic Score"</span>) <span class="sc">+</span></span>
-<span id="cb32-6"><a href="#cb32-6"></a>  <span class="fu">ggtitle</span>(<span class="st">"Scatterplot of CalEnviroScreen Scores"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31" data-code-line-numbers="2-3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> action_comedy,</span>
+<span id="cb31-2"><a href="#cb31-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> production_budget, <span class="at">y =</span> worldwide_gross, <span class="at">color =</span> genre)) <span class="sc">+</span></span>
+<span id="cb31-3"><a href="#cb31-3"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)  <span class="sc">+</span></span>
+<span id="cb31-4"><a href="#cb31-4"></a>  <span class="fu">xlab</span>(<span class="st">"Production Budget ($)"</span>) <span class="sc">+</span></span>
+<span id="cb31-5"><a href="#cb31-5"></a>  <span class="fu">ylab</span>(<span class="st">"Worldwide Gross ($)"</span>) <span class="sc">+</span></span>
+<span id="cb31-6"><a href="#cb31-6"></a>  <span class="fu">ggtitle</span>(<span class="st">"Worldwide Gross vs. Budget for </span><span class="sc">\n</span><span class="st">Action/Comedy Movies"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:45%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-33-1.png" width="384"></p>
+<p><img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-37-1.png" width="384"></p>
 </div>
 </div>
 </div>
 </div>
-</section></section>
-<section>
-<section id="general-principles-for-data-visualization" class="title-slide slide level1 center">
-<h1>General principles for data visualization</h1>
-
 </section>
-<section id="customizing-our-scatter-plot-1" class="slide level2 smaller">
-<h2>Customizing our scatter plot</h2>
-<p>We can similarly customize our scatter plots</p>
+<section id="what-to-remember-for-ggplot2" class="slide level2">
+<h2>What to remember for ggplot2</h2>
+<p>The <code>ggplot2</code> package is built around a “grammar of graphics”: a standard way of building plots layer by layer.</p>
+<p>The three basic layers:</p>
+<ol type="1">
+<li><strong>Data</strong>: a data frame with all of the variables of interest</li>
+<li><strong>Aesthetics</strong>: graphical dimensions like <code>x</code>, <code>y</code>, <code>color</code>, <code>shape</code>, and more.</li>
+<li><strong>Geometries</strong>: the specific markings used to illustrate your variables and aesthetics.</li>
+</ol>
+</section>
+<section id="what-to-remember-for-ggplot2-1" class="slide level2">
+<h2>What to remember for ggplot2</h2>
+<p>Writing <code>ggplot2</code> code can be confusing since most people are used to thinking about the geometry first.</p>
+<p>One approach that may help:</p>
+<ol type="1">
+<li>Start by picking a geometry (ex. <code>geom_point()</code>).</li>
+<li>Research the available aesthetics for that geometry (ex. <code>x</code>, <code>y</code>, <code>color</code>, <code>shape</code>, <code>size</code>). Not all aesthetics are available for all geometries.</li>
+<li>Map variables to the dataset to the relevant aesthetics.</li>
+</ol>
+</section>
+<section id="beyond-two-dimensions-1" class="slide level2 smaller">
+<h2>Beyond two dimensions</h2>
+<p>Be sure to avoid making your visualization overly complicated:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> movies,</span>
+<span id="cb32-2"><a href="#cb32-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> production_budget, </span>
+<span id="cb32-3"><a href="#cb32-3"></a>           <span class="at">y =</span> worldwide_gross, </span>
+<span id="cb32-4"><a href="#cb32-4"></a>           <span class="at">color =</span> genre,</span>
+<span id="cb32-5"><a href="#cb32-5"></a>           <span class="at">shape =</span> mpaa_rating,</span>
+<span id="cb32-6"><a href="#cb32-6"></a>           <span class="at">size =</span> domestic_gross)) <span class="sc">+</span></span>
+<span id="cb32-7"><a href="#cb32-7"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)  <span class="sc">+</span></span>
+<span id="cb32-8"><a href="#cb32-8"></a>  <span class="fu">xlab</span>(<span class="st">"Production Budget ($)"</span>) <span class="sc">+</span></span>
+<span id="cb32-9"><a href="#cb32-9"></a>  <span class="fu">ylab</span>(<span class="st">"Worldwide Gross ($)"</span>) <span class="sc">+</span></span>
+<span id="cb32-10"><a href="#cb32-10"></a>  <span class="fu">ggtitle</span>(<span class="st">"Worldwide Gross vs. Budget"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="beyond-two-dimensions-2" class="slide level2 smaller">
+<h2>Beyond two dimensions</h2>
+
+<img data-src="07_visualizing-data_files/figure-revealjs/unnamed-chunk-39-1.png" width="960" class="r-stretch"></section>
+<section id="ggplot-cheatsheet" class="slide level2">
+<h2>ggplot cheatsheet</h2>
+<ul>
+<li>Axes: <code>xlim()</code>, <code>ylim()</code></li>
+<li>Legends: within initial <code>aes()</code>, edit within <code>theme()</code> or <code>guides()</code></li>
+<li><code>geom_point()</code>, <code>geom_line()</code>, <code>geom_histogram()</code>, <code>geom_bar()</code>, <code>geom_boxplot()</code>, <code>geom_text()</code></li>
+<li><code>facet_grid()</code>, <code>facet_wrap()</code> for faceting</li>
+<li><code>labs()</code> for labels</li>
+<li><code>theme_bw()</code> to make things look nicer</li>
+<li>Graphical parameters: <code>color</code> for color, <code>alpha</code> for opacity, <code>lwd</code>/<code>size</code> for thickness, <code>shape</code> for shape, <code>fill</code> for interior color, …</li>
+</ul>
+<p>Find more tips <a href="https://github.com/rstudio/cheatsheets/raw/master/data-visualization.pdf">here!</a></p>
+</section>
+<section id="general-principles-for-data-visualization" class="slide level2">
+<h2>General principles for data visualization</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>Avoid:</strong></p>
@@ -983,15 +1204,34 @@ Projected CRS: NAD83 / California Albers
 </div>
 </div>
 </section>
+<section id="sometimes-breaking-the-rules-is-okay" class="slide level2">
+<h2>Sometimes breaking the rules is okay…</h2>
+
+<img data-src="https://upload.wikimedia.org/wikipedia/commons/2/29/Minard.png" class="r-stretch quarto-figure-center"><p>Charles Minard</p>
+</section>
+<section id="sometimes-breaking-the-rules-is-okay-1" class="slide level2">
+<h2>Sometimes breaking the rules is okay…</h2>
+
+<img data-src="https://th-thumbnailer.cdn-si-edu.com/h2WL28E-CZgGj-Lrvs40-3PMAOE=/1000x750/filters:no_upscale():focal(1223x1116:1224x1117)/https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer/3b/22/3b22a3d0-0a6f-42fb-a1d6-58019a3d9312/11_33873a_city_and_rural_population_18901.png" class="r-stretch"><p>W.E.B. DuBois</p>
+</section>
+<section id="sometimes-breaking-the-rules-is-okay-2" class="slide level2">
+<h2>Sometimes breaking the rules is okay…</h2>
+
+<img data-src="https://upload.wikimedia.org/wikipedia/commons/1/17/Nightingale-mortality.jpg" class="r-stretch"><p>Florence Nightingale</p>
+</section>
+<section id="lab-04" class="slide level2">
+<h2>Lab 04</h2>
+<p>In this lab, we’ll practice data visualization with base R and <code>ggplot2</code>.</p>
+</section>
 <section id="some-misleading-visualizations" class="slide level2">
 <h2>Some misleading visualizations</h2>
 <p><img src="images/bad1.jpg" height="450"></p>
-<p><strong>Avoid:</strong> Pie charts! Eugh! The proportions are completely off!</p>
+<p><strong>Avoid:</strong> Pie charts? The proportions are completely off.</p>
 </section>
 <section id="some-misleading-visualizations-1" class="slide level2">
 <h2>Some misleading visualizations</h2>
 <p><img src="images/bad2.jpg" height="450"></p>
-<p><strong>Avoid:</strong> Pie charts! Eugh! Percents don’t add up!</p>
+<p><strong>Avoid:</strong> Pie charts? Percentages don’t add up.</p>
 </section>
 <section id="some-misleading-visualizations-2" class="slide level2">
 <h2>Some misleading visualizations</h2>
@@ -1021,7 +1261,6 @@ Projected CRS: NAD83 / California Albers
 <section id="some-misleading-visualizations-7" class="slide level2">
 <h2>Some misleading visualizations</h2>
 <p><img src="images/bad8.jpg" height="450"></p>
-<p>(This was presented in Congress!)]</p>
 <p><strong>Avoid:</strong> Two axes in a single plot, bad axis range</p>
 </section>
 <section id="some-misleading-visualizations-8" class="slide level2">
@@ -1032,30 +1271,12 @@ Projected CRS: NAD83 / California Albers
 <section id="some-misleading-visualizations-9" class="slide level2">
 <h2>Some misleading visualizations</h2>
 <p><img src="images/bad10.png" height="450"></p>
-<p>(From the Gates Foundation!)</p>
 <p><strong>Avoid:</strong> Inconsistent x-axis intervals</p>
-</section>
-<section id="ggplot-cheatsheet" class="slide level2">
-<h2>ggplot cheatsheet</h2>
-<ul>
-<li>Axes: <code>xlim()</code>, <code>ylim()</code></li>
-<li>Legends: within initial <code>aes()</code>, edit within <code>theme()</code> or <code>guides()</code></li>
-<li><code>geom_point()</code>, <code>geom_line()</code>, <code>geom_histogram()</code>, <code>geom_bar()</code>, <code>geom_boxplot()</code>, <code>geom_text()</code></li>
-<li><code>facet_grid()</code>, <code>facet_wrap()</code> for faceting</li>
-<li><code>labs()</code> for labels</li>
-<li><code>theme_bw()</code> to make things look nicer</li>
-<li>Graphical parameters: <code>color</code> for color, <code>alpha</code> for opacity, <code>lwd</code>/<code>size</code> for thickness, <code>shape</code> for shape, <code>fill</code> for interior color, …</li>
-</ul>
-<p>Find more tips <a href="https://github.com/rstudio/cheatsheets/raw/master/data-visualization.pdf">here!</a></p>
-</section>
-<section id="lab-04" class="slide level2">
-<h2>Lab 04</h2>
-<p>In this lab, we’ll practice data visualization with base R and <code>ggplot2</code>.</p>
 
 <div class="footer footer-default">
 
 </div>
-</section></section>
+</section>
     </div>
   </div>
 

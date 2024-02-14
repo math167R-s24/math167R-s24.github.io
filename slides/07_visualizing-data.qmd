@@ -11,21 +11,25 @@ editor: visual
 
 1.  What does the following code do?
 
-    ```{r, echo = T, eval = F}
-    flips <- factor(c("H", "T", "H", "H"), levels = c("H", "T"))
-    sum(as.numeric(flips))
+    ```{r, echo = T, eval = F, message = F}
+    library(palmerpenguins)
+    library(tidyverse)
+    data(penguins)
+    penguins |> 
+      group_by(species, island) |>
+      summarize(mean_body_mass = mean(body_mass_g, na.rm = T))
     ```
 
 ## Warm-up
 
-**Answer:**
-
-1.  
-
-    ```{r, echo = T, eval = F}
-    flips <- factor(c("H", "T", "H", "H"), levels = c("H", "T"))
-    sum(as.numeric(flips))
-    ```
+```{r, echo = T, eval = T}
+library(palmerpenguins)
+library(tidyverse)
+data(penguins)
+penguins |> 
+  group_by(species, island) |>
+  summarize(mean_body_mass = mean(body_mass_g, na.rm = T))
+```
 
 ## Overview of today
 
@@ -33,7 +37,655 @@ editor: visual
 -   Data visualization with `ggplot2`
 -   Principles of data visualization
 
-# Data visualization in base R
+## Data visualization
+
+## Why look at data?
+
+```{r, echo = F, eval = T}
+library(datasauRus)
+library(ggplot2)
+ggplot(datasaurus_dozen |> 
+         filter(dataset != "dino"),
+       aes(x = x, y = y)) + 
+  geom_point() + facet_wrap(~dataset)
+```
+
+## Why look at data?
+
+All of these datasets have the same means for `x` and `y`, and (approximately) the same correlation:
+
+```{r, echo = F, eval = T}
+datasaurus_dozen |>
+  group_by(dataset) |> 
+  summarize(mean_x = round(mean(x), 1),
+            mean_y = round(mean(y), 1),
+            correlation = round(cor(x, y), 1))
+```
+
+## Why look at data?
+
+![](https://socviz.co/assets/ch-01-jackman-outlier.png){fig-align="center"}
+
+from Jackson (1980) as reproduced in Kieran Healy's *Data Visualization.*
+
+## What makes a good data visualization?
+
+1.  Legibility: Is it easy for the viewer to understand and interpret your visual?
+2.  Integrity: Does the visual accurately communicate some insight about the data?
+3.  Beauty: Is the visual appealing and uncluttered?
+
+Other Readings:
+
+-   [Information is Beautiful](https://informationisbeautiful.net/visualizations/what-makes-a-good-data-visualization/)
+
+## Legibility
+
+![](https://socviz.co/assets/ch-01-perception-adelson-checkershow.jpg){fig-align="center"}
+
+from Edward H. Adelson as reproduced in Kieran Healy's *Data Visualization.*
+
+## Legibility
+
+![](https://socviz.co/dataviz-pdfl_files/figure-html4/ch-01-dual-search-1.png){fig-align="center"}
+
+## Legibility
+
+![](https://socviz.co/dataviz-pdfl_files/figure-html4/ch-01-multichannel-1.png)
+
+from Kieran Healy's *Data Visualization.*
+
+## Integrity
+
+![](https://socviz.co/assets/ch-01-democracy-nyt-version.png){fig-align="center"}
+
+## Integrity
+
+![](https://socviz.co/assets/ch-01-democracy-voeten-version-2.png)
+
+## Example: Movies data {.smaller}
+
+```{r, warning = F, message = F, cache = F, echo = T, eval = F}
+movies <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-10-23/movie_profit.csv")
+```
+
+```{r, warning = F, message = F, cache = T, echo = F, eval = T}
+movies <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-10-23/movie_profit.csv")
+knitr::kable(movies[1:20,], digits = 3, row.names = F) |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "300px")
+```
+
+## Univariate visualizations
+
+Univariate visualizations describe **one** variable at a time.
+
+For categorical variables, usually bar plots or pie charts are used.
+
+For numerical variables, usually histograms, box plots, or density plots are used.
+
+## Summarizing categorical data with a table
+
+```{r, echo = T, eval = T}
+table(movies$genre)
+```
+
+## Visualizing a categorical variable {.smaller}
+
+The `barplot` function takes a **named numeric vector** as its first argument:
+
+```{r, echo = T, eval = T}
+barplot(height = table(movies$genre))
+```
+
+## Customizing base R plots {.smaller}
+
+Base R plotting functions have many optional arguments allowing customization:
+
+```{r, echo = T, eval = T}
+barplot(
+  height = table(movies$genre), 
+  main = "Distribution of Movie Genres in Tidy Tuesday dataset",
+  col = "red"
+)
+```
+
+## Visualizing a categorical variable {.smaller}
+
+The `pie` function takes a **named numeric vector** as its first argument:
+
+```{r, echo = T, eval = T}
+pie(x = table(movies$genre))
+```
+
+## Summarizing a numerical variable {.smaller}
+
+```{r, echo = T, eval = T}
+summary(movies$worldwide_gross)
+```
+
+## Visualizing a numerical variable {.smaller}
+
+```{r, echo = T, eval = T}
+hist(
+  x = movies$worldwide_gross, 
+  main = "Distribution of Worldwide Gross of Movies",
+  col = "red"
+)
+```
+
+What shape does this distribution have?
+
+## Visualizing a numerical variable {.smaller}
+
+```{r, echo = T, eval = T}
+boxplot(
+  x = movies$worldwide_gross, 
+  main = "Distribution of Worldwide Gross",
+  xlab = "Worldwide Gross ($)",
+  col = "red",
+  horizontal = T
+)
+```
+
+## Visualizing a numerical variable {.smaller}
+
+```{r, echo = T, eval = T}
+boxplot(
+  x = movies$production_budget, 
+  main = "Distribution of Production Budget",
+  xlab = "Budget ($)",
+  col = "red",
+  horizontal = T
+)
+```
+
+## Multivariate visualizations
+
+How might we plot the relationship between a numerical variable and a categorical variable?
+
+How about between two categorical variables? Between two numerical variables?
+
+What if we want to visualize three variables at once?
+
+## Visualizing two numerical variables {.smaller}
+
+The `plot` function can be used to obtain scatter plots for two numerical variables:
+
+```{r, echo = T, eval = F}
+plot(
+  x = movies$production_budget, 
+  y = movies$worldwide_gross, 
+  main = "Worldwide Gross vs. Production Budget",
+  xlab = "Budget ($)",
+  ylab = "Worldwide Gross ($)",
+  col = "blue",
+)
+```
+
+## Visualizing two numerical variables {.smaller}
+
+```{r, echo = F, eval = T}
+plot(
+  x = movies$production_budget, 
+  y = movies$worldwide_gross, 
+  main = "Worldwide Gross vs. Production Budget",
+  xlab = "Budget ($)",
+  ylab = "Worldwide Gross ($)",
+  col = "blue",
+)
+```
+
+## Visualizing a numerical variable and a categorical variable
+
+The `plot` function can be used to obtain stacked boxplots for two numerical variables:
+
+```{r, echo = T, eval = F}
+boxplot(worldwide_gross ~ genre,
+        data = movies, 
+        main = "Distribution of Worldwide Gross by Genre"
+        xlab = "Worldwide Gross ($)",
+        ylab = "",
+        horizontal = T,
+        las = 1)
+```
+
+## Visualizing two categorical variables
+
+```{r, echo = T, eval = T}
+table(movies$genre, movies$mpaa_rating)
+```
+
+## Visualizing two categorical variables
+
+```{r, echo = T, eval = T}
+barplot(table(movies$genre, movies$mpaa_rating),
+        legend =  c("Action", "Adventure", "Comedy", "Drama", "Horror"))
+```
+
+## Data visualization with `ggplot2` {.smaller}
+
+`ggplot2` is a fantastic package for making complex visualizations that many people find more intuitive to use.
+
+```{r, eval = T, echo = T}
+library(ggplot2)
+```
+
+Plots are built sequentially using layers, so it's easy to edit and fine-tune the plots you generate.
+
+When using `ggplot2`, it is *essential* that your data are properly formatted If they are not, the results probably will not look like you expect.
+
+Let's work through how to build a plot layer by layer.
+
+## Data visualization with `ggplot2` {.smaller}
+
+First, let's initialize a plot. Use the `data` parameter to tell `ggplot` what data frame to use.
+
+-   It should be tidy data, in either a `data.frame` or `tibble`!
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "1"
+ggplot(data = movies)
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE, eval = T, fig.height = 3.5, fig.width = 4}
+ggplot(data = movies) 
+```
+:::
+:::
+
+## Select variables using `ggplot2` {.smaller}
+
+Next, we match **variables** to **aesthetics** within our plot. For example, let's put Pollution Burden on the x-axis. We do so using the function `aes()` within the initial `ggplot()` call.
+
+-   Possible aesthetics include axes as well as characteristics such as color, size, shape
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "2"
+ggplot(data = movies,
+       aes(x = production_budget)) 
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE, eval = T, fig.height = 3.5, fig.width = 4}
+ggplot(data = movies,
+       aes(x = production_budget)) 
+```
+:::
+:::
+
+## Map aesthetics to shapes using `ggplot2` {.smaller}
+
+Now `ggplot` knows what to plot, but it doesn't know how to plot it yet. Let's add a new layer that creates a histogram with `geom_histogram()`.
+
+-   This is a new layer! We add layers using the `+` operator.
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "3"
+ggplot(data = movies,
+       aes(x = production_budget)) +
+  geom_histogram()
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE, eval = T, fig.height = 3.5, fig.width = 4}
+ggplot(data = movies,
+       aes(x = production_budget)) +
+  geom_histogram()
+```
+:::
+:::
+
+## Customizing shapes {.smaller}
+
+We can customize the shape within `geom_histogram()`:
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "3"
+ggplot(data = movies,
+       aes(x = production_budget)) +
+  geom_histogram(fill = 'red')
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE, eval = T, fig.height = 3.5, fig.width = 4}
+ggplot(data = movies,
+       aes(x = production_budget)) +
+  geom_histogram(fill = 'red')
+```
+:::
+:::
+
+## Adding label and titles {.smaller}
+
+We can finally add axis labels and a title using the `+` operator:
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "4-5"
+ggplot(data = movies,
+       aes(x = production_budget)) +
+  geom_histogram(fill = 'red') + 
+  xlab("Budget ($)") +
+  ggtitle("Distribution of Production Budgets")
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE, eval = T, fig.height = 3.5, fig.width = 4}
+ggplot(data = movies,
+       aes(x = production_budget)) +
+  geom_histogram(fill = 'red') + 
+  xlab("Budget ($)") +
+  ggtitle("Distribution of Production Budgets")
+```
+:::
+:::
+
+## Subsetting our data {.smaller}
+
+Recall we can subset our data using the `dplyr::filter()` function from `tidyverse`. Note the use of the `%in%` operator here:
+
+```{r, echo = T, eval = T}
+# remember you may need to run library(tidyverse)
+select_genres <- c("Action", "Comedy")
+# require county to be in SF Bay Area
+action_comedy <- movies |>
+  filter(genre %in% select_genres)
+head(action_comedy)
+```
+
+## Scatter plots with `ggplot2` {.smaller}
+
+We can easily add another **variable/aesthetic** pair and change the **shape** to get a multivariate visualization:
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "2-3"
+ggplot(data = action_comedy,
+       aes(x = production_budget, y = worldwide_gross)) +
+  geom_point()
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE, eval = T, fig.height = 3.5, fig.width = 4}
+ggplot(data = action_comedy,
+       aes(x = production_budget, y = worldwide_gross)) +
+  geom_point()
+```
+:::
+:::
+
+## Customizing our scatter plot {.smaller}
+
+We can similarly customize our scatter plots
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "3-6"
+ggplot(data = action_comedy,
+       aes(x = production_budget, y = worldwide_gross)) +
+  geom_point(color = 'red', alpha = 0.5)  +
+  xlab("Production Budget ($)") +
+  ylab("Worldwide Gross ($)") +
+  ggtitle("Worldwide Gross vs. Budget for \nAction/Comedy Movies")
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE, eval = T, fig.height = 3.5, fig.width = 4}
+ggplot(data = action_comedy,
+       aes(x = production_budget, y = worldwide_gross)) +
+  geom_point(color = 'red', alpha = 0.5)  +
+  xlab("Production Budget ($)") +
+  ylab("Worldwide Gross ($)") +
+  ggtitle("Worldwide Gross vs. Budget for \nAction/Comedy Movies")
+```
+:::
+:::
+
+## Beyond two dimensions {.smaller}
+
+We can add even more mappings between aesthetics and variables to explore multivariate relationships:
+
+::: columns
+::: {.column width="55%"}
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "2-3"
+ggplot(data = action_comedy,
+       aes(x = production_budget, y = worldwide_gross, color = genre)) +
+  geom_point(alpha = 0.5)  +
+  xlab("Production Budget ($)") +
+  ylab("Worldwide Gross ($)") +
+  ggtitle("Worldwide Gross vs. Budget for \nAction/Comedy Movies")
+```
+:::
+
+::: {.column width="45%"}
+```{r, echo = FALSE, eval = T, fig.height = 3.5, fig.width = 4}
+ggplot(data = action_comedy,
+       aes(x = production_budget, y = worldwide_gross, color = genre)) +
+  geom_point(alpha = 0.5)  +
+  xlab("Production Budget ($)") +
+  ylab("Worldwide Gross ($)") +
+  ggtitle("Worldwide Gross vs. Budget for \nAction/Comedy Movies")
+```
+:::
+:::
+
+## What to remember for ggplot2
+
+The `ggplot2` package is built around a "grammar of graphics": a standard way of building plots layer by layer.
+
+The three basic layers:
+
+1.  **Data**: a data frame with all of the variables of interest
+2.  **Aesthetics**: graphical dimensions like `x`, `y`, `color`, `shape`, and more.
+3.  **Geometries**: the specific markings used to illustrate your variables and aesthetics.
+
+## What to remember for ggplot2
+
+Writing `ggplot2` code can be confusing since most people are used to thinking about the geometry first.
+
+One approach that may help:
+
+1.  Start by picking a geometry (ex. `geom_point()`).
+2.  Research the available aesthetics for that geometry (ex. `x`, `y`, `color`, `shape`, `size`). Not all aesthetics are available for all geometries.
+3.  Map variables to the dataset to the relevant aesthetics.
+
+## Beyond two dimensions {.smaller}
+
+Be sure to avoid making your visualization overly complicated:
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+ggplot(data = movies,
+       aes(x = production_budget, 
+           y = worldwide_gross, 
+           color = genre,
+           shape = mpaa_rating,
+           size = domestic_gross)) +
+  geom_point(alpha = 0.5)  +
+  xlab("Production Budget ($)") +
+  ylab("Worldwide Gross ($)") +
+  ggtitle("Worldwide Gross vs. Budget")
+```
+
+## Beyond two dimensions {.smaller}
+
+```{r, echo = FALSE, eval = T}
+ggplot(data = movies,
+       aes(x = production_budget, 
+           y = worldwide_gross, 
+           color = genre,
+           shape = mpaa_rating,
+           size = domestic_gross)) +
+  geom_point(alpha = 0.5)  +
+  xlab("Production Budget ($)") +
+  ylab("Worldwide Gross ($)") +
+  ggtitle("Worldwide Gross vs. Budget")
+```
+
+
+## ggplot cheatsheet
+
+-   Axes: `xlim()`, `ylim()`
+-   Legends: within initial `aes()`, edit within `theme()` or `guides()`
+-   `geom_point()`, `geom_line()`, `geom_histogram()`, `geom_bar()`, `geom_boxplot()`, `geom_text()`
+-   `facet_grid()`, `facet_wrap()` for faceting
+-   `labs()` for labels
+-   `theme_bw()` to make things look nicer
+-   Graphical parameters: `color` for color, `alpha` for opacity, `lwd`/`size` for thickness, `shape` for shape, `fill` for interior color, ...
+
+Find more tips [here!](https://github.com/rstudio/cheatsheets/raw/master/data-visualization.pdf)
+
+
+## General principles for data visualization
+
+::: columns
+::: {.column width="50%"}
+**Avoid:**
+
+-   3D plots
+-   Deceptive axes
+-   Excessive labels
+-   Excessive/bad coloring
+-   Fancy shading/effects
+-   Bad variable/axis names
+-   Unreadable labels
+-   Overloaded with information
+:::
+
+::: {.column width="50%"}
+**Strive for:**
+
+-   Simple, clean graphics
+-   Neat and human readable text
+-   Appropriate data range (bar charts should *always* start from 0!)
+-   Consistent intervals
+-   Roughly \~6 colors or less
+-   Size figures appropriately
+:::
+:::
+
+## Sometimes breaking the rules is okay...
+
+![](https://upload.wikimedia.org/wikipedia/commons/2/29/Minard.png){fig-align="center"}
+
+Charles Minard
+
+## Sometimes breaking the rules is okay...
+
+![](https://th-thumbnailer.cdn-si-edu.com/h2WL28E-CZgGj-Lrvs40-3PMAOE=/1000x750/filters:no_upscale():focal(1223x1116:1224x1117)/https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer/3b/22/3b22a3d0-0a6f-42fb-a1d6-58019a3d9312/11_33873a_city_and_rural_population_18901.png)
+
+W.E.B. DuBois
+
+## Sometimes breaking the rules is okay...
+
+![](https://upload.wikimedia.org/wikipedia/commons/1/17/Nightingale-mortality.jpg)
+
+Florence Nightingale
+
+## Lab 04
+
+In this lab, we'll practice data visualization with base R and `ggplot2`.
+
+## Some misleading visualizations
+
+<img src="images/bad1.jpg" height="450"/>
+
+**Avoid:** Pie charts? The proportions are completely off.
+
+## Some misleading visualizations
+
+<img src="images/bad2.jpg" height="450"/>
+
+**Avoid:** Pie charts? Percentages don't add up.
+
+## Some misleading visualizations
+
+<img src="images/bad3.png" height="450"/>
+
+**Avoid:** 3d bar charts?!
+
+## Some misleading visualizations
+
+<img src="images/bad4.png" height="450"/>
+
+**Avoid:** Bad use of color
+
+## Some misleading visualizations
+
+<img src="images/bad5.jpg" height="450"/>
+
+**Avoid:** Bad axis, lack of information, 3D bar chart
+
+## Some misleading visualizations
+
+<img src="images/bad6.jpg" height="450"/>
+
+**Avoid:** Four numbers displayed as a cluttered chart, terrible labels, bad axis range
+
+## Some misleading visualizations
+
+<img src="images/bad7.jpg" height="450"/>
+
+**Avoid:** Deceptively flipped y-axis! (and excessive color)
+
+## Some misleading visualizations
+
+<img src="images/bad8.jpg" height="450"/>
+
+**Avoid:** Two axes in a single plot, bad axis range
+
+## Some misleading visualizations
+
+<img src="images/bad9.png" height="450"/>
+
+**Avoid:** Deceptive axis range (should start at 0)
+
+## Some misleading visualizations
+
+<img src="images/bad10.png" height="450"/>
+
+**Avoid:** Inconsistent x-axis intervals
+
+```{r, echo = FALSE, eval = T, fig.height = 3.5, fig.width = 4}
+knitr::knit_exit()
+```
 
 ## Example: CalEnviroScreen
 
@@ -426,115 +1078,3 @@ ggplot(data = ces_sfba,
 ```
 :::
 :::
-
-# General principles for data visualization
-
-## Customizing our scatter plot {.smaller}
-
-We can similarly customize our scatter plots
-
-::: columns
-::: {.column width="50%"}
-**Avoid:**
-
--   3D plots
--   Deceptive axes
--   Excessive labels
--   Excessive/bad coloring
--   Fancy shading/effects
--   Bad variable/axis names
--   Unreadable labels
--   Overloaded with information
-:::
-
-::: {.column width="50%"}
-**Strive for:**
-
--   Simple, clean graphics
--   Neat and human readable text
--   Appropriate data range (bar charts should *always* start from 0!)
--   Consistent intervals
--   Roughly \~6 colors or less
--   Size figures appropriately
-:::
-:::
-
-## Some misleading visualizations
-
-<img src="images/bad1.jpg" height="450"/>
-
-**Avoid:** Pie charts! Eugh! The proportions are completely off!
-
-## Some misleading visualizations
-
-<img src="images/bad2.jpg" height="450"/>
-
-**Avoid:** Pie charts! Eugh! Percents don't add up!
-
-## Some misleading visualizations
-
-<img src="images/bad3.png" height="450"/>
-
-**Avoid:** 3d bar charts?!
-
-## Some misleading visualizations
-
-<img src="images/bad4.png" height="450"/>
-
-**Avoid:** Bad use of color
-
-## Some misleading visualizations
-
-<img src="images/bad5.jpg" height="450"/>
-
-**Avoid:** Bad axis, lack of information, 3D bar chart
-
-## Some misleading visualizations
-
-<img src="images/bad6.jpg" height="450"/>
-
-**Avoid:** Four numbers displayed as a cluttered chart, terrible labels, bad axis range
-
-## Some misleading visualizations
-
-<img src="images/bad7.jpg" height="450"/>
-
-**Avoid:** Deceptively flipped y-axis! (and excessive color)
-
-## Some misleading visualizations
-
-<img src="images/bad8.jpg" height="450"/>
-
-(This was presented in Congress!)\]
-
-**Avoid:** Two axes in a single plot, bad axis range
-
-## Some misleading visualizations
-
-<img src="images/bad9.png" height="450"/>
-
-**Avoid:** Deceptive axis range (should start at 0)
-
-## Some misleading visualizations
-
-<img src="images/bad10.png" height="450"/>
-
-(From the Gates Foundation!)
-
-**Avoid:** Inconsistent x-axis intervals
-
-## ggplot cheatsheet
-
--   Axes: `xlim()`, `ylim()`
--   Legends: within initial `aes()`, edit within `theme()` or `guides()`
--   `geom_point()`, `geom_line()`, `geom_histogram()`, `geom_bar()`, `geom_boxplot()`, `geom_text()`
--   `facet_grid()`, `facet_wrap()` for faceting
--   `labs()` for labels
--   `theme_bw()` to make things look nicer
--   Graphical parameters: `color` for color, `alpha` for opacity, `lwd`/`size` for thickness, `shape` for shape, `fill` for interior color, ...
-
-Find more tips [here!](https://github.com/rstudio/cheatsheets/raw/master/data-visualization.pdf)
-
-## Lab 04
-
-In this lab, we'll practice data visualization with base R and `ggplot2`.

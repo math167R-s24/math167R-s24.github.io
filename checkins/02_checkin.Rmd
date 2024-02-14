@@ -57,7 +57,7 @@ data(flights)
 <!--# YOUR ANSWER/EXPLANATION HERE -->
 
 
-**6.** Compute the mean `arr_delay` by month AND airport. What do you notice?
+**6.** Compute the mean `arr_delay` by month AND `origin`. What do you notice?
 
 ```{r}
 # YOUR CODE HERE
