@@ -1,42 +1,624 @@
 ---
-title: "MATH167R: Merging data"
+title: "MATH167R: Merging and manipulating data"
 author: "Peter Gao"
 format: 
   revealjs:
     theme: [./slides.scss, ../theme.scss]
 editor: visual
+
 ---
 
-## Warm-up
-
-Consider the following data:
-
-```{r, echo = T, eval = T}
-library(tidyverse)
-ChickWeight
-```
-
-1.  What does the following code do?
-
-    ```{r, echo = T, eval = F}
-    pivot_wider(ChickWeight,
-                 names_from = "Time", 
-                 values_from = "weight")
-    ```
-
-## Warm-up
-
-```{r, echo = T, eval = T, warning = F}
-library(tidyverse)
-pivot_wider(ChickWeight,
-            names_from = "Time", 
-            values_from = "weight")
-```
 
 ## Overview of today
 
--   Merging datasets
+-   Merging and manipulating datasets
 -   Exploratory analysis
+
+## Working with messier data: US population, 2010-2020
+
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+state_population <- readr::read_csv("https://www2.census.gov/programs-surveys/popest/datasets/2010-2020/national/totals/nst-est2020.csv")
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+# code to print the data
+state_population <- readr::read_csv("https://www2.census.gov/programs-surveys/popest/datasets/2010-2020/national/totals/nst-est2020.csv")
+library(knitr)
+kable(state_population, digits = 3, row.names = F) |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "400px")
+```
+
+
+## National population data
+
+We can use the `SUMLEV` variable to obtain only national data:
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+#| code-line-numbers: "6"
+library(tidyverse)
+US_pop <- state_population |>
+  filter(SUMLEV == "010")
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+library(tidyverse)
+US_pop <- state_population |>
+  filter(SUMLEV == "010")
+# code to print the data
+kable(US_pop, digits = 3, row.names = F) |>
+  kableExtra::kable_styling("striped", full_width = T)
+```
+
+## National population data
+
+How can we generate the following plot?
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+US_pop |> 
+  select(-POPESTIMATE042020) |>
+  pivot_longer(contains("POPESTIMATE"), names_to = "Year", values_to = "Population") |>
+  mutate(Year = as.numeric(stringr::str_sub(Year, start = 12))) |>
+  ggplot(aes(x = Year, y = Population)) + 
+  geom_line()
+```
+
+## National population data
+
+Note that our data cannot be readily used with `ggplot` to generate the previous plot. Ideally, we would like two vectors of the same length: one representing `Year` and one representing `Population`. Today, we'll discuss how to do this in both **base R** and the **tidyverse**.
+
+## `pivot_longer()` and `pivot_wider()`
+
+The `pivot_longer()` and `pivot_wider()` functions are useful for reshaping data: `pivot_longer()` "lengthens" datasets and `pivot_wider()` does the opposite.
+
+They are challenging to use because you need to have a clear vision of the data frame you want, not because they are complicated in R.
+
+## Example: `pivot_longer()` {.smaller}
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+relig_income
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+kable(relig_income) |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "480px")
+```
+
+## Example: `pivot_longer()`
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+#| code-line-numbers: "2"
+relig_income |>
+  pivot_longer(cols = !religion, names_to = "income", values_to = "count")
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+relig_income |>
+  pivot_longer(cols = !religion, names_to = "income", values_to = "count") |>
+  kable() |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "480px")
+```
+
+## Example: `pivot_longer()`
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+head(billboard)
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+kable(head(billboard)) |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "400px")
+```
+
+## Example: `pivot_longer()`
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+billboard |>
+  pivot_longer(
+    cols = starts_with("wk"),
+    names_to = "week",
+    names_prefix = "wk",
+    values_to = "rank",
+    values_drop_na = TRUE
+  )
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+billboard |>
+  pivot_longer(
+    cols = starts_with("wk"),
+    names_to = "week",
+    names_prefix = "wk",
+    values_to = "rank",
+    values_drop_na = TRUE
+  ) |>
+  head(n = 20) |>
+  kable() |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "200px")
+```
+
+## Example: `pivot_wider()`
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+fish_encounters
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+kable(fish_encounters) |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "480px")
+```
+
+## Example: `pivot_wider()`
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+#| code-line-numbers: "2"
+fish_encounters |>
+  pivot_wider(names_from = station, values_from = seen)
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+fish_encounters |>
+  pivot_wider(names_from = station, values_from = seen) |>
+  head(n = 20) |>
+  kable() |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "480px")
+```
+
+
+## Example: `pivot_wider()`
+
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+us_rent_income
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+kable(us_rent_income) |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "400px")
+```
+
+## Example: `pivot_wider()`
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+us_rent_income |>
+  pivot_wider(
+    names_from = variable,
+    values_from = c(estimate, moe)
+  )
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+us_rent_income |>
+  pivot_wider(
+    names_from = variable,
+    values_from = c(estimate, moe)
+  ) |>
+  kable() |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "360px")
+```
+
+## Manipulating data for visualization
+
+Let's return to our US population example:
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+#| code-line-numbers: "6"
+library(tidyverse)
+US_pop <- state_population |>
+  filter(SUMLEV == "010")
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+library(tidyverse)
+US_pop <- state_population |>
+  filter(SUMLEV == "010")
+# code to print the data
+kable(US_pop, digits = 3, row.names = F) |>
+  kableExtra::kable_styling("striped", full_width = T)  |> 
+  kableExtra::scroll_box(height = "120px")
+```
+
+## Approach 1: Build a data frame manually
+
+```{r, echo = T, eval = F, error = T}
+# base R
+plot_dat <- data.frame(
+  Year = 2010:2020,
+  Population = US_pop[1, 8:19]
+)
+head(plot_dat)
+```
+
+. . .
+
+```{r, echo = F, eval = T, error = T}
+# base R
+plot_dat <- data.frame(
+  Year = 2010:2020,
+  Population = US_pop[1, 8:19]
+)
+head(plot_dat)
+```
+
+## National population data
+
+What went wrong? `US_pop[1, 8:19]` is a tibble, and we need a numeric.
+
+. . .
+
+```{r, echo = T, eval = F, error = T}
+plot_dat <- data.frame(
+  Year = 2010:2020,
+  Population = as.numeric(US_pop[1, 8:19])
+)
+```
+
+. . .
+
+```{r, echo = F, eval = T, error = T}
+# base R
+plot_dat <- data.frame(
+  Year = 2010:2020,
+  Population = as.numeric(US_pop[1, 8:19])
+)
+```
+
+## National population data
+
+Now what? `US_pop` has an extra column `POPESTIMATE042020` which we need to remove.
+
+. . .
+
+```{r, echo = T, eval = T, error = T}
+# base R
+plot_dat <- data.frame(
+  Year = 2010:2020,
+  Population = as.numeric(US_pop[, c(8:17, 19)])
+)
+head(plot_dat)
+```
+
+## National population data
+
+Finally, we can use the `plot` function to get our desired visualization:
+
+```{r, echo = T, eval = T, error = T}
+plot(plot_dat$Year, plot_dat$Population)
+```
+
+## Approach 2: Tidyverse
+
+Now let's see how we might approach the same task in the tidyverse. Our strategy will be to "tidy" the data so we have one row for each observation and one column for each observation.
+
+First, let's remove the unnecessary column using the `select()` function. 
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "2"
+US_pop |> 
+  select(-POPESTIMATE042020)  
+```
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| code-line-numbers: "2"
+US_pop |> 
+  select(-POPESTIMATE042020)  |>
+  kable() |> 
+  kableExtra::scroll_box(height = "120px")
+```
+
+## Tidyverse strategy
+
+Now let's use the `pivot_longer` function to combine the `POPESTIMATE` columns into two variables: `Year` and `Population`:
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "3-5"
+US_pop |> 
+  select(-POPESTIMATE042020) |>
+  pivot_longer(contains("POPESTIMATE"), 
+               names_to = "Year",
+               values_to = "Population")  
+```
+
+## Tidyverse strategy
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| code-line-numbers: "2"
+US_pop |> 
+  select(-POPESTIMATE042020) |>
+  pivot_longer(contains("POPESTIMATE"), 
+               names_to = "Year",
+               values_to = "Population")  |>
+  kable() |> 
+  kableExtra::scroll_box(height = "400px")
+```
+
+What do we need to do next?
+
+## Tidyverse strategy
+
+Finally, we need to use the `str_sub()` function to shorten our `Year` variable before turning it into a numeric.
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "6"
+US_pop |> 
+  select(-POPESTIMATE042020) |>
+  pivot_longer(contains("POPESTIMATE"), 
+               names_to = "Year",
+               values_to = "Population") |>
+  mutate(Year = as.numeric(stringr::str_sub(Year, start = 12)))
+```
+
+## Tidyverse strategy
+
+Now, `Year` is numeric as desired:
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| code-line-numbers: "2"
+US_pop |> 
+  select(-POPESTIMATE042020) |>
+  pivot_longer(contains("POPESTIMATE"), 
+               names_to = "Year",
+               values_to = "Population") |>
+  mutate(Year = as.numeric(stringr::str_sub(Year, start = 12))) |>
+  head(n = 30) |>
+  kable() |> 
+  kableExtra::scroll_box(height = "400px")
+```
+
+## Tidyverse strategy
+
+Now we can `|>` it to `ggplot`:
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "7-8"
+US_pop |> 
+  select(-POPESTIMATE042020) |>
+  pivot_longer(contains("POPESTIMATE"), 
+               names_to = "Year",
+               values_to = "Population") |>
+  mutate(Year = as.numeric(stringr::str_sub(Year, start = 12))) |>
+  ggplot(aes(x = Year, y = Population)) + 
+  geom_line()
+```
+
+## Tidyverse strategy
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| code-line-numbers: "2"
+#| fig-width: 7
+#| fig-height: 4.75
+US_pop |> 
+  select(-POPESTIMATE042020) |>
+  pivot_longer(contains("POPESTIMATE"), 
+               names_to = "Year",
+               values_to = "Population") |>
+  mutate(Year = as.numeric(stringr::str_sub(Year, start = 12))) |>
+  ggplot(aes(x = Year, y = Population)) + 
+  geom_line()
+```
+
+## Tidyverse strategy: More complicated plots
+
+We can also work with the region level data, mapping the `color` aesthetic to the region:
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "2, 7-8"
+state_population |> 
+  filter(SUMLEV == "020") |>
+  select(-POPESTIMATE042020) |>
+  pivot_longer(contains("POPESTIMATE"), 
+               names_to = "Year",
+               values_to = "Population") |>
+  mutate(Year = as.numeric(stringr::str_sub(Year, start = 12))) |>
+  ggplot(aes(x = Year, y = Population, color = NAME)) + 
+  geom_line()
+```
+
+## Tidyverse strategy: More complicated plots
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| code-line-numbers: "2, 7-8"
+#| fig-width: 7
+#| fig-height: 4.75
+state_population |> 
+  filter(SUMLEV == "020") |>
+  select(-POPESTIMATE042020) |>
+  pivot_longer(contains("POPESTIMATE"), 
+               names_to = "Year",
+               values_to = "Population") |>
+  mutate(Year = as.numeric(stringr::str_sub(Year, start = 12))) |>
+  ggplot(aes(x = Year, y = Population, color = NAME)) + 
+  geom_line()
+```
 
 ## Joining Data
 
@@ -66,6 +648,13 @@ band_instruments
 #| eval: TRUE
 band_members |> inner_join(band_instruments)
 band_members |> left_join(band_instruments)
+```
+
+## Example: Band members
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
 band_members |> right_join(band_instruments)
 band_members |> full_join(band_instruments)
 ```
@@ -81,9 +670,9 @@ band_members |> inner_join(band_instruments, by = join_by(name))
 
 ## Inner join vs. outer join
 
-<img src="images/join-inner.png" height="100"/>
+<img src="images/join-inner.png" height="90"/>
 
-<img src="images/join-outer.png" height="380"/>
+<img src="images/join-outer.png" height="360"/>
 
 Images courtesy of Hadley Wickham. [(Link)](https://r4ds.had.co.nz/relational-data.html)
 
@@ -97,12 +686,157 @@ merge(band_members, band_instruments, by.x = "name", by.y = "name")
 
 # outer join
 merge(band_members, band_instruments, by.x = "name", by.y = "name", all = T)
+```
 
+## Base R
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
 # left join
 merge(band_members, band_instruments, by.x = "name", by.y = "name", all.x = T)
 
 # right join
 merge(band_members, band_instruments, by.x = "name", by.y = "name", all.y = T)
+```
+
+
+
+## Data manipulation cheatsheet
+
+-   `filter()` subset rows
+-   `select()` subset columns, use with `contains()`, `starts_with()`, `ends_with()`, ...
+-   `mutate()` create columns
+-   `group_by()`, `summarize()`, `count()` group and summarize groups
+-   `rename()` rename columns
+-   `pivot_longer()`, `pivot_wider()` reshape data
+-   `inner_join()`, `left_join()`, `right_join()`, `outer_join()` combine data (like SQL)
+
+[Much, much more! (Click me for a cheat sheet)](https://rstudio.com/resources/cheatsheets/)
+
+## Exploratory data analysis
+
+Exploratory data analysis is the process of learning about a dataset by visualizing, summarizing, and transforming it.
+
+By now we've seen most of the skills you need to carry out exploratory data analysis (EDA). As Wickham, Çetinkaya-Rundel, and Grolemund put it, the cycle of EDA looks something like this:
+
+1.  Generate questions about your data.
+
+2.  Explore your questions by visualizing, transforming, and modelling your data.
+
+3.  Use your findings to refine your questions and generate new questions.
+
+You can read their walkthrough of the EDA process [here](https://r4ds.hadley.nz/eda).
+
+## Example: World Bank Inflation Data
+
+The World Bank provides historical data on inflation in countries around the world [here](https://www.worldbank.org/en/research/brief/inflation-database).
+
+In particular, let's explore the annual consumer price inflation data for the US.
+
+. . .
+
+The **consumer price inflation** measures the "annual percentage change in the cost to the average consumer of acquiring a basket of goods."
+
+## Example: World Bank Inflation Data
+
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+library(openxlsx)
+cpi <- read.xlsx("https://thedocs.worldbank.org/en/doc/1ad246272dbbc437c74323719506aa0c-0350012021/original/Inflation-data.xlsx",
+                 sheet = 4)
+cpi <- cpi[1:203,]
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+# code to print the data
+library(openxlsx)
+cpi <- read.xlsx("https://thedocs.worldbank.org/en/doc/1ad246272dbbc437c74323719506aa0c-0350012021/original/Inflation-data.xlsx",
+                 sheet = 5)
+cpi <- cpi[1:203,] # remove last row
+kable(head(cpi, n = 25), digits = 3, row.names = F) |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "360px")
+```
+
+## Example: World Bank Inflation Data
+
+How do we create a line plot with `Year` on the x-axis and `CPI` on the y-axis for the US?
+
+. . .
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+#| code-line-numbers: "2-4"
+cpi |>
+  pivot_longer(cols = `1970`:`2022`,
+               names_to = "Year", 
+               values_to = "CPI") |>
+  mutate(Year = as.numeric(Year)) |>
+  select(Country, Year, CPI)
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+cpi |>
+  pivot_longer(cols = `1970`:`2022`,
+               names_to = "Year", 
+               values_to = "CPI") |>
+  mutate(Year = as.numeric(Year)) |>
+  select(Country, Year, CPI) |>
+  head(n = 30) |>
+  kable(digits = 3) |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "240px")
+```
+
+## Example: World Bank Inflation Data
+
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+cpi |>
+  pivot_longer(cols = `1970`:`2022`,
+               names_to = "Year", 
+               values_to = "CPI") |>
+  mutate(Year = as.numeric(Year)) |>
+  filter(Country.Code == "USA") |>
+  ggplot(mapping = aes(x = Year, y = CPI)) +
+  geom_line()
+```
+
+```{r}
+knitr::knit_exit()
 ```
 
 ## Example: California data
@@ -183,7 +917,6 @@ ggplot(income_combined, aes(x = medincome_2010, y = medincome_2021)) +
   
 ```
 
-
 ## Example: California data
 
 ```{r, echo = F, eval = T}
@@ -196,31 +929,4 @@ ggplot(income_combined, aes(x = medincome_2010, y = medincome_2021)) +
        subtitle = "American Community Survey",
        y = "2021 Median Income",
        x = "2010 Median Income")
-  
 ```
-
-## Data manipulation cheatsheet
-
--   `filter()` subset rows
--   `select()` subset columns, use with `contains()`, `starts_with()`, `ends_with()`, ...
--   `mutate()` create columns
--   `group_by()`, `summarize()`, `count()` group and summarize groups
--   `rename()` rename columns
--   `pivot_longer()`, `pivot_wider()` reshape data
--   `inner_join()`, `left_join()`, `right_join()`, `outer_join()` combine data (like SQL)
-
-[Much, much more! (Click me for a cheat sheet)](https://rstudio.com/resources/cheatsheets/)
-
-## Exploratory data analysis
-
-Exploratory data analysis is the process of learning about a dataset by visualizing, summarizing, and transforming it.
-
-By now we've seen most of the skills you need to carry out exploratory data analysis (EDA). As Wickham, Çetinkaya-Rundel, and Grolemund put it, the cycle of EDA looks something like this:
-
-1.  Generate questions about your data.
-
-2.  Explore your questions by visualizing, transforming, and modelling your data.
-
-3.  Use your findings to refine your questions and generate new questions.
-
-You can read their walkthrough of the EDA process [here](https://r4ds.hadley.nz/eda).

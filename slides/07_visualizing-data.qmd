@@ -559,7 +559,6 @@ ggplot(data = movies,
   ggtitle("Worldwide Gross vs. Budget")
 ```
 
-
 ## ggplot cheatsheet
 
 -   Axes: `xlim()`, `ylim()`
@@ -571,7 +570,6 @@ ggplot(data = movies,
 -   Graphical parameters: `color` for color, `alpha` for opacity, `lwd`/`size` for thickness, `shape` for shape, `fill` for interior color, ...
 
 Find more tips [here!](https://github.com/rstudio/cheatsheets/raw/master/data-visualization.pdf)
-
 
 ## General principles for data visualization
 

@@ -384,9 +384,6 @@
       margin-right: 0; 
     }
   </style>
-  
-  <script src="../site_libs/kePrint-0.0.1/kePrint.js"></script>
-  <link href="../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 <meta property="og:title" content="MATH167R - MATH167R: Data visualization">
 <meta property="og:site-name" content="MATH167R">
 </head>
@@ -439,2254 +436,380 @@ Peter Gao
 <section id="overview-of-today" class="slide level2">
 <h2>Overview of today</h2>
 <ul>
+<li>Reviewing <code>ggplot2</code></li>
 <li>Advanced data visualization</li>
-<li>Data transformation for visualization</li>
+<li>Styling R visualizations</li>
 </ul>
 </section>
-<section>
-<section id="advanced-data-visualization" class="title-slide slide level1 center">
-<h1>Advanced Data Visualization</h1>
-
-</section>
-<section id="example-egg-production-in-the-united-states" class="slide level2">
-<h2>Example: Egg production in the United States</h2>
-<p>Today we’ll start using the <a href="https://thehumaneleague.org/article/E008R01-us-egg-production-data">The Humane League’s US Egg Production dataset</a>, which we can load using the following code:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb3-2"><a href="#cb3-2"></a>eggproduction  <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-04-11/egg-production.csv'</span>)</span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="fu">head</span>(eggproduction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 6
-  observed_month prod_type     prod_process   n_hens     n_eggs source          
-  &lt;date&gt;         &lt;chr&gt;         &lt;chr&gt;           &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;           
-1 2016-07-31     hatching eggs all          57975000 1147000000 ChicEggs-09-23-…
-2 2016-08-31     hatching eggs all          57595000 1142700000 ChicEggs-10-21-…
-3 2016-09-30     hatching eggs all          57161000 1093300000 ChicEggs-11-22-…
-4 2016-10-31     hatching eggs all          56857000 1126700000 ChicEggs-12-23-…
-5 2016-11-30     hatching eggs all          57116000 1096600000 ChicEggs-01-24-…
-6 2016-12-31     hatching eggs all          57750000 1132900000 ChicEggs-02-28-…</code></pre>
-</div>
-</div>
-</section>
-<section id="data-dictionary" class="slide level2 smaller">
-<h2>Data Dictionary</h2>
-<div style="height:500px;overflow:auto;">
-<table>
-<colgroup>
-<col style="width: 15%">
-<col style="width: 15%">
-<col style="width: 69%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">variable</th>
-<th style="text-align: left;">class</th>
-<th style="text-align: left;">description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">observed_month</td>
-<td style="text-align: left;">double</td>
-<td style="text-align: left;">Month in which report observations are collected,Dates are recorded in ISO 8601 format YYYY-MM-DD</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">prod_type</td>
-<td style="text-align: left;">character</td>
-<td style="text-align: left;">type of egg product: hatching, table eggs</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">prod_process</td>
-<td style="text-align: left;">character</td>
-<td style="text-align: left;">type of production process and housing: cage-free (organic), cage-free (non-organic), all. The value ‘all’ includes cage-free and conventional housing.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">n_hens</td>
-<td style="text-align: left;">double</td>
-<td style="text-align: left;">number of hens produced by hens for a given month-type-process combo</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">n_eggs</td>
-<td style="text-align: left;">double</td>
-<td style="text-align: left;">number of eggs producing eggs for a given month-type-process combo</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">source</td>
-<td style="text-align: left;">character</td>
-<td style="text-align: left;">Original USDA report from which data are sourced. Values correspond to titles of PDF reports. Date of report is included in title.</td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="building-up-a-visualization" class="slide level2">
-<h2>Building up a visualization</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>eggproduction <span class="sc">|&gt;</span> </span>
-<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">filter</span>(prod_type <span class="sc">==</span> <span class="st">"table eggs"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 165 × 6
-   observed_month prod_type  prod_process    n_hens     n_eggs source           
-   &lt;date&gt;         &lt;chr&gt;      &lt;chr&gt;            &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;            
- 1 2016-07-31     table eggs all          299669000 7350500000 ChicEggs-09-23-2…
- 2 2016-08-31     table eggs all          300917000 7409000000 ChicEggs-10-21-2…
- 3 2016-09-30     table eggs all          303270000 7204200000 ChicEggs-11-22-2…
- 4 2016-10-31     table eggs all          305852000 7534700000 ChicEggs-12-23-2…
- 5 2016-11-30     table eggs all          310728000 7468500000 ChicEggs-01-24-2…
- 6 2016-12-31     table eggs all          318820000 7950400000 ChicEggs-02-28-2…
- 7 2017-01-31     table eggs all          318109000 7903500000 ChicEggs-03-21-2…
- 8 2017-02-28     table eggs all          316807000 7079800000 ChicEggs-04-21-2…
- 9 2017-03-31     table eggs all          316147000 7842000000 ChicEggs-05-22-2…
-10 2017-04-30     table eggs all          314918000 7545900000 ChicEggs-06-23-2…
-# ℹ 155 more rows</code></pre>
-</div>
-</div>
-</section>
-<section id="building-up-a-visualization-1" class="slide level2">
-<h2>Building up a visualization</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>eggproduction <span class="sc">|&gt;</span> </span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">filter</span>(prod_type <span class="sc">==</span> <span class="st">"table eggs"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> observed_month, <span class="at">y =</span> n_eggs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-7-1.png" width="768" class="r-stretch"></section>
-<section id="building-up-a-visualization-2" class="slide level2">
-<h2>Building up a visualization</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8" data-code-line-numbers="3-4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>eggproduction <span class="sc">|&gt;</span> </span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">filter</span>(prod_type <span class="sc">==</span> <span class="st">"table eggs"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> observed_month, <span class="at">y =</span> n_eggs)) <span class="sc">+</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-9-1.png" width="768" class="r-stretch"></section>
-<section id="building-up-a-visualization-3" class="slide level2">
-<h2>Building up a visualization</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="3-4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>eggproduction <span class="sc">|&gt;</span> </span>
-<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">filter</span>(prod_type <span class="sc">==</span> <span class="st">"table eggs"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> observed_month, <span class="at">y =</span> n_eggs, <span class="at">color =</span> prod_process)) <span class="sc">+</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-11-1.png" width="768" class="r-stretch"></section>
-<section id="building-up-a-visualization-4" class="slide level2">
-<h2>Building up a visualization</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10" data-code-line-numbers="3-4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>eggproduction <span class="sc">|&gt;</span> </span>
-<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">filter</span>(prod_type <span class="sc">==</span> <span class="st">"table eggs"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> observed_month, <span class="at">y =</span> n_eggs, <span class="at">color =</span> prod_process)) <span class="sc">+</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a>  <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-13-1.png" width="768" class="r-stretch"></section>
-<section id="labels-and-legends" class="slide level2">
-<h2>Labels and legends</h2>
-<p><code>theme</code> can be added to change options including axis labels and legend position</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11" data-code-line-numbers="5-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>eggproduction <span class="sc">|&gt;</span> </span>
-<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">filter</span>(prod_type <span class="sc">==</span> <span class="st">"table eggs"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> observed_month, <span class="at">y =</span> n_eggs, <span class="at">color =</span> prod_process)) <span class="sc">+</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a>  <span class="fu">xlab</span>(<span class="st">"Date"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"# eggs"</span>) <span class="sc">+</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-15-1.png" width="768" class="r-stretch"></section>
-<section id="colors" class="slide level2">
-<h2>Colors</h2>
-<p><code>scale_color_viridis_d</code> swaps colors to the <code>viridis</code> discrete color palette, which is optimized for accessibility.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>eggproduction <span class="sc">|&gt;</span> </span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">filter</span>(prod_type <span class="sc">==</span> <span class="st">"table eggs"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> observed_month, <span class="at">y =</span> n_eggs, <span class="at">color =</span> prod_process)) <span class="sc">+</span></span>
-<span id="cb12-4"><a href="#cb12-4"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb12-5"><a href="#cb12-5"></a>  <span class="fu">xlab</span>(<span class="st">"Date"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"# eggs"</span>) <span class="sc">+</span></span>
-<span id="cb12-6"><a href="#cb12-6"></a>  <span class="fu">scale_color_viridis_d</span>() <span class="sc">+</span></span>
-<span id="cb12-7"><a href="#cb12-7"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-17-1.png" width="768" class="r-stretch"></section>
-<section id="remember" class="slide level2">
-<h2>Remember!</h2>
-<p>Learning <code>ggplot</code> takes a lot of time–use your peers, me, and the internet as a resource!</p>
-<p><strong>General strategy</strong></p>
+<section id="review-grammar-of-graphics" class="slide level2">
+<h2>Review: grammar of graphics</h2>
+<p>The three basic layers:</p>
 <ol type="1">
-<li><p>Clean and tidy data into the appropriate format.</p></li>
-<li><p>Map <strong>variables</strong> to <strong>aesthetics</strong>.</p></li>
-<li><p>Use <code>geom_</code> functions to draw <strong>markings</strong> with the appropriate aesthetics.</p></li>
-<li><p>Add labels and titles with <code>xlab</code>, <code>ylab</code>, and <code>ggtitle</code>.</p></li>
-<li><p>Adjust text size, legend position with <code>theme</code>.</p></li>
+<li><strong>Data</strong>: a data frame with all of the variables of interest</li>
+<li><strong>Aesthetics</strong>: graphical dimensions like <code>x</code>, <code>y</code>, <code>color</code>, <code>shape</code>, and more.</li>
+<li><strong>Geometries</strong>: the specific markings used to illustrate your variables and aesthetics.</li>
 </ol>
 </section>
-<section id="adding-even-more-dimensions" class="slide level2">
-<h2>Adding even more dimensions</h2>
+<section id="review-cats-and-dogs" class="slide level2">
+<h2>Review: Cats and Dogs</h2>
+<p>Suppose we have the following data on animal weights. How can we compute the average weights of cats and dogs? [example from <a href="https://datavizf23.classes.andrewheiss.com/slides/04-slides.html">Andrew Heiss</a>]</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>eggproduction <span class="sc">|&gt;</span> </span>
-<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> observed_month, <span class="at">y =</span> n_eggs, <span class="at">color =</span> prod_process)) <span class="sc">+</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb13-4"><a href="#cb13-4"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>prod_type) <span class="sc">+</span></span>
-<span id="cb13-5"><a href="#cb13-5"></a>  <span class="fu">xlab</span>(<span class="st">"Date"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"# eggs"</span>) <span class="sc">+</span></span>
-<span id="cb13-6"><a href="#cb13-6"></a>  <span class="fu">scale_color_viridis_d</span>() <span class="sc">+</span></span>
-<span id="cb13-7"><a href="#cb13-7"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-19-1.png" width="768" class="r-stretch"></section></section>
-<section>
-<section id="manipulating-data-for-visualization" class="title-slide slide level1 center">
-<h1>Manipulating data for visualization</h1>
-
-</section>
-<section id="us-population-data-2010-2020" class="slide level2">
-<h2>US population data, 2010-2020</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>state_population <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://www2.census.gov/programs-surveys/popest/datasets/2010-2020/national/totals/nst-est2020.csv"</span>)</span>
-<span id="cb14-2"><a href="#cb14-2"></a></span>
-<span id="cb14-3"><a href="#cb14-3"></a><span class="co"># code to print the data</span></span>
-<span id="cb14-4"><a href="#cb14-4"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb14-5"><a href="#cb14-5"></a><span class="fu">kable</span>(state_population, <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">row.names =</span> F) <span class="sc">|&gt;</span></span>
-<span id="cb14-6"><a href="#cb14-6"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="st">"striped"</span>, <span class="at">full_width =</span> T) <span class="sc">|&gt;</span> </span>
-<span id="cb14-7"><a href="#cb14-7"></a>  kableExtra<span class="sc">::</span><span class="fu">scroll_box</span>(<span class="at">height =</span> <span class="st">"560px"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="us-population-data-2010-2020-1" class="slide level2">
-<h2>US population data, 2010-2020</h2>
-<div class="cell">
-<div class="cell-output-display">
-<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:560px; ">
-<table class="table table-striped" data-quarto-postprocess="true" style="margin-left: auto; margin-right: auto;">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">SUMLEV</th>
-<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">REGION</th>
-<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">DIVISION</th>
-<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">STATE</th>
-<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">NAME</th>
-<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">CENSUS2010POP</th>
-<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">ESTIMATESBASE2010</th>
-<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">POPESTIMATE2010</th>
-<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">POPESTIMATE2011</th>
-<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">POPESTIMATE2012</th>
-<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">POPESTIMATE2013</th>
-<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">POPESTIMATE2014</th>
-<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">POPESTIMATE2015</th>
-<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">POPESTIMATE2016</th>
-<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">POPESTIMATE2017</th>
-<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">POPESTIMATE2018</th>
-<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">POPESTIMATE2019</th>
-<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">POPESTIMATE042020</th>
-<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">POPESTIMATE2020</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: right;">309327143</td>
-<td style="text-align: right;">311583481</td>
-<td style="text-align: right;">313877662</td>
-<td style="text-align: right;">316059947</td>
-<td style="text-align: right;">318386329</td>
-<td style="text-align: right;">320738994</td>
-<td style="text-align: right;">323071755</td>
-<td style="text-align: right;">325122128</td>
-<td style="text-align: right;">326838199</td>
-<td style="text-align: right;">328329953</td>
-<td style="text-align: right;">329398742</td>
-<td style="text-align: right;">329484123</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">020</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">Northeast Region</td>
-<td style="text-align: right;">55317240</td>
-<td style="text-align: right;">55318414</td>
-<td style="text-align: right;">55380764</td>
-<td style="text-align: right;">55608318</td>
-<td style="text-align: right;">55782661</td>
-<td style="text-align: right;">55912775</td>
-<td style="text-align: right;">56021339</td>
-<td style="text-align: right;">56052790</td>
-<td style="text-align: right;">56063777</td>
-<td style="text-align: right;">56083383</td>
-<td style="text-align: right;">56084543</td>
-<td style="text-align: right;">56002934</td>
-<td style="text-align: right;">55924275</td>
-<td style="text-align: right;">55849869</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">020</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">Midwest Region</td>
-<td style="text-align: right;">66927001</td>
-<td style="text-align: right;">66929737</td>
-<td style="text-align: right;">66975328</td>
-<td style="text-align: right;">67164092</td>
-<td style="text-align: right;">67348275</td>
-<td style="text-align: right;">67576524</td>
-<td style="text-align: right;">67765576</td>
-<td style="text-align: right;">67885682</td>
-<td style="text-align: right;">68018175</td>
-<td style="text-align: right;">68160342</td>
-<td style="text-align: right;">68263019</td>
-<td style="text-align: right;">68340091</td>
-<td style="text-align: right;">68357895</td>
-<td style="text-align: right;">68316744</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">020</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">South Region</td>
-<td style="text-align: right;">114555744</td>
-<td style="text-align: right;">114563042</td>
-<td style="text-align: right;">114869421</td>
-<td style="text-align: right;">116019483</td>
-<td style="text-align: right;">117264196</td>
-<td style="text-align: right;">118397213</td>
-<td style="text-align: right;">119666248</td>
-<td style="text-align: right;">121049223</td>
-<td style="text-align: right;">122419547</td>
-<td style="text-align: right;">123611036</td>
-<td style="text-align: right;">124649156</td>
-<td style="text-align: right;">125686544</td>
-<td style="text-align: right;">126494232</td>
-<td style="text-align: right;">126662754</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">020</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">West Region</td>
-<td style="text-align: right;">71945553</td>
-<td style="text-align: right;">71946912</td>
-<td style="text-align: right;">72101630</td>
-<td style="text-align: right;">72791588</td>
-<td style="text-align: right;">73482530</td>
-<td style="text-align: right;">74173435</td>
-<td style="text-align: right;">74933166</td>
-<td style="text-align: right;">75751299</td>
-<td style="text-align: right;">76570256</td>
-<td style="text-align: right;">77267367</td>
-<td style="text-align: right;">77841481</td>
-<td style="text-align: right;">78300384</td>
-<td style="text-align: right;">78622340</td>
-<td style="text-align: right;">78654756</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">6</td>
-<td style="text-align: left;">01</td>
-<td style="text-align: left;">Alabama</td>
-<td style="text-align: right;">4779736</td>
-<td style="text-align: right;">4780118</td>
-<td style="text-align: right;">4785514</td>
-<td style="text-align: right;">4799642</td>
-<td style="text-align: right;">4816632</td>
-<td style="text-align: right;">4831586</td>
-<td style="text-align: right;">4843737</td>
-<td style="text-align: right;">4854803</td>
-<td style="text-align: right;">4866824</td>
-<td style="text-align: right;">4877989</td>
-<td style="text-align: right;">4891628</td>
-<td style="text-align: right;">4907965</td>
-<td style="text-align: right;">4920706</td>
-<td style="text-align: right;">4921532</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">9</td>
-<td style="text-align: left;">02</td>
-<td style="text-align: left;">Alaska</td>
-<td style="text-align: right;">710231</td>
-<td style="text-align: right;">710246</td>
-<td style="text-align: right;">713982</td>
-<td style="text-align: right;">722349</td>
-<td style="text-align: right;">730810</td>
-<td style="text-align: right;">737626</td>
-<td style="text-align: right;">737075</td>
-<td style="text-align: right;">738430</td>
-<td style="text-align: right;">742575</td>
-<td style="text-align: right;">740983</td>
-<td style="text-align: right;">736624</td>
-<td style="text-align: right;">733603</td>
-<td style="text-align: right;">732074</td>
-<td style="text-align: right;">731158</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">8</td>
-<td style="text-align: left;">04</td>
-<td style="text-align: left;">Arizona</td>
-<td style="text-align: right;">6392017</td>
-<td style="text-align: right;">6392292</td>
-<td style="text-align: right;">6407342</td>
-<td style="text-align: right;">6473416</td>
-<td style="text-align: right;">6556344</td>
-<td style="text-align: right;">6634690</td>
-<td style="text-align: right;">6732873</td>
-<td style="text-align: right;">6832810</td>
-<td style="text-align: right;">6944767</td>
-<td style="text-align: right;">7048088</td>
-<td style="text-align: right;">7164228</td>
-<td style="text-align: right;">7291843</td>
-<td style="text-align: right;">7393900</td>
-<td style="text-align: right;">7421401</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">7</td>
-<td style="text-align: left;">05</td>
-<td style="text-align: left;">Arkansas</td>
-<td style="text-align: right;">2915918</td>
-<td style="text-align: right;">2916029</td>
-<td style="text-align: right;">2921998</td>
-<td style="text-align: right;">2941038</td>
-<td style="text-align: right;">2952876</td>
-<td style="text-align: right;">2960459</td>
-<td style="text-align: right;">2968759</td>
-<td style="text-align: right;">2979732</td>
-<td style="text-align: right;">2991815</td>
-<td style="text-align: right;">3003855</td>
-<td style="text-align: right;">3012161</td>
-<td style="text-align: right;">3020985</td>
-<td style="text-align: right;">3029672</td>
-<td style="text-align: right;">3030522</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">9</td>
-<td style="text-align: left;">06</td>
-<td style="text-align: left;">California</td>
-<td style="text-align: right;">37253956</td>
-<td style="text-align: right;">37254522</td>
-<td style="text-align: right;">37319550</td>
-<td style="text-align: right;">37636311</td>
-<td style="text-align: right;">37944551</td>
-<td style="text-align: right;">38253768</td>
-<td style="text-align: right;">38586706</td>
-<td style="text-align: right;">38904296</td>
-<td style="text-align: right;">39149186</td>
-<td style="text-align: right;">39337785</td>
-<td style="text-align: right;">39437463</td>
-<td style="text-align: right;">39437610</td>
-<td style="text-align: right;">39418894</td>
-<td style="text-align: right;">39368078</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">8</td>
-<td style="text-align: left;">08</td>
-<td style="text-align: left;">Colorado</td>
-<td style="text-align: right;">5029196</td>
-<td style="text-align: right;">5029319</td>
-<td style="text-align: right;">5047539</td>
-<td style="text-align: right;">5121900</td>
-<td style="text-align: right;">5193660</td>
-<td style="text-align: right;">5270774</td>
-<td style="text-align: right;">5352637</td>
-<td style="text-align: right;">5454328</td>
-<td style="text-align: right;">5543844</td>
-<td style="text-align: right;">5617421</td>
-<td style="text-align: right;">5697155</td>
-<td style="text-align: right;">5758486</td>
-<td style="text-align: right;">5798266</td>
-<td style="text-align: right;">5807719</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">09</td>
-<td style="text-align: left;">Connecticut</td>
-<td style="text-align: right;">3574097</td>
-<td style="text-align: right;">3574151</td>
-<td style="text-align: right;">3579173</td>
-<td style="text-align: right;">3588632</td>
-<td style="text-align: right;">3595211</td>
-<td style="text-align: right;">3595792</td>
-<td style="text-align: right;">3595697</td>
-<td style="text-align: right;">3588561</td>
-<td style="text-align: right;">3579830</td>
-<td style="text-align: right;">3575324</td>
-<td style="text-align: right;">3574561</td>
-<td style="text-align: right;">3566022</td>
-<td style="text-align: right;">3561494</td>
-<td style="text-align: right;">3557006</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">10</td>
-<td style="text-align: left;">Delaware</td>
-<td style="text-align: right;">897934</td>
-<td style="text-align: right;">897947</td>
-<td style="text-align: right;">899647</td>
-<td style="text-align: right;">907590</td>
-<td style="text-align: right;">915518</td>
-<td style="text-align: right;">924062</td>
-<td style="text-align: right;">933131</td>
-<td style="text-align: right;">942065</td>
-<td style="text-align: right;">949989</td>
-<td style="text-align: right;">957942</td>
-<td style="text-align: right;">966985</td>
-<td style="text-align: right;">976668</td>
-<td style="text-align: right;">984899</td>
-<td style="text-align: right;">986809</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">11</td>
-<td style="text-align: left;">District of Columbia</td>
-<td style="text-align: right;">601723</td>
-<td style="text-align: right;">601767</td>
-<td style="text-align: right;">605282</td>
-<td style="text-align: right;">620290</td>
-<td style="text-align: right;">635737</td>
-<td style="text-align: right;">651559</td>
-<td style="text-align: right;">663603</td>
-<td style="text-align: right;">677014</td>
-<td style="text-align: right;">687576</td>
-<td style="text-align: right;">697079</td>
-<td style="text-align: right;">704147</td>
-<td style="text-align: right;">708253</td>
-<td style="text-align: right;">712185</td>
-<td style="text-align: right;">712816</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">12</td>
-<td style="text-align: left;">Florida</td>
-<td style="text-align: right;">18801310</td>
-<td style="text-align: right;">18804589</td>
-<td style="text-align: right;">18846143</td>
-<td style="text-align: right;">19055607</td>
-<td style="text-align: right;">19302016</td>
-<td style="text-align: right;">19551678</td>
-<td style="text-align: right;">19853880</td>
-<td style="text-align: right;">20219111</td>
-<td style="text-align: right;">20627237</td>
-<td style="text-align: right;">20977089</td>
-<td style="text-align: right;">21254926</td>
-<td style="text-align: right;">21492056</td>
-<td style="text-align: right;">21688239</td>
-<td style="text-align: right;">21733312</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">13</td>
-<td style="text-align: left;">Georgia</td>
-<td style="text-align: right;">9687653</td>
-<td style="text-align: right;">9688737</td>
-<td style="text-align: right;">9712209</td>
-<td style="text-align: right;">9803630</td>
-<td style="text-align: right;">9903580</td>
-<td style="text-align: right;">9975592</td>
-<td style="text-align: right;">10071204</td>
-<td style="text-align: right;">10183353</td>
-<td style="text-align: right;">10308442</td>
-<td style="text-align: right;">10417031</td>
-<td style="text-align: right;">10519389</td>
-<td style="text-align: right;">10628020</td>
-<td style="text-align: right;">10695662</td>
-<td style="text-align: right;">10710017</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">9</td>
-<td style="text-align: left;">15</td>
-<td style="text-align: left;">Hawaii</td>
-<td style="text-align: right;">1360301</td>
-<td style="text-align: right;">1360304</td>
-<td style="text-align: right;">1364004</td>
-<td style="text-align: right;">1379562</td>
-<td style="text-align: right;">1395199</td>
-<td style="text-align: right;">1408822</td>
-<td style="text-align: right;">1415335</td>
-<td style="text-align: right;">1422999</td>
-<td style="text-align: right;">1428885</td>
-<td style="text-align: right;">1425763</td>
-<td style="text-align: right;">1423102</td>
-<td style="text-align: right;">1415615</td>
-<td style="text-align: right;">1410587</td>
-<td style="text-align: right;">1407006</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">8</td>
-<td style="text-align: left;">16</td>
-<td style="text-align: left;">Idaho</td>
-<td style="text-align: right;">1567582</td>
-<td style="text-align: right;">1567658</td>
-<td style="text-align: right;">1570819</td>
-<td style="text-align: right;">1584272</td>
-<td style="text-align: right;">1595910</td>
-<td style="text-align: right;">1612053</td>
-<td style="text-align: right;">1632248</td>
-<td style="text-align: right;">1652495</td>
-<td style="text-align: right;">1684036</td>
-<td style="text-align: right;">1719745</td>
-<td style="text-align: right;">1752074</td>
-<td style="text-align: right;">1789060</td>
-<td style="text-align: right;">1818238</td>
-<td style="text-align: right;">1826913</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">17</td>
-<td style="text-align: left;">Illinois</td>
-<td style="text-align: right;">12830632</td>
-<td style="text-align: right;">12831572</td>
-<td style="text-align: right;">12840545</td>
-<td style="text-align: right;">12867783</td>
-<td style="text-align: right;">12883029</td>
-<td style="text-align: right;">12895778</td>
-<td style="text-align: right;">12885092</td>
-<td style="text-align: right;">12859585</td>
-<td style="text-align: right;">12821709</td>
-<td style="text-align: right;">12779893</td>
-<td style="text-align: right;">12724685</td>
-<td style="text-align: right;">12667017</td>
-<td style="text-align: right;">12615162</td>
-<td style="text-align: right;">12587530</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">18</td>
-<td style="text-align: left;">Indiana</td>
-<td style="text-align: right;">6483802</td>
-<td style="text-align: right;">6484050</td>
-<td style="text-align: right;">6490555</td>
-<td style="text-align: right;">6517250</td>
-<td style="text-align: right;">6538989</td>
-<td style="text-align: right;">6570575</td>
-<td style="text-align: right;">6596019</td>
-<td style="text-align: right;">6611442</td>
-<td style="text-align: right;">6637898</td>
-<td style="text-align: right;">6662068</td>
-<td style="text-align: right;">6698481</td>
-<td style="text-align: right;">6731010</td>
-<td style="text-align: right;">6752183</td>
-<td style="text-align: right;">6754953</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">19</td>
-<td style="text-align: left;">Iowa</td>
-<td style="text-align: right;">3046355</td>
-<td style="text-align: right;">3046877</td>
-<td style="text-align: right;">3050819</td>
-<td style="text-align: right;">3066772</td>
-<td style="text-align: right;">3076844</td>
-<td style="text-align: right;">3093935</td>
-<td style="text-align: right;">3110643</td>
-<td style="text-align: right;">3122541</td>
-<td style="text-align: right;">3133210</td>
-<td style="text-align: right;">3143734</td>
-<td style="text-align: right;">3149900</td>
-<td style="text-align: right;">3159596</td>
-<td style="text-align: right;">3164115</td>
-<td style="text-align: right;">3163561</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">20</td>
-<td style="text-align: left;">Kansas</td>
-<td style="text-align: right;">2853118</td>
-<td style="text-align: right;">2853120</td>
-<td style="text-align: right;">2858266</td>
-<td style="text-align: right;">2869677</td>
-<td style="text-align: right;">2886024</td>
-<td style="text-align: right;">2894306</td>
-<td style="text-align: right;">2901861</td>
-<td style="text-align: right;">2910717</td>
-<td style="text-align: right;">2912977</td>
-<td style="text-align: right;">2910892</td>
-<td style="text-align: right;">2912748</td>
-<td style="text-align: right;">2912635</td>
-<td style="text-align: right;">2915024</td>
-<td style="text-align: right;">2913805</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">6</td>
-<td style="text-align: left;">21</td>
-<td style="text-align: left;">Kentucky</td>
-<td style="text-align: right;">4339367</td>
-<td style="text-align: right;">4339330</td>
-<td style="text-align: right;">4348464</td>
-<td style="text-align: right;">4370817</td>
-<td style="text-align: right;">4387865</td>
-<td style="text-align: right;">4406906</td>
-<td style="text-align: right;">4416992</td>
-<td style="text-align: right;">4429126</td>
-<td style="text-align: right;">4440306</td>
-<td style="text-align: right;">4455590</td>
-<td style="text-align: right;">4464273</td>
-<td style="text-align: right;">4472345</td>
-<td style="text-align: right;">4477899</td>
-<td style="text-align: right;">4477251</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">7</td>
-<td style="text-align: left;">22</td>
-<td style="text-align: left;">Louisiana</td>
-<td style="text-align: right;">4533372</td>
-<td style="text-align: right;">4533500</td>
-<td style="text-align: right;">4544635</td>
-<td style="text-align: right;">4576244</td>
-<td style="text-align: right;">4602067</td>
-<td style="text-align: right;">4626040</td>
-<td style="text-align: right;">4645938</td>
-<td style="text-align: right;">4666998</td>
-<td style="text-align: right;">4681346</td>
-<td style="text-align: right;">4673673</td>
-<td style="text-align: right;">4664450</td>
-<td style="text-align: right;">4658285</td>
-<td style="text-align: right;">4650984</td>
-<td style="text-align: right;">4645318</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">23</td>
-<td style="text-align: left;">Maine</td>
-<td style="text-align: right;">1328361</td>
-<td style="text-align: right;">1328354</td>
-<td style="text-align: right;">1327651</td>
-<td style="text-align: right;">1328473</td>
-<td style="text-align: right;">1328094</td>
-<td style="text-align: right;">1328543</td>
-<td style="text-align: right;">1331217</td>
-<td style="text-align: right;">1329098</td>
-<td style="text-align: right;">1332348</td>
-<td style="text-align: right;">1335743</td>
-<td style="text-align: right;">1340123</td>
-<td style="text-align: right;">1345770</td>
-<td style="text-align: right;">1349647</td>
-<td style="text-align: right;">1350141</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">24</td>
-<td style="text-align: left;">Maryland</td>
-<td style="text-align: right;">5773552</td>
-<td style="text-align: right;">5773787</td>
-<td style="text-align: right;">5788784</td>
-<td style="text-align: right;">5840241</td>
-<td style="text-align: right;">5888375</td>
-<td style="text-align: right;">5925197</td>
-<td style="text-align: right;">5960064</td>
-<td style="text-align: right;">5988528</td>
-<td style="text-align: right;">6007014</td>
-<td style="text-align: right;">6028186</td>
-<td style="text-align: right;">6042153</td>
-<td style="text-align: right;">6054954</td>
-<td style="text-align: right;">6059529</td>
-<td style="text-align: right;">6055802</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">25</td>
-<td style="text-align: left;">Massachusetts</td>
-<td style="text-align: right;">6547629</td>
-<td style="text-align: right;">6547788</td>
-<td style="text-align: right;">6566440</td>
-<td style="text-align: right;">6614218</td>
-<td style="text-align: right;">6664269</td>
-<td style="text-align: right;">6715158</td>
-<td style="text-align: right;">6764864</td>
-<td style="text-align: right;">6797484</td>
-<td style="text-align: right;">6827280</td>
-<td style="text-align: right;">6863560</td>
-<td style="text-align: right;">6885720</td>
-<td style="text-align: right;">6894883</td>
-<td style="text-align: right;">6898116</td>
-<td style="text-align: right;">6893574</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">26</td>
-<td style="text-align: left;">Michigan</td>
-<td style="text-align: right;">9883640</td>
-<td style="text-align: right;">9884112</td>
-<td style="text-align: right;">9877597</td>
-<td style="text-align: right;">9883053</td>
-<td style="text-align: right;">9898289</td>
-<td style="text-align: right;">9914802</td>
-<td style="text-align: right;">9932033</td>
-<td style="text-align: right;">9934483</td>
-<td style="text-align: right;">9954117</td>
-<td style="text-align: right;">9976752</td>
-<td style="text-align: right;">9987286</td>
-<td style="text-align: right;">9984795</td>
-<td style="text-align: right;">9976330</td>
-<td style="text-align: right;">9966555</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">27</td>
-<td style="text-align: left;">Minnesota</td>
-<td style="text-align: right;">5303925</td>
-<td style="text-align: right;">5303933</td>
-<td style="text-align: right;">5310934</td>
-<td style="text-align: right;">5346620</td>
-<td style="text-align: right;">5377500</td>
-<td style="text-align: right;">5414722</td>
-<td style="text-align: right;">5452665</td>
-<td style="text-align: right;">5484002</td>
-<td style="text-align: right;">5525360</td>
-<td style="text-align: right;">5569283</td>
-<td style="text-align: right;">5608762</td>
-<td style="text-align: right;">5640053</td>
-<td style="text-align: right;">5655855</td>
-<td style="text-align: right;">5657342</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">6</td>
-<td style="text-align: left;">28</td>
-<td style="text-align: left;">Mississippi</td>
-<td style="text-align: right;">2967297</td>
-<td style="text-align: right;">2968129</td>
-<td style="text-align: right;">2970615</td>
-<td style="text-align: right;">2979147</td>
-<td style="text-align: right;">2984599</td>
-<td style="text-align: right;">2989839</td>
-<td style="text-align: right;">2991892</td>
-<td style="text-align: right;">2990231</td>
-<td style="text-align: right;">2990595</td>
-<td style="text-align: right;">2990674</td>
-<td style="text-align: right;">2982879</td>
-<td style="text-align: right;">2978227</td>
-<td style="text-align: right;">2971253</td>
-<td style="text-align: right;">2966786</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">29</td>
-<td style="text-align: left;">Missouri</td>
-<td style="text-align: right;">5988927</td>
-<td style="text-align: right;">5988941</td>
-<td style="text-align: right;">5996089</td>
-<td style="text-align: right;">6011182</td>
-<td style="text-align: right;">6026027</td>
-<td style="text-align: right;">6042989</td>
-<td style="text-align: right;">6059130</td>
-<td style="text-align: right;">6075411</td>
-<td style="text-align: right;">6091384</td>
-<td style="text-align: right;">6111382</td>
-<td style="text-align: right;">6125986</td>
-<td style="text-align: right;">6140475</td>
-<td style="text-align: right;">6151737</td>
-<td style="text-align: right;">6151548</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">8</td>
-<td style="text-align: left;">30</td>
-<td style="text-align: left;">Montana</td>
-<td style="text-align: right;">989415</td>
-<td style="text-align: right;">989400</td>
-<td style="text-align: right;">990730</td>
-<td style="text-align: right;">997518</td>
-<td style="text-align: right;">1004168</td>
-<td style="text-align: right;">1014158</td>
-<td style="text-align: right;">1022657</td>
-<td style="text-align: right;">1031495</td>
-<td style="text-align: right;">1042137</td>
-<td style="text-align: right;">1053862</td>
-<td style="text-align: right;">1061818</td>
-<td style="text-align: right;">1070123</td>
-<td style="text-align: right;">1078405</td>
-<td style="text-align: right;">1080577</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">31</td>
-<td style="text-align: left;">Nebraska</td>
-<td style="text-align: right;">1826341</td>
-<td style="text-align: right;">1826311</td>
-<td style="text-align: right;">1829591</td>
-<td style="text-align: right;">1840914</td>
-<td style="text-align: right;">1853691</td>
-<td style="text-align: right;">1865813</td>
-<td style="text-align: right;">1879955</td>
-<td style="text-align: right;">1892059</td>
-<td style="text-align: right;">1906483</td>
-<td style="text-align: right;">1916998</td>
-<td style="text-align: right;">1925512</td>
-<td style="text-align: right;">1932571</td>
-<td style="text-align: right;">1937258</td>
-<td style="text-align: right;">1937552</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">8</td>
-<td style="text-align: left;">32</td>
-<td style="text-align: left;">Nevada</td>
-<td style="text-align: right;">2700551</td>
-<td style="text-align: right;">2700683</td>
-<td style="text-align: right;">2702483</td>
-<td style="text-align: right;">2713114</td>
-<td style="text-align: right;">2744670</td>
-<td style="text-align: right;">2776956</td>
-<td style="text-align: right;">2818935</td>
-<td style="text-align: right;">2868531</td>
-<td style="text-align: right;">2919555</td>
-<td style="text-align: right;">2972097</td>
-<td style="text-align: right;">3030725</td>
-<td style="text-align: right;">3090771</td>
-<td style="text-align: right;">3128500</td>
-<td style="text-align: right;">3138259</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">33</td>
-<td style="text-align: left;">New Hampshire</td>
-<td style="text-align: right;">1316470</td>
-<td style="text-align: right;">1316457</td>
-<td style="text-align: right;">1316807</td>
-<td style="text-align: right;">1320444</td>
-<td style="text-align: right;">1324677</td>
-<td style="text-align: right;">1327272</td>
-<td style="text-align: right;">1334257</td>
-<td style="text-align: right;">1337480</td>
-<td style="text-align: right;">1343694</td>
-<td style="text-align: right;">1350395</td>
-<td style="text-align: right;">1355064</td>
-<td style="text-align: right;">1360783</td>
-<td style="text-align: right;">1365533</td>
-<td style="text-align: right;">1366275</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">34</td>
-<td style="text-align: left;">New Jersey</td>
-<td style="text-align: right;">8791894</td>
-<td style="text-align: right;">8791959</td>
-<td style="text-align: right;">8799451</td>
-<td style="text-align: right;">8828552</td>
-<td style="text-align: right;">8845671</td>
-<td style="text-align: right;">8857821</td>
-<td style="text-align: right;">8867277</td>
-<td style="text-align: right;">8870312</td>
-<td style="text-align: right;">8873584</td>
-<td style="text-align: right;">8888147</td>
-<td style="text-align: right;">8891730</td>
-<td style="text-align: right;">8891258</td>
-<td style="text-align: right;">8890883</td>
-<td style="text-align: right;">8882371</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">8</td>
-<td style="text-align: left;">35</td>
-<td style="text-align: left;">New Mexico</td>
-<td style="text-align: right;">2059179</td>
-<td style="text-align: right;">2059199</td>
-<td style="text-align: right;">2064614</td>
-<td style="text-align: right;">2080707</td>
-<td style="text-align: right;">2087715</td>
-<td style="text-align: right;">2092833</td>
-<td style="text-align: right;">2090236</td>
-<td style="text-align: right;">2090071</td>
-<td style="text-align: right;">2092555</td>
-<td style="text-align: right;">2092844</td>
-<td style="text-align: right;">2093754</td>
-<td style="text-align: right;">2099634</td>
-<td style="text-align: right;">2106117</td>
-<td style="text-align: right;">2106319</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">36</td>
-<td style="text-align: left;">New York</td>
-<td style="text-align: right;">19378102</td>
-<td style="text-align: right;">19378117</td>
-<td style="text-align: right;">19399956</td>
-<td style="text-align: right;">19499921</td>
-<td style="text-align: right;">19574362</td>
-<td style="text-align: right;">19626488</td>
-<td style="text-align: right;">19653431</td>
-<td style="text-align: right;">19657321</td>
-<td style="text-align: right;">19636391</td>
-<td style="text-align: right;">19593849</td>
-<td style="text-align: right;">19544098</td>
-<td style="text-align: right;">19463131</td>
-<td style="text-align: right;">19382373</td>
-<td style="text-align: right;">19336776</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">37</td>
-<td style="text-align: left;">North Carolina</td>
-<td style="text-align: right;">9535483</td>
-<td style="text-align: right;">9535762</td>
-<td style="text-align: right;">9574586</td>
-<td style="text-align: right;">9658913</td>
-<td style="text-align: right;">9751810</td>
-<td style="text-align: right;">9846717</td>
-<td style="text-align: right;">9937295</td>
-<td style="text-align: right;">10037218</td>
-<td style="text-align: right;">10161802</td>
-<td style="text-align: right;">10275758</td>
-<td style="text-align: right;">10391358</td>
-<td style="text-align: right;">10501384</td>
-<td style="text-align: right;">10581885</td>
-<td style="text-align: right;">10600823</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">38</td>
-<td style="text-align: left;">North Dakota</td>
-<td style="text-align: right;">672591</td>
-<td style="text-align: right;">672575</td>
-<td style="text-align: right;">674752</td>
-<td style="text-align: right;">685526</td>
-<td style="text-align: right;">702227</td>
-<td style="text-align: right;">723149</td>
-<td style="text-align: right;">738736</td>
-<td style="text-align: right;">755537</td>
-<td style="text-align: right;">756114</td>
-<td style="text-align: right;">756755</td>
-<td style="text-align: right;">760062</td>
-<td style="text-align: right;">763724</td>
-<td style="text-align: right;">765224</td>
-<td style="text-align: right;">765309</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">39</td>
-<td style="text-align: left;">Ohio</td>
-<td style="text-align: right;">11536504</td>
-<td style="text-align: right;">11536763</td>
-<td style="text-align: right;">11539449</td>
-<td style="text-align: right;">11545735</td>
-<td style="text-align: right;">11550971</td>
-<td style="text-align: right;">11579692</td>
-<td style="text-align: right;">11606573</td>
-<td style="text-align: right;">11622315</td>
-<td style="text-align: right;">11640060</td>
-<td style="text-align: right;">11665706</td>
-<td style="text-align: right;">11680892</td>
-<td style="text-align: right;">11696507</td>
-<td style="text-align: right;">11699855</td>
-<td style="text-align: right;">11693217</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">7</td>
-<td style="text-align: left;">40</td>
-<td style="text-align: left;">Oklahoma</td>
-<td style="text-align: right;">3751351</td>
-<td style="text-align: right;">3751582</td>
-<td style="text-align: right;">3760014</td>
-<td style="text-align: right;">3788824</td>
-<td style="text-align: right;">3819320</td>
-<td style="text-align: right;">3853891</td>
-<td style="text-align: right;">3879187</td>
-<td style="text-align: right;">3910518</td>
-<td style="text-align: right;">3928143</td>
-<td style="text-align: right;">3933602</td>
-<td style="text-align: right;">3943488</td>
-<td style="text-align: right;">3960676</td>
-<td style="text-align: right;">3977682</td>
-<td style="text-align: right;">3980783</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">9</td>
-<td style="text-align: left;">41</td>
-<td style="text-align: left;">Oregon</td>
-<td style="text-align: right;">3831074</td>
-<td style="text-align: right;">3831083</td>
-<td style="text-align: right;">3837614</td>
-<td style="text-align: right;">3872672</td>
-<td style="text-align: right;">3900102</td>
-<td style="text-align: right;">3924110</td>
-<td style="text-align: right;">3965447</td>
-<td style="text-align: right;">4018542</td>
-<td style="text-align: right;">4093271</td>
-<td style="text-align: right;">4147294</td>
-<td style="text-align: right;">4183538</td>
-<td style="text-align: right;">4216116</td>
-<td style="text-align: right;">4237408</td>
-<td style="text-align: right;">4241507</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">42</td>
-<td style="text-align: left;">Pennsylvania</td>
-<td style="text-align: right;">12702379</td>
-<td style="text-align: right;">12702891</td>
-<td style="text-align: right;">12711406</td>
-<td style="text-align: right;">12747052</td>
-<td style="text-align: right;">12769123</td>
-<td style="text-align: right;">12779538</td>
-<td style="text-align: right;">12792392</td>
-<td style="text-align: right;">12789838</td>
-<td style="text-align: right;">12788468</td>
-<td style="text-align: right;">12794679</td>
-<td style="text-align: right;">12809107</td>
-<td style="text-align: right;">12798883</td>
-<td style="text-align: right;">12794404</td>
-<td style="text-align: right;">12783254</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">44</td>
-<td style="text-align: left;">Rhode Island</td>
-<td style="text-align: right;">1052567</td>
-<td style="text-align: right;">1052970</td>
-<td style="text-align: right;">1053994</td>
-<td style="text-align: right;">1053829</td>
-<td style="text-align: right;">1054893</td>
-<td style="text-align: right;">1055560</td>
-<td style="text-align: right;">1056511</td>
-<td style="text-align: right;">1056886</td>
-<td style="text-align: right;">1057816</td>
-<td style="text-align: right;">1056554</td>
-<td style="text-align: right;">1059338</td>
-<td style="text-align: right;">1058158</td>
-<td style="text-align: right;">1058004</td>
-<td style="text-align: right;">1057125</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">45</td>
-<td style="text-align: left;">South Carolina</td>
-<td style="text-align: right;">4625364</td>
-<td style="text-align: right;">4625358</td>
-<td style="text-align: right;">4635846</td>
-<td style="text-align: right;">4672655</td>
-<td style="text-align: right;">4719027</td>
-<td style="text-align: right;">4766469</td>
-<td style="text-align: right;">4826858</td>
-<td style="text-align: right;">4896006</td>
-<td style="text-align: right;">4963031</td>
-<td style="text-align: right;">5027102</td>
-<td style="text-align: right;">5091702</td>
-<td style="text-align: right;">5157702</td>
-<td style="text-align: right;">5205864</td>
-<td style="text-align: right;">5218040</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">46</td>
-<td style="text-align: left;">South Dakota</td>
-<td style="text-align: right;">814180</td>
-<td style="text-align: right;">814198</td>
-<td style="text-align: right;">816193</td>
-<td style="text-align: right;">823740</td>
-<td style="text-align: right;">833859</td>
-<td style="text-align: right;">842751</td>
-<td style="text-align: right;">849670</td>
-<td style="text-align: right;">854663</td>
-<td style="text-align: right;">863693</td>
-<td style="text-align: right;">873732</td>
-<td style="text-align: right;">879386</td>
-<td style="text-align: right;">887127</td>
-<td style="text-align: right;">891688</td>
-<td style="text-align: right;">892717</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">6</td>
-<td style="text-align: left;">47</td>
-<td style="text-align: left;">Tennessee</td>
-<td style="text-align: right;">6346105</td>
-<td style="text-align: right;">6346281</td>
-<td style="text-align: right;">6355518</td>
-<td style="text-align: right;">6400298</td>
-<td style="text-align: right;">6455752</td>
-<td style="text-align: right;">6496943</td>
-<td style="text-align: right;">6544617</td>
-<td style="text-align: right;">6595354</td>
-<td style="text-align: right;">6651277</td>
-<td style="text-align: right;">6714748</td>
-<td style="text-align: right;">6778180</td>
-<td style="text-align: right;">6830325</td>
-<td style="text-align: right;">6875939</td>
-<td style="text-align: right;">6886834</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">7</td>
-<td style="text-align: left;">48</td>
-<td style="text-align: left;">Texas</td>
-<td style="text-align: right;">25145561</td>
-<td style="text-align: right;">25146072</td>
-<td style="text-align: right;">25241897</td>
-<td style="text-align: right;">25645504</td>
-<td style="text-align: right;">26084120</td>
-<td style="text-align: right;">26479646</td>
-<td style="text-align: right;">26963092</td>
-<td style="text-align: right;">27468531</td>
-<td style="text-align: right;">27914064</td>
-<td style="text-align: right;">28291024</td>
-<td style="text-align: right;">28624564</td>
-<td style="text-align: right;">28986794</td>
-<td style="text-align: right;">29286467</td>
-<td style="text-align: right;">29360759</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">8</td>
-<td style="text-align: left;">49</td>
-<td style="text-align: left;">Utah</td>
-<td style="text-align: right;">2763885</td>
-<td style="text-align: right;">2763891</td>
-<td style="text-align: right;">2775413</td>
-<td style="text-align: right;">2814797</td>
-<td style="text-align: right;">2854146</td>
-<td style="text-align: right;">2898773</td>
-<td style="text-align: right;">2938327</td>
-<td style="text-align: right;">2983626</td>
-<td style="text-align: right;">3044241</td>
-<td style="text-align: right;">3103540</td>
-<td style="text-align: right;">3155153</td>
-<td style="text-align: right;">3203383</td>
-<td style="text-align: right;">3239542</td>
-<td style="text-align: right;">3249879</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">50</td>
-<td style="text-align: left;">Vermont</td>
-<td style="text-align: right;">625741</td>
-<td style="text-align: right;">625727</td>
-<td style="text-align: right;">625886</td>
-<td style="text-align: right;">627197</td>
-<td style="text-align: right;">626361</td>
-<td style="text-align: right;">626603</td>
-<td style="text-align: right;">625693</td>
-<td style="text-align: right;">625810</td>
-<td style="text-align: right;">624366</td>
-<td style="text-align: right;">625132</td>
-<td style="text-align: right;">624802</td>
-<td style="text-align: right;">624046</td>
-<td style="text-align: right;">623821</td>
-<td style="text-align: right;">623347</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">51</td>
-<td style="text-align: left;">Virginia</td>
-<td style="text-align: right;">8001024</td>
-<td style="text-align: right;">8001046</td>
-<td style="text-align: right;">8024004</td>
-<td style="text-align: right;">8102437</td>
-<td style="text-align: right;">8187456</td>
-<td style="text-align: right;">8255861</td>
-<td style="text-align: right;">8315430</td>
-<td style="text-align: right;">8367303</td>
-<td style="text-align: right;">8417651</td>
-<td style="text-align: right;">8471011</td>
-<td style="text-align: right;">8510920</td>
-<td style="text-align: right;">8556642</td>
-<td style="text-align: right;">8587217</td>
-<td style="text-align: right;">8590563</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">9</td>
-<td style="text-align: left;">53</td>
-<td style="text-align: left;">Washington</td>
-<td style="text-align: right;">6724540</td>
-<td style="text-align: right;">6724540</td>
-<td style="text-align: right;">6743009</td>
-<td style="text-align: right;">6827479</td>
-<td style="text-align: right;">6898599</td>
-<td style="text-align: right;">6966252</td>
-<td style="text-align: right;">7057531</td>
-<td style="text-align: right;">7167287</td>
-<td style="text-align: right;">7299961</td>
-<td style="text-align: right;">7427951</td>
-<td style="text-align: right;">7526793</td>
-<td style="text-align: right;">7614024</td>
-<td style="text-align: right;">7678379</td>
-<td style="text-align: right;">7693612</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">54</td>
-<td style="text-align: left;">West Virginia</td>
-<td style="text-align: right;">1852994</td>
-<td style="text-align: right;">1853008</td>
-<td style="text-align: right;">1854265</td>
-<td style="text-align: right;">1856606</td>
-<td style="text-align: right;">1857446</td>
-<td style="text-align: right;">1854768</td>
-<td style="text-align: right;">1850569</td>
-<td style="text-align: right;">1843332</td>
-<td style="text-align: right;">1832435</td>
-<td style="text-align: right;">1818683</td>
-<td style="text-align: right;">1805953</td>
-<td style="text-align: right;">1795263</td>
-<td style="text-align: right;">1788150</td>
-<td style="text-align: right;">1784787</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">55</td>
-<td style="text-align: left;">Wisconsin</td>
-<td style="text-align: right;">5686986</td>
-<td style="text-align: right;">5687285</td>
-<td style="text-align: right;">5690538</td>
-<td style="text-align: right;">5705840</td>
-<td style="text-align: right;">5720825</td>
-<td style="text-align: right;">5738012</td>
-<td style="text-align: right;">5753199</td>
-<td style="text-align: right;">5762927</td>
-<td style="text-align: right;">5775170</td>
-<td style="text-align: right;">5793147</td>
-<td style="text-align: right;">5809319</td>
-<td style="text-align: right;">5824581</td>
-<td style="text-align: right;">5833464</td>
-<td style="text-align: right;">5832655</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">8</td>
-<td style="text-align: left;">56</td>
-<td style="text-align: left;">Wyoming</td>
-<td style="text-align: right;">563626</td>
-<td style="text-align: right;">563775</td>
-<td style="text-align: right;">564531</td>
-<td style="text-align: right;">567491</td>
-<td style="text-align: right;">576656</td>
-<td style="text-align: right;">582620</td>
-<td style="text-align: right;">583159</td>
-<td style="text-align: right;">586389</td>
-<td style="text-align: right;">585243</td>
-<td style="text-align: right;">579994</td>
-<td style="text-align: right;">579054</td>
-<td style="text-align: right;">580116</td>
-<td style="text-align: right;">582030</td>
-<td style="text-align: right;">582328</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">040</td>
-<td style="text-align: left;">X</td>
-<td style="text-align: left;">X</td>
-<td style="text-align: left;">72</td>
-<td style="text-align: left;">Puerto Rico</td>
-<td style="text-align: right;">3725789</td>
-<td style="text-align: right;">3726157</td>
-<td style="text-align: right;">3721525</td>
-<td style="text-align: right;">3678732</td>
-<td style="text-align: right;">3634488</td>
-<td style="text-align: right;">3593077</td>
-<td style="text-align: right;">3534874</td>
-<td style="text-align: right;">3473232</td>
-<td style="text-align: right;">3406672</td>
-<td style="text-align: right;">3325284</td>
-<td style="text-align: right;">3193344</td>
-<td style="text-align: right;">3193553</td>
-<td style="text-align: right;">3167851</td>
-<td style="text-align: right;">3159343</td>
-</tr>
-</tbody>
-</table>
-</div>
-
-</div>
-</div>
-</section>
-<section id="national-population-data" class="slide level2">
-<h2>National population data</h2>
-<p>We can use the <code>SUMLEV</code> variable to obtain only national data:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>US_pop <span class="ot">&lt;-</span> state_population <span class="sc">|&gt;</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">filter</span>(SUMLEV <span class="sc">==</span> <span class="st">"010"</span>)</span>
-<span id="cb15-3"><a href="#cb15-3"></a></span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="co"># code to print the data</span></span>
-<span id="cb15-5"><a href="#cb15-5"></a><span class="fu">kable</span>(US_pop, <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">row.names =</span> F) <span class="sc">|&gt;</span></span>
-<span id="cb15-6"><a href="#cb15-6"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="st">"striped"</span>, <span class="at">full_width =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<table class="table table-striped" data-quarto-postprocess="true" style="margin-left: auto; margin-right: auto;">
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th">SUMLEV</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">REGION</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">DIVISION</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">STATE</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">NAME</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">CENSUS2010POP</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">ESTIMATESBASE2010</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2010</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2011</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2012</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2013</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2014</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2015</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2016</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2017</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2018</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2019</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE042020</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2020</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: right;">309327143</td>
-<td style="text-align: right;">311583481</td>
-<td style="text-align: right;">313877662</td>
-<td style="text-align: right;">316059947</td>
-<td style="text-align: right;">318386329</td>
-<td style="text-align: right;">320738994</td>
-<td style="text-align: right;">323071755</td>
-<td style="text-align: right;">325122128</td>
-<td style="text-align: right;">326838199</td>
-<td style="text-align: right;">328329953</td>
-<td style="text-align: right;">329398742</td>
-<td style="text-align: right;">329484123</td>
-</tr>
-</tbody>
-</table>
-
-
-</div>
-</div>
-</section>
-<section id="national-population-data-1" class="slide level2">
-<h2>National population data</h2>
-<p>How can we generate the following plot?</p>
-
-<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-23-1.png" width="960" class="r-stretch"></section>
-<section id="national-population-data-2" class="slide level2">
-<h2>National population data</h2>
-<p>Note that our data cannot be readily used with <code>ggplot</code> to generate the previous plot. Ideally, we would like two vectors of the same length: one representing <code>Year</code> and one representing <code>Population</code>. Today, we’ll discuss how to do this in both <strong>base R</strong> and the <strong>tidyverse</strong>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># base R</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a>plot_dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb16-3"><a href="#cb16-3"></a>  <span class="at">Year =</span> <span class="dv">2010</span><span class="sc">:</span><span class="dv">2020</span>,</span>
-<span id="cb16-4"><a href="#cb16-4"></a>  <span class="at">Population =</span> US_pop[<span class="dv">1</span>, <span class="dv">8</span><span class="sc">:</span><span class="dv">19</span>]</span>
-<span id="cb16-5"><a href="#cb16-5"></a>)</span>
-<span id="cb16-6"><a href="#cb16-6"></a><span class="fu">head</span>(plot_dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">head</span>(animals, <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>  Year Population.POPESTIMATE2010 Population.POPESTIMATE2011
-1 2010                  309327143                  311583481
-2 2011                  309327143                  311583481
-3 2012                  309327143                  311583481
-4 2013                  309327143                  311583481
-5 2014                  309327143                  311583481
-6 2015                  309327143                  311583481
-  Population.POPESTIMATE2012 Population.POPESTIMATE2013
-1                  313877662                  316059947
-2                  313877662                  316059947
-3                  313877662                  316059947
-4                  313877662                  316059947
-5                  313877662                  316059947
-6                  313877662                  316059947
-  Population.POPESTIMATE2014 Population.POPESTIMATE2015
-1                  318386329                  320738994
-2                  318386329                  320738994
-3                  318386329                  320738994
-4                  318386329                  320738994
-5                  318386329                  320738994
-6                  318386329                  320738994
-  Population.POPESTIMATE2016 Population.POPESTIMATE2017
-1                  323071755                  325122128
-2                  323071755                  325122128
-3                  323071755                  325122128
-4                  323071755                  325122128
-5                  323071755                  325122128
-6                  323071755                  325122128
-  Population.POPESTIMATE2018 Population.POPESTIMATE2019
-1                  326838199                  328329953
-2                  326838199                  328329953
-3                  326838199                  328329953
-4                  326838199                  328329953
-5                  326838199                  328329953
-6                  326838199                  328329953
-  Population.POPESTIMATE042020 Population.POPESTIMATE2020
-1                    329398742                  329484123
-2                    329398742                  329484123
-3                    329398742                  329484123
-4                    329398742                  329484123
-5                    329398742                  329484123
-6                    329398742                  329484123</code></pre>
+<pre><code># A tibble: 10 × 2
+   animal weight
+   &lt;chr&gt;   &lt;dbl&gt;
+ 1 Cat      18.1
+ 2 Dog      37.9
+ 3 Cat      24.2
+ 4 Dog      58.8
+ 5 Dog      51.7
+ 6 Dog      38.5
+ 7 Cat      22.2
+ 8 Dog      27.8
+ 9 Cat      17.4
+10 Cat      24.3</code></pre>
 </div>
 </div>
 </section>
-<section id="national-population-data-3" class="slide level2">
-<h2>National population data</h2>
-<p>What went wrong? <code>US_pop[1, 8:19]</code> is a tibble, and we need a numeric.</p>
+<section id="review-cats-and-dogs-1" class="slide level2">
+<h2>Review: Cats and Dogs</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>plot_dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb18-2"><a href="#cb18-2"></a>  <span class="at">Year =</span> <span class="dv">2010</span><span class="sc">:</span><span class="dv">2020</span>,</span>
-<span id="cb18-3"><a href="#cb18-3"></a>  <span class="at">Population =</span> <span class="fu">as.numeric</span>(US_pop[<span class="dv">1</span>, <span class="dv">8</span><span class="sc">:</span><span class="dv">19</span>])</span>
-<span id="cb18-4"><a href="#cb18-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="cell-output cell-output-error">
-<pre><code>Error in data.frame(Year = 2010:2020, Population = as.numeric(US_pop[1, : arguments imply differing number of rows: 11, 12</code></pre>
-</div>
-</div>
-</section>
-<section id="national-population-data-4" class="slide level2">
-<h2>National population data</h2>
-<p>Now what? <code>US_pop</code> has an extra column <code>POPESTIMATE042020</code> which we need to remove.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># base R</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a>plot_dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb20-3"><a href="#cb20-3"></a>  <span class="at">Year =</span> <span class="dv">2010</span><span class="sc">:</span><span class="dv">2020</span>,</span>
-<span id="cb20-4"><a href="#cb20-4"></a>  <span class="at">Population =</span> <span class="fu">as.numeric</span>(US_pop[, <span class="fu">c</span>(<span class="dv">8</span><span class="sc">:</span><span class="dv">17</span>, <span class="dv">19</span>)])</span>
-<span id="cb20-5"><a href="#cb20-5"></a>)</span>
-<span id="cb20-6"><a href="#cb20-6"></a><span class="fu">head</span>(plot_dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>mean_wt <span class="ot">&lt;-</span> animals <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">group_by</span>(animal) <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">summarize</span>(<span class="at">mean_wt =</span> <span class="fu">mean</span>(weight))</span>
+<span id="cb5-4"><a href="#cb5-4"></a>mean_wt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  Year Population
-1 2010  309327143
-2 2011  311583481
-3 2012  313877662
-4 2013  316059947
-5 2014  318386329
-6 2015  320738994</code></pre>
+<pre><code># A tibble: 2 × 2
+  animal mean_wt
+  &lt;chr&gt;    &lt;dbl&gt;
+1 Cat       40.2
+2 Dog       40.1</code></pre>
 </div>
 </div>
+<p>How can we turn this into a visual?</p>
 </section>
-<section id="national-population-data-5" class="slide level2">
-<h2>National population data</h2>
-<p>Finally, we can use the <code>plot</code> function to get our desired visualization:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">plot</span>(plot_dat<span class="sc">$</span>Year, plot_dat<span class="sc">$</span>Population)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="review-cats-and-dogs-2" class="slide level2">
+<h2>Review: Cats and Dogs</h2>
+<p>In <code>ggplot2</code>, there are two geometries for bar plots: <code>geom_col()</code> and <code>geom_bar()</code>.</p>
+<ul>
+<li>The height of the bars of <code>geom_col()</code> represent numerical values in each group.</li>
+<li>The height of the bars of <code>geom_bar()</code> represent the number of rows for each group.</li>
+</ul>
+</section>
+<section id="review-cats-and-dogs-3" class="slide level2">
+<h2>Review: Cats and Dogs</h2>
+<div class="cell" data-layout-align="center" data-fig.dim="[5,3.75]">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> mean_wt, </span>
+<span id="cb7-2"><a href="#cb7-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> animal, <span class="at">y =</span> mean_wt, <span class="at">fill =</span> animal)) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>  <span class="fu">ylab</span>(<span class="st">"Mean weight (lb)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-29-1.png" width="960" class="r-stretch"></section>
-<section id="tidyverse-strategy" class="slide level2">
-<h2>Tidyverse strategy</h2>
-<p>Now let’s see how we might approach the same task in the tidyverse. Our strategy will be to “tidy” the data so we have one row for each observation and one column for each observation.</p>
-<p>First, let’s remove the unnecessary column using the <code>select()</code> function. Here the <code>kable</code> function is used to print out our table.</p>
-<div style="height:500px;overflow:auto;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb23" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>US_pop <span class="sc">|&gt;</span> </span>
-<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">select</span>(<span class="sc">-</span>POPESTIMATE042020)  <span class="sc">|&gt;</span></span>
-<span id="cb23-3"><a href="#cb23-3"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<table data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th">SUMLEV</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">REGION</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">DIVISION</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">STATE</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">NAME</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">CENSUS2010POP</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">ESTIMATESBASE2010</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2010</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2011</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2012</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2013</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2014</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2015</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2016</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2017</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2018</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2019</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">POPESTIMATE2020</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: right;">309327143</td>
-<td style="text-align: right;">311583481</td>
-<td style="text-align: right;">313877662</td>
-<td style="text-align: right;">316059947</td>
-<td style="text-align: right;">318386329</td>
-<td style="text-align: right;">320738994</td>
-<td style="text-align: right;">323071755</td>
-<td style="text-align: right;">325122128</td>
-<td style="text-align: right;">326838199</td>
-<td style="text-align: right;">328329953</td>
-<td style="text-align: right;">329484123</td>
-</tr>
-</tbody>
-</table>
-
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-7-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="review-cats-and-dogs-4" class="slide level2">
+<h2>Review: Cats and Dogs</h2>
+<div class="cell" data-layout-align="center" data-fig.dim="[5,3.75]">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># construct named vector</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>mean_wt_vec <span class="ot">&lt;-</span> mean_wt<span class="sc">$</span>mean_wt</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="fu">names</span>(mean_wt_vec) <span class="ot">&lt;-</span> mean_wt<span class="sc">$</span>animal</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="fu">barplot</span>(mean_wt_vec,</span>
+<span id="cb8-5"><a href="#cb8-5"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>),</span>
+<span id="cb8-6"><a href="#cb8-6"></a>        <span class="at">ylab =</span> <span class="st">"Mean weight (lb)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-</div>
-</div>
-</section>
-<section id="tidyverse-strategy-1" class="slide level2">
-<h2>Tidyverse strategy</h2>
-<p>Now let’s use the <code>pivot_longer</code> function to combine the <code>POPESTIMATE</code> columns into two variables: <code>Year</code> and <code>Population</code>:</p>
-<div style="height:500px;overflow:auto;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb24" data-code-line-numbers="3-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>US_pop <span class="sc">|&gt;</span> </span>
-<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">select</span>(<span class="sc">-</span>POPESTIMATE042020) <span class="sc">|&gt;</span></span>
-<span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">"POPESTIMATE"</span>), </span>
-<span id="cb24-4"><a href="#cb24-4"></a>               <span class="at">names_to =</span> <span class="st">"Year"</span>,</span>
-<span id="cb24-5"><a href="#cb24-5"></a>               <span class="at">values_to =</span> <span class="st">"Population"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb24-6"><a href="#cb24-6"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<table data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th">SUMLEV</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">REGION</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">DIVISION</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">STATE</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">NAME</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">CENSUS2010POP</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">ESTIMATESBASE2010</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">Year</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Population</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: left;">POPESTIMATE2010</td>
-<td style="text-align: right;">309327143</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: left;">POPESTIMATE2011</td>
-<td style="text-align: right;">311583481</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: left;">POPESTIMATE2012</td>
-<td style="text-align: right;">313877662</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: left;">POPESTIMATE2013</td>
-<td style="text-align: right;">316059947</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: left;">POPESTIMATE2014</td>
-<td style="text-align: right;">318386329</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: left;">POPESTIMATE2015</td>
-<td style="text-align: right;">320738994</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: left;">POPESTIMATE2016</td>
-<td style="text-align: right;">323071755</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: left;">POPESTIMATE2017</td>
-<td style="text-align: right;">325122128</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: left;">POPESTIMATE2018</td>
-<td style="text-align: right;">326838199</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: left;">POPESTIMATE2019</td>
-<td style="text-align: right;">328329953</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: left;">POPESTIMATE2020</td>
-<td style="text-align: right;">329484123</td>
-</tr>
-</tbody>
-</table>
-
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-8-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="if-possible-show-the-data" class="slide level2">
+<h2>If possible, show the data</h2>
+<div class="cell" data-layout-align="center" data-fig.dim="[5,3.75]">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">ggplot</span>(animals, <span class="fu">aes</span>(<span class="at">x =</span> animal, <span class="at">y =</span> weight, <span class="at">color =</span> animal)) <span class="sc">+</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_jitter</span>(<span class="at">height =</span> <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Mean Weight (lb)"</span>) <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-</div>
-</div>
-<p>What do we need to do next?</p>
-</section>
-<section id="tidyverse-strategy-2" class="slide level2">
-<h2>Tidyverse strategy</h2>
-<p>Finally, we need to use the <code>str_sub()</code> function to shorten our <code>Year</code> variable before turning it into a numeric.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb25" data-code-line-numbers="6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>US_pop <span class="sc">|&gt;</span> </span>
-<span id="cb25-2"><a href="#cb25-2"></a>  <span class="fu">select</span>(<span class="sc">-</span>POPESTIMATE042020) <span class="sc">|&gt;</span></span>
-<span id="cb25-3"><a href="#cb25-3"></a>  <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">"POPESTIMATE"</span>), </span>
-<span id="cb25-4"><a href="#cb25-4"></a>               <span class="at">names_to =</span> <span class="st">"Year"</span>,</span>
-<span id="cb25-5"><a href="#cb25-5"></a>               <span class="at">values_to =</span> <span class="st">"Population"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb25-6"><a href="#cb25-6"></a>  <span class="fu">mutate</span>(<span class="at">Year =</span> <span class="fu">as.numeric</span>(stringr<span class="sc">::</span><span class="fu">str_sub</span>(Year, <span class="at">start =</span> <span class="dv">12</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb25-7"><a href="#cb25-7"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div style="height:450px;overflow:auto;">
-<div class="cell">
-<div class="cell-output-display">
-<table data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th">SUMLEV</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">REGION</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">DIVISION</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">STATE</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">NAME</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">CENSUS2010POP</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">ESTIMATESBASE2010</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Year</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Population</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: right;">2010</td>
-<td style="text-align: right;">309327143</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: right;">2011</td>
-<td style="text-align: right;">311583481</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: right;">2012</td>
-<td style="text-align: right;">313877662</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: right;">2013</td>
-<td style="text-align: right;">316059947</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: right;">2014</td>
-<td style="text-align: right;">318386329</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: right;">2015</td>
-<td style="text-align: right;">320738994</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: right;">2016</td>
-<td style="text-align: right;">323071755</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: right;">2017</td>
-<td style="text-align: right;">325122128</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: right;">2018</td>
-<td style="text-align: right;">326838199</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: right;">2019</td>
-<td style="text-align: right;">328329953</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">010</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">00</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">308745538</td>
-<td style="text-align: right;">308758105</td>
-<td style="text-align: right;">2020</td>
-<td style="text-align: right;">329484123</td>
-</tr>
-</tbody>
-</table>
-
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-9-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="if-possible-show-the-data-1" class="slide level2">
+<h2>If possible, show the data</h2>
+<div class="cell" data-layout-align="center" data-fig.dim="[5,3.75]">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">ggplot</span>(animals, <span class="fu">aes</span>(<span class="at">x =</span> animal, </span>
+<span id="cb10-2"><a href="#cb10-2"></a>                    <span class="at">y =</span> weight, </span>
+<span id="cb10-3"><a href="#cb10-3"></a>                    <span class="at">color =</span> animal)) <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_jitter</span>(<span class="at">height =</span> <span class="dv">0</span>), <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Mean weight (lb)"</span>) <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-10-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="review-cats-and-dogs-5" class="slide level2">
+<h2>Review: Cats and Dogs</h2>
+<p>Takeaways:</p>
+<ul>
+<li>Data has to be in the right format to work with <code>ggplot2</code></li>
+<li>Geometries can be combined for more complex visualizations</li>
+<li>Only showing summary statistics can be misleading and can hide information.</li>
+</ul>
+</section>
+<section id="gapminder-data" class="slide level2">
+<h2>Gapminder data</h2>
+
+<img data-src="images/gapminder.png" class="r-stretch"><p><a href="https://www.gapminder.org/tools/#$chart-type=bubbles&amp;url=v1">link</a></p>
+</section>
+<section id="gapminder-data-1" class="slide level2">
+<h2>Gapminder data</h2>
+<ul>
+<li>What changes do we see over time? What do we notice in this visualization?</li>
+<li>What questions arise? Do you have any doubts about this visualization?</li>
+</ul>
+</section>
+<section id="gapminder-data-2" class="slide level2">
+<h2>Gapminder data</h2>
+<div class="cell" data-layout-align="center" data-fig.dim="[5,3.75]">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">library</span>(gapminder)</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="fu">data</span>(gapminder)</span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="fu">head</span>(gapminder)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 6
+  country     continent  year lifeExp      pop gdpPercap
+  &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+1 Afghanistan Asia       1952    28.8  8425333      779.
+2 Afghanistan Asia       1957    30.3  9240934      821.
+3 Afghanistan Asia       1962    32.0 10267083      853.
+4 Afghanistan Asia       1967    34.0 11537966      836.
+5 Afghanistan Asia       1972    36.1 13079460      740.
+6 Afghanistan Asia       1977    38.4 14880372      786.</code></pre>
 </div>
 </div>
 </section>
-<section id="tidyverse-strategy-3" class="slide level2">
-<h2>Tidyverse strategy</h2>
-<p>Now we can <code>|&gt;</code> it to <code>ggplot</code>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb26" data-code-line-numbers="7-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>US_pop <span class="sc">|&gt;</span> </span>
-<span id="cb26-2"><a href="#cb26-2"></a>  <span class="fu">select</span>(<span class="sc">-</span>POPESTIMATE042020) <span class="sc">|&gt;</span></span>
-<span id="cb26-3"><a href="#cb26-3"></a>  <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">"POPESTIMATE"</span>), </span>
-<span id="cb26-4"><a href="#cb26-4"></a>               <span class="at">names_to =</span> <span class="st">"Year"</span>,</span>
-<span id="cb26-5"><a href="#cb26-5"></a>               <span class="at">values_to =</span> <span class="st">"Population"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb26-6"><a href="#cb26-6"></a>  <span class="fu">mutate</span>(<span class="at">Year =</span> <span class="fu">as.numeric</span>(stringr<span class="sc">::</span><span class="fu">str_sub</span>(Year, <span class="at">start =</span> <span class="dv">12</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb26-7"><a href="#cb26-7"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Population)) <span class="sc">+</span> </span>
-<span id="cb26-8"><a href="#cb26-8"></a>  <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="gapminder-data-3" class="slide level2">
+<h2>Gapminder data</h2>
+<div class="cell" data-layout-align="center" data-fig.dim="[5,3.75]">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">summary</span>(gapminder)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        country        continent        year         lifeExp     
+ Afghanistan:  12   Africa  :624   Min.   :1952   Min.   :23.60  
+ Albania    :  12   Americas:300   1st Qu.:1966   1st Qu.:48.20  
+ Algeria    :  12   Asia    :396   Median :1980   Median :60.71  
+ Angola     :  12   Europe  :360   Mean   :1980   Mean   :59.47  
+ Argentina  :  12   Oceania : 24   3rd Qu.:1993   3rd Qu.:70.85  
+ Australia  :  12                  Max.   :2007   Max.   :82.60  
+ (Other)    :1632                                                
+      pop              gdpPercap       
+ Min.   :6.001e+04   Min.   :   241.2  
+ 1st Qu.:2.794e+06   1st Qu.:  1202.1  
+ Median :7.024e+06   Median :  3531.8  
+ Mean   :2.960e+07   Mean   :  7215.3  
+ 3rd Qu.:1.959e+07   3rd Qu.:  9325.5  
+ Max.   :1.319e+09   Max.   :113523.1  
+                                       </code></pre>
+</div>
+</div>
+</section>
+<section id="gapminder-data-4" class="slide level2">
+<h2>Gapminder data</h2>
+<p>Let’s work with the following data:</p>
+<div class="cell" data-layout-align="center" data-fig.dim="[5,3.75]">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>gapminder_2007 <span class="ot">&lt;-</span> gapminder <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2007</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>How do we recreate the following plot?</p>
+
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="gapminder-data-5" class="slide level2">
+<h2>Gapminder data</h2>
+<p>Work with the people around you to recreate this plot:</p>
+
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-15-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="gapminder-data-6" class="slide level2">
+<h2>Gapminder data</h2>
+<p>Hopefully, you produced something like this:</p>
+<div class="cell" data-layout-align="center" data-fig.dim="[7,3.75]">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> gapminder_2007,</span>
+<span id="cb16-2"><a href="#cb16-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> gdpPercap,</span>
+<span id="cb16-3"><a href="#cb16-3"></a>                     <span class="at">y =</span> lifeExp,</span>
+<span id="cb16-4"><a href="#cb16-4"></a>                     <span class="at">color =</span> continent,</span>
+<span id="cb16-5"><a href="#cb16-5"></a>                     <span class="at">size =</span> pop)) <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a>  <span class="fu">geom_point</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="playing-with-scales" class="slide level2">
+<h2>Playing with scales</h2>
+<p><strong>Scales</strong> are another layer we can add on top of our plot:</p>
+<div class="cell" data-layout-align="center" data-fig.dim="[7,3.75]">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> gapminder_2007,</span>
+<span id="cb17-2"><a href="#cb17-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> gdpPercap,</span>
+<span id="cb17-3"><a href="#cb17-3"></a>                     <span class="at">y =</span> lifeExp,</span>
+<span id="cb17-4"><a href="#cb17-4"></a>                     <span class="at">color =</span> continent,</span>
+<span id="cb17-5"><a href="#cb17-5"></a>                     <span class="at">size =</span> pop)) <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7"></a>  <span class="fu">scale_x_log10</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>What do you expect the output to look like?</p>
+</section>
+<section id="playing-with-scales-1" class="slide level2">
+<h2>Playing with scales</h2>
+
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-18-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="playing-with-scales-2" class="slide level2">
+<h2>Playing with scales</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> gapminder_2007,</span>
+<span id="cb18-2"><a href="#cb18-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> gdpPercap,</span>
+<span id="cb18-3"><a href="#cb18-3"></a>                     <span class="at">y =</span> lifeExp,</span>
+<span id="cb18-4"><a href="#cb18-4"></a>                     <span class="at">color =</span> continent,</span>
+<span id="cb18-5"><a href="#cb18-5"></a>                     <span class="at">size =</span> pop)) <span class="sc">+</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a>  <span class="fu">scale_color_viridis_d</span>() <span class="co"># discrete viridis color scale</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-34-1.png" width="768" class="r-stretch"></section>
-<section id="tidyverse-strategy-more-complicated-plots" class="slide level2">
-<h2>Tidyverse strategy: More complicated plots</h2>
-<p>We can map the <code>color</code> aesthetic to the region:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb27" data-code-line-numbers="2, 7-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>state_population <span class="sc">|&gt;</span> </span>
-<span id="cb27-2"><a href="#cb27-2"></a>  <span class="fu">filter</span>(SUMLEV <span class="sc">==</span> <span class="st">"020"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb27-3"><a href="#cb27-3"></a>  <span class="fu">select</span>(<span class="sc">-</span>POPESTIMATE042020) <span class="sc">|&gt;</span></span>
-<span id="cb27-4"><a href="#cb27-4"></a>  <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">"POPESTIMATE"</span>), </span>
-<span id="cb27-5"><a href="#cb27-5"></a>               <span class="at">names_to =</span> <span class="st">"Year"</span>,</span>
-<span id="cb27-6"><a href="#cb27-6"></a>               <span class="at">values_to =</span> <span class="st">"Population"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb27-7"><a href="#cb27-7"></a>  <span class="fu">mutate</span>(<span class="at">Year =</span> <span class="fu">as.numeric</span>(stringr<span class="sc">::</span><span class="fu">str_sub</span>(Year, <span class="at">start =</span> <span class="dv">12</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb27-8"><a href="#cb27-8"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Population, <span class="at">color =</span> NAME)) <span class="sc">+</span> </span>
-<span id="cb27-9"><a href="#cb27-9"></a>  <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-19-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="small-multiples" class="slide level2">
+<h2>Small multiples</h2>
+<p><em>“At the heart of quantitative reasoning is a single question: Compared to what? Small multiple designs, multivariate and data bountiful, answer directly by visually enforcing comparisons of changes, of the differences among objects, of the scope of alternatives. For a wide range of problems in data presentation, small multiples are the best design solution.”</em></p>
+<div style="text-align: right">
+<p>Edward Tufte</p>
+</div>
+</section>
+<section id="small-multiples-1" class="slide level2">
+<h2>Small multiples</h2>
+<p>We can often make comparisons clearer by splitting a plot into many “small multiples” which have the same axes:</p>
+
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-20-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="facets-for-small-multiples" class="slide level2">
+<h2>Facets for small multiples</h2>
+<p>Small multiples are implemented in <code>ggplot2</code> via the <code>facet_wrap()</code> and <code>facet_grid()</code> functions:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> gapminder_2007,</span>
+<span id="cb19-2"><a href="#cb19-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> gdpPercap,</span>
+<span id="cb19-3"><a href="#cb19-3"></a>                     <span class="at">y =</span> lifeExp,</span>
+<span id="cb19-4"><a href="#cb19-4"></a>                     <span class="at">color =</span> continent,</span>
+<span id="cb19-5"><a href="#cb19-5"></a>                     <span class="at">size =</span> pop)) <span class="sc">+</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb19-7"><a href="#cb19-7"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-35-1.png" width="960" class="r-stretch"></section>
-<section id="pivot_longer-and-pivot_wider" class="slide level2">
-<h2><code>pivot_longer()</code> and <code>pivot_wider()</code></h2>
-<p>The <code>pivot_longer()</code> and <code>pivot_wider()</code> functions are useful for reshaping data: <code>pivot_longer()</code> “lengthens” datasets and <code>pivot_wider()</code> does the opposite.</p>
-<p>They are challenging to use because you need to have a clear vision of the data frame you want, not because they are complicated in R.</p>
-</section>
-<section id="example-pivot_longer" class="slide level2">
-<h2>Example: <code>pivot_longer()</code></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>relig_income</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 18 × 11
-   religion `&lt;$10k` `$10-20k` `$20-30k` `$30-40k` `$40-50k` `$50-75k` `$75-100k`
-   &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
- 1 Agnostic      27        34        60        81        76       137        122
- 2 Atheist       12        27        37        52        35        70         73
- 3 Buddhist      27        21        30        34        33        58         62
- 4 Catholic     418       617       732       670       638      1116        949
- 5 Don’t k…      15        14        15        11        10        35         21
- 6 Evangel…     575       869      1064       982       881      1486        949
- 7 Hindu          1         9         7         9        11        34         47
- 8 Histori…     228       244       236       238       197       223        131
- 9 Jehovah…      20        27        24        24        21        30         15
-10 Jewish        19        19        25        25        30        95         69
-11 Mainlin…     289       495       619       655       651      1107        939
-12 Mormon        29        40        48        51        56       112         85
-13 Muslim         6         7         9        10         9        23         16
-14 Orthodox      13        17        23        32        32        47         38
-15 Other C…       9         7        11        13        13        14         18
-16 Other F…      20        33        40        46        49        63         46
-17 Other W…       5         2         3         4         2         7          3
-18 Unaffil…     217       299       374       365       341       528        407
-# ℹ 3 more variables: `$100-150k` &lt;dbl&gt;, `&gt;150k` &lt;dbl&gt;,
-#   `Don't know/refused` &lt;dbl&gt;</code></pre>
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-21-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="gapminder-data-7" class="slide level2">
+<h2>Gapminder data</h2>
+<p>Work with the people around you to recreate this plot:</p>
+
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-22-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="themes" class="slide level2">
+<h2>Themes</h2>
+<p><code>ggplot2</code> provides a default theme: gray background, basic discrete color scheme, etc.</p>
+
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-23-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="other-themes" class="slide level2">
+<h2>Other themes</h2>
+<p>However, <code>ggplot2</code> also comes with additional themes that you can layer on top of your plots:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb20" data-code-line-numbers="6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">ggplot</span>(penguins, </span>
+<span id="cb20-2"><a href="#cb20-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> flipper_length_mm, </span>
+<span id="cb20-3"><a href="#cb20-3"></a>           <span class="at">y =</span> body_mass_g, </span>
+<span id="cb20-4"><a href="#cb20-4"></a>           <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb20-6"><a href="#cb20-6"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
 </div>
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-24-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="other-themes-1" class="slide level2">
+<h2>Other themes</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb21" data-code-line-numbers="6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">ggplot</span>(penguins, </span>
+<span id="cb21-2"><a href="#cb21-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> flipper_length_mm, </span>
+<span id="cb21-3"><a href="#cb21-3"></a>           <span class="at">y =</span> body_mass_g, </span>
+<span id="cb21-4"><a href="#cb21-4"></a>           <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb21-6"><a href="#cb21-6"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
 </div>
-</section>
-<section id="example-pivot_longer-1" class="slide level2">
-<h2>Example: <code>pivot_longer()</code></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>relig_income <span class="sc">|&gt;</span></span>
-<span id="cb30-2"><a href="#cb30-2"></a>  <span class="fu">pivot_longer</span>(<span class="sc">!</span>religion, <span class="at">names_to =</span> <span class="st">"income"</span>, <span class="at">values_to =</span> <span class="st">"count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 180 × 3
-   religion income             count
-   &lt;chr&gt;    &lt;chr&gt;              &lt;dbl&gt;
- 1 Agnostic &lt;$10k                 27
- 2 Agnostic $10-20k               34
- 3 Agnostic $20-30k               60
- 4 Agnostic $30-40k               81
- 5 Agnostic $40-50k               76
- 6 Agnostic $50-75k              137
- 7 Agnostic $75-100k             122
- 8 Agnostic $100-150k            109
- 9 Agnostic &gt;150k                 84
-10 Agnostic Don't know/refused    96
-# ℹ 170 more rows</code></pre>
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-25-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="other-themes-2" class="slide level2">
+<h2>Other themes</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb22" data-code-line-numbers="6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">ggplot</span>(penguins, </span>
+<span id="cb22-2"><a href="#cb22-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> flipper_length_mm, </span>
+<span id="cb22-3"><a href="#cb22-3"></a>           <span class="at">y =</span> body_mass_g, </span>
+<span id="cb22-4"><a href="#cb22-4"></a>           <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a>  <span class="fu">theme_dark</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
 </div>
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-26-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="other-themes-3" class="slide level2">
+<h2>Other themes</h2>
+<p>Other themes can be obtained from the <code>ggthemes</code> package:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb23" data-code-line-numbers="1,7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">library</span>(ggthemes)</span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="fu">ggplot</span>(penguins, </span>
+<span id="cb23-3"><a href="#cb23-3"></a>       <span class="fu">aes</span>(<span class="at">x =</span> flipper_length_mm, </span>
+<span id="cb23-4"><a href="#cb23-4"></a>           <span class="at">y =</span> body_mass_g, </span>
+<span id="cb23-5"><a href="#cb23-5"></a>           <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb23-6"><a href="#cb23-6"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb23-7"><a href="#cb23-7"></a>  <span class="fu">theme_economist_white</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
 </div>
-</section>
-<section id="example-pivot_longer-2" class="slide level2">
-<h2>Example: <code>pivot_longer()</code></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>billboard</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 317 × 79
-   artist     track date.entered   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8
-   &lt;chr&gt;      &lt;chr&gt; &lt;date&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
- 1 2 Pac      Baby… 2000-02-26      87    82    72    77    87    94    99    NA
- 2 2Ge+her    The … 2000-09-02      91    87    92    NA    NA    NA    NA    NA
- 3 3 Doors D… Kryp… 2000-04-08      81    70    68    67    66    57    54    53
- 4 3 Doors D… Loser 2000-10-21      76    76    72    69    67    65    55    59
- 5 504 Boyz   Wobb… 2000-04-15      57    34    25    17    17    31    36    49
- 6 98^0       Give… 2000-08-19      51    39    34    26    26    19     2     2
- 7 A*Teens    Danc… 2000-07-08      97    97    96    95   100    NA    NA    NA
- 8 Aaliyah    I Do… 2000-01-29      84    62    51    41    38    35    35    38
- 9 Aaliyah    Try … 2000-03-18      59    53    38    28    21    18    16    14
-10 Adams, Yo… Open… 2000-08-26      76    76    74    69    68    67    61    58
-# ℹ 307 more rows
-# ℹ 68 more variables: wk9 &lt;dbl&gt;, wk10 &lt;dbl&gt;, wk11 &lt;dbl&gt;, wk12 &lt;dbl&gt;,
-#   wk13 &lt;dbl&gt;, wk14 &lt;dbl&gt;, wk15 &lt;dbl&gt;, wk16 &lt;dbl&gt;, wk17 &lt;dbl&gt;, wk18 &lt;dbl&gt;,
-#   wk19 &lt;dbl&gt;, wk20 &lt;dbl&gt;, wk21 &lt;dbl&gt;, wk22 &lt;dbl&gt;, wk23 &lt;dbl&gt;, wk24 &lt;dbl&gt;,
-#   wk25 &lt;dbl&gt;, wk26 &lt;dbl&gt;, wk27 &lt;dbl&gt;, wk28 &lt;dbl&gt;, wk29 &lt;dbl&gt;, wk30 &lt;dbl&gt;,
-#   wk31 &lt;dbl&gt;, wk32 &lt;dbl&gt;, wk33 &lt;dbl&gt;, wk34 &lt;dbl&gt;, wk35 &lt;dbl&gt;, wk36 &lt;dbl&gt;,
-#   wk37 &lt;dbl&gt;, wk38 &lt;dbl&gt;, wk39 &lt;dbl&gt;, wk40 &lt;dbl&gt;, wk41 &lt;dbl&gt;, wk42 &lt;dbl&gt;, …</code></pre>
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-27-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="other-themes-4" class="slide level2">
+<h2>Other themes</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb24" data-code-line-numbers="6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">ggplot</span>(penguins, </span>
+<span id="cb24-2"><a href="#cb24-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> flipper_length_mm, </span>
+<span id="cb24-3"><a href="#cb24-3"></a>           <span class="at">y =</span> body_mass_g, </span>
+<span id="cb24-4"><a href="#cb24-4"></a>           <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb24-5"><a href="#cb24-5"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb24-6"><a href="#cb24-6"></a>  <span class="fu">theme_wsj</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
 </div>
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-28-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="other-themes-5" class="slide level2">
+<h2>Other themes</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb25" data-code-line-numbers="6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">ggplot</span>(penguins, </span>
+<span id="cb25-2"><a href="#cb25-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> flipper_length_mm, </span>
+<span id="cb25-3"><a href="#cb25-3"></a>           <span class="at">y =</span> body_mass_g, </span>
+<span id="cb25-4"><a href="#cb25-4"></a>           <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb25-5"><a href="#cb25-5"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb25-6"><a href="#cb25-6"></a>  <span class="fu">theme_fivethirtyeight</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
 </div>
-</section>
-<section id="example-pivot_longer-3" class="slide level2">
-<h2>Example: <code>pivot_longer()</code></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>billboard <span class="sc">|&gt;</span></span>
-<span id="cb34-2"><a href="#cb34-2"></a>  <span class="fu">pivot_longer</span>(</span>
-<span id="cb34-3"><a href="#cb34-3"></a>    <span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"wk"</span>),</span>
-<span id="cb34-4"><a href="#cb34-4"></a>    <span class="at">names_to =</span> <span class="st">"week"</span>,</span>
-<span id="cb34-5"><a href="#cb34-5"></a>    <span class="at">names_prefix =</span> <span class="st">"wk"</span>,</span>
-<span id="cb34-6"><a href="#cb34-6"></a>    <span class="at">values_to =</span> <span class="st">"rank"</span>,</span>
-<span id="cb34-7"><a href="#cb34-7"></a>    <span class="at">values_drop_na =</span> <span class="cn">TRUE</span></span>
-<span id="cb34-8"><a href="#cb34-8"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5,307 × 5
-   artist  track                   date.entered week   rank
-   &lt;chr&gt;   &lt;chr&gt;                   &lt;date&gt;       &lt;chr&gt; &lt;dbl&gt;
- 1 2 Pac   Baby Don't Cry (Keep... 2000-02-26   1        87
- 2 2 Pac   Baby Don't Cry (Keep... 2000-02-26   2        82
- 3 2 Pac   Baby Don't Cry (Keep... 2000-02-26   3        72
- 4 2 Pac   Baby Don't Cry (Keep... 2000-02-26   4        77
- 5 2 Pac   Baby Don't Cry (Keep... 2000-02-26   5        87
- 6 2 Pac   Baby Don't Cry (Keep... 2000-02-26   6        94
- 7 2 Pac   Baby Don't Cry (Keep... 2000-02-26   7        99
- 8 2Ge+her The Hardest Part Of ... 2000-09-02   1        91
- 9 2Ge+her The Hardest Part Of ... 2000-09-02   2        87
-10 2Ge+her The Hardest Part Of ... 2000-09-02   3        92
-# ℹ 5,297 more rows</code></pre>
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-29-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="themes-1" class="slide level2">
+<h2>Themes</h2>
+<p>If you want finer control over your plot appearance, you can dive into the <code>theme()</code> function:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb26" data-code-line-numbers="6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">ggplot</span>(penguins, </span>
+<span id="cb26-2"><a href="#cb26-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> flipper_length_mm, </span>
+<span id="cb26-3"><a href="#cb26-3"></a>           <span class="at">y =</span> body_mass_g, </span>
+<span id="cb26-4"><a href="#cb26-4"></a>           <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb26-5"><a href="#cb26-5"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb26-6"><a href="#cb26-6"></a>  <span class="fu">theme</span>(<span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">30</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
 </div>
-</div>
-</section>
-<section id="example-pivot_wider" class="slide level2">
-<h2>Example: <code>pivot_wider()</code></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>fish_encounters</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 114 × 3
-   fish  station  seen
-   &lt;fct&gt; &lt;fct&gt;   &lt;int&gt;
- 1 4842  Release     1
- 2 4842  I80_1       1
- 3 4842  Lisbon      1
- 4 4842  Rstr        1
- 5 4842  Base_TD     1
- 6 4842  BCE         1
- 7 4842  BCW         1
- 8 4842  BCE2        1
- 9 4842  BCW2        1
-10 4842  MAE         1
-# ℹ 104 more rows</code></pre>
-</div>
-</div>
-</section>
-<section id="example-pivot_wider-1" class="slide level2">
-<h2>Example: <code>pivot_wider()</code></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>fish_encounters <span class="sc">|&gt;</span></span>
-<span id="cb38-2"><a href="#cb38-2"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> station, <span class="at">values_from =</span> seen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 19 × 12
-   fish  Release I80_1 Lisbon  Rstr Base_TD   BCE   BCW  BCE2  BCW2   MAE   MAW
-   &lt;fct&gt;   &lt;int&gt; &lt;int&gt;  &lt;int&gt; &lt;int&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
- 1 4842        1     1      1     1       1     1     1     1     1     1     1
- 2 4843        1     1      1     1       1     1     1     1     1     1     1
- 3 4844        1     1      1     1       1     1     1     1     1     1     1
- 4 4845        1     1      1     1       1    NA    NA    NA    NA    NA    NA
- 5 4847        1     1      1    NA      NA    NA    NA    NA    NA    NA    NA
- 6 4848        1     1      1     1      NA    NA    NA    NA    NA    NA    NA
- 7 4849        1     1     NA    NA      NA    NA    NA    NA    NA    NA    NA
- 8 4850        1     1     NA     1       1     1     1    NA    NA    NA    NA
- 9 4851        1     1     NA    NA      NA    NA    NA    NA    NA    NA    NA
-10 4854        1     1     NA    NA      NA    NA    NA    NA    NA    NA    NA
-11 4855        1     1      1     1       1    NA    NA    NA    NA    NA    NA
-12 4857        1     1      1     1       1     1     1     1     1    NA    NA
-13 4858        1     1      1     1       1     1     1     1     1     1     1
-14 4859        1     1      1     1       1    NA    NA    NA    NA    NA    NA
-15 4861        1     1      1     1       1     1     1     1     1     1     1
-16 4862        1     1      1     1       1     1     1     1     1    NA    NA
-17 4863        1     1     NA    NA      NA    NA    NA    NA    NA    NA    NA
-18 4864        1     1     NA    NA      NA    NA    NA    NA    NA    NA    NA
-19 4865        1     1      1    NA      NA    NA    NA    NA    NA    NA    NA</code></pre>
-</div>
-</div>
-</section>
-<section id="example-pivot_wider-2" class="slide level2">
-<h2>Example: <code>pivot_wider()</code></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>us_rent_income</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 104 × 5
-   GEOID NAME       variable estimate   moe
-   &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;
- 1 01    Alabama    income      24476   136
- 2 01    Alabama    rent          747     3
- 3 02    Alaska     income      32940   508
- 4 02    Alaska     rent         1200    13
- 5 04    Arizona    income      27517   148
- 6 04    Arizona    rent          972     4
- 7 05    Arkansas   income      23789   165
- 8 05    Arkansas   rent          709     5
- 9 06    California income      29454   109
-10 06    California rent         1358     3
-# ℹ 94 more rows</code></pre>
-</div>
-</div>
-</section>
-<section id="example-pivot_wider-3" class="slide level2">
-<h2>Example: <code>pivot_wider()</code></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>us_rent_income <span class="sc">|&gt;</span></span>
-<span id="cb42-2"><a href="#cb42-2"></a>  <span class="fu">pivot_wider</span>(</span>
-<span id="cb42-3"><a href="#cb42-3"></a>    <span class="at">names_from =</span> variable,</span>
-<span id="cb42-4"><a href="#cb42-4"></a>    <span class="at">values_from =</span> <span class="fu">c</span>(estimate, moe)</span>
-<span id="cb42-5"><a href="#cb42-5"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 52 × 6
-   GEOID NAME                 estimate_income estimate_rent moe_income moe_rent
-   &lt;chr&gt; &lt;chr&gt;                          &lt;dbl&gt;         &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
- 1 01    Alabama                        24476           747        136        3
- 2 02    Alaska                         32940          1200        508       13
- 3 04    Arizona                        27517           972        148        4
- 4 05    Arkansas                       23789           709        165        5
- 5 06    California                     29454          1358        109        3
- 6 08    Colorado                       32401          1125        109        5
- 7 09    Connecticut                    35326          1123        195        5
- 8 10    Delaware                       31560          1076        247       10
- 9 11    District of Columbia           43198          1424        681       17
-10 12    Florida                        25952          1077         70        3
-# ℹ 42 more rows</code></pre>
-</div>
-</div>
+<img data-src="08_advanced-visualization_files/figure-revealjs/unnamed-chunk-30-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="themes-2" class="slide level2">
+<h2>Themes</h2>
+<p>Within the theme function, we can manipulate various <strong>theme elements</strong>:</p>
+
+<img data-src="https://henrywang.nl/wp-content/uploads/2020/04/theme_elements.png" class="r-stretch"></section>
+<section id="themes-3" class="slide level2">
+<h2>Themes</h2>
+<p>Other resources:</p>
+<ul>
+<li>Clara Granell’s <a href="https://github.com/claragranell/ggplot2/blob/main/ggplot_theme_system_cheatsheet.pdf">ggplot2 Theme System Cheatsheet</a></li>
+<li>Andrew Heiss’s <a href="https://www.andrewheiss.com/blog/2022/06/23/long-labels-ggplot/">Ways to deal with long labels</a></li>
+<li>Chapter 8 of Kieran Healy’s <a href="https://socviz.co/refineplots.html#change-the-appearance-of-plots-with-themes">Data Visualization</a></li>
+<li><a href="https://bbc.github.io/rcookbook/#how_to_create_bbc_style_graphics">How to create BBC style graphics</a></li>
+</ul>
 
 <div class="footer footer-default">
 
 </div>
-</section></section>
+</section>
     </div>
   </div>
 

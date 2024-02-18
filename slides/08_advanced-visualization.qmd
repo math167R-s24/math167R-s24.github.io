@@ -4,7 +4,7 @@ author: "Peter Gao"
 format: 
   revealjs:
     theme: [./slides.scss, ../theme.scss]
-editor: visual
+editor: source
 ---
 
 ## Warm-up
@@ -37,498 +37,470 @@ ggplot(penguins,
 
 ## Overview of today
 
+-   Reviewing `ggplot2`
 -   Advanced data visualization
--   Data transformation for visualization
+-   Styling R visualizations
 
-# Advanced Data Visualization
+## Review: grammar of graphics
 
-## Example: Egg production in the United States
+The three basic layers:
 
-Today we'll start using the [The Humane League's US Egg Production dataset](https://thehumaneleague.org/article/E008R01-us-egg-production-data), which we can load using the following code:
+1.  **Data**: a data frame with all of the variables of interest
+2.  **Aesthetics**: graphical dimensions like `x`, `y`, `color`, `shape`, and more.
+3.  **Geometries**: the specific markings used to illustrate your variables and aesthetics.
 
-```{r, echo = T, eval = T}
+## Review: Cats and Dogs
+
+Suppose we have the following data on animal weights. How can we compute the average weights of cats and dogs? \[example from [Andrew Heiss](https://datavizf23.classes.andrewheiss.com/slides/04-slides.html)\]
+
+```{r, echo = F, eval = T, warning = F}
 library(tidyverse)
-eggproduction  <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-04-11/egg-production.csv')
-head(eggproduction)
+# example from Andrew Heiss
+set.seed(12)
+animals <- tibble(animal = c(rep(c("Small cat", "Big cat"), each = 250), rep("Dog", 500))) |> 
+  mutate(weight = case_when(
+    animal == "Small cat" ~ rnorm(n(), 20, 5),
+    animal == "Big cat" ~ rnorm(n(), 60, 5),
+    animal == "Dog" ~ rnorm(n(), 40, 10)
+  )) |> 
+  mutate(animal = ifelse(str_detect(animal, "cat"), "Cat", "Dog"))
+
 ```
 
-## Data Dictionary {.smaller}
+```{r, echo = T, eval = F, warning = F}
+head(animals, n = 10)
+```
 
-::: {style="height:500px;overflow:auto;"}
-| variable       | class     | description                                                                                                                                             |
-|:----------|:----------|:--------------------------------------------------|
-| observed_month | double    | Month in which report observations are collected,Dates are recorded in ISO 8601 format YYYY-MM-DD                                                       |
-| prod_type      | character | type of egg product: hatching, table eggs                                                                                                               |
-| prod_process   | character | type of production process and housing: cage-free (organic), cage-free (non-organic), all. The value 'all' includes cage-free and conventional housing. |
-| n_hens         | double    | number of hens produced by hens for a given month-type-process combo                                                                                    |
-| n_eggs         | double    | number of eggs producing eggs for a given month-type-process combo                                                                                      |
-| source         | character | Original USDA report from which data are sourced. Values correspond to titles of PDF reports. Date of report is included in title.                      |
+```{r, echo = F, eval = T, warning = F}
+slice_sample(animals, n = 10)
+```
+
+## Review: Cats and Dogs
+
+```{r, echo = T, eval = T, warning = F}
+mean_wt <- animals |>
+  group_by(animal) |>
+  summarize(mean_wt = mean(weight))
+mean_wt
+```
+
+How can we turn this into a visual?
+
+## Review: Cats and Dogs
+
+In `ggplot2`, there are two geometries for bar plots: `geom_col()` and `geom_bar()`.
+
+-   The height of the bars of `geom_col()` represent numerical values in each group.
+-   The height of the bars of `geom_bar()` represent the number of rows for each group.
+
+## Review: Cats and Dogs
+
+```{r, echo = T, eval = T, warning = F, fig.dim=c(5, 3.75), out.width="100%", fig.align = "center"}
+ggplot(data = mean_wt, 
+       aes(x = animal, y = mean_wt, fill = animal)) +
+  geom_col() +
+  ylab("Mean weight (lb)")
+```
+
+## Review: Cats and Dogs
+
+```{r, echo = T, eval = T, warning = F, fig.dim=c(5, 3.75), out.width="100%", fig.align = "center"}
+# construct named vector
+mean_wt_vec <- mean_wt$mean_wt
+names(mean_wt_vec) <- mean_wt$animal
+barplot(mean_wt_vec,
+        col = c("red", "blue"),
+        ylab = "Mean weight (lb)")
+```
+
+## If possible, show the data
+
+```{r, echo = T, eval = T, warning = F, fig.dim=c(5, 3.75), out.width="100%", fig.align = "center"}
+ggplot(animals, aes(x = animal, y = weight, color = animal)) +
+  geom_point(position = position_jitter(height = 0)) +
+  labs(x = NULL, y = "Mean Weight (lb)") +
+  guides(color = "none")
+```
+
+## If possible, show the data
+
+```{r, echo = T, eval = T, warning = F, fig.dim=c(5, 3.75), out.width="100%", fig.align = "center"}
+ggplot(animals, aes(x = animal, 
+                    y = weight, 
+                    color = animal)) +
+  geom_boxplot() +
+  geom_point(position = position_jitter(height = 0), alpha = 0.5) +
+  labs(x = NULL, y = "Mean weight (lb)") +
+  guides(color = "none")
+```
+
+## Review: Cats and Dogs
+
+Takeaways:
+
+-   Data has to be in the right format to work with `ggplot2`
+-   Geometries can be combined for more complex visualizations
+-   Only showing summary statistics can be misleading and can hide information.
+
+## Gapminder data
+
+![](images/gapminder.png)
+
+[link](https://www.gapminder.org/tools/#$chart-type=bubbles&url=v1)
+
+## Gapminder data
+
+-   What changes do we see over time? What do we notice in this visualization?
+-   What questions arise? Do you have any doubts about this visualization?
+
+## Gapminder data
+
+```{r, echo = T, eval = T, warning = F, fig.dim=c(5, 3.75), out.width="100%", fig.align = "center"}
+library(gapminder)
+data(gapminder)
+head(gapminder)
+```
+
+## Gapminder data
+
+```{r, echo = T, eval = T, warning = F, fig.dim=c(5, 3.75), out.width="100%", fig.align = "center"}
+summary(gapminder)
+```
+
+## Gapminder data
+
+Let's work with the following data:
+
+```{r, echo = T, eval = T, warning = F, fig.dim=c(5, 3.75), out.width="100%", fig.align = "center"}
+gapminder_2007 <- gapminder |> filter(year == 2007)
+```
+
+How do we recreate the following plot?
+
+```{r, echo = F, eval = T, warning = F, fig.dim=c(7, 3.75), out.width="100%", fig.align = "center"}
+ggplot(data = gapminder_2007,
+       mapping = aes(x = gdpPercap,
+                     y = lifeExp,
+                     color = continent,
+                     size = pop)) +
+  geom_point() 
+```
+
+## Gapminder data
+
+Work with the people around you to recreate this plot:
+
+```{r, echo = F, eval = T, warning = F, fig.dim=c(7, 3.75), out.width="100%", fig.align = "center"}
+ggplot(data = gapminder_2007,
+       mapping = aes(x = gdpPercap,
+                     y = lifeExp,
+                     color = continent,
+                     size = pop)) +
+  geom_point() 
+```
+
+## Gapminder data
+
+Hopefully, you produced something like this:
+
+```{r, echo = T, eval = F, warning = F, fig.dim=c(7, 3.75), out.width="100%", fig.align = "center"}
+ggplot(data = gapminder_2007,
+       mapping = aes(x = gdpPercap,
+                     y = lifeExp,
+                     color = continent,
+                     size = pop)) +
+  geom_point() 
+```
+
+## Playing with scales
+
+**Scales** are another layer we can add on top of our plot:
+
+```{r, echo = T, eval = F, warning = F, fig.dim=c(7, 3.75), out.width="100%", fig.align = "center"}
+ggplot(data = gapminder_2007,
+       mapping = aes(x = gdpPercap,
+                     y = lifeExp,
+                     color = continent,
+                     size = pop)) +
+  geom_point() +
+  scale_x_log10()
+```
+
+What do you expect the output to look like?
+
+## Playing with scales
+
+```{r, echo = F, eval = T, warning = F, fig.dim=c(7, 3.75), out.width="100%", fig.align = "center"}
+ggplot(data = gapminder_2007,
+       mapping = aes(x = gdpPercap,
+                     y = lifeExp,
+                     color = continent,
+                     size = pop)) +
+  geom_point() +
+  scale_x_log10()
+```
+
+## Playing with scales
+
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 3.75
+#| out.width: "100%"
+#| fig.align: "center"
+#| code-line-numbers: "8"
+ggplot(data = gapminder_2007,
+       mapping = aes(x = gdpPercap,
+                     y = lifeExp,
+                     color = continent,
+                     size = pop)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_color_viridis_d() # discrete viridis color scale
+```
+
+## Small multiples
+
+*"At the heart of quantitative reasoning is a single question: Compared to what? Small multiple designs, multivariate and data bountiful, answer directly by visually enforcing comparisons of changes, of the differences among objects, of the scope of alternatives. For a wide range of problems in data presentation, small multiples are the best design solution."*
+
+::: {style="text-align: right"}
+Edward Tufte
 :::
 
-## Building up a visualization
+## Small multiples
+
+We can often make comparisons clearer by splitting a plot into many "small multiples" which have the same axes:
 
 ```{r}
-#| echo: TRUE
-#| eval: FALSE
-#| code-line-numbers: "2"
-eggproduction |> 
-  filter(prod_type == "table eggs") 
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 3.75
+#| out.width: "100%"
+#| fig.align: "center"
+#| code-line-numbers: "8"
+ggplot(data = gapminder_2007,
+       mapping = aes(x = gdpPercap,
+                     y = lifeExp,
+                     color = continent,
+                     size = pop)) +
+  geom_point() +
+  scale_x_log10() +
+  facet_wrap(~continent)
+  
 ```
 
-```{r, echo = FALSE, eval = T, fig.height = 4, fig.width = 8}
-eggproduction |> 
-  filter(prod_type == "table eggs") 
-```
+## Facets for small multiples
 
-## Building up a visualization
+Small multiples are implemented in `ggplot2` via the `facet_wrap()` and `facet_grid()` functions:
 
 ```{r}
-#| echo: TRUE
-#| eval: FALSE
-#| code-line-numbers: "3"
-eggproduction |> 
-  filter(prod_type == "table eggs") |>
-  ggplot(aes(x = observed_month, y = n_eggs))
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 3.75
+#| out.width: "100%"
+#| fig.align: "center"
+#| code-line-numbers: "8"
+ggplot(data = gapminder_2007,
+       mapping = aes(x = gdpPercap,
+                     y = lifeExp,
+                     color = continent,
+                     size = pop)) +
+  geom_point() +
+  scale_x_log10() +
+  facet_wrap(~continent)
 ```
 
-```{r, echo = FALSE, eval = T, fig.height = 4, fig.width = 8}
-eggproduction |> 
-  filter(prod_type == "table eggs") |>
-  ggplot(aes(x = observed_month, y = n_eggs))
+## Gapminder data
+
+Work with the people around you to recreate this plot:
+
+```{r, echo = F, eval = T, warning = F, fig.dim=c(7, 4.75), out.width="100%", fig.align = "center"}
+gapminder_sub <- gapminder |> filter(year %in% c(1957, 1982, 2007))
+ggplot(data = gapminder_sub,
+       mapping = aes(x = gdpPercap,
+                     y = lifeExp,
+                     color = continent,
+                     size = pop)) +
+  geom_point() +
+  scale_x_log10() +
+  facet_wrap(~year)
 ```
 
-## Building up a visualization
+## Themes
 
-```{r}
-#| echo: TRUE
-#| eval: FALSE
-#| code-line-numbers: "3-4"
-eggproduction |> 
-  filter(prod_type == "table eggs") |>
-  ggplot(aes(x = observed_month, y = n_eggs)) +
+`ggplot2` provides a default theme: gray background, basic discrete color scheme, etc.
+
+```{r, echo = F, eval = T, warning = F, fig.dim=c(7, 4.75), out.width="100%", fig.align = "center"}
+library(palmerpenguins)
+data(penguins)
+ggplot(penguins, 
+       aes(x = flipper_length_mm, 
+           y = body_mass_g, 
+           color = species)) +
   geom_point()
 ```
 
-```{r, echo = FALSE, eval = T, fig.height = 4, fig.width = 8}
-eggproduction |> 
-  filter(prod_type == "table eggs") |>
-  ggplot(aes(x = observed_month, y = n_eggs)) +
-  geom_point()
-```
+## Other themes
 
-## Building up a visualization
+However, `ggplot2` also comes with additional themes that you can layer on top of your plots:
 
 ```{r}
-#| echo: TRUE
-#| eval: FALSE
-#| code-line-numbers: "3-4"
-eggproduction |> 
-  filter(prod_type == "table eggs") |>
-  ggplot(aes(x = observed_month, y = n_eggs, color = prod_process)) +
-  geom_point()
-```
-
-```{r, echo = FALSE, eval = T, fig.height = 4, fig.width = 8}
-eggproduction |> 
-  filter(prod_type == "table eggs") |>
-  ggplot(aes(x = observed_month, y = n_eggs, color = prod_process)) +
-  geom_point()
-```
-
-## Building up a visualization
-
-```{r}
-#| echo: TRUE
-#| eval: FALSE
-#| code-line-numbers: "3-4"
-eggproduction |> 
-  filter(prod_type == "table eggs") |>
-  ggplot(aes(x = observed_month, y = n_eggs, color = prod_process)) +
-  geom_line()
-```
-
-```{r, echo = FALSE, eval = T, fig.height = 4, fig.width = 8}
-eggproduction |> 
-  filter(prod_type == "table eggs") |>
-  ggplot(aes(x = observed_month, y = n_eggs, color = prod_process)) +
-  geom_line()
-```
-
-## Labels and legends
-
-`theme` can be added to change options including axis labels and legend position
-
-```{r}
-#| echo: TRUE
-#| eval: FALSE
-#| code-line-numbers: "5-6"
-eggproduction |> 
-  filter(prod_type == "table eggs") |>
-  ggplot(aes(x = observed_month, y = n_eggs, color = prod_process)) +
-  geom_line() +
-  xlab("Date") + ylab("# eggs") +
-  theme(legend.position = "bottom")
-```
-
-```{r, echo = FALSE, eval = T, fig.height = 4, fig.width = 8}
-eggproduction |> 
-  filter(prod_type == "table eggs") |>
-  ggplot(aes(x = observed_month, y = n_eggs, color = prod_process)) +
-  geom_line() +
-  xlab("Date") + ylab("# eggs") +
-  theme(legend.position = "bottom")
-```
-
-## Colors
-
-`scale_color_viridis_d` swaps colors to the `viridis` discrete color palette, which is optimized for accessibility.
-
-```{r}
-#| echo: TRUE
-#| eval: FALSE
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 3.75
+#| out.width: "100%"
+#| fig.align: "center"
 #| code-line-numbers: "6"
-eggproduction |> 
-  filter(prod_type == "table eggs") |>
-  ggplot(aes(x = observed_month, y = n_eggs, color = prod_process)) +
-  geom_line() +
-  xlab("Date") + ylab("# eggs") +
-  scale_color_viridis_d() +
-  theme(legend.position = "bottom")
+ggplot(penguins, 
+       aes(x = flipper_length_mm, 
+           y = body_mass_g, 
+           color = species)) +
+  geom_point() +
+  theme_minimal()
 ```
 
-```{r, echo = FALSE, eval = T, fig.height = 4, fig.width = 8}
-eggproduction |> 
-  filter(prod_type == "table eggs") |>
-  ggplot(aes(x = observed_month, y = n_eggs, color = prod_process)) +
-  geom_line() +
-  xlab("Date") + ylab("# eggs") +
-  scale_color_viridis_d() +
-  theme(legend.position = "bottom")
-```
-
-## Remember!
-
-Learning `ggplot` takes a lot of time--use your peers, me, and the internet as a resource!
-
-**General strategy**
-
-1.  Clean and tidy data into the appropriate format.
-
-2.  Map **variables** to **aesthetics**.
-
-3.  Use `geom_` functions to draw **markings** with the appropriate aesthetics.
-
-4.  Add labels and titles with `xlab`, `ylab`, and `ggtitle`.
-
-5.  Adjust text size, legend position with `theme`.
-
-## Adding even more dimensions
+## Other themes
 
 ```{r}
-#| echo: TRUE
-#| eval: FALSE
-#| code-line-numbers: "4"
-eggproduction |> 
-  ggplot(aes(x = observed_month, y = n_eggs, color = prod_process)) +
-  geom_line() +
-  facet_wrap(~prod_type) +
-  xlab("Date") + ylab("# eggs") +
-  scale_color_viridis_d() +
-  theme(legend.position = "bottom")
-```
-
-```{r, echo = FALSE, eval = T, fig.height = 4, fig.width = 8}
-eggproduction |> 
-  ggplot(aes(x = observed_month, y = n_eggs, color = prod_process)) +
-  geom_line() +
-  facet_wrap(~prod_type) +
-  xlab("Date") + ylab("# eggs") +
-  scale_color_viridis_d() +
-  theme(legend.position = "bottom")
-```
-
-# Manipulating data for visualization
-
-## US population data, 2010-2020
-
-```{r, echo = T, eval = F}
-state_population <- readr::read_csv("https://www2.census.gov/programs-surveys/popest/datasets/2010-2020/national/totals/nst-est2020.csv")
-
-# code to print the data
-library(knitr)
-kable(state_population, digits = 3, row.names = F) |>
-  kableExtra::kable_styling("striped", full_width = T) |> 
-  kableExtra::scroll_box(height = "560px")
-```
-
-## US population data, 2010-2020
-
-```{r, echo = F, eval = T}
-state_population <- readr::read_csv("https://www2.census.gov/programs-surveys/popest/datasets/2010-2020/national/totals/nst-est2020.csv")
-
-# code to print the data
-library(knitr)
-kable(state_population, digits = 3, row.names = F) |>
-  kableExtra::kable_styling("striped", full_width = T) |> 
-  kableExtra::scroll_box(height = "560px")
-```
-
-## National population data
-
-We can use the `SUMLEV` variable to obtain only national data:
-
-```{r, echo = T, eval = T}
-US_pop <- state_population |>
-  filter(SUMLEV == "010")
-
-# code to print the data
-kable(US_pop, digits = 3, row.names = F) |>
-  kableExtra::kable_styling("striped", full_width = T)
-```
-
-## National population data
-
-How can we generate the following plot?
-
-```{r, echo = F, eval = T}
-US_pop |> 
-  select(-POPESTIMATE042020) |>
-  pivot_longer(contains("POPESTIMATE"), names_to = "Year", values_to = "Population") |>
-  mutate(Year = as.numeric(stringr::str_sub(Year, start = 12))) |>
-  ggplot(aes(x = Year, y = Population)) + 
-  geom_line()
-```
-
-## National population data
-
-Note that our data cannot be readily used with `ggplot` to generate the previous plot. Ideally, we would like two vectors of the same length: one representing `Year` and one representing `Population`. Today, we'll discuss how to do this in both **base R** and the **tidyverse**.
-
-```{r, echo = T, eval = F, error = T}
-# base R
-plot_dat <- data.frame(
-  Year = 2010:2020,
-  Population = US_pop[1, 8:19]
-)
-head(plot_dat)
-```
-
-```{r, echo = F, eval = T, error = T}
-# base R
-plot_dat <- data.frame(
-  Year = 2010:2020,
-  Population = US_pop[1, 8:19]
-)
-head(plot_dat)
-```
-
-## National population data
-
-What went wrong? `US_pop[1, 8:19]` is a tibble, and we need a numeric.
-
-```{r, echo = T, eval = F, error = T}
-plot_dat <- data.frame(
-  Year = 2010:2020,
-  Population = as.numeric(US_pop[1, 8:19])
-)
-```
-
-```{r, echo = F, eval = T, error = T}
-# base R
-plot_dat <- data.frame(
-  Year = 2010:2020,
-  Population = as.numeric(US_pop[1, 8:19])
-)
-```
-
-## National population data
-
-Now what? `US_pop` has an extra column `POPESTIMATE042020` which we need to remove.
-
-```{r, echo = T, eval = T, error = T}
-# base R
-plot_dat <- data.frame(
-  Year = 2010:2020,
-  Population = as.numeric(US_pop[, c(8:17, 19)])
-)
-head(plot_dat)
-```
-
-## National population data
-
-Finally, we can use the `plot` function to get our desired visualization:
-
-```{r, echo = T, eval = T, error = T}
-plot(plot_dat$Year, plot_dat$Population)
-```
-
-## Tidyverse strategy
-
-Now let's see how we might approach the same task in the tidyverse. Our strategy will be to "tidy" the data so we have one row for each observation and one column for each observation.
-
-First, let's remove the unnecessary column using the `select()` function. Here the `kable` function is used to print out our table.
-
-::: {style="height:500px;overflow:auto;"}
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-#| code-line-numbers: "2"
-US_pop |> 
-  select(-POPESTIMATE042020)  |>
-  kable()
-```
-:::
-
-## Tidyverse strategy
-
-Now let's use the `pivot_longer` function to combine the `POPESTIMATE` columns into two variables: `Year` and `Population`:
-
-::: {style="height:500px;overflow:auto;"}
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-#| code-line-numbers: "3-5"
-US_pop |> 
-  select(-POPESTIMATE042020) |>
-  pivot_longer(contains("POPESTIMATE"), 
-               names_to = "Year",
-               values_to = "Population") |>
-  kable()
-```
-:::
-
-What do we need to do next?
-
-## Tidyverse strategy
-
-Finally, we need to use the `str_sub()` function to shorten our `Year` variable before turning it into a numeric.
-```{r}
-#| echo: TRUE
-#| eval: FALSE
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 3.75
+#| out.width: "100%"
+#| fig.align: "center"
 #| code-line-numbers: "6"
-US_pop |> 
-  select(-POPESTIMATE042020) |>
-  pivot_longer(contains("POPESTIMATE"), 
-               names_to = "Year",
-               values_to = "Population") |>
-  mutate(Year = as.numeric(stringr::str_sub(Year, start = 12))) |>
-  kable()
+ggplot(penguins, 
+       aes(x = flipper_length_mm, 
+           y = body_mass_g, 
+           color = species)) +
+  geom_point() +
+  theme_bw()
 ```
-::: {style="height:450px;overflow:auto;"}
+
+## Other themes
+
 ```{r}
-#| echo: FALSE
-#| eval: TRUE
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 3.75
+#| out.width: "100%"
+#| fig.align: "center"
 #| code-line-numbers: "6"
-US_pop |> 
-  select(-POPESTIMATE042020) |>
-  pivot_longer(contains("POPESTIMATE"), 
-               names_to = "Year",
-               values_to = "Population") |>
-  mutate(Year = as.numeric(stringr::str_sub(Year, start = 12))) |>
-  kable()
-```
-:::
-
-## Tidyverse strategy
-
-Now we can `|>` it to `ggplot`:
-
-```{r, echo = F, eval = T, fig.height = 4, fig.width = 8}
-#| echo: TRUE
-#| eval: TRUE
-#| code-line-numbers: "7-8"
-US_pop |> 
-  select(-POPESTIMATE042020) |>
-  pivot_longer(contains("POPESTIMATE"), 
-               names_to = "Year",
-               values_to = "Population") |>
-  mutate(Year = as.numeric(stringr::str_sub(Year, start = 12))) |>
-  ggplot(aes(x = Year, y = Population)) + 
-  geom_line()
+ggplot(penguins, 
+       aes(x = flipper_length_mm, 
+           y = body_mass_g, 
+           color = species)) +
+  geom_point() +
+  theme_dark()
 ```
 
-## Tidyverse strategy: More complicated plots
+## Other themes
 
-We can map the `color` aesthetic to the region:
+Other themes can be obtained from the `ggthemes` package:
 
 ```{r}
-#| echo: TRUE
-#| eval: TRUE
-#| code-line-numbers: "2, 7-8"
-state_population |> 
-  filter(SUMLEV == "020") |>
-  select(-POPESTIMATE042020) |>
-  pivot_longer(contains("POPESTIMATE"), 
-               names_to = "Year",
-               values_to = "Population") |>
-  mutate(Year = as.numeric(stringr::str_sub(Year, start = 12))) |>
-  ggplot(aes(x = Year, y = Population, color = NAME)) + 
-  geom_line()
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+#| code-line-numbers: "1,7"
+library(ggthemes)
+ggplot(penguins, 
+       aes(x = flipper_length_mm, 
+           y = body_mass_g, 
+           color = species)) +
+  geom_point() +
+  theme_economist_white()
 ```
 
-## `pivot_longer()` and `pivot_wider()`
+## Other themes
 
-The `pivot_longer()` and `pivot_wider()` functions are useful for reshaping data: `pivot_longer()` "lengthens" datasets and `pivot_wider()` does the opposite.
-
-They are challenging to use because you need to have a clear vision of the data frame you want, not because they are complicated in R.
-
-## Example: `pivot_longer()`
-
-```{r, echo = T}
-relig_income
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+#| code-line-numbers: "6"
+ggplot(penguins, 
+       aes(x = flipper_length_mm, 
+           y = body_mass_g, 
+           color = species)) +
+  geom_point() +
+  theme_wsj()
 ```
 
-## Example: `pivot_longer()`
+## Other themes
 
-```{r, echo = T}
-relig_income |>
-  pivot_longer(!religion, names_to = "income", values_to = "count")
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+#| code-line-numbers: "6"
+ggplot(penguins, 
+       aes(x = flipper_length_mm, 
+           y = body_mass_g, 
+           color = species)) +
+  geom_point() +
+  theme_fivethirtyeight()
 ```
 
-## Example: `pivot_longer()`
+## Themes
 
-```{r, echo = T}
-billboard
+If you want finer control over your plot appearance, you can dive into the `theme()` function:
 
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+#| code-line-numbers: "6"
+ggplot(penguins, 
+       aes(x = flipper_length_mm, 
+           y = body_mass_g, 
+           color = species)) +
+  geom_point() +
+  theme(legend.text = element_text(size = 30))
 ```
 
-## Example: `pivot_longer()`
+## Themes
 
-```{r, echo = T}
-billboard |>
-  pivot_longer(
-    cols = starts_with("wk"),
-    names_to = "week",
-    names_prefix = "wk",
-    values_to = "rank",
-    values_drop_na = TRUE
-  )
-```
+Within the theme function, we can manipulate various **theme elements**:
 
-## Example: `pivot_wider()`
+![](https://henrywang.nl/wp-content/uploads/2020/04/theme_elements.png)
 
-```{r, echo = T}
-fish_encounters
-```
+## Themes
 
-## Example: `pivot_wider()`
+Other resources:
 
-```{r, echo = T}
-fish_encounters |>
-  pivot_wider(names_from = station, values_from = seen)
-```
+- Clara Granell's [ggplot2 Theme System Cheatsheet](https://github.com/claragranell/ggplot2/blob/main/ggplot_theme_system_cheatsheet.pdf)
+- Andrew Heiss's [Ways to deal with long labels](https://www.andrewheiss.com/blog/2022/06/23/long-labels-ggplot/)
+- Chapter 8 of Kieran Healy's [Data Visualization](https://socviz.co/refineplots.html#change-the-appearance-of-plots-with-themes)
+- [How to create BBC style graphics](https://bbc.github.io/rcookbook/#how_to_create_bbc_style_graphics)
 
-## Example: `pivot_wider()`
-
-```{r, echo = T}
-us_rent_income
-```
-
-## Example: `pivot_wider()`
-
-```{r, echo = T}
-us_rent_income |>
-  pivot_wider(
-    names_from = variable,
-    values_from = c(estimate, moe)
-  )
+```{r, echo = F, eval = T, warning = F}
+knitr::knit_exit()
 ```

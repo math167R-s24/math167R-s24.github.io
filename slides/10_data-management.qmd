@@ -4,15 +4,15 @@ author: "Peter Gao"
 format: 
   revealjs:
     theme: [./slides.scss, ../theme.scss]
-editor: visual
+editor: source
 ---
 
 ## Overview of today
 
--   Workflow for downloading and saving data
+-   Merging data
 -   Organizing output and saving images
 -   Exploratory data analysis
--   Group lab time
+-   Lab time
 
 ## Downloading data
 
@@ -157,7 +157,6 @@ US_pop_plot <- US_pop_tidy |>
   ggtitle("US Population, 2010-2020")
 print(US_pop_plot)
 ```
-
 
 ## Caching code chunks
 
