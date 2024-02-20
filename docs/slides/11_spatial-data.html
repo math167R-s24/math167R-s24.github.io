@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.3.353">
 
   <meta name="author" content="Peter Gao">
-  <title>MATH167R - MATH167R: Spatial data analysis</title>
+  <title>MATH167R - MATH167R: Advanced visualizations</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -384,7 +384,7 @@
       margin-right: 0; 
     }
   </style>
-<meta property="og:title" content="MATH167R - MATH167R: Spatial data analysis">
+<meta property="og:title" content="MATH167R - MATH167R: Advanced visualizations">
 <meta property="og:site-name" content="MATH167R">
 </head>
 <body class="quarto-light">
@@ -392,7 +392,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">MATH167R: Spatial data analysis</h1>
+  <h1 class="title">MATH167R: Advanced visualizations</h1>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -407,25 +407,37 @@ Peter Gao
 <h2>Overview of today</h2>
 <ul>
 <li>Visualizing spatial data</li>
-<li>Merging data</li>
+<li>Animations</li>
 <li>Project work time</li>
 </ul>
+</section>
+<section id="example-aqi-data" class="slide level2">
+<h2>Example: AQI data</h2>
+<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-1_e46fa9308398385e933ae712b760d182">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://math250-s24.github.io/"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise" class="slide level2">
+<h2>Exercise</h2>
+</section>
+<section id="example-aqi-data-1" class="slide level2">
+<h2>Example: AQI data</h2>
 </section>
 <section id="loading-project-data" class="slide level2">
 <h2>Loading project data</h2>
 <p>Today we’ll practice working with spatial data. In <code>R</code>, most basic GIS (geographic information system) tasks can be carried out using the <code>sf</code> package, which you can install using <code>install.packages("sf")</code>. Today we’ll also be using <code>tidyverse</code> packages.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-4"><a href="#cb1-4"></a>ba_rent <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-07-05/rent.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>ba_rent <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-07-05/rent.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="craigslist-rental-data" class="slide level2">
 <h2>Craigslist rental data</h2>
 <p>This dataset provides Craigslist rental listings for the Bay Area, from 2000-2018. It was originally collected by Dr.&nbsp;Kate Pennington, whose methodology you can read about <a href="https://www.katepennington.org/clmethod">here</a>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">head</span>(ba_rent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">head</span>(ba_rent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 17
   post_id      date  year nhood city  county price  beds baths  sqft room_in_apt
@@ -549,12 +561,12 @@ Peter Gao
 <h2>Basic summaries</h2>
 <p><strong>Review</strong>: What does the following code produce?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>ba_rent <span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">filter</span>(beds <span class="sc">==</span> <span class="dv">2</span>, year <span class="sc">==</span> <span class="dv">2010</span>) <span class="sc">|&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">group_by</span>(city) <span class="sc">|&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">summarize</span>(<span class="at">mean_price =</span> <span class="fu">mean</span>(price, <span class="at">na.rm =</span> T)) <span class="sc">|&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>  <span class="fu">arrange</span>(mean_price) <span class="sc">|&gt;</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>ba_rent <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">filter</span>(beds <span class="sc">==</span> <span class="dv">2</span>, year <span class="sc">==</span> <span class="dv">2010</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">group_by</span>(city) <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>  <span class="fu">summarize</span>(<span class="at">mean_price =</span> <span class="fu">mean</span>(price, <span class="at">na.rm =</span> T)) <span class="sc">|&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a>  <span class="fu">arrange</span>(mean_price) <span class="sc">|&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <div style="height:350px;overflow:auto;">
@@ -830,12 +842,12 @@ Peter Gao
 <h2>Working with point data</h2>
 <p>Our <code>ba_rent</code> data frame already has latitude and longitude, but many points are missing:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">summary</span>(ba_rent<span class="sc">$</span>lat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">summary</span>(ba_rent<span class="sc">$</span>lat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
   33.57   37.40   37.76   37.67   37.80   40.43  193145 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">summary</span>(ba_rent<span class="sc">$</span>lon)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">summary</span>(ba_rent<span class="sc">$</span>lon)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
  -123.2  -122.4  -122.3  -122.2  -122.0   -74.2  196484 </code></pre>
@@ -846,7 +858,7 @@ Peter Gao
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">nrow</span>(ba_rent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">nrow</span>(ba_rent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 200796</code></pre>
 </div>
@@ -857,9 +869,9 @@ Peter Gao
 <h2>Working with point data</h2>
 <p>Let’s just work with the entries for which we have data from the year 2018.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>ba_rent_geo <span class="ot">&lt;-</span> ba_rent <span class="sc">|&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(lat) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(lon))</span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="fu">nrow</span>(ba_rent_geo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>ba_rent_geo <span class="ot">&lt;-</span> ba_rent <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(lat) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(lon))</span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="fu">nrow</span>(ba_rent_geo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 4311</code></pre>
 </div>
@@ -870,9 +882,9 @@ Peter Gao
 <h2>Converting data to sf object</h2>
 <p>When each row in our data frame refers to a point with longitude and latitude, we can use the <code>st_as_sf</code> function to convert our data frame to an sf object.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>ba_rent_geo <span class="ot">&lt;-</span> ba_rent_geo <span class="sc">|&gt;</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"lon"</span>, <span class="st">"lat"</span>), <span class="at">crs =</span> <span class="fu">st_crs</span>(<span class="dv">4326</span>))</span>
-<span id="cb13-3"><a href="#cb13-3"></a>ba_rent_geo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>ba_rent_geo <span class="ot">&lt;-</span> ba_rent_geo <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"lon"</span>, <span class="st">"lat"</span>), <span class="at">crs =</span> <span class="fu">st_crs</span>(<span class="dv">4326</span>))</span>
+<span id="cb14-3"><a href="#cb14-3"></a>ba_rent_geo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 4311 features and 15 fields
 Geometry type: POINT
@@ -902,54 +914,54 @@ Geodetic CRS:  WGS 84
 <h2>Visualizing point data</h2>
 <p>We can easily visualize this data now using the <code>geom_sf()</code> function, which automatically handles sf objects.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">ggplot</span>(ba_rent_geo) <span class="sc">+</span> <span class="fu">geom_sf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"></section>
-<section id="visualizing-point-data-1" class="slide level2">
-<h2>Visualizing point data</h2>
-<p>We can add a basemap using the <code>annotation_map_tile</code> function from the <code>ggspatial</code> package.</p>
-<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-10_8b6931b3ae50254f71846aee436c07fe">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">library</span>(ggspatial)</span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="fu">ggplot</span>(ba_rent_geo) <span class="sc">+</span> </span>
-<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">annotation_map_tile</span>(<span class="at">zoomin =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb16-4"><a href="#cb16-4"></a>  <span class="fu">geom_sf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">ggplot</span>(ba_rent_geo) <span class="sc">+</span> <span class="fu">geom_sf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
-<section id="removing-extra-point" class="slide level2">
-<h2>Removing extra point</h2>
-<p>We can remove points outside a certain box using the <code>st_crop</code> function:</p>
-<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-11_05055e8c076b7e2015b4f34c1df924d7">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>box <span class="ot">=</span> <span class="fu">c</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">130</span>, <span class="at">ymin =</span> <span class="fl">36.5</span>, <span class="at">xmax =</span> <span class="sc">-</span><span class="dv">120</span>, <span class="at">ymax =</span> <span class="dv">40</span>)</span>
-<span id="cb17-2"><a href="#cb17-2"></a>ba_rent_geo <span class="ot">&lt;-</span> ba_rent_geo <span class="sc">|&gt;</span></span>
-<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">st_crop</span>(box)</span>
-<span id="cb17-4"><a href="#cb17-4"></a><span class="fu">ggplot</span>(ba_rent_geo) <span class="sc">+</span> </span>
-<span id="cb17-5"><a href="#cb17-5"></a>  <span class="fu">annotation_map_tile</span>(<span class="at">zoomin =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb17-6"><a href="#cb17-6"></a>  <span class="fu">geom_sf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="visualizing-point-data-1" class="slide level2">
+<h2>Visualizing point data</h2>
+<p>We can add a basemap using the <code>annotation_map_tile</code> function from the <code>ggspatial</code> package.</p>
+<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-11_fd94e18080362cc58ee0dae37a7947f1">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">library</span>(ggspatial)</span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">ggplot</span>(ba_rent_geo) <span class="sc">+</span> </span>
+<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">annotation_map_tile</span>(<span class="at">zoomin =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a>  <span class="fu">geom_sf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
-<section id="theme-and-customization" class="slide level2">
-<h2>Theme and customization</h2>
-<p>We can then adjust the color to show <code>price</code> and also change the color scale:</p>
-<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-12_3b816d780e77e3f418f194a2a6215ef0">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">ggplot</span>(ba_rent_geo, <span class="fu">aes</span>(<span class="at">color =</span> price)) <span class="sc">+</span> </span>
-<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">annotation_map_tile</span>(<span class="at">zoomin =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">geom_sf</span>(<span class="at">alpha =</span> <span class="fl">0.75</span>, <span class="at">size =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
-<span id="cb18-4"><a href="#cb18-4"></a>  <span class="fu">scale_color_viridis_c</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="removing-extra-point" class="slide level2">
+<h2>Removing extra point</h2>
+<p>We can remove points outside a certain box using the <code>st_crop</code> function:</p>
+<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-12_e130a97bbec2195bf9bf57d1de5ae746">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>box <span class="ot">=</span> <span class="fu">c</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">130</span>, <span class="at">ymin =</span> <span class="fl">36.5</span>, <span class="at">xmax =</span> <span class="sc">-</span><span class="dv">120</span>, <span class="at">ymax =</span> <span class="dv">40</span>)</span>
+<span id="cb18-2"><a href="#cb18-2"></a>ba_rent_geo <span class="ot">&lt;-</span> ba_rent_geo <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">st_crop</span>(box)</span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="fu">ggplot</span>(ba_rent_geo) <span class="sc">+</span> </span>
+<span id="cb18-5"><a href="#cb18-5"></a>  <span class="fu">annotation_map_tile</span>(<span class="at">zoomin =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a>  <span class="fu">geom_sf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
+<section id="theme-and-customization" class="slide level2">
+<h2>Theme and customization</h2>
+<p>We can then adjust the color to show <code>price</code> and also change the color scale:</p>
+<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-13_1383177aa97363b9125ae5b04cfdc1bb">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">ggplot</span>(ba_rent_geo, <span class="fu">aes</span>(<span class="at">color =</span> price)) <span class="sc">+</span> </span>
+<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">annotation_map_tile</span>(<span class="at">zoomin =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">geom_sf</span>(<span class="at">alpha =</span> <span class="fl">0.75</span>, <span class="at">size =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a>  <span class="fu">scale_color_viridis_c</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
 <section id="spatial-polygon-data" class="slide level2">
 <h2>Spatial polygon data</h2>
 <p>Although we do not have complete coordinate data, we have good information about county:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(ba_rent<span class="sc">$</span>county))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(ba_rent<span class="sc">$</span>county))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1394</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">unique</span>(ba_rent<span class="sc">$</span>county)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">unique</span>(ba_rent<span class="sc">$</span>county)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "alameda"       "san francisco" "contra costa"  "santa clara"  
  [5] "napa"          "san mateo"     "santa cruz"    "sonoma"       
@@ -961,11 +973,11 @@ Geodetic CRS:  WGS 84
 <h2>Spatial polygon data</h2>
 <p>We can create a county level summary table for the median rent by county for 2015:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>county_rent_15 <span class="ot">&lt;-</span> ba_rent <span class="sc">%&gt;%</span></span>
-<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">filter</span>(beds <span class="sc">==</span> <span class="dv">1</span>, year <span class="sc">==</span> <span class="dv">2015</span>, <span class="sc">!</span><span class="fu">is.na</span>(county)) <span class="sc">|&gt;</span></span>
-<span id="cb23-3"><a href="#cb23-3"></a>  <span class="fu">group_by</span>(county) <span class="sc">|&gt;</span></span>
-<span id="cb23-4"><a href="#cb23-4"></a>  <span class="fu">summarize</span>(<span class="at">median_rent =</span> <span class="fu">median</span>(price, <span class="at">na.rm =</span> T))</span>
-<span id="cb23-5"><a href="#cb23-5"></a>county_rent_15</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>county_rent_15 <span class="ot">&lt;-</span> ba_rent <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">filter</span>(beds <span class="sc">==</span> <span class="dv">1</span>, year <span class="sc">==</span> <span class="dv">2015</span>, <span class="sc">!</span><span class="fu">is.na</span>(county)) <span class="sc">|&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">group_by</span>(county) <span class="sc">|&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a>  <span class="fu">summarize</span>(<span class="at">median_rent =</span> <span class="fu">median</span>(price, <span class="at">na.rm =</span> T))</span>
+<span id="cb24-5"><a href="#cb24-5"></a>county_rent_15</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 × 2
    county        median_rent
@@ -986,15 +998,15 @@ Geodetic CRS:  WGS 84
 <section id="spatial-polygon-data-2" class="slide level2">
 <h2>Spatial polygon data</h2>
 <p>We will then connect this summary table to an sf object. We can load US county data using the <code>tigris</code> package.</p>
-<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-15_fc1932dc2973cd832cb80d44864024ef">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">library</span>(tigris)</span>
-<span id="cb25-2"><a href="#cb25-2"></a>ca_counties <span class="ot">&lt;-</span> <span class="fu">counties</span>(<span class="st">"California"</span>, <span class="at">cb =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-16_b470b64bd05a5c1a6a73468ad9dd3253">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">library</span>(tigris)</span>
+<span id="cb26-2"><a href="#cb26-2"></a>ca_counties <span class="ot">&lt;-</span> <span class="fu">counties</span>(<span class="st">"California"</span>, <span class="at">cb =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-16_f2d375e00f9e06db4f596e027b8c25eb">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># convert county names to lower case</span></span>
-<span id="cb26-2"><a href="#cb26-2"></a>ca_counties <span class="ot">&lt;-</span> ca_counties <span class="sc">|&gt;</span></span>
-<span id="cb26-3"><a href="#cb26-3"></a>  <span class="fu">mutate</span>(<span class="at">county =</span> stringr<span class="sc">::</span><span class="fu">str_to_lower</span>(NAME))</span>
-<span id="cb26-4"><a href="#cb26-4"></a>ca_counties</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-17_01ae32378c4f606ebac09a7c97c56066">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># convert county names to lower case</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a>ca_counties <span class="ot">&lt;-</span> ca_counties <span class="sc">|&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3"></a>  <span class="fu">mutate</span>(<span class="at">county =</span> stringr<span class="sc">::</span><span class="fu">str_to_lower</span>(NAME))</span>
+<span id="cb27-4"><a href="#cb27-4"></a>ca_counties</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 58 features and 13 fields
 Geometry type: MULTIPOLYGON
@@ -1041,10 +1053,10 @@ First 10 features:
 <section id="joining-spatial-data" class="slide level2">
 <h2>Joining spatial data</h2>
 <p>If we want to keep only the counties for which we have data, we must use a <code>right_join</code> starting with <code>ca_counties</code>:</p>
-<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-17_3603e2261c0aba5ac0af33e34a78e9d2">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>ca_counties <span class="ot">&lt;-</span> ca_counties <span class="sc">|&gt;</span></span>
-<span id="cb28-2"><a href="#cb28-2"></a>  <span class="fu">right_join</span>(county_rent_15, <span class="at">by =</span> <span class="st">"county"</span>)</span>
-<span id="cb28-3"><a href="#cb28-3"></a>ca_counties</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-18_e09a7ca3d008ac5a3ba72ec6c1815dc6">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>ca_counties <span class="ot">&lt;-</span> ca_counties <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href="#cb29-2"></a>  <span class="fu">right_join</span>(county_rent_15, <span class="at">by =</span> <span class="st">"county"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3"></a>ca_counties</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 10 features and 14 fields
 Geometry type: MULTIPOLYGON
@@ -1090,28 +1102,25 @@ Geodetic CRS:  NAD83
 <section id="visualizing-polygon-data" class="slide level2">
 <h2>Visualizing polygon data</h2>
 <p>We can now use the <code>geom_sf()</code> function to visualize our data.</p>
-<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-18_8a56944e320832f21fc17fa1dc40f20a">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">ggplot</span>(ca_counties, <span class="fu">aes</span>(<span class="at">fill =</span> median_rent)) <span class="sc">+</span></span>
-<span id="cb30-2"><a href="#cb30-2"></a>  <span class="fu">geom_sf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
-<section id="themes-and-customization" class="slide level2">
-<h2>Themes and customization</h2>
-<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-19_3caa9c9aca611171193d60f28aa2716c">
+<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-19_5868f5f2814f5fc757bcfc546eebd170">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">ggplot</span>(ca_counties, <span class="fu">aes</span>(<span class="at">fill =</span> median_rent)) <span class="sc">+</span></span>
-<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
-<span id="cb31-3"><a href="#cb31-3"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Median Rent"</span>) <span class="sc">+</span></span>
-<span id="cb31-4"><a href="#cb31-4"></a>  <span class="fu">ggtitle</span>(<span class="st">"Median 1BR rent by county, Bay Area, 2015"</span>,</span>
-<span id="cb31-5"><a href="#cb31-5"></a>           <span class="at">subtitle =</span> <span class="st">"based on Craigslist rental listings"</span>) <span class="sc">+</span></span>
-<span id="cb31-6"><a href="#cb31-6"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">geom_sf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
-<section id="midterm-project" class="title-slide slide level1 center">
-<h1>Midterm Project</h1>
+<section id="themes-and-customization" class="slide level2">
+<h2>Themes and customization</h2>
+<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-20_11a9b925e746632da83ce04dd130a46b">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">ggplot</span>(ca_counties, <span class="fu">aes</span>(<span class="at">fill =</span> median_rent)) <span class="sc">+</span></span>
+<span id="cb32-2"><a href="#cb32-2"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
+<span id="cb32-3"><a href="#cb32-3"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Median Rent"</span>) <span class="sc">+</span></span>
+<span id="cb32-4"><a href="#cb32-4"></a>  <span class="fu">ggtitle</span>(<span class="st">"Median 1BR rent by county, Bay Area, 2015"</span>,</span>
+<span id="cb32-5"><a href="#cb32-5"></a>           <span class="at">subtitle =</span> <span class="st">"based on Craigslist rental listings"</span>) <span class="sc">+</span></span>
+<span id="cb32-6"><a href="#cb32-6"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
-<div class="footer footer-default">
+</div>
+
+<img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"><div class="footer footer-default">
 
 </div>
 </section>

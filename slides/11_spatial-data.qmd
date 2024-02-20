@@ -1,5 +1,5 @@
 ---
-title: "MATH167R: Spatial data analysis"
+title: "MATH167R: Advanced visualizations"
 author: "Peter Gao"
 format: 
   revealjs:
@@ -10,8 +10,31 @@ editor: visual
 ## Overview of today
 
 -   Visualizing spatial data
--   Merging data
+-   Animations
 -   Project work time
+
+## Example: AQI data
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| cache: TRUE
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+
+readr::read_csv("https://math250-s24.github.io/")
+```
+
+
+## Exercise
+
+
+## Example: AQI data
+
+
 
 ## Loading project data
 
@@ -302,5 +325,3 @@ ggplot(ca_counties, aes(fill = median_rent)) +
            subtitle = "based on Craigslist rental listings") +
   theme_minimal()
 ```
-
-# Midterm Project

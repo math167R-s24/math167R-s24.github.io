@@ -1,5 +1,5 @@
 ---
-title: "MATH167R: Data Management"
+title: "MATH167R: Merging Data"
 author: "Peter Gao"
 format: 
   revealjs:
@@ -10,9 +10,324 @@ editor: source
 ## Overview of today
 
 -   Merging data
+-   Exploratory data analysis and workflow
 -   Organizing output and saving images
--   Exploratory data analysis
 -   Lab time
+
+## Joining data
+
+Often we will want to combine two data frames. To do so, we typically need a **key** variable which exists in both data frames.
+
+## Example: Flights data
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+library(nycflights13)
+data(flights)
+data(airlines)
+head(flights)
+```
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+library(nycflights13)
+library(knitr)
+data(flights)
+data(airlines)
+kable(head(flights)) |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "350px")
+```
+
+## Keys
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+head(airlines)
+```
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+kable(head(airlines)) |>
+  kableExtra::kable_styling("striped", full_width = F) |> 
+  kableExtra::scroll_box(height = "350px")
+```
+
+## Joining Data
+
+We can use SQL-like join statements in R:
+
+-   `inner_join(x, y, by = "key")`: match observations only when exact keys are equal
+-   `left_join(x, y, by = "key")`: keep all observations in `x`, match observations in `y` by keys, `NA` otherwise
+-   `right_join(x, y, by = "key")`: keep all observations in `y`, match observations in `x` by keys, `NA` otherwise
+-   `outer_join(x, y, by = "key")`: keep all observations in `x` and `y`, match keys where possible, `NA` otherwise
+
+Usually, `left_join()` will suffice.
+
+## Example: Band members
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+library(tidyverse)
+band_members
+band_instruments
+```
+
+## Example: Band members
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+band_members |> inner_join(band_instruments)
+band_members |> left_join(band_instruments)
+```
+
+## Example: Band members
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+band_members |> right_join(band_instruments)
+band_members |> full_join(band_instruments)
+```
+
+## Example: Band members
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+# To suppress the message about joining variables, supply `by`
+band_members |> inner_join(band_instruments, by = join_by(name))
+```
+
+## Inner join vs. outer join
+
+<img src="images/join-inner.png" height="90"/>
+
+<img src="images/join-outer.png" height="360"/>
+
+Images courtesy of Hadley Wickham. [(Link)](https://r4ds.had.co.nz/relational-data.html)
+
+## Base R
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+# inner join
+merge(band_members, band_instruments, by.x = "name", by.y = "name")
+
+# outer join
+merge(band_members, band_instruments, by.x = "name", by.y = "name", all = T)
+```
+
+## Base R
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+# left join
+merge(band_members, band_instruments, by.x = "name", by.y = "name", all.x = T)
+
+# right join
+merge(band_members, band_instruments, by.x = "name", by.y = "name", all.y = T)
+```
+
+## Exercise: Flights data
+
+How can we combine the `flights` and `airlines` data? 
+
+. . .
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+flights |>
+  left_join(airlines, by = "carrier") |>
+  head()
+```
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+flights |>
+  left_join(airlines, by = "carrier") |>
+  head() |>
+  kable() |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "350px")
+```
+
+
+## Exercise: Flights data
+
+Use the `flights` and `weather` datasets from the `nycflights13` package to create a scatter plot with `wind_speed` on the x-axis and `dep_delay` on the `y-axis`.
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+data(flights)
+data(weather)
+```
+
+## Exercise: Flights data
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| cache: TRUE
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+flights |> 
+  left_join(weather |> select(origin, time_hour, temp, wind_speed)) |>
+  ggplot(aes(x = wind_speed, y = dep_delay)) + geom_point(alpha = .5)
+```
+
+## Example: California data
+
+The `tidycensus` package provides easy access to Census data via R. In order to download data using `tidycensus`, you will need a [Census API Key](https://api.census.gov/data/key_signup.html).
+
+For now, you can think of an API key as an ID card you use to download data from the Census.
+
+## Example: California data
+
+```{r, echo = T, eval = F}
+library(tidycensus)
+# the following command can be used to save your API key on your computer
+# census_api_key("YOUR_KEY_HERE", overwrite = FALSE, install = FALSE)
+
+# the following code loads my local Census API Key, which is used to access 
+# census data
+Sys.getenv("CENSUS_API_KEY")
+
+# 2021 median income by county
+income_2021 <- get_acs(geography = "county", 
+                       variables = c(medincome = "B19013_001"), 
+                       state = "CA", 
+                       year = 2021)
+
+# 2010 median income by county
+income_2010 <- get_acs(geography = "county", 
+                       variables = c(medincome = "B19013_001"), 
+                       state = "CA", 
+                       year = 2010)
+```
+
+```{r, echo = T, eval = T, comment = F, message = F, warning = F, include = F}
+library(tidycensus)
+
+# the following code loads my local Census API Key, which is used to access 
+# census data
+Sys.getenv("CENSUS_API_KEY")
+
+# 2021 median income by county
+income_2021 <- get_acs(geography = "county", 
+                       variables = c(medincome = "B19013_001"), 
+                       state = "CA", 
+                       year = 2021)
+
+# 2010 median income by county
+income_2010 <- get_acs(geography = "county", 
+                       variables = c(medincome = "B19013_001"), 
+                       state = "CA", 
+                       year = 2010)
+```
+
+## Example: California data
+
+```{r, echo = T, eval = T, comment = F, message = F, warning = F}
+head(income_2021)
+```
+
+
+## Example: California data
+
+```{r, echo = T, eval = T}
+income_2021 <- income_2021 |>
+  pivot_wider(
+    names_from = variable,
+    values_from = c(estimate, moe)
+  ) |>
+  select(-moe_medincome) |>
+  rename(medincome_2021 = estimate_medincome)
+head(income_2021)
+```
+
+## Example: California data
+
+```{r, echo = T, eval = T}
+# repeat for 2010 data
+income_2010 <- income_2010 |>
+  pivot_wider(
+    names_from = variable,
+    values_from = c(estimate, moe)
+  ) |>
+  select(-moe_medincome) |>
+  rename(medincome_2010 = estimate_medincome)
+```
+
+## Example: California data
+
+```{r, echo = T, eval = F}
+income_combined <- income_2010 |>
+  left_join(income_2021, by = c("GEOID", "NAME"))
+ggplot(income_combined, aes(x = medincome_2010, y = medincome_2021)) +
+  geom_point() + 
+  geom_abline(slope = 1) + 
+  labs(title = "Median income in 2021 vs. 2010, CA Counties",
+       subtitle = "American Community Survey",
+       y = "2021 Median Income",
+       x = "2010 Median Income")
+  
+```
+
+## Example: California data
+
+```{r, echo = F, eval = T}
+income_combined <- income_2010 |>
+  left_join(income_2021, by = c("GEOID", "NAME"))
+ggplot(income_combined, aes(x = medincome_2010, y = medincome_2021)) +
+  geom_point() + 
+  geom_abline(slope = 1) + 
+  labs(title = "Median income in 2021 vs. 2010, CA Counties",
+       subtitle = "American Community Survey",
+       y = "2021 Median Income",
+       x = "2010 Median Income")
+```
+
+
+## Data manipulation cheatsheet
+
+-   `filter()` subset rows
+-   `select()` subset columns, use with `contains()`, `starts_with()`, `ends_with()`, ...
+-   `mutate()` create columns
+-   `group_by()`, `summarize()`, `count()` group and summarize groups
+-   `rename()` rename columns
+-   `pivot_longer()`, `pivot_wider()` reshape data
+-   `inner_join()`, `left_join()`, `right_join()`, `outer_join()` combine data (like SQL)
+
+[Much, much more! (Click me for a cheat sheet)](https://rstudio.com/resources/cheatsheets/)
+
+## Exploratory data analysis
+
+Exploratory data analysis is the process of learning about a dataset by visualizing, summarizing, and transforming it.
+
+By now we've seen most of the skills you need to carry out exploratory data analysis (EDA). As Wickham, Çetinkaya-Rundel, and Grolemund put it, the cycle of EDA looks something like this:
+
+1.  Generate questions about your data.
+
+2.  Explore your questions by visualizing, transforming, and modelling your data.
+
+3.  Use your findings to refine your questions and generate new questions.
+
+You can read their walkthrough of the EDA process [here](https://r4ds.hadley.nz/eda).
 
 ## Downloading data
 
@@ -87,7 +402,7 @@ saveRDS(US_pop_plot, "~/Documents/MATH167R/data/US_pop_plot.rds")
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
-US_pop_plot <- readRDS("~/Documents/MATH167R/data/US_pop_tidy.rds")
+US_pop_plot <- readRDS("~/Documents/MATH167R/data/US_pop_plot.rds")
 print(US_pop_plot)
 ```
 
@@ -147,9 +462,7 @@ kable(state_population, digits = 3, row.names = F) |>
 
 You can name your chunks and use the code chunk `cache = T` to save the output of a code chunk so you don't have to wait for the code to run every time you knit.
 
-```{r pop_plot}
-#| eval: TRUE
-#| cache: TRUE
+```{r pop_plot, cache = T}
 #| echo: fenced
 US_pop_plot <- US_pop_tidy |>
   ggplot(aes(x = Year, y = Population)) + 
@@ -158,12 +471,13 @@ US_pop_plot <- US_pop_tidy |>
 print(US_pop_plot)
 ```
 
+
 ## Caching code chunks
 
 However, that means plots/output will *not* automatically update if you change the "upstream" data processing pipeline. You must change the cached chunk or delete the cache to rerun the code.
 
 Before you turn in your assignments, you should clear all the cached files and knit from scratch to make sure no errors have been introduced.
 
-## Group Lab Time
+## Lab Time
 
 The rest of class is devoted to working in groups on your lab assignment.

@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.3.353">
 
   <meta name="author" content="Peter Gao">
-  <title>MATH167R - MATH167R: Data Management</title>
+  <title>MATH167R - MATH167R: Merging Data</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -384,7 +384,10 @@
       margin-right: 0; 
     }
   </style>
-<meta property="og:title" content="MATH167R - MATH167R: Data Management">
+  
+  <script src="../site_libs/kePrint-0.0.1/kePrint.js"></script>
+  <link href="../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<meta property="og:title" content="MATH167R - MATH167R: Merging Data">
 <meta property="og:site-name" content="MATH167R">
 </head>
 <body class="quarto-light">
@@ -392,7 +395,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">MATH167R: Data Management</h1>
+  <h1 class="title">MATH167R: Merging Data</h1>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -407,16 +410,694 @@ Peter Gao
 <h2>Overview of today</h2>
 <ul>
 <li>Merging data</li>
+<li>Exploratory data analysis and workflow</li>
 <li>Organizing output and saving images</li>
-<li>Exploratory data analysis</li>
 <li>Lab time</li>
 </ul>
+</section>
+<section id="joining-data" class="slide level2">
+<h2>Joining data</h2>
+<p>Often we will want to combine two data frames. To do so, we typically need a <strong>key</strong> variable which exists in both data frames.</p>
+</section>
+<section id="example-flights-data" class="slide level2">
+<h2>Example: Flights data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(nycflights13)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">data</span>(flights)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">data</span>(airlines)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">head</span>(flights)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:350px; ">
+<table class="table table-striped" data-quarto-postprocess="true" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">year</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">month</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">day</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">dep_time</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">sched_dep_time</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">dep_delay</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">arr_time</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">sched_arr_time</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">arr_delay</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">carrier</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">flight</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">tailnum</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">origin</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">dest</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">air_time</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">distance</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">hour</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">minute</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">time_hour</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">517</td>
+<td style="text-align: right;">515</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">830</td>
+<td style="text-align: right;">819</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: left;">UA</td>
+<td style="text-align: right;">1545</td>
+<td style="text-align: left;">N14228</td>
+<td style="text-align: left;">EWR</td>
+<td style="text-align: left;">IAH</td>
+<td style="text-align: right;">227</td>
+<td style="text-align: right;">1400</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">2013-01-01 05:00:00</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">533</td>
+<td style="text-align: right;">529</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">850</td>
+<td style="text-align: right;">830</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: left;">UA</td>
+<td style="text-align: right;">1714</td>
+<td style="text-align: left;">N24211</td>
+<td style="text-align: left;">LGA</td>
+<td style="text-align: left;">IAH</td>
+<td style="text-align: right;">227</td>
+<td style="text-align: right;">1416</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: left;">2013-01-01 05:00:00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">542</td>
+<td style="text-align: right;">540</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">923</td>
+<td style="text-align: right;">850</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: left;">AA</td>
+<td style="text-align: right;">1141</td>
+<td style="text-align: left;">N619AA</td>
+<td style="text-align: left;">JFK</td>
+<td style="text-align: left;">MIA</td>
+<td style="text-align: right;">160</td>
+<td style="text-align: right;">1089</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: left;">2013-01-01 05:00:00</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">544</td>
+<td style="text-align: right;">545</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">1004</td>
+<td style="text-align: right;">1022</td>
+<td style="text-align: right;">-18</td>
+<td style="text-align: left;">B6</td>
+<td style="text-align: right;">725</td>
+<td style="text-align: left;">N804JB</td>
+<td style="text-align: left;">JFK</td>
+<td style="text-align: left;">BQN</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: right;">1576</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: left;">2013-01-01 05:00:00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">554</td>
+<td style="text-align: right;">600</td>
+<td style="text-align: right;">-6</td>
+<td style="text-align: right;">812</td>
+<td style="text-align: right;">837</td>
+<td style="text-align: right;">-25</td>
+<td style="text-align: left;">DL</td>
+<td style="text-align: right;">461</td>
+<td style="text-align: left;">N668DN</td>
+<td style="text-align: left;">LGA</td>
+<td style="text-align: left;">ATL</td>
+<td style="text-align: right;">116</td>
+<td style="text-align: right;">762</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">2013-01-01 06:00:00</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">554</td>
+<td style="text-align: right;">558</td>
+<td style="text-align: right;">-4</td>
+<td style="text-align: right;">740</td>
+<td style="text-align: right;">728</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: left;">UA</td>
+<td style="text-align: right;">1696</td>
+<td style="text-align: left;">N39463</td>
+<td style="text-align: left;">EWR</td>
+<td style="text-align: left;">ORD</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">719</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">58</td>
+<td style="text-align: left;">2013-01-01 05:00:00</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</div>
+</div>
+</section>
+<section id="keys" class="slide level2">
+<h2>Keys</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">head</span>(airlines)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:350px; ">
+<table class="table table-striped" data-quarto-postprocess="true" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">carrier</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">9E</td>
+<td style="text-align: left;">Endeavor Air Inc.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">AA</td>
+<td style="text-align: left;">American Airlines Inc.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">AS</td>
+<td style="text-align: left;">Alaska Airlines Inc.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B6</td>
+<td style="text-align: left;">JetBlue Airways</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DL</td>
+<td style="text-align: left;">Delta Air Lines Inc.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EV</td>
+<td style="text-align: left;">ExpressJet Airlines Inc.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</div>
+</div>
+</section>
+<section id="joining-data-1" class="slide level2">
+<h2>Joining Data</h2>
+<p>We can use SQL-like join statements in R:</p>
+<ul>
+<li><code>inner_join(x, y, by = "key")</code>: match observations only when exact keys are equal</li>
+<li><code>left_join(x, y, by = "key")</code>: keep all observations in <code>x</code>, match observations in <code>y</code> by keys, <code>NA</code> otherwise</li>
+<li><code>right_join(x, y, by = "key")</code>: keep all observations in <code>y</code>, match observations in <code>x</code> by keys, <code>NA</code> otherwise</li>
+<li><code>outer_join(x, y, by = "key")</code>: keep all observations in <code>x</code> and <code>y</code>, match keys where possible, <code>NA</code> otherwise</li>
+</ul>
+<p>Usually, <code>left_join()</code> will suffice.</p>
+</section>
+<section id="example-band-members" class="slide level2">
+<h2>Example: Band members</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>band_members</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  name  band   
+  &lt;chr&gt; &lt;chr&gt;  
+1 Mick  Stones 
+2 John  Beatles
+3 Paul  Beatles</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>band_instruments</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  name  plays 
+  &lt;chr&gt; &lt;chr&gt; 
+1 John  guitar
+2 Paul  bass  
+3 Keith guitar</code></pre>
+</div>
+</div>
+</section>
+<section id="example-band-members-1" class="slide level2">
+<h2>Example: Band members</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>band_members <span class="sc">|&gt;</span> <span class="fu">inner_join</span>(band_instruments)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  name  band    plays 
+  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; 
+1 John  Beatles guitar
+2 Paul  Beatles bass  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>band_members <span class="sc">|&gt;</span> <span class="fu">left_join</span>(band_instruments)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  name  band    plays 
+  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; 
+1 Mick  Stones  &lt;NA&gt;  
+2 John  Beatles guitar
+3 Paul  Beatles bass  </code></pre>
+</div>
+</div>
+</section>
+<section id="example-band-members-2" class="slide level2">
+<h2>Example: Band members</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>band_members <span class="sc">|&gt;</span> <span class="fu">right_join</span>(band_instruments)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  name  band    plays 
+  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; 
+1 John  Beatles guitar
+2 Paul  Beatles bass  
+3 Keith &lt;NA&gt;    guitar</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>band_members <span class="sc">|&gt;</span> <span class="fu">full_join</span>(band_instruments)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+  name  band    plays 
+  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; 
+1 Mick  Stones  &lt;NA&gt;  
+2 John  Beatles guitar
+3 Paul  Beatles bass  
+4 Keith &lt;NA&gt;    guitar</code></pre>
+</div>
+</div>
+</section>
+<section id="example-band-members-3" class="slide level2">
+<h2>Example: Band members</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># To suppress the message about joining variables, supply `by`</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>band_members <span class="sc">|&gt;</span> <span class="fu">inner_join</span>(band_instruments, <span class="at">by =</span> <span class="fu">join_by</span>(name))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  name  band    plays 
+  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; 
+1 John  Beatles guitar
+2 Paul  Beatles bass  </code></pre>
+</div>
+</div>
+</section>
+<section id="inner-join-vs.-outer-join" class="slide level2">
+<h2>Inner join vs.&nbsp;outer join</h2>
+<p><img src="images/join-inner.png" height="90"></p>
+<p><img src="images/join-outer.png" height="360"></p>
+<p>Images courtesy of Hadley Wickham. <a href="https://r4ds.had.co.nz/relational-data.html">(Link)</a></p>
+</section>
+<section id="base-r" class="slide level2">
+<h2>Base R</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># inner join</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">merge</span>(band_members, band_instruments, <span class="at">by.x =</span> <span class="st">"name"</span>, <span class="at">by.y =</span> <span class="st">"name"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  name    band  plays
+1 John Beatles guitar
+2 Paul Beatles   bass</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># outer join</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">merge</span>(band_members, band_instruments, <span class="at">by.x =</span> <span class="st">"name"</span>, <span class="at">by.y =</span> <span class="st">"name"</span>, <span class="at">all =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   name    band  plays
+1  John Beatles guitar
+2 Keith    &lt;NA&gt; guitar
+3  Mick  Stones   &lt;NA&gt;
+4  Paul Beatles   bass</code></pre>
+</div>
+</div>
+</section>
+<section id="base-r-1" class="slide level2">
+<h2>Base R</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># left join</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="fu">merge</span>(band_members, band_instruments, <span class="at">by.x =</span> <span class="st">"name"</span>, <span class="at">by.y =</span> <span class="st">"name"</span>, <span class="at">all.x =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  name    band  plays
+1 John Beatles guitar
+2 Mick  Stones   &lt;NA&gt;
+3 Paul Beatles   bass</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># right join</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="fu">merge</span>(band_members, band_instruments, <span class="at">by.x =</span> <span class="st">"name"</span>, <span class="at">by.y =</span> <span class="st">"name"</span>, <span class="at">all.y =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   name    band  plays
+1  John Beatles guitar
+2 Keith    &lt;NA&gt; guitar
+3  Paul Beatles   bass</code></pre>
+</div>
+</div>
+</section>
+<section id="exercise-flights-data" class="slide level2">
+<h2>Exercise: Flights data</h2>
+<p>How can we combine the <code>flights</code> and <code>airlines</code> data?</p>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>flights <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a>  <span class="fu">left_join</span>(airlines, <span class="at">by =</span> <span class="st">"carrier"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:350px; ">
+<table class="table table-striped" data-quarto-postprocess="true" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">year</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">month</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">day</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">dep_time</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">sched_dep_time</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">dep_delay</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">arr_time</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">sched_arr_time</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">arr_delay</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">carrier</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">flight</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">tailnum</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">origin</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">dest</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">air_time</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">distance</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">hour</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">minute</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">time_hour</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">517</td>
+<td style="text-align: right;">515</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">830</td>
+<td style="text-align: right;">819</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: left;">UA</td>
+<td style="text-align: right;">1545</td>
+<td style="text-align: left;">N14228</td>
+<td style="text-align: left;">EWR</td>
+<td style="text-align: left;">IAH</td>
+<td style="text-align: right;">227</td>
+<td style="text-align: right;">1400</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">2013-01-01 05:00:00</td>
+<td style="text-align: left;">United Air Lines Inc.</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">533</td>
+<td style="text-align: right;">529</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">850</td>
+<td style="text-align: right;">830</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: left;">UA</td>
+<td style="text-align: right;">1714</td>
+<td style="text-align: left;">N24211</td>
+<td style="text-align: left;">LGA</td>
+<td style="text-align: left;">IAH</td>
+<td style="text-align: right;">227</td>
+<td style="text-align: right;">1416</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: left;">2013-01-01 05:00:00</td>
+<td style="text-align: left;">United Air Lines Inc.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">542</td>
+<td style="text-align: right;">540</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">923</td>
+<td style="text-align: right;">850</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: left;">AA</td>
+<td style="text-align: right;">1141</td>
+<td style="text-align: left;">N619AA</td>
+<td style="text-align: left;">JFK</td>
+<td style="text-align: left;">MIA</td>
+<td style="text-align: right;">160</td>
+<td style="text-align: right;">1089</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: left;">2013-01-01 05:00:00</td>
+<td style="text-align: left;">American Airlines Inc.</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">544</td>
+<td style="text-align: right;">545</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">1004</td>
+<td style="text-align: right;">1022</td>
+<td style="text-align: right;">-18</td>
+<td style="text-align: left;">B6</td>
+<td style="text-align: right;">725</td>
+<td style="text-align: left;">N804JB</td>
+<td style="text-align: left;">JFK</td>
+<td style="text-align: left;">BQN</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: right;">1576</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: left;">2013-01-01 05:00:00</td>
+<td style="text-align: left;">JetBlue Airways</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">554</td>
+<td style="text-align: right;">600</td>
+<td style="text-align: right;">-6</td>
+<td style="text-align: right;">812</td>
+<td style="text-align: right;">837</td>
+<td style="text-align: right;">-25</td>
+<td style="text-align: left;">DL</td>
+<td style="text-align: right;">461</td>
+<td style="text-align: left;">N668DN</td>
+<td style="text-align: left;">LGA</td>
+<td style="text-align: left;">ATL</td>
+<td style="text-align: right;">116</td>
+<td style="text-align: right;">762</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">2013-01-01 06:00:00</td>
+<td style="text-align: left;">Delta Air Lines Inc.</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">554</td>
+<td style="text-align: right;">558</td>
+<td style="text-align: right;">-4</td>
+<td style="text-align: right;">740</td>
+<td style="text-align: right;">728</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: left;">UA</td>
+<td style="text-align: right;">1696</td>
+<td style="text-align: left;">N39463</td>
+<td style="text-align: left;">EWR</td>
+<td style="text-align: left;">ORD</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">719</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">58</td>
+<td style="text-align: left;">2013-01-01 05:00:00</td>
+<td style="text-align: left;">United Air Lines Inc.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-flights-data-1" class="slide level2">
+<h2>Exercise: Flights data</h2>
+<p>Use the <code>flights</code> and <code>weather</code> datasets from the <code>nycflights13</code> package to create a scatter plot with <code>wind_speed</code> on the x-axis and <code>dep_delay</code> on the <code>y-axis</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">data</span>(flights)</span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="fu">data</span>(weather)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-flights-data-2" class="slide level2">
+<h2>Exercise: Flights data</h2>
+
+<img data-src="10_data-management_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="example-california-data" class="slide level2">
+<h2>Example: California data</h2>
+<p>The <code>tidycensus</code> package provides easy access to Census data via R. In order to download data using <code>tidycensus</code>, you will need a <a href="https://api.census.gov/data/key_signup.html">Census API Key</a>.</p>
+<p>For now, you can think of an API key as an ID card you use to download data from the Census.</p>
+</section>
+<section id="example-california-data-1" class="slide level2">
+<h2>Example: California data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">library</span>(tidycensus)</span>
+<span id="cb27-2"><a href="#cb27-2"></a><span class="co"># the following command can be used to save your API key on your computer</span></span>
+<span id="cb27-3"><a href="#cb27-3"></a><span class="co"># census_api_key("YOUR_KEY_HERE", overwrite = FALSE, install = FALSE)</span></span>
+<span id="cb27-4"><a href="#cb27-4"></a></span>
+<span id="cb27-5"><a href="#cb27-5"></a><span class="co"># the following code loads my local Census API Key, which is used to access </span></span>
+<span id="cb27-6"><a href="#cb27-6"></a><span class="co"># census data</span></span>
+<span id="cb27-7"><a href="#cb27-7"></a><span class="fu">Sys.getenv</span>(<span class="st">"CENSUS_API_KEY"</span>)</span>
+<span id="cb27-8"><a href="#cb27-8"></a></span>
+<span id="cb27-9"><a href="#cb27-9"></a><span class="co"># 2021 median income by county</span></span>
+<span id="cb27-10"><a href="#cb27-10"></a>income_2021 <span class="ot">&lt;-</span> <span class="fu">get_acs</span>(<span class="at">geography =</span> <span class="st">"county"</span>, </span>
+<span id="cb27-11"><a href="#cb27-11"></a>                       <span class="at">variables =</span> <span class="fu">c</span>(<span class="at">medincome =</span> <span class="st">"B19013_001"</span>), </span>
+<span id="cb27-12"><a href="#cb27-12"></a>                       <span class="at">state =</span> <span class="st">"CA"</span>, </span>
+<span id="cb27-13"><a href="#cb27-13"></a>                       <span class="at">year =</span> <span class="dv">2021</span>)</span>
+<span id="cb27-14"><a href="#cb27-14"></a></span>
+<span id="cb27-15"><a href="#cb27-15"></a><span class="co"># 2010 median income by county</span></span>
+<span id="cb27-16"><a href="#cb27-16"></a>income_2010 <span class="ot">&lt;-</span> <span class="fu">get_acs</span>(<span class="at">geography =</span> <span class="st">"county"</span>, </span>
+<span id="cb27-17"><a href="#cb27-17"></a>                       <span class="at">variables =</span> <span class="fu">c</span>(<span class="at">medincome =</span> <span class="st">"B19013_001"</span>), </span>
+<span id="cb27-18"><a href="#cb27-18"></a>                       <span class="at">state =</span> <span class="st">"CA"</span>, </span>
+<span id="cb27-19"><a href="#cb27-19"></a>                       <span class="at">year =</span> <span class="dv">2010</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="example-california-data-2" class="slide level2">
+<h2>Example: California data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">head</span>(income_2021)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>FALSE # A tibble: 6 × 5
+FALSE   GEOID NAME                         variable  estimate   moe
+FALSE   &lt;chr&gt; &lt;chr&gt;                        &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt;
+FALSE 1 06001 Alameda County, California   medincome   112017  1043
+FALSE 2 06003 Alpine County, California    medincome    96000 24486
+FALSE 3 06005 Amador County, California    medincome    69955  5482
+FALSE 4 06007 Butte County, California     medincome    59863  1989
+FALSE 5 06009 Calaveras County, California medincome    70119  6448
+FALSE 6 06011 Colusa County, California    medincome    61861  6540</code></pre>
+</div>
+</div>
+</section>
+<section id="example-california-data-3" class="slide level2">
+<h2>Example: California data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>income_2021 <span class="ot">&lt;-</span> income_2021 <span class="sc">|&gt;</span></span>
+<span id="cb30-2"><a href="#cb30-2"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb30-3"><a href="#cb30-3"></a>    <span class="at">names_from =</span> variable,</span>
+<span id="cb30-4"><a href="#cb30-4"></a>    <span class="at">values_from =</span> <span class="fu">c</span>(estimate, moe)</span>
+<span id="cb30-5"><a href="#cb30-5"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb30-6"><a href="#cb30-6"></a>  <span class="fu">select</span>(<span class="sc">-</span>moe_medincome) <span class="sc">|&gt;</span></span>
+<span id="cb30-7"><a href="#cb30-7"></a>  <span class="fu">rename</span>(<span class="at">medincome_2021 =</span> estimate_medincome)</span>
+<span id="cb30-8"><a href="#cb30-8"></a><span class="fu">head</span>(income_2021)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  GEOID NAME                         medincome_2021
+  &lt;chr&gt; &lt;chr&gt;                                 &lt;dbl&gt;
+1 06001 Alameda County, California           112017
+2 06003 Alpine County, California             96000
+3 06005 Amador County, California             69955
+4 06007 Butte County, California              59863
+5 06009 Calaveras County, California          70119
+6 06011 Colusa County, California             61861</code></pre>
+</div>
+</div>
+</section>
+<section id="example-california-data-4" class="slide level2">
+<h2>Example: California data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="co"># repeat for 2010 data</span></span>
+<span id="cb32-2"><a href="#cb32-2"></a>income_2010 <span class="ot">&lt;-</span> income_2010 <span class="sc">|&gt;</span></span>
+<span id="cb32-3"><a href="#cb32-3"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb32-4"><a href="#cb32-4"></a>    <span class="at">names_from =</span> variable,</span>
+<span id="cb32-5"><a href="#cb32-5"></a>    <span class="at">values_from =</span> <span class="fu">c</span>(estimate, moe)</span>
+<span id="cb32-6"><a href="#cb32-6"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb32-7"><a href="#cb32-7"></a>  <span class="fu">select</span>(<span class="sc">-</span>moe_medincome) <span class="sc">|&gt;</span></span>
+<span id="cb32-8"><a href="#cb32-8"></a>  <span class="fu">rename</span>(<span class="at">medincome_2010 =</span> estimate_medincome)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="example-california-data-5" class="slide level2">
+<h2>Example: California data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>income_combined <span class="ot">&lt;-</span> income_2010 <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">left_join</span>(income_2021, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"GEOID"</span>, <span class="st">"NAME"</span>))</span>
+<span id="cb33-3"><a href="#cb33-3"></a><span class="fu">ggplot</span>(income_combined, <span class="fu">aes</span>(<span class="at">x =</span> medincome_2010, <span class="at">y =</span> medincome_2021)) <span class="sc">+</span></span>
+<span id="cb33-4"><a href="#cb33-4"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb33-5"><a href="#cb33-5"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb33-6"><a href="#cb33-6"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Median income in 2021 vs. 2010, CA Counties"</span>,</span>
+<span id="cb33-7"><a href="#cb33-7"></a>       <span class="at">subtitle =</span> <span class="st">"American Community Survey"</span>,</span>
+<span id="cb33-8"><a href="#cb33-8"></a>       <span class="at">y =</span> <span class="st">"2021 Median Income"</span>,</span>
+<span id="cb33-9"><a href="#cb33-9"></a>       <span class="at">x =</span> <span class="st">"2010 Median Income"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="example-california-data-6" class="slide level2">
+<h2>Example: California data</h2>
+
+<img data-src="10_data-management_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"></section>
+<section id="data-manipulation-cheatsheet" class="slide level2">
+<h2>Data manipulation cheatsheet</h2>
+<ul>
+<li><code>filter()</code> subset rows</li>
+<li><code>select()</code> subset columns, use with <code>contains()</code>, <code>starts_with()</code>, <code>ends_with()</code>, …</li>
+<li><code>mutate()</code> create columns</li>
+<li><code>group_by()</code>, <code>summarize()</code>, <code>count()</code> group and summarize groups</li>
+<li><code>rename()</code> rename columns</li>
+<li><code>pivot_longer()</code>, <code>pivot_wider()</code> reshape data</li>
+<li><code>inner_join()</code>, <code>left_join()</code>, <code>right_join()</code>, <code>outer_join()</code> combine data (like SQL)</li>
+</ul>
+<p><a href="https://rstudio.com/resources/cheatsheets/">Much, much more! (Click me for a cheat sheet)</a></p>
+</section>
+<section id="exploratory-data-analysis" class="slide level2">
+<h2>Exploratory data analysis</h2>
+<p>Exploratory data analysis is the process of learning about a dataset by visualizing, summarizing, and transforming it.</p>
+<p>By now we’ve seen most of the skills you need to carry out exploratory data analysis (EDA). As Wickham, Çetinkaya-Rundel, and Grolemund put it, the cycle of EDA looks something like this:</p>
+<ol type="1">
+<li><p>Generate questions about your data.</p></li>
+<li><p>Explore your questions by visualizing, transforming, and modelling your data.</p></li>
+<li><p>Use your findings to refine your questions and generate new questions.</p></li>
+</ol>
+<p>You can read their walkthrough of the EDA process <a href="https://r4ds.hadley.nz/eda">here</a>.</p>
 </section>
 <section id="downloading-data" class="slide level2">
 <h2>Downloading data</h2>
 <p>Up until now, we’ve mostly been working with small datasets and I have given you code to <strong>download this data from the internet</strong>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>eggproduction  <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-04-11/egg-production.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>eggproduction  <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-04-11/egg-production.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>If you put this line of code in a chunk in your .Rmd file, each time you <strong>knit/render</strong>, you will have to download this data.</p>
 <p>So, if you do not have access to the internet, you will be unable to knit to html.</p>
@@ -425,104 +1106,72 @@ Peter Gao
 <h2>Saving data locally</h2>
 <p>You can instead download the data to a local folder or use the following code to save it locally:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>readr<span class="sc">::</span><span class="fu">write_csv</span>(eggproduction, <span class="st">"~/Documents/MATH167R/data/egg-production.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>readr<span class="sc">::</span><span class="fu">write_csv</span>(eggproduction, <span class="st">"~/Documents/MATH167R/data/egg-production.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You can subsequently load it locally (no internet needed):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>eggproduction <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"~/Documents/MATH167R/data/egg-production.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>eggproduction <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"~/Documents/MATH167R/data/egg-production.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="saving-data-locally-1" class="slide level2">
 <h2>Saving data locally</h2>
 <p>Any R object can be saved as a .rds file (including plots or output).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb4-2"><a href="#cb4-2"></a>state_population <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://www2.census.gov/programs-surveys/popest/datasets/2010-2020/national/totals/nst-est2020.csv"</span>)</span>
-<span id="cb4-3"><a href="#cb4-3"></a>US_pop_tidy <span class="ot">&lt;-</span> state_population <span class="sc">|&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">filter</span>(SUMLEV <span class="sc">==</span> <span class="st">"010"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb4-5"><a href="#cb4-5"></a>  <span class="fu">select</span>(<span class="sc">-</span>POPESTIMATE042020) <span class="sc">|&gt;</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>  <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">"POPESTIMATE"</span>), </span>
-<span id="cb4-7"><a href="#cb4-7"></a>               <span class="at">names_to =</span> <span class="st">"Year"</span>,</span>
-<span id="cb4-8"><a href="#cb4-8"></a>               <span class="at">values_to =</span> <span class="st">"Population"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a>  <span class="fu">mutate</span>(<span class="at">Year =</span> <span class="fu">as.numeric</span>(stringr<span class="sc">::</span><span class="fu">str_sub</span>(Year, <span class="at">start =</span> <span class="dv">12</span>)))</span>
-<span id="cb4-10"><a href="#cb4-10"></a><span class="fu">saveRDS</span>(US_pop_tidy, <span class="st">"~/Documents/MATH167R/data/US_pop_tidy.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb37-2"><a href="#cb37-2"></a>state_population <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://www2.census.gov/programs-surveys/popest/datasets/2010-2020/national/totals/nst-est2020.csv"</span>)</span>
+<span id="cb37-3"><a href="#cb37-3"></a>US_pop_tidy <span class="ot">&lt;-</span> state_population <span class="sc">|&gt;</span></span>
+<span id="cb37-4"><a href="#cb37-4"></a>  <span class="fu">filter</span>(SUMLEV <span class="sc">==</span> <span class="st">"010"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb37-5"><a href="#cb37-5"></a>  <span class="fu">select</span>(<span class="sc">-</span>POPESTIMATE042020) <span class="sc">|&gt;</span></span>
+<span id="cb37-6"><a href="#cb37-6"></a>  <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">"POPESTIMATE"</span>), </span>
+<span id="cb37-7"><a href="#cb37-7"></a>               <span class="at">names_to =</span> <span class="st">"Year"</span>,</span>
+<span id="cb37-8"><a href="#cb37-8"></a>               <span class="at">values_to =</span> <span class="st">"Population"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-9"><a href="#cb37-9"></a>  <span class="fu">mutate</span>(<span class="at">Year =</span> <span class="fu">as.numeric</span>(stringr<span class="sc">::</span><span class="fu">str_sub</span>(Year, <span class="at">start =</span> <span class="dv">12</span>)))</span>
+<span id="cb37-10"><a href="#cb37-10"></a><span class="fu">saveRDS</span>(US_pop_tidy, <span class="st">"~/Documents/MATH167R/data/US_pop_tidy.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You can subsequently load it locally using <code>readRDS()</code> (no internet needed):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>US_pop_tidy <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"~/Documents/MATH167R/data/US_pop_tidy.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>US_pop_tidy <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"~/Documents/MATH167R/data/US_pop_tidy.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="saving-plots-locally" class="slide level2">
 <h2>Saving plots locally</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>US_pop_plot <span class="ot">&lt;-</span> US_pop_tidy <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Population)) <span class="sc">+</span> </span>
-<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">geom_line</span>()</span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="fu">saveRDS</span>(US_pop_plot, <span class="st">"~/Documents/MATH167R/data/US_pop_plot.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>US_pop_plot <span class="ot">&lt;-</span> US_pop_tidy <span class="sc">|&gt;</span></span>
+<span id="cb39-2"><a href="#cb39-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Population)) <span class="sc">+</span> </span>
+<span id="cb39-3"><a href="#cb39-3"></a>  <span class="fu">geom_line</span>()</span>
+<span id="cb39-4"><a href="#cb39-4"></a><span class="fu">saveRDS</span>(US_pop_plot, <span class="st">"~/Documents/MATH167R/data/US_pop_plot.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>US_pop_plot <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"~/Documents/MATH167R/data/US_pop_tidy.rds"</span>)</span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="fu">print</span>(US_pop_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 11 × 9
-   SUMLEV REGION DIVISION STATE NAME       CENSUS2010POP ESTIMATESBASE2010  Year
-   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;             &lt;dbl&gt; &lt;dbl&gt;
- 1 010    0      0        00    United St…     308745538         308758105  2010
- 2 010    0      0        00    United St…     308745538         308758105  2011
- 3 010    0      0        00    United St…     308745538         308758105  2012
- 4 010    0      0        00    United St…     308745538         308758105  2013
- 5 010    0      0        00    United St…     308745538         308758105  2014
- 6 010    0      0        00    United St…     308745538         308758105  2015
- 7 010    0      0        00    United St…     308745538         308758105  2016
- 8 010    0      0        00    United St…     308745538         308758105  2017
- 9 010    0      0        00    United St…     308745538         308758105  2018
-10 010    0      0        00    United St…     308745538         308758105  2019
-11 010    0      0        00    United St…     308745538         308758105  2020
-# ℹ 1 more variable: Population &lt;dbl&gt;</code></pre>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>US_pop_plot <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"~/Documents/MATH167R/data/US_pop_plot.rds"</span>)</span>
+<span id="cb40-2"><a href="#cb40-2"></a><span class="fu">print</span>(US_pop_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
 </div>
-</div>
-</section>
+<img data-src="10_data-management_files/figure-revealjs/unnamed-chunk-28-1.png" width="960" class="r-stretch"></section>
 <section id="saving-multiple-objects" class="slide level2">
 <h2>Saving multiple objects</h2>
 <p>Using the <code>save()</code> function, you can save multiple objects as a .RData file:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">save</span>(US_pop_plot, US_pop_tidy, <span class="at">file =</span> <span class="st">"~/Documents/MATH167R/data/US_pop_combined.RData"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="fu">save</span>(US_pop_plot, US_pop_tidy, <span class="at">file =</span> <span class="st">"~/Documents/MATH167R/data/US_pop_combined.RData"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Load these objects using a <code>load()</code> call:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">load</span>(<span class="st">"~/Documents/MATH167R/data/US_pop_combined.RData"</span>)</span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">print</span>(US_pop_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 11 × 9
-   SUMLEV REGION DIVISION STATE NAME       CENSUS2010POP ESTIMATESBASE2010  Year
-   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;             &lt;dbl&gt; &lt;dbl&gt;
- 1 010    0      0        00    United St…     308745538         308758105  2010
- 2 010    0      0        00    United St…     308745538         308758105  2011
- 3 010    0      0        00    United St…     308745538         308758105  2012
- 4 010    0      0        00    United St…     308745538         308758105  2013
- 5 010    0      0        00    United St…     308745538         308758105  2014
- 6 010    0      0        00    United St…     308745538         308758105  2015
- 7 010    0      0        00    United St…     308745538         308758105  2016
- 8 010    0      0        00    United St…     308745538         308758105  2017
- 9 010    0      0        00    United St…     308745538         308758105  2018
-10 010    0      0        00    United St…     308745538         308758105  2019
-11 010    0      0        00    United St…     308745538         308758105  2020
-# ℹ 1 more variable: Population &lt;dbl&gt;</code></pre>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">load</span>(<span class="st">"~/Documents/MATH167R/data/US_pop_combined.RData"</span>)</span>
+<span id="cb42-2"><a href="#cb42-2"></a><span class="fu">print</span>(US_pop_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
 </div>
-</div>
-</section>
+<img data-src="10_data-management_files/figure-revealjs/unnamed-chunk-30-1.png" width="960" class="r-stretch"></section>
 <section id="saving-plots-locally-1" class="slide level2">
 <h2>Saving plots locally</h2>
 <p>We can save plots to .pdf files using a call to <code>pdf()</code> before the plot code and then <code>dev.off()</code> afterwards.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="st">"~/Documents/MATH167R/results/US_pop_plot.pdf"</span>,</span>
-<span id="cb12-2"><a href="#cb12-2"></a>    <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>) <span class="co"># dimensions in inches</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a>US_pop_plot <span class="ot">&lt;-</span> US_pop_tidy <span class="sc">|&gt;</span></span>
-<span id="cb12-4"><a href="#cb12-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Population)) <span class="sc">+</span> </span>
-<span id="cb12-5"><a href="#cb12-5"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb12-6"><a href="#cb12-6"></a>  <span class="fu">ggtitle</span>(<span class="st">"US Population, 2010-2020"</span>)</span>
-<span id="cb12-7"><a href="#cb12-7"></a><span class="fu">print</span>(US_pop_plot)</span>
-<span id="cb12-8"><a href="#cb12-8"></a><span class="fu">dev.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="st">"~/Documents/MATH167R/results/US_pop_plot.pdf"</span>,</span>
+<span id="cb43-2"><a href="#cb43-2"></a>    <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>) <span class="co"># dimensions in inches</span></span>
+<span id="cb43-3"><a href="#cb43-3"></a>US_pop_plot <span class="ot">&lt;-</span> US_pop_tidy <span class="sc">|&gt;</span></span>
+<span id="cb43-4"><a href="#cb43-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Population)) <span class="sc">+</span> </span>
+<span id="cb43-5"><a href="#cb43-5"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb43-6"><a href="#cb43-6"></a>  <span class="fu">ggtitle</span>(<span class="st">"US Population, 2010-2020"</span>)</span>
+<span id="cb43-7"><a href="#cb43-7"></a><span class="fu">print</span>(US_pop_plot)</span>
+<span id="cb43-8"><a href="#cb43-8"></a><span class="fu">dev.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>quartz_off_screen 
                 2 </code></pre>
@@ -533,28 +1182,26 @@ Peter Gao
 <h2>Generating clean tables using <code>kable()</code></h2>
 <p>The <code>kable()</code> function from the <code>knitr</code> package can be sued to generate clean tables for publication. The <code>kableExtra</code> package contains many extra functions for formatting tables.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>state_population <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://www2.census.gov/programs-surveys/popest/datasets/2010-2020/national/totals/nst-est2020.csv"</span>)</span>
-<span id="cb14-2"><a href="#cb14-2"></a></span>
-<span id="cb14-3"><a href="#cb14-3"></a><span class="co"># code to print the data</span></span>
-<span id="cb14-4"><a href="#cb14-4"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb14-5"><a href="#cb14-5"></a><span class="fu">kable</span>(state_population, <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">row.names =</span> F) <span class="sc">|&gt;</span></span>
-<span id="cb14-6"><a href="#cb14-6"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="st">"striped"</span>, <span class="at">full_width =</span> T) <span class="sc">|&gt;</span> </span>
-<span id="cb14-7"><a href="#cb14-7"></a>  kableExtra<span class="sc">::</span><span class="fu">scroll_box</span>(<span class="at">height =</span> <span class="st">"560px"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>state_population <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://www2.census.gov/programs-surveys/popest/datasets/2010-2020/national/totals/nst-est2020.csv"</span>)</span>
+<span id="cb45-2"><a href="#cb45-2"></a></span>
+<span id="cb45-3"><a href="#cb45-3"></a><span class="co"># code to print the data</span></span>
+<span id="cb45-4"><a href="#cb45-4"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb45-5"><a href="#cb45-5"></a><span class="fu">kable</span>(state_population, <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">row.names =</span> F) <span class="sc">|&gt;</span></span>
+<span id="cb45-6"><a href="#cb45-6"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="st">"striped"</span>, <span class="at">full_width =</span> T) <span class="sc">|&gt;</span> </span>
+<span id="cb45-7"><a href="#cb45-7"></a>  kableExtra<span class="sc">::</span><span class="fu">scroll_box</span>(<span class="at">height =</span> <span class="st">"560px"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="caching-code-chunks" class="slide level2">
 <h2>Caching code chunks</h2>
 <p>You can name your chunks and use the code chunk <code>cache = T</code> to save the output of a code chunk so you don’t have to wait for the code to run every time you knit.</p>
-<div class="cell" data-hash="10_data-management_cache/revealjs/pop_plot_a8b79936ba1464bc64783753ff3e405b">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb15-1"><a href="#cb15-1"></a><span class="in">```{r pop_plot}</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="co">#| eval: TRUE</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a><span class="co">#| cache: TRUE</span></span>
-<span id="cb15-4"><a href="#cb15-4"></a>US_pop_plot <span class="ot">&lt;-</span> US_pop_tidy <span class="sc">|&gt;</span></span>
-<span id="cb15-5"><a href="#cb15-5"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Population)) <span class="sc">+</span> </span>
-<span id="cb15-6"><a href="#cb15-6"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb15-7"><a href="#cb15-7"></a>  <span class="fu">ggtitle</span>(<span class="st">"US Population, 2010-2020"</span>)</span>
-<span id="cb15-8"><a href="#cb15-8"></a><span class="fu">print</span>(US_pop_plot)</span>
-<span id="cb15-9"><a href="#cb15-9"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="10_data-management_cache/revealjs/pop_plot_76c7b1d51437aca89b0382f64f63c9e5">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb46-1"><a href="#cb46-1"></a><span class="in">```{r pop_plot, cache = T}</span></span>
+<span id="cb46-2"><a href="#cb46-2"></a>US_pop_plot <span class="ot">&lt;-</span> US_pop_tidy <span class="sc">|&gt;</span></span>
+<span id="cb46-3"><a href="#cb46-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Population)) <span class="sc">+</span> </span>
+<span id="cb46-4"><a href="#cb46-4"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb46-5"><a href="#cb46-5"></a>  <span class="fu">ggtitle</span>(<span class="st">"US Population, 2010-2020"</span>)</span>
+<span id="cb46-6"><a href="#cb46-6"></a><span class="fu">print</span>(US_pop_plot)</span>
+<span id="cb46-7"><a href="#cb46-7"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="10_data-management_files/figure-revealjs/pop_plot-1.png" width="960" class="r-stretch"></section>
@@ -563,8 +1210,8 @@ Peter Gao
 <p>However, that means plots/output will <em>not</em> automatically update if you change the “upstream” data processing pipeline. You must change the cached chunk or delete the cache to rerun the code.</p>
 <p>Before you turn in your assignments, you should clear all the cached files and knit from scratch to make sure no errors have been introduced.</p>
 </section>
-<section id="group-lab-time" class="slide level2">
-<h2>Group Lab Time</h2>
+<section id="lab-time" class="slide level2">
+<h2>Lab Time</h2>
 <p>The rest of class is devoted to working in groups on your lab assignment.</p>
 
 <div class="footer footer-default">

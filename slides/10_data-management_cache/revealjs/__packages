@@ -8,3 +8,6 @@ dplyr
 stringr
 forcats
 lubridate
+tidycensus
+nycflights13
+knitr

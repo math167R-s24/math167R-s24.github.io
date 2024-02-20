@@ -1,20 +1,32 @@
 ---
-title: "MATH167R: Merging and manipulating data"
+title: "MATH167R: Tidying and manipulating data"
 author: "Peter Gao"
 format: 
   revealjs:
     theme: [./slides.scss, ../theme.scss]
 editor: visual
-
 ---
-
 
 ## Overview of today
 
--   Merging and manipulating datasets
+-   Tidying datasets
 -   Exploratory analysis
 
-## Working with messier data: US population, 2010-2020
+## One dataset, four ways
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+library(tidyverse)
+table1
+```
 
 ```{r}
 #| echo: true
@@ -24,43 +36,50 @@ editor: visual
 #| fig-height: 4.75
 #| out.width: "100%"
 #| fig.align: "center"
-state_population <- readr::read_csv("https://www2.census.gov/programs-surveys/popest/datasets/2010-2020/national/totals/nst-est2020.csv")
+table2
 ```
+:::
 
+::: {.column width="50%"}
 ```{r}
-#| echo: false
+#| echo: true
 #| eval: true
 #| warning: false
 #| fig-width: 7
 #| fig-height: 4.75
 #| out.width: "100%"
 #| fig.align: "center"
-# code to print the data
-state_population <- readr::read_csv("https://www2.census.gov/programs-surveys/popest/datasets/2010-2020/national/totals/nst-est2020.csv")
-library(knitr)
-kable(state_population, digits = 3, row.names = F) |>
-  kableExtra::kable_styling("striped", full_width = T) |> 
-  kableExtra::scroll_box(height = "400px")
+library(tidyverse)
+table3
 ```
-
-
-## National population data
-
-We can use the `SUMLEV` variable to obtain only national data:
 
 ```{r}
 #| echo: true
-#| eval: false
+#| eval: true
 #| warning: false
 #| fig-width: 7
 #| fig-height: 4.75
 #| out.width: "100%"
 #| fig.align: "center"
-#| code-line-numbers: "6"
-library(tidyverse)
-US_pop <- state_population |>
-  filter(SUMLEV == "010")
+table4a
 ```
+
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+table4b
+```
+:::
+:::
+
+## Which way?
+
+Suppose I wanted to create the following plot:
 
 ```{r}
 #| echo: false
@@ -70,37 +89,21 @@ US_pop <- state_population |>
 #| fig-height: 4.75
 #| out.width: "100%"
 #| fig.align: "center"
-library(tidyverse)
-US_pop <- state_population |>
-  filter(SUMLEV == "010")
-# code to print the data
-kable(US_pop, digits = 3, row.names = F) |>
-  kableExtra::kable_styling("striped", full_width = T)
+ggplot(table1, aes(x = year, y = cases)) +
+  geom_line(aes(group = country), color = "grey50") +
+  geom_point(aes(color = country, shape = country)) +
+  scale_x_continuous(breaks = c(1999, 2000)) # x-axis breaks at 1999 and 2000
 ```
 
-## National population data
+Which format should I use? Try to recreate this plot.
 
-How can we generate the following plot?
+What if we wanted to compute the number of cases **per capita**, for each country and year?
 
-```{r}
-#| echo: false
-#| eval: true
-#| warning: false
-#| fig-width: 7
-#| fig-height: 4.75
-#| out.width: "100%"
-#| fig.align: "center"
-US_pop |> 
-  select(-POPESTIMATE042020) |>
-  pivot_longer(contains("POPESTIMATE"), names_to = "Year", values_to = "Population") |>
-  mutate(Year = as.numeric(stringr::str_sub(Year, start = 12))) |>
-  ggplot(aes(x = Year, y = Population)) + 
-  geom_line()
-```
+## Munging data
 
-## National population data
+What if we want to convert from `table2` or `table4a` and `table4b` to `table1`?
 
-Note that our data cannot be readily used with `ggplot` to generate the previous plot. Ideally, we would like two vectors of the same length: one representing `Year` and one representing `Population`. Today, we'll discuss how to do this in both **base R** and the **tidyverse**.
+Today, we'll discuss how to do this in both **base R** and the **tidyverse**.
 
 ## `pivot_longer()` and `pivot_wider()`
 
@@ -129,9 +132,29 @@ relig_income
 #| fig-height: 4.75
 #| out.width: "100%"
 #| fig.align: "center"
+library(knitr)
 kable(relig_income) |>
   kableExtra::kable_styling("striped", full_width = T) |> 
   kableExtra::scroll_box(height = "480px")
+```
+
+## Example: `pivot_longer()` {.smaller}
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+relig_income |>
+  pivot_longer(cols = !religion, names_to = "income", values_to = "count") |>
+  ggplot(aes(x = income, fill = religion, y = count)) +
+  geom_col() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          legend.text = element_text(size = 7),
+          legend.key.size = unit(.3, 'cm'))
 ```
 
 ## Example: `pivot_longer()`
@@ -289,9 +312,7 @@ fish_encounters |>
   kableExtra::scroll_box(height = "480px")
 ```
 
-
 ## Example: `pivot_wider()`
-
 
 ```{r}
 #| echo: true
@@ -352,9 +373,165 @@ us_rent_income |>
   kableExtra::scroll_box(height = "360px")
 ```
 
-## Manipulating data for visualization
+## One dataset, four ways
 
-Let's return to our US population example:
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+library(tidyverse)
+table1
+```
+
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+table2
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+library(tidyverse)
+table3
+```
+
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+table4a
+```
+
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+table4b
+```
+:::
+:::
+
+## Munging data
+
+What if we want to convert from `table2` or `table4a` and `table4b` to `table1`?
+
+**Group work**: Work through how to convert `table2` to `table1` (and back). If time permits, try converting `table4a` and `table4b` `table1` (and back).
+
+## Working with messier data: US population, 2010-2020
+
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+state_population <- readr::read_csv("https://www2.census.gov/programs-surveys/popest/datasets/2010-2020/national/totals/nst-est2020.csv")
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+# code to print the data
+state_population <- readr::read_csv("https://www2.census.gov/programs-surveys/popest/datasets/2010-2020/national/totals/nst-est2020.csv")
+library(knitr)
+kable(state_population, digits = 3, row.names = F) |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "400px")
+```
+
+## National population data
+
+We can use the `SUMLEV` variable to obtain only national data:
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+#| code-line-numbers: "6"
+library(tidyverse)
+US_pop <- state_population |>
+  filter(SUMLEV == "010")
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+library(tidyverse)
+US_pop <- state_population |>
+  filter(SUMLEV == "010")
+# code to print the data
+kable(US_pop, digits = 3, row.names = F) |>
+  kableExtra::kable_styling("striped", full_width = T)
+```
+
+## National population data
+
+How can we generate the following plot?
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+US_pop |> 
+  select(-POPESTIMATE042020) |>
+  pivot_longer(contains("POPESTIMATE"), names_to = "Year", values_to = "Population") |>
+  mutate(Year = as.numeric(stringr::str_sub(Year, start = 12))) |>
+  ggplot(aes(x = Year, y = Population)) + 
+  geom_line()
+```
+
+## National population data
+
+Note that our data cannot be readily used with `ggplot` to generate the previous plot. Ideally, we would like two vectors of the same length: one representing `Year` and one representing `Population`.
+
+## Manipulating data for visualization
 
 ```{r}
 #| echo: true
@@ -459,7 +636,7 @@ plot(plot_dat$Year, plot_dat$Population)
 
 Now let's see how we might approach the same task in the tidyverse. Our strategy will be to "tidy" the data so we have one row for each observation and one column for each observation.
 
-First, let's remove the unnecessary column using the `select()` function. 
+First, let's remove the unnecessary column using the `select()` function.
 
 ```{r}
 #| echo: TRUE
@@ -476,6 +653,7 @@ US_pop |>
 US_pop |> 
   select(-POPESTIMATE042020)  |>
   kable() |> 
+  kableExtra::kable_styling("striped", full_width = T) |> 
   kableExtra::scroll_box(height = "120px")
 ```
 
@@ -506,6 +684,7 @@ US_pop |>
                names_to = "Year",
                values_to = "Population")  |>
   kable() |> 
+  kableExtra::kable_styling("striped", full_width = T) |> 
   kableExtra::scroll_box(height = "400px")
 ```
 
@@ -543,6 +722,7 @@ US_pop |>
   mutate(Year = as.numeric(stringr::str_sub(Year, start = 12))) |>
   head(n = 30) |>
   kable() |> 
+  kableExtra::kable_styling("striped", full_width = T) |> 
   kableExtra::scroll_box(height = "400px")
 ```
 
@@ -619,114 +799,6 @@ state_population |>
   ggplot(aes(x = Year, y = Population, color = NAME)) + 
   geom_line()
 ```
-
-## Joining Data
-
-We can use SQL-like join statements in R!
-
--   `inner_join(x, y, by = "key")`: match observations only when exact keys are equal
--   `left_join(x, y, by = "key")`: keep all observations in `x`, match observations in `y` by keys, `NA` otherwise
--   `right_join(x, y, by = "key")`: keep all observations in `y`, match observations in `x` by keys, `NA` otherwise
--   `outer_join(x, y, by = "key")`: keep all observations in `x` and `y`, match keys where possible, `NA` otherwise
-
-Usually, `left_join()` will suffice.
-
-## Example: Band members
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-library(tidyverse)
-band_members
-band_instruments
-```
-
-## Example: Band members
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-band_members |> inner_join(band_instruments)
-band_members |> left_join(band_instruments)
-```
-
-## Example: Band members
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-band_members |> right_join(band_instruments)
-band_members |> full_join(band_instruments)
-```
-
-## Example: Band members
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-# To suppress the message about joining variables, supply `by`
-band_members |> inner_join(band_instruments, by = join_by(name))
-```
-
-## Inner join vs. outer join
-
-<img src="images/join-inner.png" height="90"/>
-
-<img src="images/join-outer.png" height="360"/>
-
-Images courtesy of Hadley Wickham. [(Link)](https://r4ds.had.co.nz/relational-data.html)
-
-## Base R
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-# inner join
-merge(band_members, band_instruments, by.x = "name", by.y = "name")
-
-# outer join
-merge(band_members, band_instruments, by.x = "name", by.y = "name", all = T)
-```
-
-## Base R
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-# left join
-merge(band_members, band_instruments, by.x = "name", by.y = "name", all.x = T)
-
-# right join
-merge(band_members, band_instruments, by.x = "name", by.y = "name", all.y = T)
-```
-
-
-
-## Data manipulation cheatsheet
-
--   `filter()` subset rows
--   `select()` subset columns, use with `contains()`, `starts_with()`, `ends_with()`, ...
--   `mutate()` create columns
--   `group_by()`, `summarize()`, `count()` group and summarize groups
--   `rename()` rename columns
--   `pivot_longer()`, `pivot_wider()` reshape data
--   `inner_join()`, `left_join()`, `right_join()`, `outer_join()` combine data (like SQL)
-
-[Much, much more! (Click me for a cheat sheet)](https://rstudio.com/resources/cheatsheets/)
-
-## Exploratory data analysis
-
-Exploratory data analysis is the process of learning about a dataset by visualizing, summarizing, and transforming it.
-
-By now we've seen most of the skills you need to carry out exploratory data analysis (EDA). As Wickham, Çetinkaya-Rundel, and Grolemund put it, the cycle of EDA looks something like this:
-
-1.  Generate questions about your data.
-
-2.  Explore your questions by visualizing, transforming, and modelling your data.
-
-3.  Use your findings to refine your questions and generate new questions.
-
-You can read their walkthrough of the EDA process [here](https://r4ds.hadley.nz/eda).
 
 ## Example: World Bank Inflation Data
 
@@ -835,98 +907,28 @@ cpi |>
   geom_line()
 ```
 
-```{r}
-knitr::knit_exit()
-```
+## Data manipulation cheatsheet
 
-## Example: California data
+-   `filter()` subset rows
+-   `select()` subset columns, use with `contains()`, `starts_with()`, `ends_with()`, ...
+-   `mutate()` create columns
+-   `group_by()`, `summarize()`, `count()` group and summarize groups
+-   `rename()` rename columns
+-   `pivot_longer()`, `pivot_wider()` reshape data
+-   `inner_join()`, `left_join()`, `right_join()`, `outer_join()` combine data (like SQL)
 
-```{r, echo = T, eval = F}
-library(tidycensus)
+[Much, much more! (Click me for a cheat sheet)](https://rstudio.com/resources/cheatsheets/)
 
-# the following code loads my local Census API Key, which is used to access 
-# census data
-Sys.getenv("CENSUS_API_KEY")
+## Exploratory data analysis
 
-# 2021 median income by county
-income_2021 <- get_acs(geography = "county", 
-                       variables = c(medincome = "B19013_001"), 
-                       state = "CA", 
-                       year = 2021)
+Exploratory data analysis is the process of learning about a dataset by visualizing, summarizing, and transforming it.
 
-# 2010 median income by county
-income_2010 <- get_acs(geography = "county", 
-                       variables = c(medincome = "B19013_001"), 
-                       state = "CA", 
-                       year = 2010)
-```
+By now we've seen most of the skills you need to carry out exploratory data analysis (EDA). As Wickham, Çetinkaya-Rundel, and Grolemund put it, the cycle of EDA looks something like this:
 
-```{r, echo = T, eval = T, comment = F, message = F, warning = F, include = F}
-library(tidycensus)
+1.  Generate questions about your data.
 
-# the following code loads my local Census API Key, which is used to access 
-# census data
-Sys.getenv("CENSUS_API_KEY")
+2.  Explore your questions by visualizing, transforming, and modelling your data.
 
-# 2021 median income by county
-income_2021 <- get_acs(geography = "county", 
-                       variables = c(medincome = "B19013_001"), 
-                       state = "CA", 
-                       year = 2021)
+3.  Use your findings to refine your questions and generate new questions.
 
-# 2010 median income by county
-income_2010 <- get_acs(geography = "county", 
-                       variables = c(medincome = "B19013_001"), 
-                       state = "CA", 
-                       year = 2010)
-```
-
-## Example: California data
-
-```{r, echo = T, eval = T}
-income_2021 <- income_2021 |>
-  pivot_wider(
-    names_from = variable,
-    values_from = c(estimate, moe)
-  ) |>
-  select(-moe_medincome) |>
-  rename(medincome_2021 = estimate_medincome)
-head(income_2021)
-income_2010 <- income_2010 |>
-  pivot_wider(
-    names_from = variable,
-    values_from = c(estimate, moe)
-  ) |>
-  select(-moe_medincome) |>
-  rename(medincome_2010 = estimate_medincome)
-
-```
-
-## Example: California data
-
-```{r, echo = T, eval = F}
-income_combined <- income_2010 |>
-  left_join(income_2021, by = c("GEOID", "NAME"))
-ggplot(income_combined, aes(x = medincome_2010, y = medincome_2021)) +
-  geom_point() + 
-  geom_abline(slope = 1) + 
-  labs(title = "Median income in 2021 vs. 2010, CA Counties",
-       subtitle = "American Community Survey",
-       y = "2021 Median Income",
-       x = "2010 Median Income")
-  
-```
-
-## Example: California data
-
-```{r, echo = F, eval = T}
-income_combined <- income_2010 |>
-  left_join(income_2021, by = c("GEOID", "NAME"))
-ggplot(income_combined, aes(x = medincome_2010, y = medincome_2021)) +
-  geom_point() + 
-  geom_abline(slope = 1) + 
-  labs(title = "Median income in 2021 vs. 2010, CA Counties",
-       subtitle = "American Community Survey",
-       y = "2021 Median Income",
-       x = "2010 Median Income")
-```
+You can read their walkthrough of the EDA process [here](https://r4ds.hadley.nz/eda).
