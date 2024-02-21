@@ -75,6 +75,22 @@ head(animals, n = 10)
 slice_sample(animals, n = 10)
 ```
 
+## Code for generating data
+
+```{r, echo = T, eval = F, warning = F}
+library(tidyverse)
+# example from Andrew Heiss
+set.seed(12)
+animals <- tibble(animal = c(rep(c("Small cat", "Big cat"), each = 250), rep("Dog", 500))) |> 
+  mutate(weight = case_when(
+    animal == "Small cat" ~ rnorm(n(), 20, 5),
+    animal == "Big cat" ~ rnorm(n(), 60, 5),
+    animal == "Dog" ~ rnorm(n(), 40, 10)
+  )) |> 
+  mutate(animal = ifelse(str_detect(animal, "cat"), "Cat", "Dog"))
+
+```
+
 ## Review: Cats and Dogs
 
 ```{r, echo = T, eval = T, warning = F}

@@ -822,7 +822,7 @@ The **consumer price inflation** measures the "annual percentage change in the c
 #| fig.align: "center"
 library(openxlsx)
 cpi <- read.xlsx("https://thedocs.worldbank.org/en/doc/1ad246272dbbc437c74323719506aa0c-0350012021/original/Inflation-data.xlsx",
-                 sheet = 4)
+                 sheet = 5)
 cpi <- cpi[1:203,]
 ```
 

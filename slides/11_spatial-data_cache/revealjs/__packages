@@ -12,3 +12,5 @@ forcats
 lubridate
 ggspatial
 tigris
+gapminder
+gganimate

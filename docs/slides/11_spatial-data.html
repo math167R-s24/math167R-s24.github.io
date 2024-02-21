@@ -384,6 +384,9 @@
       margin-right: 0; 
     }
   </style>
+  
+  <script src="../site_libs/kePrint-0.0.1/kePrint.js"></script>
+  <link href="../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 <meta property="og:title" content="MATH167R - MATH167R: Advanced visualizations">
 <meta property="og:site-name" content="MATH167R">
 </head>
@@ -411,424 +414,372 @@ Peter Gao
 <li>Project work time</li>
 </ul>
 </section>
-<section id="example-aqi-data" class="slide level2">
-<h2>Example: AQI data</h2>
-<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-1_e46fa9308398385e933ae712b760d182">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://math250-s24.github.io/"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="example-pm-2.5-data" class="slide level2">
+<h2>Example: PM 2.5 data</h2>
+<p>The EPA provides daily data on air quality for monitoring stations across the country, which you can download <a href="https://www.epa.gov/outdoor-air-quality-data/download-daily-data">here</a>. The below code downloads a subset of this data from the course website for the pollutant PM 2.5 (atmospheric particulate matter with a diameter of less than 2.5 micrometers).</p>
+<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-1_88079df84b2e8b05ec7ea7b757a6b46c">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>pm_2_5 <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://math167r-s24.github.io/static/CA_PM2_5_2023.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="exercise" class="slide level2">
-<h2>Exercise</h2>
-</section>
-<section id="example-aqi-data-1" class="slide level2">
-<h2>Example: AQI data</h2>
-</section>
-<section id="loading-project-data" class="slide level2">
-<h2>Loading project data</h2>
-<p>Today we’ll practice working with spatial data. In <code>R</code>, most basic GIS (geographic information system) tasks can be carried out using the <code>sf</code> package, which you can install using <code>install.packages("sf")</code>. Today we’ll also be using <code>tidyverse</code> packages.</p>
+<section id="example-pm-2.5-data-1" class="slide level2">
+<h2>Example: PM 2.5 data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb2-4"><a href="#cb2-4"></a>ba_rent <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-07-05/rent.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">head</span>(pm_2_5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="craigslist-rental-data" class="slide level2">
-<h2>Craigslist rental data</h2>
-<p>This dataset provides Craigslist rental listings for the Bay Area, from 2000-2018. It was originally collected by Dr.&nbsp;Kate Pennington, whose methodology you can read about <a href="https://www.katepennington.org/clmethod">here</a>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">head</span>(ba_rent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 17
-  post_id      date  year nhood city  county price  beds baths  sqft room_in_apt
-  &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;
-1 pre2013_1… 2.01e7  2005 alam… alam… alame…  1250     2     2    NA           0
-2 pre2013_1… 2.01e7  2005 alam… alam… alame…  1295     2    NA    NA           0
-3 pre2013_1… 2.00e7  2004 alam… alam… alame…  1100     2    NA    NA           0
-4 pre2013_6… 2.01e7  2012 alam… alam… alame…  1425     1    NA   735           0
-5 pre2013_1… 2.00e7  2004 alam… alam… alame…   890     1    NA    NA           0
-6 pre2013_1… 2.01e7  2006 alam… alam… alame…   825     1    NA    NA           0
-# ℹ 6 more variables: address &lt;chr&gt;, lat &lt;dbl&gt;, lon &lt;dbl&gt;, title &lt;chr&gt;,
-#   descr &lt;chr&gt;, details &lt;chr&gt;</code></pre>
-</div>
-</div>
-</section>
-<section id="craigslist-rental-data-variables" class="slide level2">
-<h2>Craigslist rental data variables</h2>
-<div style="height:500px;overflow:auto;">
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;"><strong>variable</strong></th>
-<th style="text-align: left;"><strong>class</strong></th>
-<th style="text-align: left;"><strong>description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">post_id</td>
-<td style="text-align: left;">character</td>
-<td style="text-align: left;">Unique ID</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">date</td>
-<td style="text-align: left;">double</td>
-<td style="text-align: left;">date</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">year</td>
-<td style="text-align: left;">double</td>
-<td style="text-align: left;">year</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">nhood</td>
-<td style="text-align: left;">character</td>
-<td style="text-align: left;">neighborhood</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">city</td>
-<td style="text-align: left;">character</td>
-<td style="text-align: left;">city</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">county</td>
-<td style="text-align: left;">character</td>
-<td style="text-align: left;">county</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">price</td>
-<td style="text-align: left;">double</td>
-<td style="text-align: left;">price in USD</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">beds</td>
-<td style="text-align: left;">double</td>
-<td style="text-align: left;">n of beds</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">baths</td>
-<td style="text-align: left;">double</td>
-<td style="text-align: left;">n of baths</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">sqft</td>
-<td style="text-align: left;">double</td>
-<td style="text-align: left;">square feet of rental</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">room_in_apt</td>
-<td style="text-align: left;">double</td>
-<td style="text-align: left;">room in apartment</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">address</td>
-<td style="text-align: left;">character</td>
-<td style="text-align: left;">address</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">lat</td>
-<td style="text-align: left;">double</td>
-<td style="text-align: left;">latitude</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">lon</td>
-<td style="text-align: left;">double</td>
-<td style="text-align: left;">longitude</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">title</td>
-<td style="text-align: left;">character</td>
-<td style="text-align: left;">title of listing</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">descr</td>
-<td style="text-align: left;">character</td>
-<td style="text-align: left;">description</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">details</td>
-<td style="text-align: left;">character</td>
-<td style="text-align: left;">additional details</td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="craigslist-rental-data-1" class="slide level2">
-<h2>Craigslist rental data</h2>
-</section>
-<section id="basic-summaries" class="slide level2">
-<h2>Basic summaries</h2>
-<p><strong>Review</strong>: What does the following code produce?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>ba_rent <span class="sc">|&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">filter</span>(beds <span class="sc">==</span> <span class="dv">2</span>, year <span class="sc">==</span> <span class="dv">2010</span>) <span class="sc">|&gt;</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">group_by</span>(city) <span class="sc">|&gt;</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a>  <span class="fu">summarize</span>(<span class="at">mean_price =</span> <span class="fu">mean</span>(price, <span class="at">na.rm =</span> T)) <span class="sc">|&gt;</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>  <span class="fu">arrange</span>(mean_price) <span class="sc">|&gt;</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="fragment">
-<div style="height:350px;overflow:auto;">
 <div class="cell-output-display">
-<table>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:480px; ">
+<table class="table table-striped" data-quarto-postprocess="true" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr class="header">
-<th style="text-align: left;">city</th>
-<th style="text-align: right;">mean_price</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">Date</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">Source</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">Site ID</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">POC</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">Daily Mean PM2.5 Concentration</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">UNITS</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">DAILY_AQI_VALUE</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">Site Name</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">DAILY_OBS_COUNT</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">PERCENT_COMPLETE</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">AQS_PARAMETER_CODE</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">AQS_PARAMETER_DESC</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">CBSA_CODE</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">CBSA_NAME</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">STATE_CODE</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">STATE</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">COUNTY_CODE</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">COUNTY</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">SITE_LATITUDE</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">SITE_LONGITUDE</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">san leandro</td>
-<td style="text-align: right;">700.0000</td>
+<td style="text-align: left;">01/01/2023</td>
+<td style="text-align: left;">AQS</td>
+<td style="text-align: left;">060010007</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3.7</td>
+<td style="text-align: left;">ug/m3 LC</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">Livermore</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">88101</td>
+<td style="text-align: left;">PM2.5 - Local Conditions</td>
+<td style="text-align: right;">41860</td>
+<td style="text-align: left;">San Francisco-Oakland-Hayward, CA</td>
+<td style="text-align: left;">06</td>
+<td style="text-align: left;">California</td>
+<td style="text-align: left;">001</td>
+<td style="text-align: left;">Alameda</td>
+<td style="text-align: right;">37.68753</td>
+<td style="text-align: right;">-121.7842</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">richmond</td>
-<td style="text-align: right;">910.0000</td>
+<td style="text-align: left;">01/02/2023</td>
+<td style="text-align: left;">AQS</td>
+<td style="text-align: left;">060010007</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2.7</td>
+<td style="text-align: left;">ug/m3 LC</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: left;">Livermore</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">88101</td>
+<td style="text-align: left;">PM2.5 - Local Conditions</td>
+<td style="text-align: right;">41860</td>
+<td style="text-align: left;">San Francisco-Oakland-Hayward, CA</td>
+<td style="text-align: left;">06</td>
+<td style="text-align: left;">California</td>
+<td style="text-align: left;">001</td>
+<td style="text-align: left;">Alameda</td>
+<td style="text-align: right;">37.68753</td>
+<td style="text-align: right;">-121.7842</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">fairfield</td>
-<td style="text-align: right;">922.7273</td>
+<td style="text-align: left;">01/03/2023</td>
+<td style="text-align: left;">AQS</td>
+<td style="text-align: left;">060010007</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3.6</td>
+<td style="text-align: left;">ug/m3 LC</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">Livermore</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">88101</td>
+<td style="text-align: left;">PM2.5 - Local Conditions</td>
+<td style="text-align: right;">41860</td>
+<td style="text-align: left;">San Francisco-Oakland-Hayward, CA</td>
+<td style="text-align: left;">06</td>
+<td style="text-align: left;">California</td>
+<td style="text-align: left;">001</td>
+<td style="text-align: left;">Alameda</td>
+<td style="text-align: right;">37.68753</td>
+<td style="text-align: right;">-121.7842</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">sf bay area</td>
-<td style="text-align: right;">925.0000</td>
+<td style="text-align: left;">01/04/2023</td>
+<td style="text-align: left;">AQS</td>
+<td style="text-align: left;">060010007</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2.7</td>
+<td style="text-align: left;">ug/m3 LC</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: left;">Livermore</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">88101</td>
+<td style="text-align: left;">PM2.5 - Local Conditions</td>
+<td style="text-align: right;">41860</td>
+<td style="text-align: left;">San Francisco-Oakland-Hayward, CA</td>
+<td style="text-align: left;">06</td>
+<td style="text-align: left;">California</td>
+<td style="text-align: left;">001</td>
+<td style="text-align: left;">Alameda</td>
+<td style="text-align: right;">37.68753</td>
+<td style="text-align: right;">-121.7842</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">gilroy</td>
-<td style="text-align: right;">1000.0000</td>
+<td style="text-align: left;">01/05/2023</td>
+<td style="text-align: left;">AQS</td>
+<td style="text-align: left;">060010007</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4.7</td>
+<td style="text-align: left;">ug/m3 LC</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: left;">Livermore</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">88101</td>
+<td style="text-align: left;">PM2.5 - Local Conditions</td>
+<td style="text-align: right;">41860</td>
+<td style="text-align: left;">San Francisco-Oakland-Hayward, CA</td>
+<td style="text-align: left;">06</td>
+<td style="text-align: left;">California</td>
+<td style="text-align: left;">001</td>
+<td style="text-align: left;">Alameda</td>
+<td style="text-align: right;">37.68753</td>
+<td style="text-align: right;">-121.7842</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">rohnert park</td>
-<td style="text-align: right;">1061.1111</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">concord</td>
-<td style="text-align: right;">1098.1818</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">vallejo</td>
-<td style="text-align: right;">1141.4286</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">santa rosa</td>
-<td style="text-align: right;">1161.0000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">hayward</td>
-<td style="text-align: right;">1178.8571</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">el sobrante</td>
-<td style="text-align: right;">1197.8571</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">alameda</td>
-<td style="text-align: right;">1250.0000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">pittsburg</td>
-<td style="text-align: right;">1259.6667</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">sonoma</td>
-<td style="text-align: right;">1330.0000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">cambrian</td>
-<td style="text-align: right;">1350.0000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">fairfax</td>
-<td style="text-align: right;">1395.0000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">dublin</td>
-<td style="text-align: right;">1431.3333</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">morgan hill</td>
-<td style="text-align: right;">1439.0000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">livermore</td>
-<td style="text-align: right;">1447.0000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">woodacre</td>
-<td style="text-align: right;">1450.0000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">los gatos</td>
-<td style="text-align: right;">1472.5000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">petaluma</td>
-<td style="text-align: right;">1491.1429</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">union city</td>
-<td style="text-align: right;">1498.6500</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">oakland</td>
-<td style="text-align: right;">1512.3529</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">milpitas</td>
-<td style="text-align: right;">1528.0000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">walnut creek</td>
-<td style="text-align: right;">1548.0000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">napa county</td>
-<td style="text-align: right;">1565.0000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">campbell</td>
-<td style="text-align: right;">1570.8750</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">redwood city</td>
-<td style="text-align: right;">1575.5000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">el cerrito</td>
-<td style="text-align: right;">1581.2500</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">novato</td>
-<td style="text-align: right;">1615.5000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">belmont</td>
-<td style="text-align: right;">1622.5000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">pacifica</td>
-<td style="text-align: right;">1630.7500</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">sunnyvale</td>
-<td style="text-align: right;">1657.0588</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">san jose</td>
-<td style="text-align: right;">1669.1818</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">san ramon</td>
-<td style="text-align: right;">1683.3333</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">mountain view</td>
-<td style="text-align: right;">1726.3000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">santa clara</td>
-<td style="text-align: right;">1780.6190</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">corte madera</td>
-<td style="text-align: right;">1799.0000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">berkeley</td>
-<td style="text-align: right;">1842.0417</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">larkspur</td>
-<td style="text-align: right;">1847.5000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">san mateo</td>
-<td style="text-align: right;">1909.3333</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">los altos</td>
-<td style="text-align: right;">1923.7500</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">cupertino</td>
-<td style="text-align: right;">1936.8889</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">foster city</td>
-<td style="text-align: right;">2017.2500</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">san bruno</td>
-<td style="text-align: right;">2047.5000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">santa cruz</td>
-<td style="text-align: right;">2100.0000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">palo alto</td>
-<td style="text-align: right;">2110.0000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">mill valley</td>
-<td style="text-align: right;">2124.0000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">san rafael</td>
-<td style="text-align: right;">2152.8750</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">orinda</td>
-<td style="text-align: right;">2175.0000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">sausalito</td>
-<td style="text-align: right;">2236.0000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">daly city</td>
-<td style="text-align: right;">2252.5000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">menlo park</td>
-<td style="text-align: right;">2327.5000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">emeryville</td>
-<td style="text-align: right;">2331.6667</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">woodside</td>
-<td style="text-align: right;">2400.0000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">burlingame</td>
-<td style="text-align: right;">2575.0000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">san anselmo</td>
-<td style="text-align: right;">2750.0000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">san francisco</td>
-<td style="text-align: right;">2800.2436</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">belvedere</td>
-<td style="text-align: right;">2806.6667</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">healdsburg</td>
-<td style="text-align: right;">4500.0000</td>
+<td style="text-align: left;">01/06/2023</td>
+<td style="text-align: left;">AQS</td>
+<td style="text-align: left;">060010007</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">9.2</td>
+<td style="text-align: left;">ug/m3 LC</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: left;">Livermore</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">88101</td>
+<td style="text-align: left;">PM2.5 - Local Conditions</td>
+<td style="text-align: right;">41860</td>
+<td style="text-align: left;">San Francisco-Oakland-Hayward, CA</td>
+<td style="text-align: left;">06</td>
+<td style="text-align: left;">California</td>
+<td style="text-align: left;">001</td>
+<td style="text-align: left;">Alameda</td>
+<td style="text-align: right;">37.68753</td>
+<td style="text-align: right;">-121.7842</td>
 </tr>
 </tbody>
 </table>
 </div>
+
 </div>
 </div>
 </section>
+<section id="example-pm-2.5-data-2" class="slide level2">
+<h2>Example: PM 2.5 data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">summary</span>(pm_2_5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Date              Source            Site ID               POC        
+ Length:51541       Length:51541       Length:51541       Min.   : 1.000  
+ Class :character   Class :character   Class :character   1st Qu.: 2.000  
+ Mode  :character   Mode  :character   Mode  :character   Median : 3.000  
+                                                          Mean   : 2.634  
+                                                          3rd Qu.: 3.000  
+                                                          Max.   :12.000  
+                                                                          
+ Daily Mean PM2.5 Concentration    UNITS           DAILY_AQI_VALUE 
+ Min.   : -3.000                Length:51541       Min.   :  0.00  
+ 1st Qu.:  3.900                Class :character   1st Qu.: 16.00  
+ Median :  6.500                Mode  :character   Median : 27.00  
+ Mean   :  7.823                                   Mean   : 30.64  
+ 3rd Qu.: 10.000                                   3rd Qu.: 42.00  
+ Max.   :235.100                                   Max.   :285.00  
+                                                                   
+  Site Name         DAILY_OBS_COUNT PERCENT_COMPLETE AQS_PARAMETER_CODE
+ Length:51541       Min.   :1       Min.   :100      Min.   :88101     
+ Class :character   1st Qu.:1       1st Qu.:100      1st Qu.:88101     
+ Mode  :character   Median :1       Median :100      Median :88101     
+                    Mean   :1       Mean   :100      Mean   :88177     
+                    3rd Qu.:1       3rd Qu.:100      3rd Qu.:88101     
+                    Max.   :1       Max.   :100      Max.   :88502     
+                                                                       
+ AQS_PARAMETER_DESC   CBSA_CODE      CBSA_NAME          STATE_CODE       
+ Length:51541       Min.   :12540   Length:51541       Length:51541      
+ Class :character   1st Qu.:31080   Class :character   Class :character  
+ Mode  :character   Median :40140   Mode  :character   Mode  :character  
+                    Mean   :35282                                        
+                    3rd Qu.:41860                                        
+                    Max.   :49700                                        
+                    NA's   :3920                                         
+    STATE           COUNTY_CODE           COUNTY          SITE_LATITUDE  
+ Length:51541       Length:51541       Length:51541       Min.   :32.58  
+ Class :character   Class :character   Class :character   1st Qu.:34.21  
+ Mode  :character   Mode  :character   Mode  :character   Median :36.60  
+                                                          Mean   :36.38  
+                                                          3rd Qu.:37.97  
+                                                          Max.   :41.76  
+                                                                         
+ SITE_LONGITUDE  
+ Min.   :-124.2  
+ 1st Qu.:-121.5  
+ Median :-119.8  
+ Mean   :-119.8  
+ 3rd Qu.:-118.2  
+ Max.   :-115.5  
+                 </code></pre>
+</div>
+</div>
+</section>
+<section id="data-wrangling" class="slide level2">
+<h2>Data wrangling</h2>
+<p>Note that the <code>Date</code> variable is a character–we can convert this into a <code>Date</code> class object using the <code>lubridate</code> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb5-2"><a href="#cb5-2"></a>pm_2_5 <span class="ot">&lt;-</span> pm_2_5 <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">mutate</span>(<span class="at">Date =</span> <span class="fu">mdy</span>(Date))</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="fu">summary</span>(pm_2_5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Date               Source            Site ID               POC        
+ Min.   :2023-01-01   Length:51541       Length:51541       Min.   : 1.000  
+ 1st Qu.:2023-03-26   Class :character   Class :character   1st Qu.: 2.000  
+ Median :2023-06-21   Mode  :character   Mode  :character   Median : 3.000  
+ Mean   :2023-06-23                                         Mean   : 2.634  
+ 3rd Qu.:2023-09-18                                         3rd Qu.: 3.000  
+ Max.   :2023-12-31                                         Max.   :12.000  
+                                                                            
+ Daily Mean PM2.5 Concentration    UNITS           DAILY_AQI_VALUE 
+ Min.   : -3.000                Length:51541       Min.   :  0.00  
+ 1st Qu.:  3.900                Class :character   1st Qu.: 16.00  
+ Median :  6.500                Mode  :character   Median : 27.00  
+ Mean   :  7.823                                   Mean   : 30.64  
+ 3rd Qu.: 10.000                                   3rd Qu.: 42.00  
+ Max.   :235.100                                   Max.   :285.00  
+                                                                   
+  Site Name         DAILY_OBS_COUNT PERCENT_COMPLETE AQS_PARAMETER_CODE
+ Length:51541       Min.   :1       Min.   :100      Min.   :88101     
+ Class :character   1st Qu.:1       1st Qu.:100      1st Qu.:88101     
+ Mode  :character   Median :1       Median :100      Median :88101     
+                    Mean   :1       Mean   :100      Mean   :88177     
+                    3rd Qu.:1       3rd Qu.:100      3rd Qu.:88101     
+                    Max.   :1       Max.   :100      Max.   :88502     
+                                                                       
+ AQS_PARAMETER_DESC   CBSA_CODE      CBSA_NAME          STATE_CODE       
+ Length:51541       Min.   :12540   Length:51541       Length:51541      
+ Class :character   1st Qu.:31080   Class :character   Class :character  
+ Mode  :character   Median :40140   Mode  :character   Mode  :character  
+                    Mean   :35282                                        
+                    3rd Qu.:41860                                        
+                    Max.   :49700                                        
+                    NA's   :3920                                         
+    STATE           COUNTY_CODE           COUNTY          SITE_LATITUDE  
+ Length:51541       Length:51541       Length:51541       Min.   :32.58  
+ Class :character   Class :character   Class :character   1st Qu.:34.21  
+ Mode  :character   Mode  :character   Mode  :character   Median :36.60  
+                                                          Mean   :36.38  
+                                                          3rd Qu.:37.97  
+                                                          Max.   :41.76  
+                                                                         
+ SITE_LONGITUDE  
+ Min.   :-124.2  
+ 1st Qu.:-121.5  
+ Median :-119.8  
+ Mean   :-119.8  
+ 3rd Qu.:-118.2  
+ Max.   :-115.5  
+                 </code></pre>
+</div>
+</div>
+</section>
+<section id="wildfire-season-2023" class="slide level2">
+<h2>Wildfire season 2023</h2>
+
+<img data-src="images/Screenshot 2024-02-20 at 10.24.44 AM.png" class="r-stretch"></section>
+<section id="wildfire-season-2023-1" class="slide level2">
+<h2>Wildfire season 2023</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>jan1_pm_2_5 <span class="ot">&lt;-</span> pm_2_5 <span class="sc">|&gt;</span> <span class="fu">filter</span>(Date <span class="sc">==</span> <span class="st">"2023-01-01"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="fu">hist</span>(jan1_pm_2_5<span class="sc">$</span><span class="st">`</span><span class="at">Daily Mean PM2.5 Concentration</span><span class="st">`</span>,</span>
+<span id="cb7-3"><a href="#cb7-3"></a>     <span class="at">main =</span> <span class="st">"Jan 1"</span>,  <span class="at">xlab =</span> <span class="st">"PM 2.5"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-6-1.png" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>oct19_pm_2_5 <span class="ot">&lt;-</span> pm_2_5 <span class="sc">|&gt;</span> <span class="fu">filter</span>(Date <span class="sc">==</span> <span class="st">"2023-09-19"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">hist</span>(oct19_pm_2_5<span class="sc">$</span><span class="st">`</span><span class="at">Daily Mean PM2.5 Concentration</span><span class="st">`</span>,</span>
+<span id="cb8-3"><a href="#cb8-3"></a>     <span class="at">main =</span> <span class="st">"October 19"</span>, <span class="at">xlab =</span> <span class="st">"PM 2.5"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-7-1.png" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="working-with-spatial-data" class="slide level2">
+<h2>Working with spatial data</h2>
+<p>We can’t get an idea of how air quality varies over space using univariate summaries like these. Ideally, we could plot the PM 2.5 or AQI measurements on a map of California.</p>
+</section>
+<section id="naively-working-with-latitudelongitude" class="slide level2">
+<h2>Naively working with latitude/longitude</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> oct19_pm_2_5, </span>
+<span id="cb9-2"><a href="#cb9-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> SITE_LONGITUDE, </span>
+<span id="cb9-3"><a href="#cb9-3"></a>                     <span class="at">y =</span> SITE_LATITUDE, </span>
+<span id="cb9-4"><a href="#cb9-4"></a>                     <span class="at">color =</span> DAILY_AQI_VALUE)) <span class="sc">+</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a>  <span class="fu">scale_color_viridis_c</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-8-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="naively-working-with-latitudelongitude-1" class="slide level2">
+<h2>Naively working with latitude/longitude</h2>
+<p>Compare with January 1:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> jan1_pm_2_5, </span>
+<span id="cb10-2"><a href="#cb10-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> SITE_LONGITUDE, </span>
+<span id="cb10-3"><a href="#cb10-3"></a>                     <span class="at">y =</span> SITE_LATITUDE, </span>
+<span id="cb10-4"><a href="#cb10-4"></a>                     <span class="at">color =</span> DAILY_AQI_VALUE)) <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a>  <span class="fu">scale_color_viridis_c</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-9-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="naively-working-with-latitudelongitude-2" class="slide level2">
+<h2>Naively working with latitude/longitude</h2>
+<p>We can only get so far just treating longitude and latitude as x and y. In particular, near the poles, we will get large amounts of distortion:</p>
+
+<img data-src="https://upload.wikimedia.org/wikipedia/commons/8/83/Equirectangular_projection_SW.jpg" class="r-stretch"></section>
 <section id="simple-features" class="slide level2">
 <h2>Simple features</h2>
 <p><strong>Simple Features</strong> is a set of standards for storing and accessing geographic data.</p>
@@ -838,75 +789,42 @@ Peter Gao
 <li><p>Working with spatial data can be extremely memory intensive, so care is needed.</p></li>
 </ul>
 </section>
-<section id="working-with-point-data" class="slide level2">
-<h2>Working with point data</h2>
-<p>Our <code>ba_rent</code> data frame already has latitude and longitude, but many points are missing:</p>
+<section id="converting-data-to-simple-features-object" class="slide level2">
+<h2>Converting data to simple features object</h2>
+<p>When each row in our data frame refers to a point with longitude and latitude, we can use the <code>st_as_sf</code> function to convert our data frame to an <code>sf</code> object.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">summary</span>(ba_rent<span class="sc">$</span>lat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-  33.57   37.40   37.76   37.67   37.80   40.43  193145 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">summary</span>(ba_rent<span class="sc">$</span>lon)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
- -123.2  -122.4  -122.3  -122.2  -122.0   -74.2  196484 </code></pre>
-</div>
-</div>
-<div class="fragment">
-<p>Compare the number of <code>NA</code> values with the total rows:</p>
-</div>
-<div class="fragment">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">nrow</span>(ba_rent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 200796</code></pre>
-</div>
-</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb11-2"><a href="#cb11-2"></a>oct19_pm_2_5 <span class="ot">&lt;-</span> oct19_pm_2_5 <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">st_as_sf</span>(</span>
+<span id="cb11-4"><a href="#cb11-4"></a>    <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"SITE_LONGITUDE"</span>, <span class="st">"SITE_LATITUDE"</span>), <span class="co"># what columns hold lon/lat?</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a>    <span class="at">crs =</span> <span class="fu">st_crs</span>(<span class="dv">4326</span>) <span class="co"># what projection are we using?</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="working-with-point-data-1" class="slide level2">
-<h2>Working with point data</h2>
-<p>Let’s just work with the entries for which we have data from the year 2018.</p>
+<section id="converting-data-to-simple-features-object-1" class="slide level2">
+<h2>Converting data to simple features object</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>ba_rent_geo <span class="ot">&lt;-</span> ba_rent <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(lat) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(lon))</span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="fu">nrow</span>(ba_rent_geo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">head</span>(oct19_pm_2_5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 4311</code></pre>
-</div>
-</div>
-<p>We have extremely limited data in this time frame.</p>
-</section>
-<section id="converting-data-to-sf-object" class="slide level2">
-<h2>Converting data to sf object</h2>
-<p>When each row in our data frame refers to a point with longitude and latitude, we can use the <code>st_as_sf</code> function to convert our data frame to an sf object.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>ba_rent_geo <span class="ot">&lt;-</span> ba_rent_geo <span class="sc">|&gt;</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"lon"</span>, <span class="st">"lat"</span>), <span class="at">crs =</span> <span class="fu">st_crs</span>(<span class="dv">4326</span>))</span>
-<span id="cb14-3"><a href="#cb14-3"></a>ba_rent_geo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Simple feature collection with 4311 features and 15 fields
+<pre><code>Simple feature collection with 6 features and 18 fields
 Geometry type: POINT
 Dimension:     XY
-Bounding box:  xmin: -123.1965 ymin: 33.97564 xmax: -74.19802 ymax: 40.43494
+Bounding box:  xmin: -122.2823 ymin: 37.68753 xmax: -121.7842 ymax: 39.76168
 Geodetic CRS:  WGS 84
-# A tibble: 4,311 × 16
-   post_id     date  year nhood city  county price  beds baths  sqft room_in_apt
- * &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;
- 1 43283531… 2.01e7  2014 alam… alam… alame…  1450     1    NA   640           0
- 2 48659165… 2.02e7  2015 alam… alam… alame…  2100     1     1    NA           0
- 3 48172274… 2.01e7  2014 alam… alam… alame…  1939     2     1   864           0
- 4 35443866… 2.01e7  2013 alam… alam… alame…  2650     3    NA  2400           0
- 5 46673146… 2.01e7  2014 alam… alam… alame…   600     0    NA    NA           0
- 6 47108881… 2.01e7  2014 alam… alam… alame…  2250     2     1  1080           0
- 7 59557241… 2.02e7  2017 alam… alam… alame…  3900     3     2    NA           0
- 8 59619891… 2.02e7  2017 alam… alam… alame…  3995     3     2  1787           0
- 9 42680700… 2.01e7  2014 alam… alam… alame…  7200     5    NA  3400           0
-10 49351757… 2.02e7  2015 alam… alam… alame…  2536     2     2  1225           0
-# ℹ 4,301 more rows
-# ℹ 5 more variables: address &lt;chr&gt;, title &lt;chr&gt;, descr &lt;chr&gt;, details &lt;chr&gt;,
-#   geometry &lt;POINT [°]&gt;</code></pre>
+# A tibble: 6 × 19
+  Date       Source `Site ID`   POC Daily Mean PM2.5 Con…¹ UNITS DAILY_AQI_VALUE
+  &lt;date&gt;     &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt;                  &lt;dbl&gt; &lt;chr&gt;           &lt;dbl&gt;
+1 2023-09-19 AQS    060010007     3                   21.7 ug/m…              71
+2 2023-09-19 AQS    060010009     3                   27.9 ug/m…              84
+3 2023-09-19 AQS    060010011     3                   29.6 ug/m…              88
+4 2023-09-19 AQS    060010012     3                   33.3 ug/m…              96
+5 2023-09-19 AQS    060010015     3                   25.7 ug/m…              80
+6 2023-09-19 AQS    060070008     3                    7.1 ug/m…              30
+# ℹ abbreviated name: ¹​`Daily Mean PM2.5 Concentration`
+# ℹ 12 more variables: `Site Name` &lt;chr&gt;, DAILY_OBS_COUNT &lt;dbl&gt;,
+#   PERCENT_COMPLETE &lt;dbl&gt;, AQS_PARAMETER_CODE &lt;dbl&gt;, AQS_PARAMETER_DESC &lt;chr&gt;,
+#   CBSA_CODE &lt;dbl&gt;, CBSA_NAME &lt;chr&gt;, STATE_CODE &lt;chr&gt;, STATE &lt;chr&gt;,
+#   COUNTY_CODE &lt;chr&gt;, COUNTY &lt;chr&gt;, geometry &lt;POINT [°]&gt;</code></pre>
 </div>
 </div>
 </section>
@@ -914,213 +832,138 @@ Geodetic CRS:  WGS 84
 <h2>Visualizing point data</h2>
 <p>We can easily visualize this data now using the <code>geom_sf()</code> function, which automatically handles sf objects.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">ggplot</span>(ba_rent_geo) <span class="sc">+</span> <span class="fu">geom_sf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
-<section id="visualizing-point-data-1" class="slide level2">
-<h2>Visualizing point data</h2>
-<p>We can add a basemap using the <code>annotation_map_tile</code> function from the <code>ggspatial</code> package.</p>
-<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-11_fd94e18080362cc58ee0dae37a7947f1">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">library</span>(ggspatial)</span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">ggplot</span>(ba_rent_geo) <span class="sc">+</span> </span>
-<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">annotation_map_tile</span>(<span class="at">zoomin =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb17-4"><a href="#cb17-4"></a>  <span class="fu">geom_sf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
-<section id="removing-extra-point" class="slide level2">
-<h2>Removing extra point</h2>
-<p>We can remove points outside a certain box using the <code>st_crop</code> function:</p>
-<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-12_e130a97bbec2195bf9bf57d1de5ae746">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>box <span class="ot">=</span> <span class="fu">c</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">130</span>, <span class="at">ymin =</span> <span class="fl">36.5</span>, <span class="at">xmax =</span> <span class="sc">-</span><span class="dv">120</span>, <span class="at">ymax =</span> <span class="dv">40</span>)</span>
-<span id="cb18-2"><a href="#cb18-2"></a>ba_rent_geo <span class="ot">&lt;-</span> ba_rent_geo <span class="sc">|&gt;</span></span>
-<span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">st_crop</span>(box)</span>
-<span id="cb18-4"><a href="#cb18-4"></a><span class="fu">ggplot</span>(ba_rent_geo) <span class="sc">+</span> </span>
-<span id="cb18-5"><a href="#cb18-5"></a>  <span class="fu">annotation_map_tile</span>(<span class="at">zoomin =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb18-6"><a href="#cb18-6"></a>  <span class="fu">geom_sf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">ggplot</span>(oct19_pm_2_5) <span class="sc">+</span> <span class="fu">geom_sf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
-<section id="theme-and-customization" class="slide level2">
-<h2>Theme and customization</h2>
-<p>We can then adjust the color to show <code>price</code> and also change the color scale:</p>
-<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-13_1383177aa97363b9125ae5b04cfdc1bb">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">ggplot</span>(ba_rent_geo, <span class="fu">aes</span>(<span class="at">color =</span> price)) <span class="sc">+</span> </span>
-<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">annotation_map_tile</span>(<span class="at">zoomin =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">geom_sf</span>(<span class="at">alpha =</span> <span class="fl">0.75</span>, <span class="at">size =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
-<span id="cb19-4"><a href="#cb19-4"></a>  <span class="fu">scale_color_viridis_c</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="visualizing-point-data-1" class="slide level2">
+<h2>Visualizing point data</h2>
+<p>We can add a basemap by downloading the outline of California from the <code>tigris</code> package.</p>
+<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-13_626f156df3a36cb7f2434a59faa3133c">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">library</span>(tigris)</span>
+<span id="cb15-2"><a href="#cb15-2"></a>CA_sf <span class="ot">&lt;-</span> <span class="fu">states</span>() <span class="sc">|&gt;</span> <span class="fu">filter</span>(NAME <span class="sc">==</span> <span class="st">"California"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-15_155fa8c6b687451e85019a76b1d1f237">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> CA_sf) <span class="sc">+</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> oct19_pm_2_5) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
+<img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-15-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="visualizing-point-data-2" class="slide level2">
+<h2>Visualizing point data</h2>
+<p>We can then adjust the color to show <code>DAILY_AQI_VALUE</code> and also change the color scale:</p>
+<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-16_413d4cf55ece48d39d7b7471cb88d7e7">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> CA_sf) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> oct19_pm_2_5, </span>
+<span id="cb17-4"><a href="#cb17-4"></a>          <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">color =</span> DAILY_AQI_VALUE)) <span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a>  <span class="fu">scale_color_viridis_c</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-16-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="exercise" class="slide level2">
+<h2>Exercise</h2>
+<p>How do we create the following plot?</p>
+
+<img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-17-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
 <section id="spatial-polygon-data" class="slide level2">
-<h2>Spatial polygon data</h2>
-<p>Although we do not have complete coordinate data, we have good information about county:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(ba_rent<span class="sc">$</span>county))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1394</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">unique</span>(ba_rent<span class="sc">$</span>county)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> [1] "alameda"       "san francisco" "contra costa"  "santa clara"  
- [5] "napa"          "san mateo"     "santa cruz"    "sonoma"       
- [9] "marin"         "solano"        NA             </code></pre>
-</div>
+<h2>Spatial Polygon data</h2>
+<p>The AQI data we downloaded also contains county information. We can compute county level mean AQI using <code>group_by</code> and <code>summarize</code>:</p>
+<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-18_29b287c8ac5022fb3053f3d1a6e50cd0">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>oct19_county_means <span class="ot">&lt;-</span> oct19_pm_2_5 <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">|&gt;</span> <span class="co"># remove the geometry; we don't need it here</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">group_by</span>(COUNTY) <span class="sc">|&gt;</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a>  <span class="fu">summarize</span>(<span class="at">AQI =</span> <span class="fu">mean</span>(DAILY_AQI_VALUE))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="spatial-polygon-data-1" class="slide level2">
-<h2>Spatial polygon data</h2>
-<p>We can create a county level summary table for the median rent by county for 2015:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>county_rent_15 <span class="ot">&lt;-</span> ba_rent <span class="sc">%&gt;%</span></span>
-<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">filter</span>(beds <span class="sc">==</span> <span class="dv">1</span>, year <span class="sc">==</span> <span class="dv">2015</span>, <span class="sc">!</span><span class="fu">is.na</span>(county)) <span class="sc">|&gt;</span></span>
-<span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">group_by</span>(county) <span class="sc">|&gt;</span></span>
-<span id="cb24-4"><a href="#cb24-4"></a>  <span class="fu">summarize</span>(<span class="at">median_rent =</span> <span class="fu">median</span>(price, <span class="at">na.rm =</span> T))</span>
-<span id="cb24-5"><a href="#cb24-5"></a>county_rent_15</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 2
-   county        median_rent
-   &lt;chr&gt;               &lt;dbl&gt;
- 1 alameda             1950 
- 2 contra costa        1475 
- 3 marin               2188 
- 4 napa                1642.
- 5 san francisco       3227 
- 6 san mateo           2465 
- 7 santa clara         2228 
- 8 santa cruz          1650 
- 9 solano              1292 
-10 sonoma              1495 </code></pre>
+<h2>Spatial Polygon data</h2>
+<p>We can then create a county-level <strong>polygon</strong> map by downloading county-level boundaries using <code>tigris</code>.</p>
+<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-19_ec50a051a53921119b6e09754a6dfdd7">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>CA_counties_sf <span class="ot">&lt;-</span> <span class="fu">counties</span>(<span class="at">state =</span> <span class="st">"CA"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-21_c10415bf1ba00eb5909c6fc880aeaf2c">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>oct19_county_means <span class="ot">&lt;-</span> CA_counties_sf <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">right_join</span>(oct19_county_means, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"NAME"</span> <span class="ot">=</span> <span class="st">"COUNTY"</span>)) </span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> CA_sf) <span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> oct19_county_means, <span class="fu">aes</span>(<span class="at">fill =</span> AQI)) <span class="sc">+</span></span>
+<span id="cb20-6"><a href="#cb20-6"></a>  <span class="fu">scale_fill_viridis_c</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="spatial-polygon-data-2" class="slide level2">
-<h2>Spatial polygon data</h2>
-<p>We will then connect this summary table to an sf object. We can load US county data using the <code>tigris</code> package.</p>
-<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-16_b470b64bd05a5c1a6a73468ad9dd3253">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">library</span>(tigris)</span>
-<span id="cb26-2"><a href="#cb26-2"></a>ca_counties <span class="ot">&lt;-</span> <span class="fu">counties</span>(<span class="st">"California"</span>, <span class="at">cb =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-17_01ae32378c4f606ebac09a7c97c56066">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># convert county names to lower case</span></span>
-<span id="cb27-2"><a href="#cb27-2"></a>ca_counties <span class="ot">&lt;-</span> ca_counties <span class="sc">|&gt;</span></span>
-<span id="cb27-3"><a href="#cb27-3"></a>  <span class="fu">mutate</span>(<span class="at">county =</span> stringr<span class="sc">::</span><span class="fu">str_to_lower</span>(NAME))</span>
-<span id="cb27-4"><a href="#cb27-4"></a>ca_counties</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Simple feature collection with 58 features and 13 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -124.4096 ymin: 32.53444 xmax: -114.1312 ymax: 42.00948
-Geodetic CRS:  NAD83
-First 10 features:
-    STATEFP COUNTYFP COUNTYNS       AFFGEOID GEOID        NAME
-48       06      059 00277294 0500000US06059 06059      Orange
-51       06      111 00277320 0500000US06111 06111     Ventura
-95       06      063 00277296 0500000US06063 06063      Plumas
-182      06      015 01682074 0500000US06015 06015   Del Norte
-246      06      023 01681908 0500000US06023 06023    Humboldt
-254      06      043 00277286 0500000US06043 06043    Mariposa
-327      06      037 00277283 0500000US06037 06037 Los Angeles
-340      06      065 00277297 0500000US06065 06065   Riverside
-341      06      101 00277315 0500000US06101 06101      Sutter
-342      06      113 00277321 0500000US06113 06113        Yolo
-              NAMELSAD STUSPS STATE_NAME LSAD       ALAND     AWATER
-48       Orange County     CA California   06  2053476505  406279630
-51      Ventura County     CA California   06  4767622161  947345735
-95       Plumas County     CA California   06  6612400772  156387638
-182   Del Norte County     CA California   06  2606118035  578742633
-246    Humboldt County     CA California   06  9241565229 1253726036
-254    Mariposa County     CA California   06  3752476985   36220865
-327 Los Angeles County     CA California   06 10513508620 1787475204
-340   Riverside County     CA California   06 18671924669  242973907
-341      Sutter County     CA California   06  1560975503   14811541
-342        Yolo County     CA California   06  2628145869   22877242
-                          geometry      county
-48  MULTIPOLYGON (((-118.1144 3...      orange
-51  MULTIPOLYGON (((-119.4412 3...     ventura
-95  MULTIPOLYGON (((-121.497 40...      plumas
-182 MULTIPOLYGON (((-124.2175 4...   del norte
-246 MULTIPOLYGON (((-124.4086 4...    humboldt
-254 MULTIPOLYGON (((-120.3944 3...    mariposa
-327 MULTIPOLYGON (((-118.6044 3... los angeles
-340 MULTIPOLYGON (((-117.6767 3...   riverside
-341 MULTIPOLYGON (((-121.9483 3...      sutter
-342 MULTIPOLYGON (((-122.4215 3...        yolo</code></pre>
-</div>
+<h2>Spatial Polygon data</h2>
+
+<img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-22-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="animation-with-gganimate" class="slide level2">
+<h2>Animation with <code>gganimate</code></h2>
+<p>The <code>gganimate</code> package provides tools for animating <code>ggplot</code> visualizations:</p>
+
+<img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-23-1.gif" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="animation-with-gganimate-1" class="slide level2">
+<h2>Animation with <code>gganimate</code></h2>
+<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-24_47ba2cb89c4d94c1986aa17e45486e52">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">ggplot</span>(gapminder, <span class="fu">aes</span>(gdpPercap, lifeExp, <span class="at">size =</span> pop, <span class="at">colour =</span> country)) <span class="sc">+</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> country_colors) <span class="sc">+</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a>  <span class="fu">scale_size</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">12</span>)) <span class="sc">+</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb21-6"><a href="#cb21-6"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>continent) <span class="sc">+</span></span>
+<span id="cb21-7"><a href="#cb21-7"></a>  <span class="co"># Here comes the gganimate specific bits</span></span>
+<span id="cb21-8"><a href="#cb21-8"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Year: {frame_time}'</span>,</span>
+<span id="cb21-9"><a href="#cb21-9"></a>       <span class="at">x =</span> <span class="st">'GDP per capita'</span>, </span>
+<span id="cb21-10"><a href="#cb21-10"></a>       <span class="at">y =</span> <span class="st">'life expectancy'</span>) <span class="sc">+</span></span>
+<span id="cb21-11"><a href="#cb21-11"></a>  <span class="fu">transition_time</span>(year) <span class="sc">+</span></span>
+<span id="cb21-12"><a href="#cb21-12"></a>  <span class="fu">ease_aes</span>(<span class="st">'linear'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="joining-spatial-data" class="slide level2">
-<h2>Joining spatial data</h2>
-<p>If we want to keep only the counties for which we have data, we must use a <code>right_join</code> starting with <code>ca_counties</code>:</p>
-<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-18_e09a7ca3d008ac5a3ba72ec6c1815dc6">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>ca_counties <span class="ot">&lt;-</span> ca_counties <span class="sc">|&gt;</span></span>
-<span id="cb29-2"><a href="#cb29-2"></a>  <span class="fu">right_join</span>(county_rent_15, <span class="at">by =</span> <span class="st">"county"</span>)</span>
-<span id="cb29-3"><a href="#cb29-3"></a>ca_counties</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Simple feature collection with 10 features and 14 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -123.5335 ymin: 36.85065 xmax: -121.2082 ymax: 38.86424
-Geodetic CRS:  NAD83
-   STATEFP COUNTYFP COUNTYNS       AFFGEOID GEOID          NAME
-1       06      081 00277305 0500000US06081 06081     San Mateo
-2       06      041 00277285 0500000US06041 06041         Marin
-3       06      095 00277312 0500000US06095 06095        Solano
-4       06      001 01675839 0500000US06001 06001       Alameda
-5       06      055 00277292 0500000US06055 06055          Napa
-6       06      013 01675903 0500000US06013 06013  Contra Costa
-7       06      097 01657246 0500000US06097 06097        Sonoma
-8       06      085 00277307 0500000US06085 06085   Santa Clara
-9       06      087 00277308 0500000US06087 06087    Santa Cruz
-10      06      075 00277302 0500000US06075 06075 San Francisco
-               NAMELSAD STUSPS STATE_NAME LSAD      ALAND    AWATER
-1      San Mateo County     CA California   06 1161922042 757123906
-2          Marin County     CA California   06 1347889807 797077678
-3         Solano County     CA California   06 2128527683 218619356
-4        Alameda County     CA California   06 1910017353 216902808
-5           Napa County     CA California   06 1938032964 104262608
-6   Contra Costa County     CA California   06 1856838508 225278783
-7         Sonoma County     CA California   06 4080864785 498081645
-8    Santa Clara County     CA California   06 3343892720  33595850
-9     Santa Cruz County     CA California   06 1152823584 419714230
-10 San Francisco County     CA California   06  121507089 479146790
-          county median_rent                       geometry
-1      san mateo      2465.0 MULTIPOLYGON (((-122.5209 3...
-2          marin      2188.0 MULTIPOLYGON (((-122.4463 3...
-3         solano      1292.0 MULTIPOLYGON (((-122.4035 3...
-4        alameda      1950.0 MULTIPOLYGON (((-122.3423 3...
-5           napa      1642.5 MULTIPOLYGON (((-122.6464 3...
-6   contra costa      1475.0 MULTIPOLYGON (((-122.4298 3...
-7         sonoma      1495.0 MULTIPOLYGON (((-123.5331 3...
-8    santa clara      2228.0 MULTIPOLYGON (((-122.2027 3...
-9     santa cruz      1650.0 MULTIPOLYGON (((-122.3177 3...
-10 san francisco      3227.0 MULTIPOLYGON (((-122.3323 3...</code></pre>
-</div>
+<section id="animation-with-gganimate-2" class="slide level2">
+<h2>Animation with <code>gganimate</code></h2>
+
+<img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-25-1.gif" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="animation-with-gganimate-3" class="slide level2">
+<h2>Animation with <code>gganimate</code></h2>
+<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-26_5051bfb5948aa30aacdc3bf444d5a745">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>pm_2_5 <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://math167r-s24.github.io/static/CA_PM2_5_2023.csv"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2"></a>pm_2_5 <span class="ot">&lt;-</span> pm_2_5 <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a>  <span class="fu">mutate</span>(<span class="at">Date =</span> <span class="fu">mdy</span>(Date)) <span class="sc">|&gt;</span></span>
+<span id="cb22-4"><a href="#cb22-4"></a>  <span class="fu">filter</span>(<span class="fu">month</span>(Date) <span class="sc">==</span> <span class="dv">9</span>)</span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> CA_sf) <span class="sc">+</span></span>
+<span id="cb22-7"><a href="#cb22-7"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> pm_2_5, </span>
+<span id="cb22-8"><a href="#cb22-8"></a>             <span class="at">mapping =</span> <span class="fu">aes</span>(</span>
+<span id="cb22-9"><a href="#cb22-9"></a>               <span class="at">x =</span> SITE_LONGITUDE, </span>
+<span id="cb22-10"><a href="#cb22-10"></a>               <span class="at">y =</span> SITE_LATITUDE, </span>
+<span id="cb22-11"><a href="#cb22-11"></a>               <span class="at">color =</span> DAILY_AQI_VALUE</span>
+<span id="cb22-12"><a href="#cb22-12"></a>             )) <span class="sc">+</span></span>
+<span id="cb22-13"><a href="#cb22-13"></a>  <span class="fu">scale_color_viridis_c</span>() <span class="sc">+</span></span>
+<span id="cb22-14"><a href="#cb22-14"></a>  <span class="co"># Here comes the gganimate specific bits</span></span>
+<span id="cb22-15"><a href="#cb22-15"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Date: {frame_time}"</span>) <span class="sc">+</span></span>
+<span id="cb22-16"><a href="#cb22-16"></a>  <span class="fu">transition_time</span>(Date) <span class="sc">+</span> </span>
+<span id="cb22-17"><a href="#cb22-17"></a>  <span class="fu">ease_aes</span>(<span class="st">'linear'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="visualizing-polygon-data" class="slide level2">
-<h2>Visualizing polygon data</h2>
-<p>We can now use the <code>geom_sf()</code> function to visualize our data.</p>
-<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-19_5868f5f2814f5fc757bcfc546eebd170">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">ggplot</span>(ca_counties, <span class="fu">aes</span>(<span class="at">fill =</span> median_rent)) <span class="sc">+</span></span>
-<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">geom_sf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="takeaways" class="slide level2">
+<h2>Takeaways</h2>
+<ul>
+<li><p>Packages like <code>sf</code> and <code>gganimate</code> are complex and frequently changing – but extend <code>ggplot</code> for new types of data and visualizations.</p></li>
+<li><p>Don’t need to memorize these packages’ functions: get comfortable with documentation.</p></li>
+<li><p>Be creative and challenge yourself–don’t limit yourself to the visuals we’ve created in class.</p></li>
+</ul>
+</section>
+<section id="other-sources-of-spatial-data" class="slide level2">
+<h2>Other sources of spatial data</h2>
+<ul>
+<li><a href="https://data.sanjoseca.gov/group/geospatial">San Jose Open Data</a></li>
+<li><a href="https://datasf.org/opendata/">San Francisco Open Data</a></li>
+</ul>
+</section>
+<section id="final-project" class="slide level2">
+<h2>Final project</h2>
+<p>Instructions on the course website.</p>
 
-</div>
-<img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
-<section id="themes-and-customization" class="slide level2">
-<h2>Themes and customization</h2>
-<div class="cell" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-20_11a9b925e746632da83ce04dd130a46b">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">ggplot</span>(ca_counties, <span class="fu">aes</span>(<span class="at">fill =</span> median_rent)) <span class="sc">+</span></span>
-<span id="cb32-2"><a href="#cb32-2"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
-<span id="cb32-3"><a href="#cb32-3"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Median Rent"</span>) <span class="sc">+</span></span>
-<span id="cb32-4"><a href="#cb32-4"></a>  <span class="fu">ggtitle</span>(<span class="st">"Median 1BR rent by county, Bay Area, 2015"</span>,</span>
-<span id="cb32-5"><a href="#cb32-5"></a>           <span class="at">subtitle =</span> <span class="st">"based on Craigslist rental listings"</span>) <span class="sc">+</span></span>
-<span id="cb32-6"><a href="#cb32-6"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-
-<img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"><div class="footer footer-default">
+<div class="footer footer-default">
 
 </div>
 </section>

@@ -13,108 +13,147 @@ editor: visual
 -   Animations
 -   Project work time
 
-## Example: AQI data
+## Example: PM 2.5 data
+
+The EPA provides daily data on air quality for monitoring stations across the country, which you can download [here](https://www.epa.gov/outdoor-air-quality-data/download-daily-data). The below code downloads a subset of this data from the course website for the pollutant PM 2.5 (atmospheric particulate matter with a diameter of less than 2.5 micrometers).
 
 ```{r}
 #| echo: TRUE
-#| eval: FALSE
+#| eval: TRUE
 #| cache: TRUE
 #| warning: false
 #| fig-width: 7
 #| fig-height: 4.75
 #| out.width: "100%"
 #| fig.align: "center"
-
-readr::read_csv("https://math250-s24.github.io/")
+pm_2_5 <- readr::read_csv("https://math167r-s24.github.io/static/CA_PM2_5_2023.csv")
 ```
 
-
-## Exercise
-
-
-## Example: AQI data
-
-
-
-## Loading project data
-
-Today we'll practice working with spatial data. In `R`, most basic GIS (geographic information system) tasks can be carried out using the `sf` package, which you can install using `install.packages("sf")`. Today we'll also be using `tidyverse` packages.
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-library(sf)
-library(knitr)
-library(tidyverse)
-ba_rent <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-07-05/rent.csv")
-```
-
-## Craigslist rental data
-
-This dataset provides Craigslist rental listings for the Bay Area, from 2000-2018. It was originally collected by Dr. Kate Pennington, whose methodology you can read about [here](https://www.katepennington.org/clmethod).
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-head(ba_rent)
-```
-
-## Craigslist rental data variables
-
-::: {style="height:500px;overflow:auto;"}
-| **variable** | **class** | **description**       |
-|:-------------|:----------|:----------------------|
-| post_id      | character | Unique ID             |
-| date         | double    | date                  |
-| year         | double    | year                  |
-| nhood        | character | neighborhood          |
-| city         | character | city                  |
-| county       | character | county                |
-| price        | double    | price in USD          |
-| beds         | double    | n of beds             |
-| baths        | double    | n of baths            |
-| sqft         | double    | square feet of rental |
-| room_in_apt  | double    | room in apartment     |
-| address      | character | address               |
-| lat          | double    | latitude              |
-| lon          | double    | longitude             |
-| title        | character | title of listing      |
-| descr        | character | description           |
-| details      | character | additional details    |
-:::
-
-## Craigslist rental data
-
-## Basic summaries
-
-**Review**: What does the following code produce?
+## Example: PM 2.5 data
 
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
-ba_rent |>
-  filter(beds == 2, year == 2010) |>
-  group_by(city) |>
-  summarize(mean_price = mean(price, na.rm = T)) |>
-  arrange(mean_price) |>
-  kable()
+head(pm_2_5)
 ```
 
-. . .
-
-::: {style="height:350px;overflow:auto;"}
 ```{r}
 #| echo: FALSE
 #| eval: TRUE
-#| results: asis
-ba_rent |>
-  filter(beds == 2, year == 2010) |>
-  group_by(city) |>
-  summarize(mean_price = mean(price, na.rm = T)) |>
-  arrange(mean_price) |>
-  kable()
+library(knitr)
+kable(head(pm_2_5)) |>
+  kableExtra::kable_styling("striped", full_width = F) |> 
+  kableExtra::scroll_box(height = "480px")
 ```
+
+## Example: PM 2.5 data
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+summary(pm_2_5)
+```
+
+## Data wrangling
+
+Note that the `Date` variable is a character--we can convert this into a `Date` class object using the `lubridate` package.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+library(tidyverse)
+pm_2_5 <- pm_2_5 |>
+  mutate(Date = mdy(Date))
+summary(pm_2_5)
+```
+
+## Wildfire season 2023
+
+![](images/Screenshot 2024-02-20 at 10.24.44 AM.png)
+
+## Wildfire season 2023
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+jan1_pm_2_5 <- pm_2_5 |> filter(Date == "2023-01-01")
+hist(jan1_pm_2_5$`Daily Mean PM2.5 Concentration`,
+     main = "Jan 1",  xlab = "PM 2.5")
+```
+
 :::
+
+::: {.column width="50%"}
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+oct19_pm_2_5 <- pm_2_5 |> filter(Date == "2023-09-19")
+hist(oct19_pm_2_5$`Daily Mean PM2.5 Concentration`,
+     main = "October 19", xlab = "PM 2.5")
+```
+
+:::
+:::
+
+## Working with spatial data
+
+We can't get an idea of how air quality varies over space using univariate summaries like these. Ideally, we could plot the PM 2.5 or AQI measurements on a map of California.
+
+## Naively working with latitude/longitude
+
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+ggplot(data = oct19_pm_2_5, 
+       mapping = aes(x = SITE_LONGITUDE, 
+                     y = SITE_LATITUDE, 
+                     color = DAILY_AQI_VALUE)) +
+  geom_point() +
+  scale_color_viridis_c()
+```
+
+## Naively working with latitude/longitude
+
+Compare with January 1:
+
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+ggplot(data = jan1_pm_2_5, 
+       mapping = aes(x = SITE_LONGITUDE, 
+                     y = SITE_LATITUDE, 
+                     color = DAILY_AQI_VALUE)) +
+  geom_point() +
+  scale_color_viridis_c()
+```
+
+## Naively working with latitude/longitude
+
+We can only get so far just treating longitude and latitude as x and y. In particular, near the poles, we will get large amounts of distortion:
+
+![](https://upload.wikimedia.org/wikipedia/commons/8/83/Equirectangular_projection_SW.jpg)
 
 ## Simple features
 
@@ -126,53 +165,28 @@ ba_rent |>
 
 -   Working with spatial data can be extremely memory intensive, so care is needed.
 
-## Working with point data
 
-Our `ba_rent` data frame already has latitude and longitude, but many points are missing:
+## Converting data to simple features object
+
+When each row in our data frame refers to a point with longitude and latitude, we can use the `st_as_sf` function to convert our data frame to an `sf` object.
 
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
-summary(ba_rent$lat)
-summary(ba_rent$lon)
+library(sf)
+oct19_pm_2_5 <- oct19_pm_2_5 |>
+  st_as_sf(
+    coords = c("SITE_LONGITUDE", "SITE_LATITUDE"), # what columns hold lon/lat?
+    crs = st_crs(4326) # what projection are we using?
+  ) 
 ```
 
-. . .
-
-Compare the number of `NA` values with the total rows:
-
-. . .
+## Converting data to simple features object
 
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
-nrow(ba_rent)
-```
-
-## Working with point data
-
-Let's just work with the entries for which we have data from the year 2018.
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-ba_rent_geo <- ba_rent |>
-  filter(!is.na(lat) & !is.na(lon))
-nrow(ba_rent_geo)
-```
-
-We have extremely limited data in this time frame.
-
-## Converting data to sf object
-
-When each row in our data frame refers to a point with longitude and latitude, we can use the `st_as_sf` function to convert our data frame to an sf object.
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-ba_rent_geo <- ba_rent_geo |>
-  st_as_sf(coords = c("lon", "lat"), crs = st_crs(4326))
-ba_rent_geo
+head(oct19_pm_2_5)
 ```
 
 ## Visualizing point data
@@ -182,26 +196,59 @@ We can easily visualize this data now using the `geom_sf()` function, which auto
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
-ggplot(ba_rent_geo) + geom_sf()
+ggplot(oct19_pm_2_5) + geom_sf()
 ```
 
 ## Visualizing point data
 
-We can add a basemap using the `annotation_map_tile` function from the `ggspatial` package.
+We can add a basemap by downloading the outline of California from the `tigris` package.
 
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| cache: TRUE
+#| message: FALSE
+#| warning: FALSE
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+library(tigris)
+CA_sf <- states() |> filter(NAME == "California")
+```
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| include: FALSE
+#| cache: TRUE
+#| message: FALSE
+#| warning: FALSE
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+library(tigris)
+CA_sf <- states() |> filter(NAME == "California")
+```
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
 #| cache: TRUE
-library(ggspatial)
-ggplot(ba_rent_geo) + 
-  annotation_map_tile(zoomin = -1) +
-  geom_sf()
+#| message: FALSE
+#| warning: FALSE
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+ggplot() +
+  geom_sf(data = CA_sf) +
+  geom_sf(data = oct19_pm_2_5) 
 ```
 
-## Removing extra point
 
-We can remove points outside a certain box using the `st_crop` function:
+## Visualizing point data
+
+We can then adjust the color to show `DAILY_AQI_VALUE` and also change the color scale:
 
 ```{r}
 #| echo: TRUE
@@ -209,58 +256,50 @@ We can remove points outside a certain box using the `st_crop` function:
 #| message: FALSE
 #| warning: FALSE
 #| cache: TRUE
-box = c(xmin = -130, ymin = 36.5, xmax = -120, ymax = 40)
-ba_rent_geo <- ba_rent_geo |>
-  st_crop(box)
-ggplot(ba_rent_geo) + 
-  annotation_map_tile(zoomin = -1) +
-  geom_sf()
-```
-
-## Theme and customization
-
-We can then adjust the color to show `price` and also change the color scale:
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-#| message: FALSE
-#| warning: FALSE
-#| cache: TRUE
-ggplot(ba_rent_geo, aes(color = price)) + 
-  annotation_map_tile(zoomin = -1) +
-  geom_sf(alpha = 0.75, size = 0.75) +
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+ggplot() +
+  geom_sf(data = CA_sf) +
+  geom_sf(data = oct19_pm_2_5, 
+          mapping = aes(color = DAILY_AQI_VALUE)) +
   scale_color_viridis_c()
 ```
 
-## Spatial polygon data
+## Exercise
 
-Although we do not have complete coordinate data, we have good information about county:
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-sum(is.na(ba_rent$county))
-unique(ba_rent$county)
-```
-
-## Spatial polygon data
-
-We can create a county level summary table for the median rent by county for 2015:
+How do we create the following plot?
 
 ```{r}
-#| echo: TRUE
+#| echo: FALSE
 #| eval: TRUE
-county_rent_15 <- ba_rent %>%
-  filter(beds == 1, year == 2015, !is.na(county)) |>
-  group_by(county) |>
-  summarize(median_rent = median(price, na.rm = T))
-county_rent_15
+#| message: FALSE
+#| warning: FALSE
+#| cache: TRUE
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+pm_2_5 <- pm_2_5 |>
+  st_as_sf(
+    coords = c("SITE_LONGITUDE", "SITE_LATITUDE"), # what columns hold lon/lat?
+    crs = st_crs(4326) # what projection are we using?
+  ) 
+pm_2_5_subset <- pm_2_5 |>
+  filter(Date >= "2023-09-19" & Date <= "2023-09-22")
+ggplot() +
+  geom_sf(data = CA_sf) +
+  geom_sf(data = pm_2_5_subset, 
+          mapping = aes(color = DAILY_AQI_VALUE),
+          size = .85) +
+  scale_color_viridis_c() +
+  facet_wrap(~Date)
 ```
 
-## Spatial polygon data
+## Spatial Polygon data
 
-We will then connect this summary table to an sf object. We can load US county data using the `tigris` package.
+The AQI data we downloaded also contains county information. We can compute county level mean AQI using `group_by` and `summarize`:
 
 ```{r}
 #| echo: TRUE
@@ -268,60 +307,225 @@ We will then connect this summary table to an sf object. We can load US county d
 #| cache: TRUE
 #| message: FALSE
 #| warning: FALSE
-#| output: false
-library(tigris)
-ca_counties <- counties("California", cb = TRUE)
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+oct19_county_means <- oct19_pm_2_5 |>
+  st_set_geometry(NULL) |> # remove the geometry; we don't need it here
+  group_by(COUNTY) |>
+  summarize(AQI = mean(DAILY_AQI_VALUE))
+```
+
+## Spatial Polygon data
+
+We can then create a county-level **polygon** map by downloading county-level boundaries using `tigris`.
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| cache: TRUE
+#| message: FALSE
+#| warning: FALSE
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+CA_counties_sf <- counties(state = "CA")
+```
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| include: FALSE
+#| cache: TRUE
+#| message: FALSE
+#| warning: FALSE
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+CA_counties_sf <- counties(state = "CA")
 ```
 
 ```{r}
 #| echo: TRUE
+#| eval: FALSE
+#| cache: TRUE
+#| message: FALSE
+#| warning: FALSE
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+oct19_county_means <- CA_counties_sf |>
+  right_join(oct19_county_means, by = c("NAME" = "COUNTY")) 
+ggplot() +
+  geom_sf(data = CA_sf) +
+  geom_sf(data = oct19_county_means, aes(fill = AQI)) +
+  scale_fill_viridis_c() 
+```
+
+## Spatial Polygon data
+
+```{r}
+#| echo: FALSE
 #| eval: TRUE
 #| cache: TRUE
 #| message: FALSE
 #| warning: FALSE
-# convert county names to lower case
-ca_counties <- ca_counties |>
-  mutate(county = stringr::str_to_lower(NAME))
-ca_counties
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+oct19_county_means <- CA_counties_sf |>
+  right_join(oct19_county_means, 
+             by = c("NAME" = "COUNTY")) 
+ggplot() +
+  geom_sf(data = CA_sf) +
+  geom_sf(data = oct19_county_means, aes(fill = AQI)) +
+  scale_fill_viridis_c() 
 ```
 
-## Joining spatial data
+## Animation with `gganimate`
 
-If we want to keep only the counties for which we have data, we must use a `right_join` starting with `ca_counties`:
+The `gganimate` package provides tools for animating `ggplot` visualizations:
 
 ```{r}
-#| echo: TRUE
+#| echo: FALSE
 #| eval: TRUE
 #| message: FALSE
 #| warning: FALSE
 #| cache: TRUE
-ca_counties <- ca_counties |>
-  right_join(county_rent_15, by = "county")
-ca_counties
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+library(gapminder)
+library(gganimate)
+ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
+  geom_point(alpha = 0.7, show.legend = FALSE) +
+  scale_colour_manual(values = country_colors) +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  facet_wrap(~continent) +
+  # Here comes the gganimate specific bits
+  labs(title = 'Year: {frame_time}', 
+       x = 'GDP per capita', 
+       y = 'life expectancy') +
+  transition_time(year) +
+  ease_aes('linear')
 ```
 
-## Visualizing polygon data
 
-We can now use the `geom_sf()` function to visualize our data.
+## Animation with `gganimate`
 
 ```{r}
 #| echo: TRUE
-#| eval: TRUE
+#| eval: FALSE
+#| message: FALSE
+#| warning: FALSE
 #| cache: TRUE
-ggplot(ca_counties, aes(fill = median_rent)) +
-  geom_sf()
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
+  geom_point(alpha = 0.7, show.legend = FALSE) +
+  scale_colour_manual(values = country_colors) +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  facet_wrap(~continent) +
+  # Here comes the gganimate specific bits
+  labs(title = 'Year: {frame_time}',
+       x = 'GDP per capita', 
+       y = 'life expectancy') +
+  transition_time(year) +
+  ease_aes('linear')
 ```
 
-## Themes and customization
+
+## Animation with `gganimate`
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| message: FALSE
+#| warning: FALSE
+#| cache: TRUE
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+pm_2_5 <- readr::read_csv("https://math167r-s24.github.io/static/CA_PM2_5_2023.csv")
+pm_2_5 <- pm_2_5 |>
+  mutate(Date = mdy(Date)) |>
+  filter(month(Date) == 9)
+ggplot() +
+  geom_sf(data = CA_sf) +
+  geom_point(data = pm_2_5, 
+             mapping = aes(
+               x = SITE_LONGITUDE, 
+               y = SITE_LATITUDE, 
+               color = DAILY_AQI_VALUE
+             )) +
+  scale_color_viridis_c() +
+  # Here comes the gganimate specific bits
+  labs(title = "Date: {frame_time}") +
+  transition_time(Date) + 
+  ease_aes('linear')
+```
+
+## Animation with `gganimate`
 
 ```{r}
 #| echo: TRUE
-#| eval: TRUE
+#| eval: FALSE
+#| message: FALSE
+#| warning: FALSE
 #| cache: TRUE
-ggplot(ca_counties, aes(fill = median_rent)) +
-  geom_sf() +
-  scale_fill_viridis_c(name = "Median Rent") +
-  ggtitle("Median 1BR rent by county, Bay Area, 2015",
-           subtitle = "based on Craigslist rental listings") +
-  theme_minimal()
+#| fig-width: 7
+#| fig-height: 4.75
+#| out.width: "100%"
+#| fig.align: "center"
+pm_2_5 <- readr::read_csv("https://math167r-s24.github.io/static/CA_PM2_5_2023.csv")
+pm_2_5 <- pm_2_5 |>
+  mutate(Date = mdy(Date)) |>
+  filter(month(Date) == 9)
+ggplot() +
+  geom_sf(data = CA_sf) +
+  geom_point(data = pm_2_5, 
+             mapping = aes(
+               x = SITE_LONGITUDE, 
+               y = SITE_LATITUDE, 
+               color = DAILY_AQI_VALUE
+             )) +
+  scale_color_viridis_c() +
+  # Here comes the gganimate specific bits
+  labs(title = "Date: {frame_time}") +
+  transition_time(Date) + 
+  ease_aes('linear')
 ```
+
+## Takeaways
+
+- Packages like `sf` and `gganimate` are complex and frequently changing -- but extend `ggplot` for new types of data and visualizations. 
+
+- Don't need to memorize these packages' functions: get comfortable with documentation.
+
+- Be creative and challenge yourself--don't limit yourself to the visuals we've created in class.
+
+## Other sources of spatial data
+
+- [San Jose Open Data](https://data.sanjoseca.gov/group/geospatial)
+- [San Francisco Open Data](https://datasf.org/opendata/)
+
+## Final project
+
+Instructions on the course website.
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+knitr::knit_exit()
+```
+
