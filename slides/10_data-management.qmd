@@ -165,7 +165,7 @@ flights |>
 
 ## Exercise: Flights data
 
-Use the `flights` and `weather` datasets from the `nycflights13` package to create a scatter plot with `wind_speed` on the x-axis and `dep_delay` on the `y-axis`.
+Use the `flights` and `weather` datasets from the `nycflights13` package to create a scatter plot with `wind_speed` on the x-axis and `dep_delay` on the `y-axis` for January flights from Newark.
 
 ```{r}
 #| echo: TRUE
@@ -179,6 +179,7 @@ data(weather)
 ```{r}
 #| echo: FALSE
 #| eval: TRUE
+#| results: hide
 #| cache: TRUE
 #| warning: false
 #| fig-width: 7
