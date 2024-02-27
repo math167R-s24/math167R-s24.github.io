@@ -338,9 +338,7 @@ If you execute the step of a function where the error occurs, you will exit inte
 
 This can get annoying, because it stops you from interacting right when you hit the bug.
 
-Strategy: 
-* Call `browser()` and execute until you hit the error. Remember exactly where it occurs. 
-* Call `browser()` again and execute again, stopping just before triggering the error. * You can copy and paste the next line of code into the `Browse` console to trigger the error without exiting the interactive debugger.
+Strategy: \* Call `browser()` and execute until you hit the error. Remember exactly where it occurs. \* Call `browser()` again and execute again, stopping just before triggering the error. \* You can copy and paste the next line of code into the `Browse` console to trigger the error without exiting the interactive debugger.
 
 ## Tips
 
@@ -349,7 +347,6 @@ Strategy:
 -   If you still can't figure it out, `s` "Step into" the next function and repeat this process.
 
 ## Example
-
 
 ```{r}
 #| echo: TRUE
@@ -371,7 +368,6 @@ calculate_p_norm(1:5, 1)
 Within an interactive debugging environment, you can use `as.list(environment())` to see what is in the environment.
 
 ## Example
-
 
 ```{r}
 #| echo: TRUE

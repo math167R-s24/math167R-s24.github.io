@@ -15,7 +15,7 @@ editor: visual
 
 ## Example: PM 2.5 data
 
-The EPA provides daily data on air quality for monitoring stations across the country, which you can download [here](https://www.epa.gov/outdoor-air-quality-data/download-daily-data). The below code downloads a subset of this data from the course website for the pollutant PM 2.5 (atmospheric particulate matter with a diameter of less than 2.5 micrometers).
+The EPA provides daily data on air quality for monitoring stations across the country, which you can download [here](https://www.epa.gov/outdoor-air-quality-data/download-daily-data). The below code downloads a subset of this data from the course website for the pollutant PM 2.5 (atmospheric particulate matter with a diameter of less than 2.5 micrometers) and AQI for 2023.
 
 ```{r}
 #| echo: TRUE
@@ -54,6 +54,26 @@ kable(head(pm_2_5)) |>
 summary(pm_2_5)
 ```
 
+## Warm-up: PM 2.5 data
+
+Work with the people around you to identify:
+
+1. Where and when was the highest `DAILY_AQI_VALUE` observed in 2023?
+2. Which site had the highest median `DAILY_AQI_VALUE` in 2023?
+3. How many monitoring sites are in Santa Clara County?
+4. What is the name of the site in this dataset that is closest to SJSU's campus?
+5. What is the median `DAILY_AQI_VALUE` for this site in 2023?
+
+## Warm-up: PM 2.5 data
+
+Answers:
+
+1. Yreka on August 28 (AQI = 285)
+2. Cortina Indian Rancheria
+3. 3
+4. San Jose - Jackson 
+5. 29
+
 ## Data wrangling
 
 Note that the `Date` variable is a character--we can convert this into a `Date` class object using the `lubridate` package.
@@ -69,7 +89,7 @@ summary(pm_2_5)
 
 ## Wildfire season 2023
 
-![](images/Screenshot 2024-02-20 at 10.24.44 AM.png)
+![](images/Screenshot%202024-02-20%20at%2010.24.44%20AM.png)
 
 ## Wildfire season 2023
 
@@ -87,7 +107,6 @@ jan1_pm_2_5 <- pm_2_5 |> filter(Date == "2023-01-01")
 hist(jan1_pm_2_5$`Daily Mean PM2.5 Concentration`,
      main = "Jan 1",  xlab = "PM 2.5")
 ```
-
 :::
 
 ::: {.column width="50%"}
@@ -103,7 +122,6 @@ oct19_pm_2_5 <- pm_2_5 |> filter(Date == "2023-09-19")
 hist(oct19_pm_2_5$`Daily Mean PM2.5 Concentration`,
      main = "October 19", xlab = "PM 2.5")
 ```
-
 :::
 :::
 
@@ -165,7 +183,6 @@ We can only get so far just treating longitude and latitude as x and y. In parti
 
 -   Working with spatial data can be extremely memory intensive, so care is needed.
 
-
 ## Converting data to simple features object
 
 When each row in our data frame refers to a point with longitude and latitude, we can use the `st_as_sf` function to convert our data frame to an `sf` object.
@@ -176,8 +193,10 @@ When each row in our data frame refers to a point with longitude and latitude, w
 library(sf)
 oct19_pm_2_5 <- oct19_pm_2_5 |>
   st_as_sf(
-    coords = c("SITE_LONGITUDE", "SITE_LATITUDE"), # what columns hold lon/lat?
-    crs = st_crs(4326) # what projection are we using?
+    # what columns hold lon/lat?
+    coords = c("SITE_LONGITUDE", "SITE_LATITUDE"), 
+     # what projection are we using?
+    crs = st_crs(4326)
   ) 
 ```
 
@@ -216,6 +235,7 @@ We can add a basemap by downloading the outline of California from the `tigris` 
 library(tigris)
 CA_sf <- states() |> filter(NAME == "California")
 ```
+
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
@@ -230,6 +250,7 @@ CA_sf <- states() |> filter(NAME == "California")
 library(tigris)
 CA_sf <- states() |> filter(NAME == "California")
 ```
+
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
@@ -244,7 +265,6 @@ ggplot() +
   geom_sf(data = CA_sf) +
   geom_sf(data = oct19_pm_2_5) 
 ```
-
 
 ## Visualizing point data
 
@@ -278,7 +298,7 @@ How do we create the following plot?
 #| warning: FALSE
 #| cache: TRUE
 #| fig-width: 7
-#| fig-height: 4.75
+#| fig-height: 6.75
 #| out.width: "100%"
 #| fig.align: "center"
 pm_2_5 <- pm_2_5 |>
@@ -312,7 +332,8 @@ The AQI data we downloaded also contains county information. We can compute coun
 #| out.width: "100%"
 #| fig.align: "center"
 oct19_county_means <- oct19_pm_2_5 |>
-  st_set_geometry(NULL) |> # remove the geometry; we don't need it here
+  # remove the geometry; we don't need it here
+  st_set_geometry(NULL) |> 
   group_by(COUNTY) |>
   summarize(AQI = mean(DAILY_AQI_VALUE))
 ```
@@ -333,6 +354,7 @@ We can then create a county-level **polygon** map by downloading county-level bo
 #| fig.align: "center"
 CA_counties_sf <- counties(state = "CA")
 ```
+
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
@@ -416,7 +438,6 @@ ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
   ease_aes('linear')
 ```
 
-
 ## Animation with `gganimate`
 
 ```{r}
@@ -442,7 +463,6 @@ ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
   transition_time(year) +
   ease_aes('linear')
 ```
-
 
 ## Animation with `gganimate`
 
@@ -508,16 +528,16 @@ ggplot() +
 
 ## Takeaways
 
-- Packages like `sf` and `gganimate` are complex and frequently changing -- but extend `ggplot` for new types of data and visualizations. 
+-   Packages like `sf` and `gganimate` are complex and frequently changing -- but extend `ggplot` for new types of data and visualizations.
 
-- Don't need to memorize these packages' functions: get comfortable with documentation.
+-   Don't need to memorize these packages' functions: get comfortable with documentation.
 
-- Be creative and challenge yourself--don't limit yourself to the visuals we've created in class.
+-   Be creative and challenge yourself--don't limit yourself to the visuals we've created in class.
 
 ## Other sources of spatial data
 
-- [San Jose Open Data](https://data.sanjoseca.gov/group/geospatial)
-- [San Francisco Open Data](https://datasf.org/opendata/)
+-   [San Jose Open Data](https://data.sanjoseca.gov/group/geospatial)
+-   [San Francisco Open Data](https://datasf.org/opendata/)
 
 ## Final project
 
@@ -528,4 +548,3 @@ Instructions on the course website.
 #| eval: TRUE
 knitr::knit_exit()
 ```
-

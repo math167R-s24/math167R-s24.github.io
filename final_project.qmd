@@ -23,7 +23,7 @@ During the semester, you will submit multiple checkpoint assignments, including 
 
 This project is intentionally open-ended: there are no predetermined right answers. Exceptional projects will demonstrate mastery of the course material and involve more than a superficial review of material covered in class or application using a toy dataset. If you are an undergraduate interested in participating in a competition and potentially presenting at the Electronic Undergraduate Statistics Conference, you may consider using this project to submit to the [Undergraduate Class Project Competition](https://www.causeweb.org/usproc/usclap).
 
-## Part One: Project Proposal (10 points)
+## Part One: Project Proposal (10 points), due 3/20
 
 To begin your project, identify a research topic and dataset. In particular, your project should meet the following minimum requirements:
 
@@ -54,7 +54,7 @@ You will submit a 2-3 page project proposal (pdf format) with the following info
 
 You are encouraged to meet with the instructor to discuss potential project topics and datasets **before** beginning your project proposal. If you wish to use a dataset discussed in class, you should obtain instructor approval.
 
-## Part Two: Inferential analysis (10 points)
+## Part Two: Inferential analysis (10 points), due 5/1
 
 For at least one of your subquestions, perform an inferential analysis (ex. hypothesis test, confidence interval, linear regression) and discuss your findings. For the second checkpoint assignment, you will prepare a written report on your inferential analysis. You will receive instructor feedback on your writeup, which you should incorporate into your final report. 
 
@@ -102,7 +102,8 @@ At the end of the semester, you will deliver a brief lightning talk in class. Yo
 
 You will complete a 1-2 page reflection and self-evaluation on your work for this final project and course. Briefly answer the following questions:
 
-1. Describe at least one aspect of your work for this class of which you are proud. Are there any ways in which you grew this semester?
-2. Describe at least one aspect of your work which you could have improved.  
-3. Are there other topics related to programming in R and data science that you wish we had covered?
+1. If you worked with a partner, what were your specific responsibilities for the project proposal, report, and presentation?
+2. Describe at least one aspect of your work for this class of which you are proud. Are there any ways in which you grew this semester?
+3. Describe at least one aspect of your work which you could have improved.  
+4. Are there other topics related to programming in R and data science that you wish we had covered?
 

@@ -416,7 +416,7 @@ Peter Gao
 </section>
 <section id="example-pm-2.5-data" class="slide level2">
 <h2>Example: PM 2.5 data</h2>
-<p>The EPA provides daily data on air quality for monitoring stations across the country, which you can download <a href="https://www.epa.gov/outdoor-air-quality-data/download-daily-data">here</a>. The below code downloads a subset of this data from the course website for the pollutant PM 2.5 (atmospheric particulate matter with a diameter of less than 2.5 micrometers).</p>
+<p>The EPA provides daily data on air quality for monitoring stations across the country, which you can download <a href="https://www.epa.gov/outdoor-air-quality-data/download-daily-data">here</a>. The below code downloads a subset of this data from the course website for the pollutant PM 2.5 (atmospheric particulate matter with a diameter of less than 2.5 micrometers) and AQI for 2023.</p>
 <div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-1_88079df84b2e8b05ec7ea7b757a6b46c">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>pm_2_5 <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://math167r-s24.github.io/static/CA_PM2_5_2023.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -650,6 +650,28 @@ Peter Gao
 </div>
 </div>
 </section>
+<section id="warm-up-pm-2.5-data" class="slide level2">
+<h2>Warm-up: PM 2.5 data</h2>
+<p>Work with the people around you to identify:</p>
+<ol type="1">
+<li>Where and when was the highest <code>DAILY_AQI_VALUE</code> observed in 2023?</li>
+<li>Which site had the highest median <code>DAILY_AQI_VALUE</code> in 2023?</li>
+<li>How many monitoring sites are in Santa Clara County?</li>
+<li>What is the name of the site in this dataset that is closest to SJSU’s campus?</li>
+<li>What is the median <code>DAILY_AQI_VALUE</code> for this site in 2023?</li>
+</ol>
+</section>
+<section id="warm-up-pm-2.5-data-1" class="slide level2">
+<h2>Warm-up: PM 2.5 data</h2>
+<p>Answers:</p>
+<ol type="1">
+<li>Yreka on August 28 (AQI = 285)</li>
+<li>Cortina Indian Rancheria</li>
+<li>3</li>
+<li>San Jose - Jackson</li>
+<li>29</li>
+</ol>
+</section>
 <section id="data-wrangling" class="slide level2">
 <h2>Data wrangling</h2>
 <p>Note that the <code>Date</code> variable is a character–we can convert this into a <code>Date</code> class object using the <code>lubridate</code> package.</p>
@@ -796,9 +818,11 @@ Peter Gao
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">library</span>(sf)</span>
 <span id="cb11-2"><a href="#cb11-2"></a>oct19_pm_2_5 <span class="ot">&lt;-</span> oct19_pm_2_5 <span class="sc">|&gt;</span></span>
 <span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">st_as_sf</span>(</span>
-<span id="cb11-4"><a href="#cb11-4"></a>    <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"SITE_LONGITUDE"</span>, <span class="st">"SITE_LATITUDE"</span>), <span class="co"># what columns hold lon/lat?</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a>    <span class="at">crs =</span> <span class="fu">st_crs</span>(<span class="dv">4326</span>) <span class="co"># what projection are we using?</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-4"><a href="#cb11-4"></a>    <span class="co"># what columns hold lon/lat?</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a>    <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"SITE_LONGITUDE"</span>, <span class="st">"SITE_LATITUDE"</span>), </span>
+<span id="cb11-6"><a href="#cb11-6"></a>     <span class="co"># what projection are we using?</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a>    <span class="at">crs =</span> <span class="fu">st_crs</span>(<span class="dv">4326</span>)</span>
+<span id="cb11-8"><a href="#cb11-8"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="converting-data-to-simple-features-object-1" class="slide level2">
@@ -870,11 +894,12 @@ Geodetic CRS:  WGS 84
 <section id="spatial-polygon-data" class="slide level2">
 <h2>Spatial Polygon data</h2>
 <p>The AQI data we downloaded also contains county information. We can compute county level mean AQI using <code>group_by</code> and <code>summarize</code>:</p>
-<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-18_29b287c8ac5022fb3053f3d1a6e50cd0">
+<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-18_5bf59820ad27e3b6ed695169dac762b0">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>oct19_county_means <span class="ot">&lt;-</span> oct19_pm_2_5 <span class="sc">|&gt;</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">|&gt;</span> <span class="co"># remove the geometry; we don't need it here</span></span>
-<span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">group_by</span>(COUNTY) <span class="sc">|&gt;</span></span>
-<span id="cb18-4"><a href="#cb18-4"></a>  <span class="fu">summarize</span>(<span class="at">AQI =</span> <span class="fu">mean</span>(DAILY_AQI_VALUE))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="co"># remove the geometry; we don't need it here</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb18-4"><a href="#cb18-4"></a>  <span class="fu">group_by</span>(COUNTY) <span class="sc">|&gt;</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a>  <span class="fu">summarize</span>(<span class="at">AQI =</span> <span class="fu">mean</span>(DAILY_AQI_VALUE))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="spatial-polygon-data-1" class="slide level2">

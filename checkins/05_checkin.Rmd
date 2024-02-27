@@ -1,7 +1,6 @@
 ---
 title: "Check-in 5"
 author: "YOUR NAME HERE"
-date: "2023-10-09"
 format: 
   html:
     embed-resources: true
@@ -9,49 +8,6 @@ format:
     code-summary: "Code"
 ---
 
-Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.
-
-### Collaborators
-
-INSERT NAMES OF ANY COLLABORATORS
+Remember, **follow the instructions below and use R Markdown to create a pdf document with your code and answers to the following questions on Gradescope.** You may find a template file by clicking "Code" in the top right corner of this page.
 
 1. (Project Euler Problem 1) The natural numbers less than 10 that are divisible by 3 or 5 are 3, 5, 6, and 9. The sum of these numbers is 23. Write R code to compute the sum of all the numbers less than 1000 that are divisible by 3 or 5.
-
-
-## A. 
-
-1. Download the median age by state tables for 2010 and 2020 from the Canvas assignment [here](https://sjsu.instructure.com/courses/1571636/assignments/6775084). You can use the `read_csv` function from the `readr` package to open these files and save them as `age_2010` and `age_2020`.
- 
-```{r, eval = F, echo = T}
-
-```
-
-2. Create a scatter plot with each state as a point, with 2020 median age on the y-axis and 2010 median age on the x-axis. You may use any of the functions we have discussed in class. Note that there are many possible solutions. My solution used `pivot_wider()`, `left_join()`, and `ggplot()`, but you are welcome to use any solution you wish.
-
-
-**Note**: the following commands were used to download this data using the `tidycensus` package. You do not need to run the following code: it is only provided in case you are curious about downloading data from the U.S. Census using R. In your final report, be sure that the following code chunk is set to `eval = F` and `echo = F`.
-
-```{r, eval = F, echo = T}
-library(tidycensus)
-
-# the following code loads my local Census API Key, which is used to access 
-# census data
-Sys.getenv("CENSUS_API_KEY")
-
-# 2010 median age by state
-age_2010 <- get_decennial(geography = "state", 
-                          variables = "P013I001", 
-                          year = 2010,
-                          sumfile = "sf1")
-
-# 2020 median age by state
-age_2020 <- get_decennial(geography = "state",
-                          variables = "P13_001N",
-                          year = 2020,
-                          sumfile = "dhc")
-
-
-# write to csv files
-write.csv(age_2010, "~/Documents/MATH167R/data/median_age_by_state_2010.csv")
-write.csv(age_2020, "~/Documents/MATH167R/data/median_age_by_state_2020.csv")
-```

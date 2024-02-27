@@ -14,38 +14,3 @@ Remember, you must submit *both* your .Rmd and the compiled .html in order to re
 ### Collaborators
 
 INSERT NAMES OF ANY COLLABORATORS
-
-Given a vector $\mathbf{x}=(x_1,\ldots, x_n)$ and a number $p\geq 1$, the vector p-norm is defined as
-
-$$||\mathbf{x}||_p=(|x_1|^p+\cdots+|x_n|^p)^{1/p}$$
-
-For example, the vector 2-norm is given by
-
-$$||\mathbf{x}||_2=(|x_1|^2+\cdots+|x_n|^2)^{1/2}$$
-
-Consider the following code.
-
-```{r, eval = T, echo = T}
-create_p_norm <- function(p = 2) {
-  return(
-    function(x) return(sum(abs(x) ^ p) ^ (1 / p))
-  )
-}
-```
-
-1. Explain in your own words what the following code does:
-
-```{r, eval = T, echo = T}
-norm_1 <- create_p_norm(1)
-x <- c(-1, 1, 2)
-norm_1(x)
-```
-
-2. Explain in your own words what the following code does:
-
-```{r, eval = T, echo = T}
-p <- 3
-norm_mystery <- create_p_norm()
-x <- c(-1, 1, 2)
-norm_mystery(x)
-```

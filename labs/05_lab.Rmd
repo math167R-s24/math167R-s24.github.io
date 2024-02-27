@@ -1,7 +1,6 @@
 ---
 title: "Lab 5"
 author: "YOUR NAME HERE"
-date: "2023-09-20"
 format: 
   html:
     embed-resources: true
@@ -9,109 +8,36 @@ format:
     code-summary: "Code"
 ---
 
-Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.
+Remember, **follow the instructions below and use R Markdown to create a pdf document with your code and answers to the following questions on Gradescope.** You may find a template file by clicking "Code" in the top right corner of this page.
 
-### Collaborators
+## 0. Cook County Assessor's Office 
 
-For this lab, please work with one to two other students. List their names here.
+For this lab, you will work with data from Cook County Assessor's Office from Illinois, which inspects properties across Chicago and its suburbs to **assess** the value of each property to determine the amount in property taxes owed by each property owner. All property owners are required to pay taxes which are used to fund public services at the state level. These assessments are based on property values which are often estimated via statistical models that account for variables like the size and location of a property.
 
-```{r}
-# LOAD ANY RELEVANT PACKAGES HERE
-```
+Since these models determine how much property owners must pay each year, it is desirable to have assessments that are fair. However, in 2017, the office of the former Cook County Assessor Joseph Berrios was sued by two Chicago nonprofits who alleged that Berrios' office ["disproportionately put the burden of residential property taxes on minority homeowners, "](https://apnews.com/1650cd356ca44ada8fcca5a2673e2344), so that wealthy property owners paid proportionally less in taxes compared with lower-income, and often minority, property owners. The Chicago Tribune investigated property assessments from 2003 to 2015, arguing that assessments had indeed been discrimnatory. Their four-part investigation can be found [here.](https://www.chicagotribune.com/investigations/ct-tax-divide-investigation-20180425-storygallery.html)
 
-## A. Basic functions
+Since this investigation, the Cook County Assessor's Office has strived to be more transparent in disclosing their methods and data for property valuation. In this assignment, we will look at data they have released on property valuation from [2013-2019](https://datacatalog.cookcountyil.gov/stories/s/p2kt-hk36). The office has also published open-source [code](https://github.com/ccao-data) for their models, which is written in R! This assignment is based on a module developed by instructors at [UC Berkeley](https://data.berkeley.edu/hce-curriculum-package-value-home).
 
-1. Write a function `is_even()` that takes as input a single integer `x` and returns a logical that represents whether `x` is an even number or not. This function should check to make sure the input is an integer. If the input is not an integer, the function should stop with an informative error message.
+## A. Residential Sales Data
 
-2. Evaluate your function with even numeric input.
+1. Download the data from [this link](https://datacatalog.cookcountyil.gov/Property-Taxation/Assessor-Archived-05-11-2022-Residential-Sales-Dat/5pge-nu6u/about_data). How many rows are there in this dataset? What does each row represent? (Hint: be precise here).
 
-3. Evaluate your function with odd numeric input.
+2. Examine the `Site Desirability` variable. What do each of the levels of this variable represent? You may need to refer to the [codebook](https://datacatalog.cookcountyil.gov/Property-Taxation/Assessor-Archived-05-11-2022-Residential-Sales-Dat/5pge-nu6u/about_data) to learn about this variable. Is it explained how this variable is determined?
 
-4. Trigger your custom error message. Note: You will need to add the chunk option `error = TRUE` to your R Markdown code chunk. If you do not, your document will not compile.
+3. Give an example of a variable that is **not** included in this dataset that could be useful in determining property value.
 
-5. Write a function `get_factors()` that takes a single positive integer input `x` and outputs all of its factors as a vector. For example, since 10 is divisible by 1, 2, 5, and 10 itself, `get_factors(10)` should return a numeric vector containing 1, 2, 5, and 10.
+4. Create a histogram of `Sale Price` for this dataset. Identify one issue with this visualization and attempt to address this issue.
 
-## B. Thresholding functions
+5. For the rest of the assignment, we will focus on a subset of properties. Provide code that creates a new `data.frame` called `clean_data` that contains only properties whose sale price is at least $500. Create a new column in this data frame called `log_sale_price` that contains the log-transformed `Sale Price` values.
 
-6. The hard-threshold function is defined as
+6. Visualize the association between number of bedrooms and `log_sale_price` using parallel box plots. You may need to convert `Bedrooms` to a factor before you are able to construct the parallel box plots. For clarity, only include properties with 10 or fewer bedrooms. Interpret your results.
 
-$$f_\lambda(x) =\begin{cases}
-x & |x|\geq \lambda\\
-0 & |x|<\lambda
-\end{cases}$$
+7. Create a new factor variable called `age_bin` that has levels `1-20`, `21-40`, `41-60`, `61-80`, `81-100`, and `100+`. Visualize the association between `age_bin` and `log_sale_price` using parallel box plots. Interpret your results.
 
-Write an R function that takes two arguments as input: a numeric input `x` and a threshold `lambda`. Your function should return the value of $f_\lambda(x)$ and work for vector input `x` of any length.
+## B. Assessor First Pass Values
 
-7. For $\lambda=4$, demonstrate your function on the vector c(-5, -3, 0, 3, 5).
+8. Not all of the properties in the above dataset have public assessment values. You can download another dataset containing "First Pass Values" representing the Assessor's initial valuations for a set of properties in 2019 [here](https://datacatalog.cookcountyil.gov/Property-Taxation/Assessor-Archived-05-11-2022-First-Pass-Values/x88m-e569/about_data). How many rows are in this dataset?
 
-(Hint: the output should be the vector `-5, 0, 0, 0, 5`)
+9. Use an appropriate function to combine the first pass values data with the `clean_data` from Part A. You should keep only rows that have both `log_sale_price` (from `clean_data`) and `First Pass Value 1` from the first pass values data. How many rows are in this combined dataset?
 
-8. For $\lambda=2$,  demonstrate your function on the vector c(-7, -5, -3, 0, 3, 5, 7).
-
-
-## C. Skewness and Kurtosis
-
-Skewness describes how asymmetrical the distribution of a numerical variable is around its mean. Given observations $x_1,\ldots, x_n$, we can calculate the sample skewness $s$ of a variable using the following formula:
-
-$$s = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^3}{\left[\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right]^{3/2}}$$
-Kurtosis is a measure of the "tailedness" of the distribution of a numerical variable is around its mean. Higher values of kurtosis indicate more extreme outliers. Given observations $x_1,\ldots, x_n$, we can calculate the sample kurtosis $k$ of a variable using the following formula:
-
-$$k = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^4}{\left[\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right]^{2}}-3$$
-
-9. Write a function `skewness()` that takes as input a numeric vector `x` and returns the sample skewness. There are functions in R that compute skewness, but you cannot use any of them--write your own implementation.
-
-10. Write a function `kurtosis()` that takes as input a numeric vector `x` and returns the sample skewness. There are functions in R that compute kurtosis, but you cannot use any of them--write your own implementation.
-
-11. Use your function to compute the sample skewness of the `arr_delay` variable in the `flights` dataset contained in the `nycflights13` package.
-
-12. Use your function to compute the sample kurtosis of the `arr_delay` variable in the `flights` dataset contained in the `nycflights13` package.
-
-
-## D. Finding an error
-
-Suppose you have two teams of runners participating in a 5k. We wish to write a function that takes as input two vectors representing the times of the runners in each team and returns a list of two vectors representing the ranks of each team's runners.
-
-For example, if the first team's times are `c(16.8, 21.2, 19.1)` and the second team's times are `c(17.2, 18.1, 20.0)`, the function should return `c(1, 6, 4)` for the first team and `c(2, 3, 5)` for the second team. 
-
-Below is a draft version of the function `get_runner_ranks()`. However, there is an error somewhere. Use any method we discussed in class to identify the error.
-
-```{r, error = T, echo = T, eval = T}
-get_runner_ranks <- function(x, y) {
-  # combine all runner times
-  combined_times <- c(x, y) 
-  
-  # sort all runner times from fastest to slowest
-  sort(combined_times, decreasing = T)
-  
-  # create ranks vectors
-  ranks_x <- numeric(length(x))
-  ranks_y <- numeric(length(y))
-  
-  for (i in seq_along(ranks_x)) {
-    # look up rank of time i in x in combined_times
-    ranks_x[i] <- match(x[i], combined_times)
-  }
-  
-  for (i in seq_along(ranks_y)) {
-    # look up rank of time i in y in combined_times
-    ranks_y[i] <- match(y[i], combined_times)
-  }
-  
-  # return a list of first team and second team ranks
-  return(list(x = ranks_x, y = ranks_y))
-}
-```
-
-13. Below, write a corrected version of `get_runner_ranks()` and compute `get_runner_ranks(c(16.8, 21.2, 19.1), c(17.2, 18.1, 20.0))`.
-
-```{r, error = T, echo = T, eval = T}
-get_runner_ranks <- function(x, y) {
-  # YOUR CODE HERE
-}
-```
-
-14. Explain in your own words what the error was.
-
-## E. Download data from an API
-
-
+10. Create a scatter plot with `log(First Pass Value 1)` on the x-axis and `log_sale_price` on the y-axis. Add a line to your plot indicating the line where `y=x`. Interpret your results. What do points above the line represent? What do points below the line represent?

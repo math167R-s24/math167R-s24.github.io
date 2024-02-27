@@ -379,9 +379,9 @@ if (is.numeric(x)) {
 
 Write code that, given two numerics `x` and `y`, prints out:
 
-* `EQUAL` if `sum(x)` and `sum(y)` are equal.
-* `X` if `sum(x)` is bigger.
-* `Y` if `sum(y)` is bigger.
+-   `EQUAL` if `sum(x)` and `sum(y)` are equal.
+-   `X` if `sum(x)` is bigger.
+-   `Y` if `sum(y)` is bigger.
 
 ## Functions
 

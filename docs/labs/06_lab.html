@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="YOUR NAME HERE">
-<meta name="dcterms.date" content="2023-10-11">
+<meta name="dcterms.date" content="2023-09-20">
 
-<title>MATH167R - Lab 6</title>
+<title>MATH167R - Lab 5</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -4491,7 +4491,7 @@ vertical-align: -.125em;
   </script>
 
 
-<meta property="og:title" content="MATH167R - Lab 6">
+<meta property="og:title" content="MATH167R - Lab 5">
 <meta property="og:description" content>
 <meta property="og:site-name" content="MATH167R">
 </head>
@@ -4592,6 +4592,9 @@ vertical-align: -.125em;
   <li><a href="#collaborators" id="toc-collaborators" class="nav-link active" data-scroll-target="#collaborators">Collaborators</a></li>
   <li><a href="#a.-basic-functions" id="toc-a.-basic-functions" class="nav-link" data-scroll-target="#a.-basic-functions">A. Basic functions</a></li>
   <li><a href="#b.-thresholding-functions" id="toc-b.-thresholding-functions" class="nav-link" data-scroll-target="#b.-thresholding-functions">B. Thresholding functions</a></li>
+  <li><a href="#c.-skewness-and-kurtosis" id="toc-c.-skewness-and-kurtosis" class="nav-link" data-scroll-target="#c.-skewness-and-kurtosis">C. Skewness and Kurtosis</a></li>
+  <li><a href="#d.-finding-an-error" id="toc-d.-finding-an-error" class="nav-link" data-scroll-target="#d.-finding-an-error">D. Finding an error</a></li>
+  <li><a href="#e.-download-data-from-an-api" id="toc-e.-download-data-from-an-api" class="nav-link" data-scroll-target="#e.-download-data-from-an-api">E. Download data from an API</a></li>
   </ul>
 </nav>
     </div>
@@ -4600,7 +4603,7 @@ vertical-align: -.125em;
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Lab 6</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title">Lab 5</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -4617,7 +4620,7 @@ vertical-align: -.125em;
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 11, 2023</p>
+      <p class="date">September 20, 2023</p>
     </div>
   </div>
   
@@ -4630,6 +4633,7 @@ vertical-align: -.125em;
 <p>Remember, you must submit <em>both</em> your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.</p>
 <section id="collaborators" class="level3">
 <h3 class="anchored" data-anchor-id="collaborators">Collaborators</h3>
+<p>For this lab, please work with one to two other students. List their names here.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LOAD ANY RELEVANT PACKAGES HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -4638,7 +4642,7 @@ vertical-align: -.125em;
 <h2 class="anchored" data-anchor-id="a.-basic-functions">A. Basic functions</h2>
 <ol type="1">
 <li><p>Write a function <code>is_even()</code> that takes as input a single integer <code>x</code> and returns a logical that represents whether <code>x</code> is an even number or not. This function should check to make sure the input is an integer. If the input is not an integer, the function should stop with an informative error message.</p></li>
-<li><p>Evaluate your function with even integer input.</p></li>
+<li><p>Evaluate your function with even numeric input.</p></li>
 <li><p>Evaluate your function with odd numeric input.</p></li>
 <li><p>Trigger your custom error message. Note: You will need to add the chunk option <code>error = TRUE</code> to your R Markdown code chunk. If you do not, your document will not compile.</p></li>
 <li><p>Write a function <code>get_factors()</code> that takes a single positive integer input <code>x</code> and outputs all of its factors as a vector. For example, since 10 is divisible by 1, 2, 5, and 10 itself, <code>get_factors(10)</code> should return a numeric vector containing 1, 2, 5, and 10.</p></li>
@@ -4661,6 +4665,64 @@ x &amp; |x|\geq \lambda\\
 <ol start="8" type="1">
 <li>For <span class="math inline">\(\lambda=2\)</span>, demonstrate your function on the vector c(-7, -5, -3, 0, 3, 5, 7).</li>
 </ol>
+</section>
+<section id="c.-skewness-and-kurtosis" class="level2">
+<h2 class="anchored" data-anchor-id="c.-skewness-and-kurtosis">C. Skewness and Kurtosis</h2>
+<p>Skewness describes how asymmetrical the distribution of a numerical variable is around its mean. Given observations <span class="math inline">\(x_1,\ldots, x_n\)</span>, we can calculate the sample skewness <span class="math inline">\(s\)</span> of a variable using the following formula:</p>
+<p><span class="math display">\[s = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^3}{\left[\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right]^{3/2}}\]</span> Kurtosis is a measure of the “tailedness” of the distribution of a numerical variable is around its mean. Higher values of kurtosis indicate more extreme outliers. Given observations <span class="math inline">\(x_1,\ldots, x_n\)</span>, we can calculate the sample kurtosis <span class="math inline">\(k\)</span> of a variable using the following formula:</p>
+<p><span class="math display">\[k = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^4}{\left[\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right]^{2}}-3\]</span></p>
+<ol start="9" type="1">
+<li><p>Write a function <code>skewness()</code> that takes as input a numeric vector <code>x</code> and returns the sample skewness. There are functions in R that compute skewness, but you cannot use any of them–write your own implementation.</p></li>
+<li><p>Write a function <code>kurtosis()</code> that takes as input a numeric vector <code>x</code> and returns the sample skewness. There are functions in R that compute kurtosis, but you cannot use any of them–write your own implementation.</p></li>
+<li><p>Use your function to compute the sample skewness of the <code>arr_delay</code> variable in the <code>flights</code> dataset contained in the <code>nycflights13</code> package.</p></li>
+<li><p>Use your function to compute the sample kurtosis of the <code>arr_delay</code> variable in the <code>flights</code> dataset contained in the <code>nycflights13</code> package.</p></li>
+</ol>
+</section>
+<section id="d.-finding-an-error" class="level2">
+<h2 class="anchored" data-anchor-id="d.-finding-an-error">D. Finding an error</h2>
+<p>Suppose you have two teams of runners participating in a 5k. We wish to write a function that takes as input two vectors representing the times of the runners in each team and returns a list of two vectors representing the ranks of each team’s runners.</p>
+<p>For example, if the first team’s times are <code>c(16.8, 21.2, 19.1)</code> and the second team’s times are <code>c(17.2, 18.1, 20.0)</code>, the function should return <code>c(1, 6, 4)</code> for the first team and <code>c(2, 3, 5)</code> for the second team.</p>
+<p>Below is a draft version of the function <code>get_runner_ranks()</code>. However, there is an error somewhere. Use any method we discussed in class to identify the error.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>get_runner_ranks <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># combine all runner times</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  combined_times <span class="ot">&lt;-</span> <span class="fu">c</span>(x, y) </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sort all runner times from fastest to slowest</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(combined_times, <span class="at">decreasing =</span> T)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create ranks vectors</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  ranks_x <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(x))</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  ranks_y <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(y))</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ranks_x)) {</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># look up rank of time i in x in combined_times</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    ranks_x[i] <span class="ot">&lt;-</span> <span class="fu">match</span>(x[i], combined_times)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ranks_y)) {</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># look up rank of time i in y in combined_times</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    ranks_y[i] <span class="ot">&lt;-</span> <span class="fu">match</span>(y[i], combined_times)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># return a list of first team and second team ranks</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">x =</span> ranks_x, <span class="at">y =</span> ranks_y))</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="13" type="1">
+<li>Below, write a corrected version of <code>get_runner_ranks()</code> and compute <code>get_runner_ranks(c(16.8, 21.2, 19.1), c(17.2, 18.1, 20.0))</code>.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>get_runner_ranks <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># YOUR CODE HERE</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="14" type="1">
+<li>Explain in your own words what the error was.</li>
+</ol>
+</section>
+<section id="e.-download-data-from-an-api" class="level2">
+<h2 class="anchored" data-anchor-id="e.-download-data-from-an-api">E. Download data from an API</h2>
 
 
 <!-- -->
@@ -4952,54 +5014,122 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class>
-<div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Lab 6&quot;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> &quot;YOUR NAME HERE&quot;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> &quot;2023-10-11&quot;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-summary: &quot;Code&quot;</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">### Collaborators</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># LOAD ANY RELEVANT PACKAGES HERE</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## A. Basic functions</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Write a function <span class="in">`is_even()`</span> that takes as input a single integer <span class="in">`x`</span> and returns a logical that represents whether <span class="in">`x`</span> is an even number or not. This function should check to make sure the input is an integer. If the input is not an integer, the function should stop with an informative error message.</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Evaluate your function with even integer input.</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Evaluate your function with odd numeric input.</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Trigger your custom error message. Note: You will need to add the chunk option <span class="in">`error = TRUE`</span> to your R Markdown code chunk. If you do not, your document will not compile.</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Write a function <span class="in">`get_factors()`</span> that takes a single positive integer input <span class="in">`x`</span> and outputs all of its factors as a vector. For example, since 10 is divisible by 1, 2, 5, and 10 itself, <span class="in">`get_factors(10)`</span> should return a numeric vector containing 1, 2, 5, and 10.</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="fu">## B. Thresholding functions</span></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>The hard-threshold function is defined as</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>$$f_\lambda(x) =\begin{cases}</span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>x &amp; |x|\geq \lambda<span class="sc">\\</span></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>0 &amp; |x|&lt;\lambda</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>\end{cases}$$</span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>Write an R function that takes two arguments as input: a numeric input <span class="in">`x`</span> and a threshold <span class="in">`lambda`</span>. Your function should return the value of $f_\lambda(x)$ and work for vector input <span class="in">`x`</span> of any length.</span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>For $\lambda=4$, demonstrate your function on the vector c(-5, -3, 0, 3, 5).</span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>(Hint: the output should be the vector <span class="in">`-5, 0, 0, 0, 5`</span>)</span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="ss">8. </span>For $\lambda=2$,  demonstrate your function on the vector c(-7, -5, -3, 0, 3, 5, 7).</span>
+<div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Lab 5&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> &quot;YOUR NAME HERE&quot;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> &quot;2023-09-20&quot;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-summary: &quot;Code&quot;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">### Collaborators</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>For this lab, please work with one to two other students. List their names here.</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co"># LOAD ANY RELEVANT PACKAGES HERE</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="fu">## A. Basic functions</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Write a function <span class="in">`is_even()`</span> that takes as input a single integer <span class="in">`x`</span> and returns a logical that represents whether <span class="in">`x`</span> is an even number or not. This function should check to make sure the input is an integer. If the input is not an integer, the function should stop with an informative error message.</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Evaluate your function with even numeric input.</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Evaluate your function with odd numeric input.</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Trigger your custom error message. Note: You will need to add the chunk option <span class="in">`error = TRUE`</span> to your R Markdown code chunk. If you do not, your document will not compile.</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Write a function <span class="in">`get_factors()`</span> that takes a single positive integer input <span class="in">`x`</span> and outputs all of its factors as a vector. For example, since 10 is divisible by 1, 2, 5, and 10 itself, <span class="in">`get_factors(10)`</span> should return a numeric vector containing 1, 2, 5, and 10.</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## B. Thresholding functions</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>The hard-threshold function is defined as</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>$$f_\lambda(x) =\begin{cases}</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>x &amp; |x|\geq \lambda<span class="sc">\\</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>0 &amp; |x|&lt;\lambda</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>\end{cases}$$</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>Write an R function that takes two arguments as input: a numeric input <span class="in">`x`</span> and a threshold <span class="in">`lambda`</span>. Your function should return the value of $f_\lambda(x)$ and work for vector input <span class="in">`x`</span> of any length.</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>For $\lambda=4$, demonstrate your function on the vector c(-5, -3, 0, 3, 5).</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>(Hint: the output should be the vector <span class="in">`-5, 0, 0, 0, 5`</span>)</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a><span class="ss">8. </span>For $\lambda=2$,  demonstrate your function on the vector c(-7, -5, -3, 0, 3, 5, 7).</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a><span class="fu">## C. Skewness and Kurtosis</span></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>Skewness describes how asymmetrical the distribution of a numerical variable is around its mean. Given observations $x_1,\ldots, x_n$, we can calculate the sample skewness $s$ of a variable using the following formula:</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>$$s = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^3}{\left<span class="co">[</span><span class="ot">\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right</span><span class="co">]</span>^{3/2}}$$</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>Kurtosis is a measure of the &quot;tailedness&quot; of the distribution of a numerical variable is around its mean. Higher values of kurtosis indicate more extreme outliers. Given observations $x_1,\ldots, x_n$, we can calculate the sample kurtosis $k$ of a variable using the following formula:</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>$$k = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^4}{\left<span class="co">[</span><span class="ot">\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right</span><span class="co">]</span>^{2}}-3$$</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a><span class="ss">9. </span>Write a function <span class="in">`skewness()`</span> that takes as input a numeric vector <span class="in">`x`</span> and returns the sample skewness. There are functions in R that compute skewness, but you cannot use any of them--write your own implementation.</span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>Write a function <span class="in">`kurtosis()`</span> that takes as input a numeric vector <span class="in">`x`</span> and returns the sample skewness. There are functions in R that compute kurtosis, but you cannot use any of them--write your own implementation.</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a><span class="ss">11. </span>Use your function to compute the sample skewness of the <span class="in">`arr_delay`</span> variable in the <span class="in">`flights`</span> dataset contained in the <span class="in">`nycflights13`</span> package.</span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a><span class="ss">12. </span>Use your function to compute the sample kurtosis of the <span class="in">`arr_delay`</span> variable in the <span class="in">`flights`</span> dataset contained in the <span class="in">`nycflights13`</span> package.</span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a><span class="fu">## D. Finding an error</span></span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>Suppose you have two teams of runners participating in a 5k. We wish to write a function that takes as input two vectors representing the times of the runners in each team and returns a list of two vectors representing the ranks of each team&#39;s runners.</span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>For example, if the first team&#39;s times are <span class="in">`c(16.8, 21.2, 19.1)`</span> and the second team&#39;s times are <span class="in">`c(17.2, 18.1, 20.0)`</span>, the function should return <span class="in">`c(1, 6, 4)`</span> for the first team and <span class="in">`c(2, 3, 5)`</span> for the second team. </span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>Below is a draft version of the function <span class="in">`get_runner_ranks()`</span>. However, there is an error somewhere. Use any method we discussed in class to identify the error.</span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, error = T, echo = T, eval = T}</span></span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>get_runner_ranks <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>  <span class="co"># combine all runner times</span></span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>  combined_times <span class="ot">&lt;-</span> <span class="fu">c</span>(x, y) </span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sort all runner times from fastest to slowest</span></span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(combined_times, <span class="at">decreasing =</span> T)</span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create ranks vectors</span></span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>  ranks_x <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(x))</span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>  ranks_y <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(y))</span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ranks_x)) {</span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>    <span class="co"># look up rank of time i in x in combined_times</span></span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>    ranks_x[i] <span class="ot">&lt;-</span> <span class="fu">match</span>(x[i], combined_times)</span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ranks_y)) {</span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a>    <span class="co"># look up rank of time i in y in combined_times</span></span>
+<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a>    ranks_y[i] <span class="ot">&lt;-</span> <span class="fu">match</span>(y[i], combined_times)</span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>  <span class="co"># return a list of first team and second team ranks</span></span>
+<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">x =</span> ranks_x, <span class="at">y =</span> ranks_y))</span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a><span class="ss">13. </span>Below, write a corrected version of <span class="in">`get_runner_ranks()`</span> and compute <span class="in">`get_runner_ranks(c(16.8, 21.2, 19.1), c(17.2, 18.1, 20.0))`</span>.</span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, error = T, echo = T, eval = T}</span></span>
+<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a>get_runner_ranks <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>  <span class="co"># YOUR CODE HERE</span></span>
+<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a><span class="ss">14. </span>Explain in your own words what the error was.</span>
+<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a><span class="fu">## E. Download data from an API</span></span>
+<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

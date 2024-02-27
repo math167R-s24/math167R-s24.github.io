@@ -7,7 +7,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="YOUR NAME HERE">
-<meta name="dcterms.date" content="2023-09-20">
 
 <title>MATH167R - Lab 5</title>
 <style>
@@ -4474,22 +4473,6 @@ vertical-align: -.125em;
   }
 }</script>
 
-  <script>/*
- * Polyfill service v3.111.0
- * Disable minification (remove `.min` from URL path) for more info
-*/
-
-</script>
-  
-  <script>
-    (function () {
-      var script = document.createElement("script");
-      script.type = "text/javascript";
-      script.src  = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js";
-      document.getElementsByTagName("head")[0].appendChild(script);
-    })();
-  </script>
-
 
 <meta property="og:title" content="MATH167R - Lab 5">
 <meta property="og:description" content>
@@ -4589,12 +4572,9 @@ vertical-align: -.125em;
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#collaborators" id="toc-collaborators" class="nav-link active" data-scroll-target="#collaborators">Collaborators</a></li>
-  <li><a href="#a.-basic-functions" id="toc-a.-basic-functions" class="nav-link" data-scroll-target="#a.-basic-functions">A. Basic functions</a></li>
-  <li><a href="#b.-thresholding-functions" id="toc-b.-thresholding-functions" class="nav-link" data-scroll-target="#b.-thresholding-functions">B. Thresholding functions</a></li>
-  <li><a href="#c.-skewness-and-kurtosis" id="toc-c.-skewness-and-kurtosis" class="nav-link" data-scroll-target="#c.-skewness-and-kurtosis">C. Skewness and Kurtosis</a></li>
-  <li><a href="#d.-finding-an-error" id="toc-d.-finding-an-error" class="nav-link" data-scroll-target="#d.-finding-an-error">D. Finding an error</a></li>
-  <li><a href="#e.-download-data-from-an-api" id="toc-e.-download-data-from-an-api" class="nav-link" data-scroll-target="#e.-download-data-from-an-api">E. Download data from an API</a></li>
+  <li><a href="#cook-county-assessors-office" id="toc-cook-county-assessors-office" class="nav-link active" data-scroll-target="#cook-county-assessors-office">0. Cook County Assessor’s Office</a></li>
+  <li><a href="#a.-residential-sales-data" id="toc-a.-residential-sales-data" class="nav-link" data-scroll-target="#a.-residential-sales-data">A. Residential Sales Data</a></li>
+  <li><a href="#b.-assessor-first-pass-values" id="toc-b.-assessor-first-pass-values" class="nav-link" data-scroll-target="#b.-assessor-first-pass-values">B. Assessor First Pass Values</a></li>
   </ul>
 </nav>
     </div>
@@ -4617,12 +4597,6 @@ vertical-align: -.125em;
           </div>
   </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">September 20, 2023</p>
-    </div>
-  </div>
   
     
   </div>
@@ -4630,99 +4604,32 @@ vertical-align: -.125em;
 
 </header>
 
-<p>Remember, you must submit <em>both</em> your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.</p>
-<section id="collaborators" class="level3">
-<h3 class="anchored" data-anchor-id="collaborators">Collaborators</h3>
-<p>For this lab, please work with one to two other students. List their names here.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LOAD ANY RELEVANT PACKAGES HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<p>Remember, <strong>follow the instructions below and use R Markdown to create a pdf document with your code and answers to the following questions on Gradescope.</strong> You may find a template file by clicking “Code” in the top right corner of this page.</p>
+<section id="cook-county-assessors-office" class="level2">
+<h2 class="anchored" data-anchor-id="cook-county-assessors-office">0. Cook County Assessor’s Office</h2>
+<p>For this lab, you will work with data from Cook County Assessor’s Office from Illinois, which inspects properties across Chicago and its suburbs to <strong>assess</strong> the value of each property to determine the amount in property taxes owed by each property owner. All property owners are required to pay taxes which are used to fund public services at the state level. These assessments are based on property values which are often estimated via statistical models that account for variables like the size and location of a property.</p>
+<p>Since these models determine how much property owners must pay each year, it is desirable to have assessments that are fair. However, in 2017, the office of the former Cook County Assessor Joseph Berrios was sued by two Chicago nonprofits who alleged that Berrios’ office <a href="https://apnews.com/1650cd356ca44ada8fcca5a2673e2344">“disproportionately put the burden of residential property taxes on minority homeowners,”</a>, so that wealthy property owners paid proportionally less in taxes compared with lower-income, and often minority, property owners. The Chicago Tribune investigated property assessments from 2003 to 2015, arguing that assessments had indeed been discrimnatory. Their four-part investigation can be found <a href="https://www.chicagotribune.com/investigations/ct-tax-divide-investigation-20180425-storygallery.html">here.</a></p>
+<p>Since this investigation, the Cook County Assessor’s Office has strived to be more transparent in disclosing their methods and data for property valuation. In this assignment, we will look at data they have released on property valuation from <a href="https://datacatalog.cookcountyil.gov/stories/s/p2kt-hk36">2013-2019</a>. The office has also published open-source <a href="https://github.com/ccao-data">code</a> for their models, which is written in R! This assignment is based on a module developed by instructors at <a href="https://data.berkeley.edu/hce-curriculum-package-value-home">UC Berkeley</a>.</p>
 </section>
-<section id="a.-basic-functions" class="level2">
-<h2 class="anchored" data-anchor-id="a.-basic-functions">A. Basic functions</h2>
+<section id="a.-residential-sales-data" class="level2">
+<h2 class="anchored" data-anchor-id="a.-residential-sales-data">A. Residential Sales Data</h2>
 <ol type="1">
-<li><p>Write a function <code>is_even()</code> that takes as input a single integer <code>x</code> and returns a logical that represents whether <code>x</code> is an even number or not. This function should check to make sure the input is an integer. If the input is not an integer, the function should stop with an informative error message.</p></li>
-<li><p>Evaluate your function with even numeric input.</p></li>
-<li><p>Evaluate your function with odd numeric input.</p></li>
-<li><p>Trigger your custom error message. Note: You will need to add the chunk option <code>error = TRUE</code> to your R Markdown code chunk. If you do not, your document will not compile.</p></li>
-<li><p>Write a function <code>get_factors()</code> that takes a single positive integer input <code>x</code> and outputs all of its factors as a vector. For example, since 10 is divisible by 1, 2, 5, and 10 itself, <code>get_factors(10)</code> should return a numeric vector containing 1, 2, 5, and 10.</p></li>
+<li><p>Download the data from <a href="https://datacatalog.cookcountyil.gov/Property-Taxation/Assessor-Archived-05-11-2022-Residential-Sales-Dat/5pge-nu6u/about_data">this link</a>. How many rows are there in this dataset? What does each row represent? (Hint: be precise here).</p></li>
+<li><p>Examine the <code>Site Desirability</code> variable. What do each of the levels of this variable represent? You may need to refer to the <a href="https://datacatalog.cookcountyil.gov/Property-Taxation/Assessor-Archived-05-11-2022-Residential-Sales-Dat/5pge-nu6u/about_data">codebook</a> to learn about this variable. Is it explained how this variable is determined?</p></li>
+<li><p>Give an example of a variable that is <strong>not</strong> included in this dataset that could be useful in determining property value.</p></li>
+<li><p>Create a histogram of <code>Sale Price</code> for this dataset. Identify one issue with this visualization and attempt to address this issue.</p></li>
+<li><p>For the rest of the assignment, we will focus on a subset of properties. Provide code that creates a new <code>data.frame</code> called <code>clean_data</code> that contains only properties whose sale price is at least $500. Create a new column in this data frame called <code>log_sale_price</code> that contains the log-transformed <code>Sale Price</code> values.</p></li>
+<li><p>Visualize the association between number of bedrooms and <code>log_sale_price</code> using parallel box plots. You may need to convert <code>Bedrooms</code> to a factor before you are able to construct the parallel box plots. For clarity, only include properties with 10 or fewer bedrooms. Interpret your results.</p></li>
+<li><p>Create a new factor variable called <code>age_bin</code> that has levels <code>1-20</code>, <code>21-40</code>, <code>41-60</code>, <code>61-80</code>, <code>81-100</code>, and <code>100+</code>. Visualize the association between <code>age_bin</code> and <code>log_sale_price</code> using parallel box plots. Interpret your results.</p></li>
 </ol>
 </section>
-<section id="b.-thresholding-functions" class="level2">
-<h2 class="anchored" data-anchor-id="b.-thresholding-functions">B. Thresholding functions</h2>
-<ol start="6" type="1">
-<li>The hard-threshold function is defined as</li>
-</ol>
-<p><span class="math display">\[f_\lambda(x) =\begin{cases}
-x &amp; |x|\geq \lambda\\
-0 &amp; |x|&lt;\lambda
-\end{cases}\]</span></p>
-<p>Write an R function that takes two arguments as input: a numeric input <code>x</code> and a threshold <code>lambda</code>. Your function should return the value of <span class="math inline">\(f_\lambda(x)\)</span> and work for vector input <code>x</code> of any length.</p>
-<ol start="7" type="1">
-<li>For <span class="math inline">\(\lambda=4\)</span>, demonstrate your function on the vector c(-5, -3, 0, 3, 5).</li>
-</ol>
-<p>(Hint: the output should be the vector <code>-5, 0, 0, 0, 5</code>)</p>
+<section id="b.-assessor-first-pass-values" class="level2">
+<h2 class="anchored" data-anchor-id="b.-assessor-first-pass-values">B. Assessor First Pass Values</h2>
 <ol start="8" type="1">
-<li>For <span class="math inline">\(\lambda=2\)</span>, demonstrate your function on the vector c(-7, -5, -3, 0, 3, 5, 7).</li>
+<li><p>Not all of the properties in the above dataset have public assessment values. You can download another dataset containing “First Pass Values” representing the Assessor’s initial valuations for a set of properties in 2019 <a href="https://datacatalog.cookcountyil.gov/Property-Taxation/Assessor-Archived-05-11-2022-First-Pass-Values/x88m-e569/about_data">here</a>. How many rows are in this dataset?</p></li>
+<li><p>Use an appropriate function to combine the first pass values data with the <code>clean_data</code> from Part A. You should keep only rows that have both <code>log_sale_price</code> (from <code>clean_data</code>) and <code>First Pass Value 1</code> from the first pass values data. How many rows are in this combined dataset?</p></li>
+<li><p>Create a scatter plot with <code>log(First Pass Value 1)</code> on the x-axis and <code>log_sale_price</code> on the y-axis. Add a line to your plot indicating the line where <code>y=x</code>. Interpret your results. What do points above the line represent? What do points below the line represent?</p></li>
 </ol>
-</section>
-<section id="c.-skewness-and-kurtosis" class="level2">
-<h2 class="anchored" data-anchor-id="c.-skewness-and-kurtosis">C. Skewness and Kurtosis</h2>
-<p>Skewness describes how asymmetrical the distribution of a numerical variable is around its mean. Given observations <span class="math inline">\(x_1,\ldots, x_n\)</span>, we can calculate the sample skewness <span class="math inline">\(s\)</span> of a variable using the following formula:</p>
-<p><span class="math display">\[s = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^3}{\left[\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right]^{3/2}}\]</span> Kurtosis is a measure of the “tailedness” of the distribution of a numerical variable is around its mean. Higher values of kurtosis indicate more extreme outliers. Given observations <span class="math inline">\(x_1,\ldots, x_n\)</span>, we can calculate the sample kurtosis <span class="math inline">\(k\)</span> of a variable using the following formula:</p>
-<p><span class="math display">\[k = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^4}{\left[\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right]^{2}}-3\]</span></p>
-<ol start="9" type="1">
-<li><p>Write a function <code>skewness()</code> that takes as input a numeric vector <code>x</code> and returns the sample skewness. There are functions in R that compute skewness, but you cannot use any of them–write your own implementation.</p></li>
-<li><p>Write a function <code>kurtosis()</code> that takes as input a numeric vector <code>x</code> and returns the sample skewness. There are functions in R that compute kurtosis, but you cannot use any of them–write your own implementation.</p></li>
-<li><p>Use your function to compute the sample skewness of the <code>arr_delay</code> variable in the <code>flights</code> dataset contained in the <code>nycflights13</code> package.</p></li>
-<li><p>Use your function to compute the sample kurtosis of the <code>arr_delay</code> variable in the <code>flights</code> dataset contained in the <code>nycflights13</code> package.</p></li>
-</ol>
-</section>
-<section id="d.-finding-an-error" class="level2">
-<h2 class="anchored" data-anchor-id="d.-finding-an-error">D. Finding an error</h2>
-<p>Suppose you have two teams of runners participating in a 5k. We wish to write a function that takes as input two vectors representing the times of the runners in each team and returns a list of two vectors representing the ranks of each team’s runners.</p>
-<p>For example, if the first team’s times are <code>c(16.8, 21.2, 19.1)</code> and the second team’s times are <code>c(17.2, 18.1, 20.0)</code>, the function should return <code>c(1, 6, 4)</code> for the first team and <code>c(2, 3, 5)</code> for the second team.</p>
-<p>Below is a draft version of the function <code>get_runner_ranks()</code>. However, there is an error somewhere. Use any method we discussed in class to identify the error.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>get_runner_ranks <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># combine all runner times</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  combined_times <span class="ot">&lt;-</span> <span class="fu">c</span>(x, y) </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sort all runner times from fastest to slowest</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(combined_times, <span class="at">decreasing =</span> T)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create ranks vectors</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  ranks_x <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(x))</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  ranks_y <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(y))</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ranks_x)) {</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># look up rank of time i in x in combined_times</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    ranks_x[i] <span class="ot">&lt;-</span> <span class="fu">match</span>(x[i], combined_times)</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ranks_y)) {</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># look up rank of time i in y in combined_times</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    ranks_y[i] <span class="ot">&lt;-</span> <span class="fu">match</span>(y[i], combined_times)</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># return a list of first team and second team ranks</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">x =</span> ranks_x, <span class="at">y =</span> ranks_y))</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<ol start="13" type="1">
-<li>Below, write a corrected version of <code>get_runner_ranks()</code> and compute <code>get_runner_ranks(c(16.8, 21.2, 19.1), c(17.2, 18.1, 20.0))</code>.</li>
-</ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>get_runner_ranks <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># YOUR CODE HERE</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<ol start="14" type="1">
-<li>Explain in your own words what the error was.</li>
-</ol>
-</section>
-<section id="e.-download-data-from-an-api" class="level2">
-<h2 class="anchored" data-anchor-id="e.-download-data-from-an-api">E. Download data from an API</h2>
 
 
 <!-- -->
@@ -5014,123 +4921,49 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class>
-<div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Lab 5&quot;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> &quot;YOUR NAME HERE&quot;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> &quot;2023-09-20&quot;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-summary: &quot;Code&quot;</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">### Collaborators</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>For this lab, please work with one to two other students. List their names here.</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co"># LOAD ANY RELEVANT PACKAGES HERE</span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="fu">## A. Basic functions</span></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Write a function <span class="in">`is_even()`</span> that takes as input a single integer <span class="in">`x`</span> and returns a logical that represents whether <span class="in">`x`</span> is an even number or not. This function should check to make sure the input is an integer. If the input is not an integer, the function should stop with an informative error message.</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Evaluate your function with even numeric input.</span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Evaluate your function with odd numeric input.</span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Trigger your custom error message. Note: You will need to add the chunk option <span class="in">`error = TRUE`</span> to your R Markdown code chunk. If you do not, your document will not compile.</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Write a function <span class="in">`get_factors()`</span> that takes a single positive integer input <span class="in">`x`</span> and outputs all of its factors as a vector. For example, since 10 is divisible by 1, 2, 5, and 10 itself, <span class="in">`get_factors(10)`</span> should return a numeric vector containing 1, 2, 5, and 10.</span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## B. Thresholding functions</span></span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>The hard-threshold function is defined as</span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>$$f_\lambda(x) =\begin{cases}</span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>x &amp; |x|\geq \lambda<span class="sc">\\</span></span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>0 &amp; |x|&lt;\lambda</span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>\end{cases}$$</span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>Write an R function that takes two arguments as input: a numeric input <span class="in">`x`</span> and a threshold <span class="in">`lambda`</span>. Your function should return the value of $f_\lambda(x)$ and work for vector input <span class="in">`x`</span> of any length.</span>
-<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>For $\lambda=4$, demonstrate your function on the vector c(-5, -3, 0, 3, 5).</span>
-<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>(Hint: the output should be the vector <span class="in">`-5, 0, 0, 0, 5`</span>)</span>
-<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a><span class="ss">8. </span>For $\lambda=2$,  demonstrate your function on the vector c(-7, -5, -3, 0, 3, 5, 7).</span>
-<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a><span class="fu">## C. Skewness and Kurtosis</span></span>
-<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>Skewness describes how asymmetrical the distribution of a numerical variable is around its mean. Given observations $x_1,\ldots, x_n$, we can calculate the sample skewness $s$ of a variable using the following formula:</span>
-<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>$$s = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^3}{\left<span class="co">[</span><span class="ot">\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right</span><span class="co">]</span>^{3/2}}$$</span>
-<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>Kurtosis is a measure of the &quot;tailedness&quot; of the distribution of a numerical variable is around its mean. Higher values of kurtosis indicate more extreme outliers. Given observations $x_1,\ldots, x_n$, we can calculate the sample kurtosis $k$ of a variable using the following formula:</span>
-<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>$$k = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^4}{\left<span class="co">[</span><span class="ot">\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right</span><span class="co">]</span>^{2}}-3$$</span>
-<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a><span class="ss">9. </span>Write a function <span class="in">`skewness()`</span> that takes as input a numeric vector <span class="in">`x`</span> and returns the sample skewness. There are functions in R that compute skewness, but you cannot use any of them--write your own implementation.</span>
-<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>Write a function <span class="in">`kurtosis()`</span> that takes as input a numeric vector <span class="in">`x`</span> and returns the sample skewness. There are functions in R that compute kurtosis, but you cannot use any of them--write your own implementation.</span>
-<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a><span class="ss">11. </span>Use your function to compute the sample skewness of the <span class="in">`arr_delay`</span> variable in the <span class="in">`flights`</span> dataset contained in the <span class="in">`nycflights13`</span> package.</span>
-<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a><span class="ss">12. </span>Use your function to compute the sample kurtosis of the <span class="in">`arr_delay`</span> variable in the <span class="in">`flights`</span> dataset contained in the <span class="in">`nycflights13`</span> package.</span>
-<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a><span class="fu">## D. Finding an error</span></span>
-<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>Suppose you have two teams of runners participating in a 5k. We wish to write a function that takes as input two vectors representing the times of the runners in each team and returns a list of two vectors representing the ranks of each team&#39;s runners.</span>
-<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>For example, if the first team&#39;s times are <span class="in">`c(16.8, 21.2, 19.1)`</span> and the second team&#39;s times are <span class="in">`c(17.2, 18.1, 20.0)`</span>, the function should return <span class="in">`c(1, 6, 4)`</span> for the first team and <span class="in">`c(2, 3, 5)`</span> for the second team. </span>
-<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>Below is a draft version of the function <span class="in">`get_runner_ranks()`</span>. However, there is an error somewhere. Use any method we discussed in class to identify the error.</span>
-<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, error = T, echo = T, eval = T}</span></span>
-<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>get_runner_ranks <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>  <span class="co"># combine all runner times</span></span>
-<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>  combined_times <span class="ot">&lt;-</span> <span class="fu">c</span>(x, y) </span>
-<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sort all runner times from fastest to slowest</span></span>
-<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(combined_times, <span class="at">decreasing =</span> T)</span>
-<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create ranks vectors</span></span>
-<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>  ranks_x <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(x))</span>
-<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>  ranks_y <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(y))</span>
-<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ranks_x)) {</span>
-<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>    <span class="co"># look up rank of time i in x in combined_times</span></span>
-<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>    ranks_x[i] <span class="ot">&lt;-</span> <span class="fu">match</span>(x[i], combined_times)</span>
-<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ranks_y)) {</span>
-<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a>    <span class="co"># look up rank of time i in y in combined_times</span></span>
-<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a>    ranks_y[i] <span class="ot">&lt;-</span> <span class="fu">match</span>(y[i], combined_times)</span>
-<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>  <span class="co"># return a list of first team and second team ranks</span></span>
-<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">x =</span> ranks_x, <span class="at">y =</span> ranks_y))</span>
-<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a><span class="ss">13. </span>Below, write a corrected version of <span class="in">`get_runner_ranks()`</span> and compute <span class="in">`get_runner_ranks(c(16.8, 21.2, 19.1), c(17.2, 18.1, 20.0))`</span>.</span>
-<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, error = T, echo = T, eval = T}</span></span>
-<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a>get_runner_ranks <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>  <span class="co"># YOUR CODE HERE</span></span>
-<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a><span class="ss">14. </span>Explain in your own words what the error was.</span>
-<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a><span class="fu">## E. Download data from an API</span></span>
-<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a></span>
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Lab 5&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> &quot;YOUR NAME HERE&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-summary: &quot;Code&quot;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>Remember, **follow the instructions below and use R Markdown to create a pdf document with your code and answers to the following questions on Gradescope.** You may find a template file by clicking &quot;Code&quot; in the top right corner of this page.</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## 0. Cook County Assessor&#39;s Office </span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>For this lab, you will work with data from Cook County Assessor&#39;s Office from Illinois, which inspects properties across Chicago and its suburbs to **assess** the value of each property to determine the amount in property taxes owed by each property owner. All property owners are required to pay taxes which are used to fund public services at the state level. These assessments are based on property values which are often estimated via statistical models that account for variables like the size and location of a property.</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>Since these models determine how much property owners must pay each year, it is desirable to have assessments that are fair. However, in 2017, the office of the former Cook County Assessor Joseph Berrios was sued by two Chicago nonprofits who alleged that Berrios&#39; office <span class="co">[</span><span class="ot">&quot;disproportionately put the burden of residential property taxes on minority homeowners, &quot;</span><span class="co">](https://apnews.com/1650cd356ca44ada8fcca5a2673e2344)</span>, so that wealthy property owners paid proportionally less in taxes compared with lower-income, and often minority, property owners. The Chicago Tribune investigated property assessments from 2003 to 2015, arguing that assessments had indeed been discrimnatory. Their four-part investigation can be found <span class="co">[</span><span class="ot">here.</span><span class="co">](https://www.chicagotribune.com/investigations/ct-tax-divide-investigation-20180425-storygallery.html)</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>Since this investigation, the Cook County Assessor&#39;s Office has strived to be more transparent in disclosing their methods and data for property valuation. In this assignment, we will look at data they have released on property valuation from <span class="co">[</span><span class="ot">2013-2019</span><span class="co">](https://datacatalog.cookcountyil.gov/stories/s/p2kt-hk36)</span>. The office has also published open-source <span class="co">[</span><span class="ot">code</span><span class="co">](https://github.com/ccao-data)</span> for their models, which is written in R! This assignment is based on a module developed by instructors at <span class="co">[</span><span class="ot">UC Berkeley</span><span class="co">](https://data.berkeley.edu/hce-curriculum-package-value-home)</span>.</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## A. Residential Sales Data</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Download the data from <span class="co">[</span><span class="ot">this link</span><span class="co">](https://datacatalog.cookcountyil.gov/Property-Taxation/Assessor-Archived-05-11-2022-Residential-Sales-Dat/5pge-nu6u/about_data)</span>. How many rows are there in this dataset? What does each row represent? (Hint: be precise here).</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Examine the <span class="in">`Site Desirability`</span> variable. What do each of the levels of this variable represent? You may need to refer to the <span class="co">[</span><span class="ot">codebook</span><span class="co">](https://datacatalog.cookcountyil.gov/Property-Taxation/Assessor-Archived-05-11-2022-Residential-Sales-Dat/5pge-nu6u/about_data)</span> to learn about this variable. Is it explained how this variable is determined?</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Give an example of a variable that is **not** included in this dataset that could be useful in determining property value.</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Create a histogram of <span class="in">`Sale Price`</span> for this dataset. Identify one issue with this visualization and attempt to address this issue.</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>For the rest of the assignment, we will focus on a subset of properties. Provide code that creates a new <span class="in">`data.frame`</span> called <span class="in">`clean_data`</span> that contains only properties whose sale price is at least $500. Create a new column in this data frame called <span class="in">`log_sale_price`</span> that contains the log-transformed <span class="in">`Sale Price`</span> values.</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Visualize the association between number of bedrooms and <span class="in">`log_sale_price`</span> using parallel box plots. You may need to convert <span class="in">`Bedrooms`</span> to a factor before you are able to construct the parallel box plots. For clarity, only include properties with 10 or fewer bedrooms. Interpret your results.</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>Create a new factor variable called <span class="in">`age_bin`</span> that has levels <span class="in">`1-20`</span>, <span class="in">`21-40`</span>, <span class="in">`41-60`</span>, <span class="in">`61-80`</span>, <span class="in">`81-100`</span>, and <span class="in">`100+`</span>. Visualize the association between <span class="in">`age_bin`</span> and <span class="in">`log_sale_price`</span> using parallel box plots. Interpret your results.</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="fu">## B. Assessor First Pass Values</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="ss">8. </span>Not all of the properties in the above dataset have public assessment values. You can download another dataset containing &quot;First Pass Values&quot; representing the Assessor&#39;s initial valuations for a set of properties in 2019 <span class="co">[</span><span class="ot">here</span><span class="co">](https://datacatalog.cookcountyil.gov/Property-Taxation/Assessor-Archived-05-11-2022-First-Pass-Values/x88m-e569/about_data)</span>. How many rows are in this dataset?</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="ss">9. </span>Use an appropriate function to combine the first pass values data with the <span class="in">`clean_data`</span> from Part A. You should keep only rows that have both <span class="in">`log_sale_price`</span> (from <span class="in">`clean_data`</span>) and <span class="in">`First Pass Value 1`</span> from the first pass values data. How many rows are in this combined dataset?</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>Create a scatter plot with <span class="in">`log(First Pass Value 1)`</span> on the x-axis and <span class="in">`log_sale_price`</span> on the y-axis. Add a line to your plot indicating the line where <span class="in">`y=x`</span>. Interpret your results. What do points above the line represent? What do points below the line represent?</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
