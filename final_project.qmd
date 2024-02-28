@@ -67,7 +67,7 @@ You will submit a 1-2 page writeup (pdf format) with the following information:
 - An outline of any assumptions needed for your method to be valid. For each assumption, discuss why your data satisfies this assumption.
 - A description of the results of your analysis and interpretation of the results.
 
-## Part Three: Final Report (60 points)
+## Part Three: Final Report (60 points),  due 5/13
 
 Finally, you will submit a written final report on your project. This final report will include the inferential analysis (part two) and summarize your work and findings.
     
@@ -91,14 +91,14 @@ The structure of your report may depend on your selected project topic, but shou
     - Discuss any potential limitations of your analysis. Were there missing data in your dataset? Are there additional data or variables that would be helpful for answering your questions.
 -    **Code appendix**: Your report should not include any code in the main text. All code should be included in an appendix at the end of your report. All code should be appropriately commented and styled according to one of the style guides discussed in class.
 
-## Part Four: Class Presentation (15 points)
+## Part Four: Class Presentation (15 points), on 5/8 and 5/13
 
 At the end of the semester, you will deliver a brief lightning talk in class. You should rehearse your presentation in advance and it should include:
 
 -   A quick introduction to your dataset and research questions of interest.
 -   An overview of your favorite visualization/descriptive summary/result from your project.
 
-## Part Five: Reflection and Self-evaluation (5 points)
+## Part Five: Reflection and Self-evaluation (5 points), due 5/13
 
 You will complete a 1-2 page reflection and self-evaluation on your work for this final project and course. Briefly answer the following questions:
 

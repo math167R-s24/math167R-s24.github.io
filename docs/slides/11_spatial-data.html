@@ -754,8 +754,8 @@ Peter Gao
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>oct19_pm_2_5 <span class="ot">&lt;-</span> pm_2_5 <span class="sc">|&gt;</span> <span class="fu">filter</span>(Date <span class="sc">==</span> <span class="st">"2023-09-19"</span>)</span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">hist</span>(oct19_pm_2_5<span class="sc">$</span><span class="st">`</span><span class="at">Daily Mean PM2.5 Concentration</span><span class="st">`</span>,</span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>sep19_pm_2_5 <span class="ot">&lt;-</span> pm_2_5 <span class="sc">|&gt;</span> <span class="fu">filter</span>(Date <span class="sc">==</span> <span class="st">"2023-09-19"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">hist</span>(sep19_pm_2_5<span class="sc">$</span><span class="st">`</span><span class="at">Daily Mean PM2.5 Concentration</span><span class="st">`</span>,</span>
 <span id="cb8-3"><a href="#cb8-3"></a>     <span class="at">main =</span> <span class="st">"October 19"</span>, <span class="at">xlab =</span> <span class="st">"PM 2.5"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -775,7 +775,7 @@ Peter Gao
 <section id="naively-working-with-latitudelongitude" class="slide level2">
 <h2>Naively working with latitude/longitude</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> oct19_pm_2_5, </span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> sep19_pm_2_5, </span>
 <span id="cb9-2"><a href="#cb9-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> SITE_LONGITUDE, </span>
 <span id="cb9-3"><a href="#cb9-3"></a>                     <span class="at">y =</span> SITE_LATITUDE, </span>
 <span id="cb9-4"><a href="#cb9-4"></a>                     <span class="at">color =</span> DAILY_AQI_VALUE)) <span class="sc">+</span></span>
@@ -816,7 +816,7 @@ Peter Gao
 <p>When each row in our data frame refers to a point with longitude and latitude, we can use the <code>st_as_sf</code> function to convert our data frame to an <code>sf</code> object.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb11-2"><a href="#cb11-2"></a>oct19_pm_2_5 <span class="ot">&lt;-</span> oct19_pm_2_5 <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>sep19_pm_2_5 <span class="ot">&lt;-</span> sep19_pm_2_5 <span class="sc">|&gt;</span></span>
 <span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">st_as_sf</span>(</span>
 <span id="cb11-4"><a href="#cb11-4"></a>    <span class="co"># what columns hold lon/lat?</span></span>
 <span id="cb11-5"><a href="#cb11-5"></a>    <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"SITE_LONGITUDE"</span>, <span class="st">"SITE_LATITUDE"</span>), </span>
@@ -828,7 +828,7 @@ Peter Gao
 <section id="converting-data-to-simple-features-object-1" class="slide level2">
 <h2>Converting data to simple features object</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">head</span>(oct19_pm_2_5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">head</span>(sep19_pm_2_5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 6 features and 18 fields
 Geometry type: POINT
@@ -856,7 +856,7 @@ Geodetic CRS:  WGS 84
 <h2>Visualizing point data</h2>
 <p>We can easily visualize this data now using the <code>geom_sf()</code> function, which automatically handles sf objects.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">ggplot</span>(oct19_pm_2_5) <span class="sc">+</span> <span class="fu">geom_sf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">ggplot</span>(sep19_pm_2_5) <span class="sc">+</span> <span class="fu">geom_sf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
@@ -867,20 +867,20 @@ Geodetic CRS:  WGS 84
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">library</span>(tigris)</span>
 <span id="cb15-2"><a href="#cb15-2"></a>CA_sf <span class="ot">&lt;-</span> <span class="fu">states</span>() <span class="sc">|&gt;</span> <span class="fu">filter</span>(NAME <span class="sc">==</span> <span class="st">"California"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-15_155fa8c6b687451e85019a76b1d1f237">
+<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-15_a06ed0a49e9a447ba1b55d595ff2fb82">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> CA_sf) <span class="sc">+</span></span>
-<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> oct19_pm_2_5) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sep19_pm_2_5) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="11_spatial-data_files/figure-revealjs/unnamed-chunk-15-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
 <section id="visualizing-point-data-2" class="slide level2">
 <h2>Visualizing point data</h2>
 <p>We can then adjust the color to show <code>DAILY_AQI_VALUE</code> and also change the color scale:</p>
-<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-16_413d4cf55ece48d39d7b7471cb88d7e7">
+<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-16_e310a9e7a5ff6d0cf8582185588ac6a3">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> CA_sf) <span class="sc">+</span></span>
-<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> oct19_pm_2_5, </span>
+<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sep19_pm_2_5, </span>
 <span id="cb17-4"><a href="#cb17-4"></a>          <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">color =</span> DAILY_AQI_VALUE)) <span class="sc">+</span></span>
 <span id="cb17-5"><a href="#cb17-5"></a>  <span class="fu">scale_color_viridis_c</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
@@ -894,8 +894,8 @@ Geodetic CRS:  WGS 84
 <section id="spatial-polygon-data" class="slide level2">
 <h2>Spatial Polygon data</h2>
 <p>The AQI data we downloaded also contains county information. We can compute county level mean AQI using <code>group_by</code> and <code>summarize</code>:</p>
-<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-18_5bf59820ad27e3b6ed695169dac762b0">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>oct19_county_means <span class="ot">&lt;-</span> oct19_pm_2_5 <span class="sc">|&gt;</span></span>
+<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-18_4379410c01cc232bda4b5a0603123eee">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>sep19_county_means <span class="ot">&lt;-</span> sep19_pm_2_5 <span class="sc">|&gt;</span></span>
 <span id="cb18-2"><a href="#cb18-2"></a>  <span class="co"># remove the geometry; we don't need it here</span></span>
 <span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb18-4"><a href="#cb18-4"></a>  <span class="fu">group_by</span>(COUNTY) <span class="sc">|&gt;</span></span>
@@ -908,12 +908,12 @@ Geodetic CRS:  WGS 84
 <div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-19_ec50a051a53921119b6e09754a6dfdd7">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>CA_counties_sf <span class="ot">&lt;-</span> <span class="fu">counties</span>(<span class="at">state =</span> <span class="st">"CA"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-21_c10415bf1ba00eb5909c6fc880aeaf2c">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>oct19_county_means <span class="ot">&lt;-</span> CA_counties_sf <span class="sc">|&gt;</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">right_join</span>(oct19_county_means, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"NAME"</span> <span class="ot">=</span> <span class="st">"COUNTY"</span>)) </span>
+<div class="cell" data-layout-align="center" data-hash="11_spatial-data_cache/revealjs/unnamed-chunk-21_b7c958ad96fb908f09efeccf2252ed26">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>sep19_county_means <span class="ot">&lt;-</span> CA_counties_sf <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">right_join</span>(sep19_county_means, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"NAME"</span> <span class="ot">=</span> <span class="st">"COUNTY"</span>)) </span>
 <span id="cb20-3"><a href="#cb20-3"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb20-4"><a href="#cb20-4"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> CA_sf) <span class="sc">+</span></span>
-<span id="cb20-5"><a href="#cb20-5"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> oct19_county_means, <span class="fu">aes</span>(<span class="at">fill =</span> AQI)) <span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sep19_county_means, <span class="fu">aes</span>(<span class="at">fill =</span> AQI)) <span class="sc">+</span></span>
 <span id="cb20-6"><a href="#cb20-6"></a>  <span class="fu">scale_fill_viridis_c</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>

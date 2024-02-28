@@ -58,21 +58,21 @@ summary(pm_2_5)
 
 Work with the people around you to identify:
 
-1. Where and when was the highest `DAILY_AQI_VALUE` observed in 2023?
-2. Which site had the highest median `DAILY_AQI_VALUE` in 2023?
-3. How many monitoring sites are in Santa Clara County?
-4. What is the name of the site in this dataset that is closest to SJSU's campus?
-5. What is the median `DAILY_AQI_VALUE` for this site in 2023?
+1.  Where and when was the highest `DAILY_AQI_VALUE` observed in 2023?
+2.  Which site had the highest median `DAILY_AQI_VALUE` in 2023?
+3.  How many monitoring sites are in Santa Clara County?
+4.  What is the name of the site in this dataset that is closest to SJSU's campus?
+5.  What is the median `DAILY_AQI_VALUE` for this site in 2023?
 
 ## Warm-up: PM 2.5 data
 
 Answers:
 
-1. Yreka on August 28 (AQI = 285)
-2. Cortina Indian Rancheria
-3. 3
-4. San Jose - Jackson 
-5. 29
+1.  Yreka on August 28 (AQI = 285)
+2.  Cortina Indian Rancheria
+3.  3
+4.  San Jose - Jackson
+5.  29
 
 ## Data wrangling
 
@@ -118,8 +118,8 @@ hist(jan1_pm_2_5$`Daily Mean PM2.5 Concentration`,
 #| fig-height: 4.75
 #| out.width: "100%"
 #| fig.align: "center"
-oct19_pm_2_5 <- pm_2_5 |> filter(Date == "2023-09-19")
-hist(oct19_pm_2_5$`Daily Mean PM2.5 Concentration`,
+sep19_pm_2_5 <- pm_2_5 |> filter(Date == "2023-09-19")
+hist(sep19_pm_2_5$`Daily Mean PM2.5 Concentration`,
      main = "October 19", xlab = "PM 2.5")
 ```
 :::
@@ -139,7 +139,7 @@ We can't get an idea of how air quality varies over space using univariate summa
 #| fig-height: 4.75
 #| out.width: "100%"
 #| fig.align: "center"
-ggplot(data = oct19_pm_2_5, 
+ggplot(data = sep19_pm_2_5, 
        mapping = aes(x = SITE_LONGITUDE, 
                      y = SITE_LATITUDE, 
                      color = DAILY_AQI_VALUE)) +
@@ -191,7 +191,7 @@ When each row in our data frame refers to a point with longitude and latitude, w
 #| echo: TRUE
 #| eval: TRUE
 library(sf)
-oct19_pm_2_5 <- oct19_pm_2_5 |>
+sep19_pm_2_5 <- sep19_pm_2_5 |>
   st_as_sf(
     # what columns hold lon/lat?
     coords = c("SITE_LONGITUDE", "SITE_LATITUDE"), 
@@ -205,7 +205,7 @@ oct19_pm_2_5 <- oct19_pm_2_5 |>
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
-head(oct19_pm_2_5)
+head(sep19_pm_2_5)
 ```
 
 ## Visualizing point data
@@ -215,7 +215,7 @@ We can easily visualize this data now using the `geom_sf()` function, which auto
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
-ggplot(oct19_pm_2_5) + geom_sf()
+ggplot(sep19_pm_2_5) + geom_sf()
 ```
 
 ## Visualizing point data
@@ -263,7 +263,7 @@ CA_sf <- states() |> filter(NAME == "California")
 #| fig.align: "center"
 ggplot() +
   geom_sf(data = CA_sf) +
-  geom_sf(data = oct19_pm_2_5) 
+  geom_sf(data = sep19_pm_2_5) 
 ```
 
 ## Visualizing point data
@@ -282,7 +282,7 @@ We can then adjust the color to show `DAILY_AQI_VALUE` and also change the color
 #| fig.align: "center"
 ggplot() +
   geom_sf(data = CA_sf) +
-  geom_sf(data = oct19_pm_2_5, 
+  geom_sf(data = sep19_pm_2_5, 
           mapping = aes(color = DAILY_AQI_VALUE)) +
   scale_color_viridis_c()
 ```
@@ -331,7 +331,7 @@ The AQI data we downloaded also contains county information. We can compute coun
 #| fig-height: 4.75
 #| out.width: "100%"
 #| fig.align: "center"
-oct19_county_means <- oct19_pm_2_5 |>
+sep19_county_means <- sep19_pm_2_5 |>
   # remove the geometry; we don't need it here
   st_set_geometry(NULL) |> 
   group_by(COUNTY) |>
@@ -379,11 +379,11 @@ CA_counties_sf <- counties(state = "CA")
 #| fig-height: 4.75
 #| out.width: "100%"
 #| fig.align: "center"
-oct19_county_means <- CA_counties_sf |>
-  right_join(oct19_county_means, by = c("NAME" = "COUNTY")) 
+sep19_county_means <- CA_counties_sf |>
+  right_join(sep19_county_means, by = c("NAME" = "COUNTY")) 
 ggplot() +
   geom_sf(data = CA_sf) +
-  geom_sf(data = oct19_county_means, aes(fill = AQI)) +
+  geom_sf(data = sep19_county_means, aes(fill = AQI)) +
   scale_fill_viridis_c() 
 ```
 
@@ -399,12 +399,12 @@ ggplot() +
 #| fig-height: 4.75
 #| out.width: "100%"
 #| fig.align: "center"
-oct19_county_means <- CA_counties_sf |>
-  right_join(oct19_county_means, 
+sep19_county_means <- CA_counties_sf |>
+  right_join(sep19_county_means, 
              by = c("NAME" = "COUNTY")) 
 ggplot() +
   geom_sf(data = CA_sf) +
-  geom_sf(data = oct19_county_means, aes(fill = AQI)) +
+  geom_sf(data = sep19_county_means, aes(fill = AQI)) +
   scale_fill_viridis_c() 
 ```
 
