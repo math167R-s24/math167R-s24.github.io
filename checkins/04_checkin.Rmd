@@ -10,37 +10,18 @@ format:
 
 Remember, **follow the instructions below and use R Markdown to create a pdf document with your code and answers to the following questions on Gradescope.** You may find a template file by clicking "Code" in the top right corner of this page.
 
-Given a vector $\mathbf{x}=(x_1,\ldots, x_n)$ and a number $p\geq 1$, the vector p-norm is defined as
+1. The hard-threshold function is defined as
 
-$$||\mathbf{x}||_p=(|x_1|^p+\cdots+|x_n|^p)^{1/p}$$
+$$f_\lambda(x) =\begin{cases}
+x & |x|\geq \lambda\\
+0 & |x|<\lambda
+\end{cases}$$
 
-For example, the vector 2-norm is given by
+Write an R function that takes two arguments as input: a numeric input `x` and a threshold `lambda`. Your function should return the value of $f_\lambda(x)$ and work for vector input `x` of any length.
 
-$$||\mathbf{x}||_2=(|x_1|^2+\cdots+|x_n|^2)^{1/2}$$
+2. For $\lambda=4$, demonstrate your function on the vector c(-5, -3, 0, 3, 5).
 
-Consider the following code.
+(Hint: the output should be the vector `-5, 0, 0, 0, 5`)
 
-```{r, eval = T, echo = T}
-create_p_norm <- function(p = 2) {
-  return(
-    function(x) return(sum(abs(x) ^ p) ^ (1 / p))
-  )
-}
-```
+3. For $\lambda=2$,  demonstrate your function on the vector c(-7, -5, -3, 0, 3, 5, 7).
 
-1. Explain in your own words what the following code does:
-
-```{r, eval = T, echo = T}
-norm_1 <- create_p_norm(1)
-x <- c(-1, 1, 2)
-norm_1(x)
-```
-
-2. Explain in your own words what the following code does:
-
-```{r, eval = T, echo = T}
-p <- 3
-norm_mystery <- create_p_norm()
-x <- c(-1, 1, 2)
-norm_mystery(x)
-```
