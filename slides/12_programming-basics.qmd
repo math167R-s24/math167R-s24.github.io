@@ -330,7 +330,7 @@ if (str_length(x) <= 10) {
 }
 ```
 
-------------------------------------------------------------------------
+## Check length of strings
 
 ```{r}
 #| echo: TRUE
@@ -343,7 +343,7 @@ if (str_length(x) <= 10) {
 }
 ```
 
-------------------------------------------------------------------------
+
 
 ## Check class
 
@@ -692,5 +692,5 @@ square_plus_2 <- function(x) {
 
 ## Exercises
 
-1.  Write a function that takes as input three numbers, `a`, `b`, and `c`, and returns the sum, **without using the `sum` function**.
+1.  Write a function that takes as input three numbers, `a`, `b`, and `c`, and returns the sum, **without using the `sum` function**. Be sure to test your functions out on example input.
 2.  Write a function that takes as input one number, `a`, and returns its absolute value, **without using the `abs` function**.
