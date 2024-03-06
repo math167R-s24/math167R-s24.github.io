@@ -1,7 +1,6 @@
 ---
-title: "Lab 5"
+title: "Lab 6"
 author: "YOUR NAME HERE"
-date: "2023-09-20"
 format: 
   html:
     embed-resources: true
@@ -20,28 +19,6 @@ For this lab, please work with one to two other students. List their names here.
 ```
 
 ## A. Basic functions
-
-1. Write a function `is_even()` that takes as input a single integer `x` and returns a logical that represents whether `x` is an even number or not. This function should check to make sure the input is an integer. If the input is not an integer, the function should stop with an informative error message.
-
-2. Evaluate your function with even numeric input.
-
-3. Evaluate your function with odd numeric input.
-
-4. Trigger your custom error message. Note: You will need to add the chunk option `error = TRUE` to your R Markdown code chunk. If you do not, your document will not compile.
-
-5. Write a function `get_factors()` that takes a single positive integer input `x` and outputs all of its factors as a vector. For example, since 10 is divisible by 1, 2, 5, and 10 itself, `get_factors(10)` should return a numeric vector containing 1, 2, 5, and 10.
-
-## B. Thresholding functions
-
-
-
-Given a vector $\mathbf{x}=(x_1,\ldots, x_n)$ and a number $p\geq 1$, the vector p-norm is defined as
-
-$$||\mathbf{x}||_p=(|x_1|^p+\cdots+|x_n|^p)^{1/p}$$
-
-For example, the vector 2-norm is given by
-
-$$||\mathbf{x}||_2=(|x_1|^2+\cdots+|x_n|^2)^{1/2}$$
 
 Consider the following code.
 
@@ -69,23 +46,8 @@ norm_mystery <- create_p_norm()
 x <- c(-1, 1, 2)
 norm_mystery(x)
 ```
-6. The hard-threshold function is defined as
 
-$$f_\lambda(x) =\begin{cases}
-x & |x|\geq \lambda\\
-0 & |x|<\lambda
-\end{cases}$$
-
-Write an R function that takes two arguments as input: a numeric input `x` and a threshold `lambda`. Your function should return the value of $f_\lambda(x)$ and work for vector input `x` of any length.
-
-7. For $\lambda=4$, demonstrate your function on the vector c(-5, -3, 0, 3, 5).
-
-(Hint: the output should be the vector `-5, 0, 0, 0, 5`)
-
-8. For $\lambda=2$,  demonstrate your function on the vector c(-7, -5, -3, 0, 3, 5, 7).
-
-
-## C. Skewness and Kurtosis
+## B. Skewness and Kurtosis
 
 Skewness describes how asymmetrical the distribution of a numerical variable is around its mean. Given observations $x_1,\ldots, x_n$, we can calculate the sample skewness $s$ of a variable using the following formula:
 
@@ -94,16 +56,13 @@ Kurtosis is a measure of the "tailedness" of the distribution of a numerical var
 
 $$k = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^4}{\left[\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right]^{2}}-3$$
 
-9. Write a function `skewness()` that takes as input a numeric vector `x` and returns the sample skewness. There are functions in R that compute skewness, but you cannot use any of them--write your own implementation.
+3. Write a function `skewness()` that takes as input a numeric vector `x` and returns the sample skewness. There are functions in R that compute skewness, but you cannot use any of them--write your own implementation. You may remove all `NA` values by default. Use your function to compute the sample skewness of the `arr_delay` variable in the `flights` dataset contained in the `nycflights13` package.
 
-10. Write a function `kurtosis()` that takes as input a numeric vector `x` and returns the sample skewness. There are functions in R that compute kurtosis, but you cannot use any of them--write your own implementation.
+4. Write a function `kurtosis()` that takes as input a numeric vector `x` and returns the sample skewness. There are functions in R that compute kurtosis, but you cannot use any of them--write your own implementation. You may remove all `NA` values by default. Use your function to compute the sample kurtosis of the `arr_delay` variable in the `flights` dataset contained in the `nycflights13` package.
 
-11. Use your function to compute the sample skewness of the `arr_delay` variable in the `flights` dataset contained in the `nycflights13` package.
+5. Write a function `get_column_skewness()` that takes as input a data frame and calculates the skewness of each **numeric** variable. The output should be a data frame with two variables: `variable` containing the name of the variable and `skewness` containing the skewness. Your output data frame should only include the numeric variables. You may remove all `NA` values by default. Demonstrate your output on the `penguins` dataset.
 
-12. Use your function to compute the sample kurtosis of the `arr_delay` variable in the `flights` dataset contained in the `nycflights13` package.
-
-
-## D. Finding an error
+## C. Finding an error
 
 Suppose you have two teams of runners participating in a 5k. We wish to write a function that takes as input two vectors representing the times of the runners in each team and returns a list of two vectors representing the ranks of each team's runners.
 
@@ -138,16 +97,12 @@ get_runner_ranks <- function(x, y) {
 }
 ```
 
-13. Below, write a corrected version of `get_runner_ranks()` and compute `get_runner_ranks(c(16.8, 21.2, 19.1), c(17.2, 18.1, 20.0))`.
+5. Explain in your own words what the error was.
+
+6. Below, write a corrected version of `get_runner_ranks()` and compute `get_runner_ranks(c(16.8, 21.2, 19.1), c(17.2, 18.1, 20.0))`.
 
 ```{r, error = T, echo = T, eval = T}
 get_runner_ranks <- function(x, y) {
   # YOUR CODE HERE
 }
 ```
-
-14. Explain in your own words what the error was.
-
-## E. Download data from an API
-
-

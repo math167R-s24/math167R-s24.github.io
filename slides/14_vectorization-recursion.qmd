@@ -1,8 +1,0 @@
----
-title: "MATH167R: Vectorization and recursion"
-author: "Peter Gao"
-format: 
-  revealjs:
-    theme: [./slides.scss, ../theme.scss]
-editor: visual
----

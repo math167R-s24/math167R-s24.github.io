@@ -9,7 +9,6 @@ editor: visual
 
 ## Overview of today
 
--   Advanced functions
 -   Environments and scope (based on *Advanced R* by Hadley Wickham)
 -   Lab time
 
@@ -224,6 +223,85 @@ Suppose we are looking for a value for a given symbol used in a function.
 2.  Next, if the value is not found in the body, the search continues in the function's environment (where it was defined).
 3.  If the value is not found there, the search continues in the parent environment.
 4.  The search continues up the sequence of parents until the empty environmnet is reached at which point we throw an error.
+
+## Example
+
+**Exercise**: What will the following code return?
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+x <- 10
+y <- 20
+f <- function(x) {
+  y <- x + 5
+  return(x)
+}
+g <- function(y) {
+  y <- x + 5
+  return(y)
+}
+g(y)
+```
+
+. . .
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| error: TRUE
+x <- 10
+y <- 20
+f <- function(x) {
+  y <- x + 5
+  return(x)
+}
+g <- function(y) {
+  y <- x + 5
+  return(y)
+}
+g(y)
+```
+
+## Example
+
+**Exercise**: What will the following code return?
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+x <- 10
+y <- 20
+f <- function(x) {
+  y <- x + 5
+  return(x)
+}
+g <- function(y) {
+  y <- x + 5
+  return(y)
+}
+g(y)
+```
+
+. . .
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| error: TRUE
+x <- 10
+y <- 20
+f <- function(x) {
+  y <- x + 5
+  return(x)
+}
+g <- function(y) {
+  y <- x + 5
+  return(y)
+}
+g(y)
+```
+
 
 ## Example
 

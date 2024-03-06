@@ -88,7 +88,7 @@ R doesn't require functions to be pure, but writing pure functions can help make
 
 ## Imperative vs. declarative
 
-### Imperative programming: `for` loop
+**Imperative programming: `for` loop**
 
 ```{r}
 #| echo: TRUE
@@ -101,7 +101,7 @@ for (i in x) {
 out
 ```
 
-### Declarative programming
+**Declarative programming:**
 
 ```{r}
 #| echo: TRUE
@@ -261,7 +261,7 @@ library(jsonlite)
 api_key <- readLines("~/Dropbox/teaching/math167R-f23/internal/nyt-key.txt")
 current_list <- jsonlite::fromJSON(
   paste0(
-    "https://api.nytimes.com/svc/books/v3/lists/2023-10-22/hardcover-fiction.json?api-key=",
+    "https://api.nytimes.com/svc/books/v3/lists/2024-03-05/hardcover-fiction.json?api-key=",
     api_key
   )
 )$results$books
@@ -284,12 +284,12 @@ current_list |>
 #| echo: TRUE
 #| eval: TRUE
 #| cache: TRUE
-dates <- seq(as.Date("2023-10-22"), as.Date("2023-08-01"), by = -7)
+dates <- seq(as.Date("2024-03-05"), by = -7, length.out = 12)
 bestseller_lists <- lapply(
   dates,
   function(x) {
     # slow down execution by waiting 12 seconds
-    Sys.sleep(12)
+    Sys.sleep(15)
     jsonlite::fromJSON(
       paste0(
         "https://api.nytimes.com/svc/books/v3/lists/",
@@ -325,15 +325,19 @@ vapply(bestseller_lists, function(x) x$title[1], character(1))
 
 ## Looping through many data files
 
-Suppose we wish to see the performance of the current #1 book over the last 12 weeks:
+Suppose we wish to see the performance of the current top five books over the last 12 weeks:
 
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
+top_titles <- 
+  lapply(bestseller_lists, function(x) x$title[1:3]) |>
+  unlist() |>
+  unique()
 top_book_data <- 
-  lapply(bestseller_lists, function(x) x[x$title == "FOURTH WING", ])
-top_book_data
+  lapply(bestseller_lists, function(x) x[x$title %in% top_titles, ])
 ```
+
 
 ## Looping through many data files
 
@@ -346,18 +350,35 @@ top_book_data <- bind_rows(top_book_data, .id = "date")
 top_book_data$date <- as.Date(top_book_data$date)
 ```
 
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+library(knitr)
+library(tidyverse)
+top_book_data |>
+  dplyr::select(date, title, author, rank, rank_last_week, weeks_on_list, publisher) |>
+  knitr::kable() |>
+  kableExtra::kable_styling("striped", full_width = T) |> 
+  kableExtra::scroll_box(height = "400px")
+```
+
 ## Looping through many data files
 
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
+#| warning: false
+#| fig-width: 8
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
 library(ggplot2)
-ggplot(top_book_data, aes(x = date, y = rank)) + 
+ggplot(top_book_data, aes(x = date, y = rank, color = title)) + 
   geom_line() + 
   scale_y_continuous(breaks = 1:20, trans = "reverse") +
   xlab("Date") +
   ylab("Rank") +
-  ggtitle(paste0("NYT Best Seller Rank of ", top_book_data$title[1])) 
+  ggtitle(paste0("Recent NYT Best Seller Ranks")) 
 ```
 
 ## Looping through many data files
@@ -380,7 +401,7 @@ Finally, we can combine some of these functions into a larger function that we c
 #| eval: FALSE
 download_data <- function() {
   # automatically pull today's date
-  dates <- seq(Sys.Date(), by = -7, length.out = 12)
+  dates <- seq(as.Date("2025-03-05"), by = -7, length.out = 12)
   bestseller_lists <- lapply(
     dates,
     function(x) {

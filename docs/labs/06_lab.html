@@ -7,9 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="YOUR NAME HERE">
-<meta name="dcterms.date" content="2023-09-20">
 
-<title>MATH167R - Lab 5</title>
+<title>MATH167R - Lab 6</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -4587,7 +4586,7 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
   </script>
 
 
-<meta property="og:title" content="MATH167R - Lab 5">
+<meta property="og:title" content="MATH167R - Lab 6">
 <meta property="og:description" content>
 <meta property="og:site-name" content="MATH167R">
 </head>
@@ -4687,10 +4686,8 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
   <ul>
   <li><a href="#collaborators" id="toc-collaborators" class="nav-link active" data-scroll-target="#collaborators">Collaborators</a></li>
   <li><a href="#a.-basic-functions" id="toc-a.-basic-functions" class="nav-link" data-scroll-target="#a.-basic-functions">A. Basic functions</a></li>
-  <li><a href="#b.-thresholding-functions" id="toc-b.-thresholding-functions" class="nav-link" data-scroll-target="#b.-thresholding-functions">B. Thresholding functions</a></li>
-  <li><a href="#c.-skewness-and-kurtosis" id="toc-c.-skewness-and-kurtosis" class="nav-link" data-scroll-target="#c.-skewness-and-kurtosis">C. Skewness and Kurtosis</a></li>
-  <li><a href="#d.-finding-an-error" id="toc-d.-finding-an-error" class="nav-link" data-scroll-target="#d.-finding-an-error">D. Finding an error</a></li>
-  <li><a href="#e.-download-data-from-an-api" id="toc-e.-download-data-from-an-api" class="nav-link" data-scroll-target="#e.-download-data-from-an-api">E. Download data from an API</a></li>
+  <li><a href="#b.-skewness-and-kurtosis" id="toc-b.-skewness-and-kurtosis" class="nav-link" data-scroll-target="#b.-skewness-and-kurtosis">B. Skewness and Kurtosis</a></li>
+  <li><a href="#c.-finding-an-error" id="toc-c.-finding-an-error" class="nav-link" data-scroll-target="#c.-finding-an-error">C. Finding an error</a></li>
   </ul>
 </nav>
     </div>
@@ -4699,7 +4696,7 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Lab 5</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title">Lab 6</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -4713,12 +4710,6 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
           </div>
   </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">September 20, 2023</p>
-    </div>
-  </div>
   
     
   </div>
@@ -4736,20 +4727,6 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
 </section>
 <section id="a.-basic-functions" class="level2">
 <h2 class="anchored" data-anchor-id="a.-basic-functions">A. Basic functions</h2>
-<ol type="1">
-<li><p>Write a function <code>is_even()</code> that takes as input a single integer <code>x</code> and returns a logical that represents whether <code>x</code> is an even number or not. This function should check to make sure the input is an integer. If the input is not an integer, the function should stop with an informative error message.</p></li>
-<li><p>Evaluate your function with even numeric input.</p></li>
-<li><p>Evaluate your function with odd numeric input.</p></li>
-<li><p>Trigger your custom error message. Note: You will need to add the chunk option <code>error = TRUE</code> to your R Markdown code chunk. If you do not, your document will not compile.</p></li>
-<li><p>Write a function <code>get_factors()</code> that takes a single positive integer input <code>x</code> and outputs all of its factors as a vector. For example, since 10 is divisible by 1, 2, 5, and 10 itself, <code>get_factors(10)</code> should return a numeric vector containing 1, 2, 5, and 10.</p></li>
-</ol>
-</section>
-<section id="b.-thresholding-functions" class="level2">
-<h2 class="anchored" data-anchor-id="b.-thresholding-functions">B. Thresholding functions</h2>
-<p>Given a vector <span class="math inline">\(\mathbf{x}=(x_1,\ldots, x_n)\)</span> and a number <span class="math inline">\(p\geq 1\)</span>, the vector p-norm is defined as</p>
-<p><span class="math display">\[||\mathbf{x}||_p=(|x_1|^p+\cdots+|x_n|^p)^{1/p}\]</span></p>
-<p>For example, the vector 2-norm is given by</p>
-<p><span class="math display">\[||\mathbf{x}||_2=(|x_1|^2+\cdots+|x_n|^2)^{1/2}\]</span></p>
 <p>Consider the following code.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>create_p_norm <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">p =</span> <span class="dv">2</span>) {</span>
@@ -4781,36 +4758,20 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
 <pre><code>[1] 2.44949</code></pre>
 </div>
 </div>
-<ol start="6" type="1">
-<li>The hard-threshold function is defined as</li>
-</ol>
-<p><span class="math display">\[f_\lambda(x) =\begin{cases}
-x &amp; |x|\geq \lambda\\
-0 &amp; |x|&lt;\lambda
-\end{cases}\]</span></p>
-<p>Write an R function that takes two arguments as input: a numeric input <code>x</code> and a threshold <code>lambda</code>. Your function should return the value of <span class="math inline">\(f_\lambda(x)\)</span> and work for vector input <code>x</code> of any length.</p>
-<ol start="7" type="1">
-<li>For <span class="math inline">\(\lambda=4\)</span>, demonstrate your function on the vector c(-5, -3, 0, 3, 5).</li>
-</ol>
-<p>(Hint: the output should be the vector <code>-5, 0, 0, 0, 5</code>)</p>
-<ol start="8" type="1">
-<li>For <span class="math inline">\(\lambda=2\)</span>, demonstrate your function on the vector c(-7, -5, -3, 0, 3, 5, 7).</li>
-</ol>
 </section>
-<section id="c.-skewness-and-kurtosis" class="level2">
-<h2 class="anchored" data-anchor-id="c.-skewness-and-kurtosis">C. Skewness and Kurtosis</h2>
+<section id="b.-skewness-and-kurtosis" class="level2">
+<h2 class="anchored" data-anchor-id="b.-skewness-and-kurtosis">B. Skewness and Kurtosis</h2>
 <p>Skewness describes how asymmetrical the distribution of a numerical variable is around its mean. Given observations <span class="math inline">\(x_1,\ldots, x_n\)</span>, we can calculate the sample skewness <span class="math inline">\(s\)</span> of a variable using the following formula:</p>
 <p><span class="math display">\[s = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^3}{\left[\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right]^{3/2}}\]</span> Kurtosis is a measure of the “tailedness” of the distribution of a numerical variable is around its mean. Higher values of kurtosis indicate more extreme outliers. Given observations <span class="math inline">\(x_1,\ldots, x_n\)</span>, we can calculate the sample kurtosis <span class="math inline">\(k\)</span> of a variable using the following formula:</p>
 <p><span class="math display">\[k = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^4}{\left[\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right]^{2}}-3\]</span></p>
-<ol start="9" type="1">
-<li><p>Write a function <code>skewness()</code> that takes as input a numeric vector <code>x</code> and returns the sample skewness. There are functions in R that compute skewness, but you cannot use any of them–write your own implementation.</p></li>
-<li><p>Write a function <code>kurtosis()</code> that takes as input a numeric vector <code>x</code> and returns the sample skewness. There are functions in R that compute kurtosis, but you cannot use any of them–write your own implementation.</p></li>
-<li><p>Use your function to compute the sample skewness of the <code>arr_delay</code> variable in the <code>flights</code> dataset contained in the <code>nycflights13</code> package.</p></li>
-<li><p>Use your function to compute the sample kurtosis of the <code>arr_delay</code> variable in the <code>flights</code> dataset contained in the <code>nycflights13</code> package.</p></li>
+<ol start="3" type="1">
+<li><p>Write a function <code>skewness()</code> that takes as input a numeric vector <code>x</code> and returns the sample skewness. There are functions in R that compute skewness, but you cannot use any of them–write your own implementation. You may remove all <code>NA</code> values by default. Use your function to compute the sample skewness of the <code>arr_delay</code> variable in the <code>flights</code> dataset contained in the <code>nycflights13</code> package.</p></li>
+<li><p>Write a function <code>kurtosis()</code> that takes as input a numeric vector <code>x</code> and returns the sample skewness. There are functions in R that compute kurtosis, but you cannot use any of them–write your own implementation. You may remove all <code>NA</code> values by default. Use your function to compute the sample kurtosis of the <code>arr_delay</code> variable in the <code>flights</code> dataset contained in the <code>nycflights13</code> package.</p></li>
+<li><p>Write a function <code>get_column_skewness()</code> that takes as input a data frame and calculates the skewness of each <strong>numeric</strong> variable. The output should be a data frame with two variables: <code>variable</code> containing the name of the variable and <code>skewness</code> containing the skewness. Your output data frame should only include the numeric variables. You may remove all <code>NA</code> values by default. Demonstrate your output on the <code>penguins</code> dataset.</p></li>
 </ol>
 </section>
-<section id="d.-finding-an-error" class="level2">
-<h2 class="anchored" data-anchor-id="d.-finding-an-error">D. Finding an error</h2>
+<section id="c.-finding-an-error" class="level2">
+<h2 class="anchored" data-anchor-id="c.-finding-an-error">C. Finding an error</h2>
 <p>Suppose you have two teams of runners participating in a 5k. We wish to write a function that takes as input two vectors representing the times of the runners in each team and returns a list of two vectors representing the ranks of each team’s runners.</p>
 <p>For example, if the first team’s times are <code>c(16.8, 21.2, 19.1)</code> and the second team’s times are <code>c(17.2, 18.1, 20.0)</code>, the function should return <code>c(1, 6, 4)</code> for the first team and <code>c(2, 3, 5)</code> for the second team.</p>
 <p>Below is a draft version of the function <code>get_runner_ranks()</code>. However, there is an error somewhere. Use any method we discussed in class to identify the error.</p>
@@ -4840,20 +4801,15 @@ x &amp; |x|\geq \lambda\\
 <span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">x =</span> ranks_x, <span class="at">y =</span> ranks_y))</span>
 <span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<ol start="13" type="1">
-<li>Below, write a corrected version of <code>get_runner_ranks()</code> and compute <code>get_runner_ranks(c(16.8, 21.2, 19.1), c(17.2, 18.1, 20.0))</code>.</li>
+<ol start="5" type="1">
+<li><p>Explain in your own words what the error was.</p></li>
+<li><p>Below, write a corrected version of <code>get_runner_ranks()</code> and compute <code>get_runner_ranks(c(16.8, 21.2, 19.1), c(17.2, 18.1, 20.0))</code>.</p></li>
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>get_runner_ranks <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># YOUR CODE HERE</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<ol start="14" type="1">
-<li>Explain in your own words what the error was.</li>
-</ol>
-</section>
-<section id="e.-download-data-from-an-api" class="level2">
-<h2 class="anchored" data-anchor-id="e.-download-data-from-an-api">E. Download data from an API</h2>
 
 
 <!-- -->
@@ -5146,157 +5102,113 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class>
 <div class="sourceCode" id="cb9" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Lab 5&quot;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Lab 6&quot;</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> &quot;YOUR NAME HERE&quot;</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> &quot;2023-09-20&quot;</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-summary: &quot;Code&quot;</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="fu">### Collaborators</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>For this lab, please work with one to two other students. List their names here.</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co"># LOAD ANY RELEVANT PACKAGES HERE</span></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="fu">## A. Basic functions</span></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Write a function <span class="in">`is_even()`</span> that takes as input a single integer <span class="in">`x`</span> and returns a logical that represents whether <span class="in">`x`</span> is an even number or not. This function should check to make sure the input is an integer. If the input is not an integer, the function should stop with an informative error message.</span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Evaluate your function with even numeric input.</span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Evaluate your function with odd numeric input.</span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Trigger your custom error message. Note: You will need to add the chunk option <span class="in">`error = TRUE`</span> to your R Markdown code chunk. If you do not, your document will not compile.</span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Write a function <span class="in">`get_factors()`</span> that takes a single positive integer input <span class="in">`x`</span> and outputs all of its factors as a vector. For example, since 10 is divisible by 1, 2, 5, and 10 itself, <span class="in">`get_factors(10)`</span> should return a numeric vector containing 1, 2, 5, and 10.</span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## B. Thresholding functions</span></span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>Given a vector $\mathbf{x}=(x_1,\ldots, x_n)$ and a number $p\geq 1$, the vector p-norm is defined as</span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>$$||\mathbf{x}||_p=(|x_1|^p+\cdots+|x_n|^p)^{1/p}$$</span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>For example, the vector 2-norm is given by</span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>$$||\mathbf{x}||_2=(|x_1|^2+\cdots+|x_n|^2)^{1/2}$$</span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>Consider the following code.</span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = T, echo = T}</span></span>
-<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>create_p_norm <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">p =</span> <span class="dv">2</span>) {</span>
-<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(</span>
-<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">function</span>(x) <span class="fu">return</span>(<span class="fu">sum</span>(<span class="fu">abs</span>(x) <span class="sc">^</span> p) <span class="sc">^</span> (<span class="dv">1</span> <span class="sc">/</span> p))</span>
-<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Explain in your own words what the following code does:</span>
-<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = T, echo = T}</span></span>
-<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>norm_1 <span class="ot">&lt;-</span> <span class="fu">create_p_norm</span>(<span class="dv">1</span>)</span>
-<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>)</span>
-<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a><span class="fu">norm_1</span>(x)</span>
-<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Explain in your own words what the following code does:</span>
-<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = T, echo = T}</span></span>
-<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>norm_mystery <span class="ot">&lt;-</span> <span class="fu">create_p_norm</span>()</span>
-<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>)</span>
-<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a><span class="fu">norm_mystery</span>(x)</span>
-<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>The hard-threshold function is defined as</span>
-<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>$$f_\lambda(x) =\begin{cases}</span>
-<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>x &amp; |x|\geq \lambda<span class="sc">\\</span></span>
-<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>0 &amp; |x|&lt;\lambda</span>
-<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a>\end{cases}$$</span>
-<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>Write an R function that takes two arguments as input: a numeric input <span class="in">`x`</span> and a threshold <span class="in">`lambda`</span>. Your function should return the value of $f_\lambda(x)$ and work for vector input <span class="in">`x`</span> of any length.</span>
-<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>For $\lambda=4$, demonstrate your function on the vector c(-5, -3, 0, 3, 5).</span>
-<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a>(Hint: the output should be the vector <span class="in">`-5, 0, 0, 0, 5`</span>)</span>
-<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="ss">8. </span>For $\lambda=2$,  demonstrate your function on the vector c(-7, -5, -3, 0, 3, 5, 7).</span>
-<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a><span class="fu">## C. Skewness and Kurtosis</span></span>
-<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a>Skewness describes how asymmetrical the distribution of a numerical variable is around its mean. Given observations $x_1,\ldots, x_n$, we can calculate the sample skewness $s$ of a variable using the following formula:</span>
-<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a>$$s = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^3}{\left<span class="co">[</span><span class="ot">\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right</span><span class="co">]</span>^{3/2}}$$</span>
-<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a>Kurtosis is a measure of the &quot;tailedness&quot; of the distribution of a numerical variable is around its mean. Higher values of kurtosis indicate more extreme outliers. Given observations $x_1,\ldots, x_n$, we can calculate the sample kurtosis $k$ of a variable using the following formula:</span>
-<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a>$$k = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^4}{\left<span class="co">[</span><span class="ot">\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right</span><span class="co">]</span>^{2}}-3$$</span>
-<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a><span class="ss">9. </span>Write a function <span class="in">`skewness()`</span> that takes as input a numeric vector <span class="in">`x`</span> and returns the sample skewness. There are functions in R that compute skewness, but you cannot use any of them--write your own implementation.</span>
-<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>Write a function <span class="in">`kurtosis()`</span> that takes as input a numeric vector <span class="in">`x`</span> and returns the sample skewness. There are functions in R that compute kurtosis, but you cannot use any of them--write your own implementation.</span>
-<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a><span class="ss">11. </span>Use your function to compute the sample skewness of the <span class="in">`arr_delay`</span> variable in the <span class="in">`flights`</span> dataset contained in the <span class="in">`nycflights13`</span> package.</span>
-<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a><span class="ss">12. </span>Use your function to compute the sample kurtosis of the <span class="in">`arr_delay`</span> variable in the <span class="in">`flights`</span> dataset contained in the <span class="in">`nycflights13`</span> package.</span>
-<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a><span class="fu">## D. Finding an error</span></span>
-<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a>Suppose you have two teams of runners participating in a 5k. We wish to write a function that takes as input two vectors representing the times of the runners in each team and returns a list of two vectors representing the ranks of each team&#39;s runners.</span>
-<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a>For example, if the first team&#39;s times are <span class="in">`c(16.8, 21.2, 19.1)`</span> and the second team&#39;s times are <span class="in">`c(17.2, 18.1, 20.0)`</span>, the function should return <span class="in">`c(1, 6, 4)`</span> for the first team and <span class="in">`c(2, 3, 5)`</span> for the second team. </span>
-<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a>Below is a draft version of the function <span class="in">`get_runner_ranks()`</span>. However, there is an error somewhere. Use any method we discussed in class to identify the error.</span>
-<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, error = T, echo = T, eval = T}</span></span>
-<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a>get_runner_ranks <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb9-118"><a href="#cb9-118" aria-hidden="true" tabindex="-1"></a>  <span class="co"># combine all runner times</span></span>
-<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a>  combined_times <span class="ot">&lt;-</span> <span class="fu">c</span>(x, y) </span>
-<span id="cb9-120"><a href="#cb9-120" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-121"><a href="#cb9-121" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sort all runner times from fastest to slowest</span></span>
-<span id="cb9-122"><a href="#cb9-122" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(combined_times, <span class="at">decreasing =</span> T)</span>
-<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-124"><a href="#cb9-124" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create ranks vectors</span></span>
-<span id="cb9-125"><a href="#cb9-125" aria-hidden="true" tabindex="-1"></a>  ranks_x <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(x))</span>
-<span id="cb9-126"><a href="#cb9-126" aria-hidden="true" tabindex="-1"></a>  ranks_y <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(y))</span>
-<span id="cb9-127"><a href="#cb9-127" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-128"><a href="#cb9-128" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ranks_x)) {</span>
-<span id="cb9-129"><a href="#cb9-129" aria-hidden="true" tabindex="-1"></a>    <span class="co"># look up rank of time i in x in combined_times</span></span>
-<span id="cb9-130"><a href="#cb9-130" aria-hidden="true" tabindex="-1"></a>    ranks_x[i] <span class="ot">&lt;-</span> <span class="fu">match</span>(x[i], combined_times)</span>
-<span id="cb9-131"><a href="#cb9-131" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb9-132"><a href="#cb9-132" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-133"><a href="#cb9-133" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ranks_y)) {</span>
-<span id="cb9-134"><a href="#cb9-134" aria-hidden="true" tabindex="-1"></a>    <span class="co"># look up rank of time i in y in combined_times</span></span>
-<span id="cb9-135"><a href="#cb9-135" aria-hidden="true" tabindex="-1"></a>    ranks_y[i] <span class="ot">&lt;-</span> <span class="fu">match</span>(y[i], combined_times)</span>
-<span id="cb9-136"><a href="#cb9-136" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb9-137"><a href="#cb9-137" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-138"><a href="#cb9-138" aria-hidden="true" tabindex="-1"></a>  <span class="co"># return a list of first team and second team ranks</span></span>
-<span id="cb9-139"><a href="#cb9-139" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">x =</span> ranks_x, <span class="at">y =</span> ranks_y))</span>
-<span id="cb9-140"><a href="#cb9-140" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-141"><a href="#cb9-141" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-142"><a href="#cb9-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-143"><a href="#cb9-143" aria-hidden="true" tabindex="-1"></a><span class="ss">13. </span>Below, write a corrected version of <span class="in">`get_runner_ranks()`</span> and compute <span class="in">`get_runner_ranks(c(16.8, 21.2, 19.1), c(17.2, 18.1, 20.0))`</span>.</span>
-<span id="cb9-144"><a href="#cb9-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-145"><a href="#cb9-145" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, error = T, echo = T, eval = T}</span></span>
-<span id="cb9-146"><a href="#cb9-146" aria-hidden="true" tabindex="-1"></a>get_runner_ranks <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb9-147"><a href="#cb9-147" aria-hidden="true" tabindex="-1"></a>  <span class="co"># YOUR CODE HERE</span></span>
-<span id="cb9-148"><a href="#cb9-148" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-149"><a href="#cb9-149" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-150"><a href="#cb9-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-151"><a href="#cb9-151" aria-hidden="true" tabindex="-1"></a><span class="ss">14. </span>Explain in your own words what the error was.</span>
-<span id="cb9-152"><a href="#cb9-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-153"><a href="#cb9-153" aria-hidden="true" tabindex="-1"></a><span class="fu">## E. Download data from an API</span></span>
-<span id="cb9-154"><a href="#cb9-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-summary: &quot;Code&quot;</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">### Collaborators</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>For this lab, please work with one to two other students. List their names here.</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="co"># LOAD ANY RELEVANT PACKAGES HERE</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## A. Basic functions</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>Consider the following code.</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = T, echo = T}</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>create_p_norm <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">p =</span> <span class="dv">2</span>) {</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">function</span>(x) <span class="fu">return</span>(<span class="fu">sum</span>(<span class="fu">abs</span>(x) <span class="sc">^</span> p) <span class="sc">^</span> (<span class="dv">1</span> <span class="sc">/</span> p))</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Explain in your own words what the following code does:</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = T, echo = T}</span></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>norm_1 <span class="ot">&lt;-</span> <span class="fu">create_p_norm</span>(<span class="dv">1</span>)</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a><span class="fu">norm_1</span>(x)</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Explain in your own words what the following code does:</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = T, echo = T}</span></span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>norm_mystery <span class="ot">&lt;-</span> <span class="fu">create_p_norm</span>()</span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a><span class="fu">norm_mystery</span>(x)</span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a><span class="fu">## B. Skewness and Kurtosis</span></span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>Skewness describes how asymmetrical the distribution of a numerical variable is around its mean. Given observations $x_1,\ldots, x_n$, we can calculate the sample skewness $s$ of a variable using the following formula:</span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>$$s = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^3}{\left<span class="co">[</span><span class="ot">\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right</span><span class="co">]</span>^{3/2}}$$</span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>Kurtosis is a measure of the &quot;tailedness&quot; of the distribution of a numerical variable is around its mean. Higher values of kurtosis indicate more extreme outliers. Given observations $x_1,\ldots, x_n$, we can calculate the sample kurtosis $k$ of a variable using the following formula:</span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>$$k = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^4}{\left<span class="co">[</span><span class="ot">\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right</span><span class="co">]</span>^{2}}-3$$</span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Write a function <span class="in">`skewness()`</span> that takes as input a numeric vector <span class="in">`x`</span> and returns the sample skewness. There are functions in R that compute skewness, but you cannot use any of them--write your own implementation. You may remove all <span class="in">`NA`</span> values by default. Use your function to compute the sample skewness of the <span class="in">`arr_delay`</span> variable in the <span class="in">`flights`</span> dataset contained in the <span class="in">`nycflights13`</span> package.</span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Write a function <span class="in">`kurtosis()`</span> that takes as input a numeric vector <span class="in">`x`</span> and returns the sample skewness. There are functions in R that compute kurtosis, but you cannot use any of them--write your own implementation. You may remove all <span class="in">`NA`</span> values by default. Use your function to compute the sample kurtosis of the <span class="in">`arr_delay`</span> variable in the <span class="in">`flights`</span> dataset contained in the <span class="in">`nycflights13`</span> package.</span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Write a function <span class="in">`get_column_skewness()`</span> that takes as input a data frame and calculates the skewness of each **numeric** variable. The output should be a data frame with two variables: <span class="in">`variable`</span> containing the name of the variable and <span class="in">`skewness`</span> containing the skewness. Your output data frame should only include the numeric variables. You may remove all <span class="in">`NA`</span> values by default. Demonstrate your output on the <span class="in">`penguins`</span> dataset.</span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a><span class="fu">## C. Finding an error</span></span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>Suppose you have two teams of runners participating in a 5k. We wish to write a function that takes as input two vectors representing the times of the runners in each team and returns a list of two vectors representing the ranks of each team&#39;s runners.</span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>For example, if the first team&#39;s times are <span class="in">`c(16.8, 21.2, 19.1)`</span> and the second team&#39;s times are <span class="in">`c(17.2, 18.1, 20.0)`</span>, the function should return <span class="in">`c(1, 6, 4)`</span> for the first team and <span class="in">`c(2, 3, 5)`</span> for the second team. </span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>Below is a draft version of the function <span class="in">`get_runner_ranks()`</span>. However, there is an error somewhere. Use any method we discussed in class to identify the error.</span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, error = T, echo = T, eval = T}</span></span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>get_runner_ranks <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>  <span class="co"># combine all runner times</span></span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>  combined_times <span class="ot">&lt;-</span> <span class="fu">c</span>(x, y) </span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sort all runner times from fastest to slowest</span></span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(combined_times, <span class="at">decreasing =</span> T)</span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create ranks vectors</span></span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a>  ranks_x <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(x))</span>
+<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a>  ranks_y <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(y))</span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ranks_x)) {</span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a>    <span class="co"># look up rank of time i in x in combined_times</span></span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a>    ranks_x[i] <span class="ot">&lt;-</span> <span class="fu">match</span>(x[i], combined_times)</span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ranks_y)) {</span>
+<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a>    <span class="co"># look up rank of time i in y in combined_times</span></span>
+<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a>    ranks_y[i] <span class="ot">&lt;-</span> <span class="fu">match</span>(y[i], combined_times)</span>
+<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a>  <span class="co"># return a list of first team and second team ranks</span></span>
+<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">x =</span> ranks_x, <span class="at">y =</span> ranks_y))</span>
+<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Explain in your own words what the error was.</span>
+<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Below, write a corrected version of <span class="in">`get_runner_ranks()`</span> and compute <span class="in">`get_runner_ranks(c(16.8, 21.2, 19.1), c(17.2, 18.1, 20.0))`</span>.</span>
+<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, error = T, echo = T, eval = T}</span></span>
+<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a>get_runner_ranks <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a>  <span class="co"># YOUR CODE HERE</span></span>
+<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

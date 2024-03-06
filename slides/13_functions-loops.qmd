@@ -35,13 +35,9 @@ function_name <- function(param1, param2 = "default") {
 
 ## Exercise: degrees to radians
 
-
-
 Write a function `degreesToRadians` that takes as input one number, `degrees`, and returns its value in radians. You do not need to check the data type of the input.
 
 ## Exercise: degrees to radians
-
-
 
 ```{r}
 #| echo: TRUE
@@ -54,8 +50,6 @@ degreesToRadians(180)
 
 ## Additional notes on functions
 
-
-
 -   *How do I know if a function is working*?
 
     -   Test it on easy examples for which you know the results
@@ -63,23 +57,17 @@ degreesToRadians(180)
 
 ## Loops
 
-
-
 **Loops** enable us to repeat a line/lines of code many times.
 
 R provides three types of explicit loops: `for`, `while`, and `repeat`. We will focus on `for` and `while`.
 
 ## `for` loops
 
-
-
 `for` loops repeat a chunk of code for each value of a vector.
 
 ::: center
 `for (name in vector) {body}`
 :::
-
-
 
 . . .
 
@@ -133,8 +121,6 @@ fib_10
 
 ## `while` loops
 
-
-
 `while` loops continuously evaluate the inner code chunk until the condition is `FALSE`.
 
 Be careful here: It is possible to get stuck in an infinite loop!
@@ -150,8 +136,6 @@ while (x < 5) {
 ```
 
 ## `while` loops
-
-
 
 Let's see if we can clean up that output. Add `"\n"` to a string to force a line break.
 
@@ -304,11 +288,9 @@ for (i in 1:10) {
 3.  Any number divisible by five is replaced with the word "buzz."
 4.  Any number divisible by both three and five is replaced with the word "fizzbuzz."
 
-## Fizz Buzz
-
 Can we write code for a computer to play fizz buzz with itself? Suppose we want the computer to play Fizz Buzz up to 100.
 
-. . .
+## Fizz Buzz
 
 ```{r}
 #| echo: TRUE
@@ -350,7 +332,6 @@ for (i in 1:100) {
 -   HackerRank
 -   LeetCode (doesn't support R)
 
-
 ## Vectorization
 
 Last class, we saw how to use `for` and `while` loops to repeat tasks. However, often in R, functions or operations are vectorized, meaning they automatically act on every entry in a vector.
@@ -370,8 +351,6 @@ x * 2
 x <- 1:4
 x < 2
 ```
-
-. . .
 
 ```{r}
 #| echo: TRUE
@@ -411,7 +390,7 @@ For this reason, it is important to begin remembering which functions are vector
 #| message: FALSE
 weather_forecasts <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-12-20/weather_forecasts.csv')
 weather_forecasts <- weather_forecasts |>
-  mutate(abs_err_precip = abs(observed_temp - forecast_temp))
+  mutate(abs_err_temp = abs(observed_temp - forecast_temp))
 ```
 
 **Exercise**: Write a function that takes as input two vectors of length $n$, `observed` and `predicted` and returns a vector of length $n$ of the absolute errors.
@@ -548,4 +527,3 @@ Write a function `factorize()` that takes as input a natural number `n` and retu
 . . .
 
 How might we get started with this question?
-

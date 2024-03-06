@@ -727,11 +727,10 @@ i = 3, j = 2, counter = 6</code></pre>
 <li>Any number divisible by five is replaced with the word “buzz.”</li>
 <li>Any number divisible by both three and five is replaced with the word “fizzbuzz.”</li>
 </ol>
+<p>Can we write code for a computer to play fizz buzz with itself? Suppose we want the computer to play Fizz Buzz up to 100.</p>
 </section>
 <section id="fizz-buzz-1" class="slide level2">
 <h2>Fizz Buzz</h2>
-<p>Can we write code for a computer to play fizz buzz with itself? Suppose we want the computer to play Fizz Buzz up to 100.</p>
-<div class="fragment">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
 <span id="cb36-2"><a href="#cb36-2"></a>  <span class="cf">if</span> (i <span class="sc">%%</span> <span class="dv">3</span> <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> i <span class="sc">%%</span> <span class="dv">5</span> <span class="sc">==</span> <span class="dv">0</span>) {</span>
@@ -744,7 +743,6 @@ i = 3, j = 2, counter = 6</code></pre>
 <span id="cb36-9"><a href="#cb36-9"></a>    <span class="fu">print</span>(i)</span>
 <span id="cb36-10"><a href="#cb36-10"></a>  }</span>
 <span id="cb36-11"><a href="#cb36-11"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </div>
 <div class="fragment">
 <div class="cell">
@@ -881,14 +879,12 @@ i = 3, j = 2, counter = 6</code></pre>
 <pre><code>[1]  TRUE FALSE FALSE FALSE</code></pre>
 </div>
 </div>
-<div class="fragment">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span></span>
 <span id="cb42-2"><a href="#cb42-2"></a>y <span class="ot">&lt;-</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">1</span></span>
 <span id="cb42-3"><a href="#cb42-3"></a>x <span class="sc">+</span> y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 5 5 5 5</code></pre>
-</div>
 </div>
 </div>
 </section>
@@ -959,7 +955,7 @@ i = 3, j = 2, counter = 6</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>weather_forecasts <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-12-20/weather_forecasts.csv'</span>)</span>
 <span id="cb46-2"><a href="#cb46-2"></a>weather_forecasts <span class="ot">&lt;-</span> weather_forecasts <span class="sc">|&gt;</span></span>
-<span id="cb46-3"><a href="#cb46-3"></a>  <span class="fu">mutate</span>(<span class="at">abs_err_precip =</span> <span class="fu">abs</span>(observed_temp <span class="sc">-</span> forecast_temp))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb46-3"><a href="#cb46-3"></a>  <span class="fu">mutate</span>(<span class="at">abs_err_temp =</span> <span class="fu">abs</span>(observed_temp <span class="sc">-</span> forecast_temp))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Exercise</strong>: Write a function that takes as input two vectors of length <span class="math inline">\(n\)</span>, <code>observed</code> and <code>predicted</code> and returns a vector of length <span class="math inline">\(n\)</span> of the absolute errors.</p>
 </section>

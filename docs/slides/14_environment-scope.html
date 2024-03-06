@@ -406,7 +406,6 @@ Peter Gao
 <section id="overview-of-today" class="slide level2">
 <h2>Overview of today</h2>
 <ul>
-<li>Advanced functions</li>
 <li>Environments and scope (based on <em>Advanced R</em> by Hadley Wickham)</li>
 <li>Lab time</li>
 </ul>
@@ -577,16 +576,64 @@ Peter Gao
 <h2>Example</h2>
 <p><strong>Exercise</strong>: What will the following code return?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb15-2"><a href="#cb15-2"></a>  f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb15-3"><a href="#cb15-3"></a>    f <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
-<span id="cb15-4"><a href="#cb15-4"></a>      x <span class="sc">^</span> <span class="dv">2</span></span>
-<span id="cb15-5"><a href="#cb15-5"></a>    }</span>
-<span id="cb15-6"><a href="#cb15-6"></a>    <span class="fu">f</span>() <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb15-7"><a href="#cb15-7"></a>  }</span>
-<span id="cb15-8"><a href="#cb15-8"></a>  <span class="fu">f</span>(x) <span class="sc">*</span> <span class="dv">2</span></span>
-<span id="cb15-9"><a href="#cb15-9"></a>}</span>
-<span id="cb15-10"><a href="#cb15-10"></a><span class="fu">f</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>x <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>y <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb15-4"><a href="#cb15-4"></a>  y <span class="ot">&lt;-</span> x <span class="sc">+</span> <span class="dv">5</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a>  <span class="fu">return</span>(x)</span>
+<span id="cb15-6"><a href="#cb15-6"></a>}</span>
+<span id="cb15-7"><a href="#cb15-7"></a>g <span class="ot">&lt;-</span> <span class="cf">function</span>(y) {</span>
+<span id="cb15-8"><a href="#cb15-8"></a>  y <span class="ot">&lt;-</span> x <span class="sc">+</span> <span class="dv">5</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a>  <span class="fu">return</span>(y)</span>
+<span id="cb15-10"><a href="#cb15-10"></a>}</span>
+<span id="cb15-11"><a href="#cb15-11"></a><span class="fu">g</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 15</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="example-1" class="slide level2">
+<h2>Example</h2>
+<p><strong>Exercise</strong>: What will the following code return?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>x <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>y <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb17-4"><a href="#cb17-4"></a>  y <span class="ot">&lt;-</span> x <span class="sc">+</span> <span class="dv">5</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a>  <span class="fu">return</span>(x)</span>
+<span id="cb17-6"><a href="#cb17-6"></a>}</span>
+<span id="cb17-7"><a href="#cb17-7"></a>g <span class="ot">&lt;-</span> <span class="cf">function</span>(y) {</span>
+<span id="cb17-8"><a href="#cb17-8"></a>  y <span class="ot">&lt;-</span> x <span class="sc">+</span> <span class="dv">5</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a>  <span class="fu">return</span>(y)</span>
+<span id="cb17-10"><a href="#cb17-10"></a>}</span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="fu">g</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 15</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="example-2" class="slide level2">
+<h2>Example</h2>
+<p><strong>Exercise</strong>: What will the following code return?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb19-2"><a href="#cb19-2"></a>  f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb19-3"><a href="#cb19-3"></a>    f <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb19-4"><a href="#cb19-4"></a>      x <span class="sc">^</span> <span class="dv">2</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a>    }</span>
+<span id="cb19-6"><a href="#cb19-6"></a>    <span class="fu">f</span>() <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb19-7"><a href="#cb19-7"></a>  }</span>
+<span id="cb19-8"><a href="#cb19-8"></a>  <span class="fu">f</span>(x) <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb19-9"><a href="#cb19-9"></a>}</span>
+<span id="cb19-10"><a href="#cb19-10"></a><span class="fu">f</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <div class="cell">
@@ -608,16 +655,16 @@ Peter Gao
 <p>Each time you <strong>execute</strong> a function by calling it, a temporary environment is created.</p>
 <p><strong>Exercise</strong>: What will the following code return?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
-<span id="cb17-2"><a href="#cb17-2"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">exists</span>(<span class="st">"a"</span>)) {</span>
-<span id="cb17-3"><a href="#cb17-3"></a>    a <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb17-4"><a href="#cb17-4"></a>  } <span class="cf">else</span> {</span>
-<span id="cb17-5"><a href="#cb17-5"></a>    a <span class="ot">&lt;-</span> a <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb17-6"><a href="#cb17-6"></a>  }</span>
-<span id="cb17-7"><a href="#cb17-7"></a>  a</span>
-<span id="cb17-8"><a href="#cb17-8"></a>}</span>
-<span id="cb17-9"><a href="#cb17-9"></a><span class="fu">f</span>()</span>
-<span id="cb17-10"><a href="#cb17-10"></a><span class="fu">f</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">exists</span>(<span class="st">"a"</span>)) {</span>
+<span id="cb21-3"><a href="#cb21-3"></a>    a <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a>  } <span class="cf">else</span> {</span>
+<span id="cb21-5"><a href="#cb21-5"></a>    a <span class="ot">&lt;-</span> a <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb21-6"><a href="#cb21-6"></a>  }</span>
+<span id="cb21-7"><a href="#cb21-7"></a>  a</span>
+<span id="cb21-8"><a href="#cb21-8"></a>}</span>
+<span id="cb21-9"><a href="#cb21-9"></a><span class="fu">f</span>()</span>
+<span id="cb21-10"><a href="#cb21-10"></a><span class="fu">f</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <div class="cell">
@@ -634,12 +681,12 @@ Peter Gao
 <h2>Super assignment</h2>
 <p>The <code>&lt;&lt;-</code> operator doesn’t create a variable in the current environment. It looks for a matching name in the parent environments. If it finds one, it updates that variable. If it doesn’t, it creates a variable in the <strong>global environment</strong>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>x <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
-<span id="cb20-3"><a href="#cb20-3"></a>  x <span class="ot">&lt;&lt;-</span> <span class="dv">1</span></span>
-<span id="cb20-4"><a href="#cb20-4"></a>}</span>
-<span id="cb20-5"><a href="#cb20-5"></a><span class="fu">f</span>()</span>
-<span id="cb20-6"><a href="#cb20-6"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>x <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb24-3"><a href="#cb24-3"></a>  x <span class="ot">&lt;&lt;-</span> <span class="dv">1</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a>}</span>
+<span id="cb24-5"><a href="#cb24-5"></a><span class="fu">f</span>()</span>
+<span id="cb24-6"><a href="#cb24-6"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1</code></pre>
 </div>
