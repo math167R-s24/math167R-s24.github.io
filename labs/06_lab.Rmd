@@ -20,32 +20,21 @@ For this lab, please work with one to two other students. List their names here.
 
 ## A. Basic functions
 
-Consider the following code.
+Use the following code to create a list of four matrices:
 
-```{r, eval = T, echo = T}
-create_p_norm <- function(p = 2) {
-  return(
-    function(x) return(sum(abs(x) ^ p) ^ (1 / p))
-  )
-}
+```{r, echo = T, eval = T}
+set.seed(100)
+matrix_list <- list(
+  A = diag(5),
+  B = matrix(rnorm(9), nrow = 3, ncol = 3),
+  C = matrix(c(1, 2, 3, 4), nrow = 2, ncol = 2),
+  D = diag(c(1:5))
+)
 ```
 
-1. Explain in your own words what the following code does:
+1. Use the `lapply` function to create a list of length four containing the inverse of these four matrices.
 
-```{r, eval = T, echo = T}
-norm_1 <- create_p_norm(1)
-x <- c(-1, 1, 2)
-norm_1(x)
-```
-
-2. Explain in your own words what the following code does:
-
-```{r, eval = T, echo = T}
-p <- 3
-norm_mystery <- create_p_norm()
-x <- c(-1, 1, 2)
-norm_mystery(x)
-```
+2. Use the `sapply` function to create a vector of length four containing the determinants of these four matrices.
 
 ## B. Skewness and Kurtosis
 
@@ -60,7 +49,7 @@ $$k = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^4}{\left[\frac{1}{n
 
 4. Write a function `kurtosis()` that takes as input a numeric vector `x` and returns the sample skewness. There are functions in R that compute kurtosis, but you cannot use any of them--write your own implementation. You may remove all `NA` values by default. Use your function to compute the sample kurtosis of the `arr_delay` variable in the `flights` dataset contained in the `nycflights13` package.
 
-5. Write a function `get_column_skewness()` that takes as input a data frame and calculates the skewness of each **numeric** variable. The output should be a data frame with two variables: `variable` containing the name of the variable and `skewness` containing the skewness. Your output data frame should only include the numeric variables. You may remove all `NA` values by default. Demonstrate your output on the `penguins` dataset.
+5. Write a function `get_column_skewness()` that takes as input a data frame and calculates the skewness of each **numeric** variable. The output should be a data frame with two variables: `variable` containing the name of the variable and `skewness` containing the skewness. Your output data frame should only include the numeric variables. You may remove all `NA` values by default. Demonstrate your function on the `penguins` dataset.
 
 ## C. Finding an error
 
@@ -97,9 +86,9 @@ get_runner_ranks <- function(x, y) {
 }
 ```
 
-5. Explain in your own words what the error was.
+6. Explain in your own words what the error was.
 
-6. Below, write a corrected version of `get_runner_ranks()` and compute `get_runner_ranks(c(16.8, 21.2, 19.1), c(17.2, 18.1, 20.0))`.
+7. Below, write a corrected version of `get_runner_ranks()` and compute `get_runner_ranks(c(16.8, 21.2, 19.1), c(17.2, 18.1, 20.0))`.
 
 ```{r, error = T, echo = T, eval = T}
 get_runner_ranks <- function(x, y) {

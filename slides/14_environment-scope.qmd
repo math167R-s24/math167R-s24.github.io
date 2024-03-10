@@ -302,7 +302,6 @@ g <- function(y) {
 g(y)
 ```
 
-
 ## Example
 
 **Exercise**: What will the following code return?
