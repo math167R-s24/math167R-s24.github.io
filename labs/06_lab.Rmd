@@ -10,13 +10,6 @@ format:
 
 Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.
 
-### Collaborators
-
-For this lab, please work with one to two other students. List their names here.
-
-```{r}
-# LOAD ANY RELEVANT PACKAGES HERE
-```
 
 ## A. Basic functions
 
