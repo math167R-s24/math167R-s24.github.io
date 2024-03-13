@@ -9,7 +9,7 @@ editor: visual
 
 ## Overview of today
 
--   Debugging (based on [Jennifer Bryan and Jim Hester's What they Forgot to Teach You About R - Debugging R Code](https://rstats.wtf/debugging-r-code.html))
+-   Debugging (based on Jennifer Bryan and Jim Hester's [What they Forgot to Teach You About R - Debugging R Code](https://rstats.wtf/debugging-r))
 
 # What to do when your code doesn't work
 
@@ -37,7 +37,7 @@ Resetting will:
 
 When you encounter a bug, try to repeat it. Likely, it came about for a reason.
 
-When you do repeat it, you should repeat it with a minimal working example. This means you should remove as much code and simplify as much data as possible.
+When you do repeat it, you should repeat it with a **minimal reproducible example**. This means you should remove as much code and simplify as much data as possible.
 
 -   Small and simple inputs
 -   No extraneous packages
@@ -45,15 +45,76 @@ When you do repeat it, you should repeat it with a minimal working example. This
 
 Example: did your function break with a large data matrix of real-world data stored within a package? How about if you just use a $3\times 3$ matrix of $1$'s?
 
+For more guidelines, see StackOverflow's [guide to creating minimal reproducible examples](https://stackoverflow.com/help/minimal-reproducible-example).
+
 ## Step 4: Locate
 
-If you weren't able to fix a bug the "easy" way (found the solution online or just needed a reset), and you have a minimal working example demonstrating your bug, then you are ready for the really hard part: finding the bug.
+If you weren't able to fix a bug the "easy" way (found the solution online or just needed a reset), and you have a minimal reproducible example demonstrating your bug, then you are ready for the really hard part: finding the bug.
 
 Often (not always), once you find a bug, it is rather easy to fix.
 
 ## `traceback()`: call stack
 
 Sometimes functions(in functions(in functions(in functions(...)))) can get complicated.
+
+
+**Exercise**: What will the following code return?
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+f <- function(x) x + 1
+g <- function(x) f(x)
+g("a")
+```
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| error: TRUE
+f <- function(x) x + 1
+g <- function(x) f(x)
+g("a")
+```
+
+## `traceback()`: call stack
+
+If you call the `traceback()` function immediately after triggering an error, the console will print out a summary of how your program reached that error. This summary is called a call stack.
+
+```{r}
+#| echo: true
+#| eval: TRUE
+#| error: TRUE
+f <- function(x) x + 1
+g <- function(x) f(x)
+g("a")
+traceback()
+```
+
+## `traceback()`: call stack
+
+
+**Exercise**: What will the following code return?
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+f <- function(x) x + 1
+g <- function(x) f(x)
+g("a")
+```
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+#| error: TRUE
+f <- function(x) x + 1
+g <- function(x) f(x)
+g("a")
+```
+
+
+## `traceback()`: call stack
 
 **Exercise**: What will the following code return?
 
@@ -184,8 +245,6 @@ traceback()
 ```
 
 ## `traceback()`: call stack
-
-This is called a **call stack**.
 
 Read from bottom to top:
 
@@ -388,15 +447,38 @@ loop_fun(1:5)
 loop_fun(diag(1:5))
 ```
 
+## Breakpoints
+
+In RStudio, you may also use breakpoints by writing your code in an R file. A breakpoint is like a `browser()` call, but you avoid having to change your code.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| error: TRUE
+loop_fun <- function(x) {
+  # browser()
+  n <- length(x)
+  y <- rep(NA, n)
+  z <- rep(NA, n)
+  for (i in 1:n) {
+    y[i] <- x[i] * 2
+    z[i] <- y[i] * 2
+  }
+  return(list("y" = y, "z" = z))
+}
+loop_fun(c("a", "b", "c"))
+```
+
+
 ## Debugging Summary
 
-### 1. Search online.
+1. Search online.
 
-### 2. Reset.
+2. Reset.
 
-### 3. Repeat.
+3. Repeat.
 
-### 4. Locate:
+4. Locate:
 
 -   Call stack: `traceback()`
 -   Non-interactive messages: `print()`, `cat()`, `str()`

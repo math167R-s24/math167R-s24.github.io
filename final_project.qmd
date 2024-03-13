@@ -23,6 +23,8 @@ During the semester, you will submit multiple checkpoint assignments, including 
 
 This project is intentionally open-ended: there are no predetermined right answers. Exceptional projects will demonstrate mastery of the course material and involve more than a superficial review of material covered in class or application using a toy dataset. If you are an undergraduate interested in participating in a competition and potentially presenting at the Electronic Undergraduate Statistics Conference, you may consider using this project to submit to the [Undergraduate Class Project Competition](https://www.causeweb.org/usproc/usclap).
 
+**Update 3/13:** You may work alone, or in a group of two or three. If you work in a group, there are additional requirements. In particular, if you work in a group of two, you must explore at least **four** subquestions. If you work in a group of three, you should explore at least **five** subquestions.
+
 ## Part One: Project Proposal (10 points), due 3/20
 
 To begin your project, identify a research topic and dataset. In particular, your project should meet the following minimum requirements:
@@ -31,7 +33,7 @@ To begin your project, identify a research topic and dataset. In particular, you
 
 1. Identify your main research question/topic of interest. (ex. **What factors influence the ratings of coffee beans by food critics?**)
 2. Choose a dataset or multiple datasets with at least 100 observations and 10 variables (exceptions can be made with instructor approval). Your dataset must include both quantitative and categorical variables.
-3.  Identify three subtopics or subquestions related to your main research topic that you want to study using this dataset. **Your subquestions should refer explicitly to variables in your dataset**. (ex. if your dataset includes information on coffee ratings and country of origin, an appropriate subquestion could be **Are South American coffee beans scored differently from African coffee beans?**)
+3.  Identify at least three subtopics or subquestions related to your main research topic that you want to study using this dataset. **Your subquestions should refer explicitly to variables in your dataset**. (ex. if your dataset includes information on coffee ratings and country of origin, an appropriate subquestion could be **Are South American coffee beans scored differently from African coffee beans?**) In particular, if you work in a group of two, you must explore at least **four** subquestions. If you work in a group of three, you should explore at least **five** subquestions.
 
 ### Submission
 
@@ -48,7 +50,7 @@ You will submit a 2-3 page project proposal (pdf format) with the following info
     | ex. `city`    | character     | city of birth |
     | . . .         | . . .         | . . .         |
 
-- An overview of your three subquestions, with explicit reference to the relevant variables in your dataset.
+- An overview of your subquestions, with explicit reference to the relevant variables in your dataset.
 - A list of three to five outside references you plan to consult for background research on your topic.
 - Any questions you have for me.
 
@@ -73,7 +75,7 @@ Finally, you will submit a written final report on your project. This final repo
     
 ### Submission
 
-You will submit a written report (pdf format). There is no explicit page limit/requirement, but a report of 5-7 single-spaced pages, not including figures/references/code, should be sufficient for most projects. The target audience of your report is a classmate who may not be familiar with your selected dataset or topic.
+You will submit a written report (pdf format). There is no explicit page limit/requirement, but a report of 5-7 single-spaced pages, not including figures/references/code, should be sufficient for most projects (longer may be necessary if you are working in a group). The target audience of your report is a classmate who may not be familiar with your selected dataset or topic.
 
 The structure of your report may depend on your selected project topic, but should include the following information at a minimum.
 
@@ -81,10 +83,10 @@ The structure of your report may depend on your selected project topic, but shou
     - Introduce main topic, your dataset, and subquestions of interest. 
     - Discuss any previous research/findings or relevant context on your question of interest. 
 -   **Exploratory data analysis**: 
-    - For each of your three subquestions, generate at least one data visualization or descriptive statistic. 
+    - For each of your subquestions, generate at least one data visualization or descriptive statistic. In particular, if you work in a group of two, you must explore at least **four** subquestions. If you work in a group of three, you should explore at least **five** subquestions. 
     - Discuss and interpret your findings.
 -   **Inferential analysis**:
-    - For at least one of your subquestions, perform a basic statistical analysis (ex. confidence interval, hypothesis test, linear regression). 
+    - For at least one of your subquestions, you should also perform a basic statistical analysis (ex. confidence interval, hypothesis test, linear regression). 
     - Discuss and interpret your findings.
 -   **Conclusions and future questions**: 
     - Summarize your conclusions and discuss any questions you might interested in exploring in the future. 
@@ -102,7 +104,7 @@ At the end of the semester, you will deliver a brief lightning talk in class. Yo
 
 You will complete a 1-2 page reflection and self-evaluation on your work for this final project and course. Briefly answer the following questions:
 
-1. If you worked with a partner, what were your specific responsibilities for the project proposal, report, and presentation?
+1. If you worked with a partner/group, what were your specific responsibilities for the project proposal, report, and presentation?
 2. Describe at least one aspect of your work for this class of which you are proud. Are there any ways in which you grew this semester?
 3. Describe at least one aspect of your work which you could have improved.  
 4. Are there other topics related to programming in R and data science that you wish we had covered?

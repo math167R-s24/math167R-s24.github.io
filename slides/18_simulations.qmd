@@ -20,39 +20,68 @@ We have already seen a number of functions for generating random variables such 
 
 Today, we will expand on these functions and related functions for studying random variables and begin using them to write various simulations.
 
-## The `r`, `p`, `d`, and `q` functions
+## Random variables in R
 
-1.  `rnorm()` can be used to generate `n` random observations from a normal distribution:
+Remember that we can use the `sample()` function as follows to draw at random from a finite set with and without replacement:
 
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
-rnorm(n = 1, mean = 0, sd = 1)
+sample(0:9, 10, replace = T)
 ```
 
-2.  `pnorm()` can be used to compute the distribution function at a value `q`:
+What if we want to generate $n$ samples from a normal distribution? Or a binomial distribution?
+
+## The `r`, `p`, `d`, and `q` functions
+
+R provides functions for working with a variety of probability distributions. For most distributions, there are four functions: `r`, `p`, `d`, and `q`. As an example, let's look at the normal distribution.
+
+`rnorm()` can be used to generate `n` random observations from a normal distribution:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+rnorm(n = 5, mean = 0, sd = 1)
+```
+
+## The `r`, `p`, `d`, and `q` functions
+
+`pnorm()` can be used to compute the distribution function at a value `q`. In other words, if $Z$ is a standard normal, pnorm returns the value of $$F(q)= P\left(Z < \frac{q-\mu}{\sigma}\right)$$
 
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
 pnorm(q = 1, mean = 0, sd = 1)
+pnorm(q = 1, mean = 1, sd = 1)
 ```
 
-3.  `qnorm()` can be used to compute the quantile function at a percentile `p`:
+## The `r`, `p`, `d`, and `q` functions
+
+`qnorm()` can be used to compute the quantile function at a percentile `p`. In other words, if $Z$ is a standard normal
+the quantile function returns the value $x$ such that 
+$$P\left(Z\leq \frac{x-\mu}{\sigma}\right)=p$$
 
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
 qnorm(p = .75, mean = 0, sd = 1)
+qnorm(p = .5, mean = 1, sd = 1)
 ```
 
-4.  `dnorm()` can be used to compute the density function at a value `x`:
+## The `r`, `p`, `d`, and `q` functions
+
+`dnorm()` can be used to compute the density function at a value `x`:
+$$ f(x)={\frac {1}{\sigma {\sqrt {2\pi }}}}\exp\left\{-{\frac {1}{2}}\left({\frac {x-\mu }{\sigma }}\right)^{2}\right\}$$
 
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
 dnorm(x = .5, mean = 0, sd = 1)
 ```
+
+## Exercise
+
+Create a histogram of 1000 samples from a normal distribution with mean 10 and standard deviation 20.
 
 ## Exercise
 
@@ -77,6 +106,16 @@ Suppose we perform a two-sided hypothesis test using a normal distribution and o
 #| eval: TRUE
 2 * pnorm(q = 2.12, mean = 0, sd = 1)
 ```
+
+## The `r`, `p`, `d`, and `q` functions: binomial distribution
+
+Practice with the `rbinom()`, `pbinom()`, `dbinom()` and `qbinom()` functions:
+
+1. If I flip a coin with probability of heads = 0.6 ten times, what is the probability of observing **exactly** 6 heads.
+
+2. If I flip a coin with probability of heads = 0.6 ten times, what is the probability of observing 6 or fewer heads?
+
+3. Consider an experiment where you flip a coin with a probability of heads = .6 ten times. Simulate this experiment 1000 times and create a histogram of your results.
 
 ## Random seeds
 
@@ -166,12 +205,21 @@ We can alternatively use the `replicate()` function to repeatedly evaluate an ex
 
 ## `replicate()` for repeated evaluation
 
-For example, we can generate `n` exponential random variables and take their maximum:
+For example, we can repeatedly generate `n` exponential random variables:
 
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
 replicate(10, rexp(10)) # matrix output
+```
+
+## `replicate()` for repeated evaluation
+
+Alternatively, we can repeatedly generate `n` exponential random variables and then take their maximum:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
 replicate(10, max(rexp(10))) # vector output
 ```
 
@@ -229,6 +277,20 @@ It turns out that $\mathrm{max}(X_1,\ldots, X_n)$ can be modeled using a Gumbel 
 
 ```{r plot_results}
 #| echo: TRUE
+#| eval: FALSE
+#| cache: TRUE
+plot(n_values, max_by_n,
+     type = "l",
+     xlab = "n", ylab = "Maximum",
+     main = paste0("Sample mean of maximums (black)",
+                   "and theoretical expectation (red)"))
+lines(n_values, -digamma(1) + log(n_values), col = "red")
+```
+
+## Example: Maximum of random variables
+
+```{r plot_results2}
+#| echo: FALSE
 #| eval: TRUE
 #| cache: TRUE
 plot(n_values, max_by_n,
@@ -247,7 +309,7 @@ A simple example is the one-dimensional random walk on the integer number line w
 
 ## Random walks
 
-We can easily simulate a one-dimensional random walk:
+We can simulate a one-dimensional random walk:
 
 ```{r random_walk}
 #| echo: TRUE
@@ -262,7 +324,9 @@ for (i in 2:n_steps) {
 }
 ```
 
-. . . We can then plot our results
+## Random walks
+
+We can then plot our results:
 
 ```{r random_walk_plot}
 #| echo: TRUE
@@ -291,6 +355,15 @@ walk_randomly <- function(n_steps, start = 0) {
   x <- c(start, walk_randomly(n_steps - 1, start + take_step()))
   return(x)
 }
+```
+
+
+## A more functional version with recursion
+
+```{r random_walk_functional_plot}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
 plot(1:100, walk_randomly(100), type = "l",
      xlab = "Step", ylab = "x",
      main = "A one-dimensional random walk")
@@ -319,6 +392,11 @@ walk_randomly_2d <- function(n_steps, start = c(0, 0)) {
   rownames(x) <- NULL
   return(x)
 }
+```
+
+## A two-dimensional random walk
+
+```{r 2d_random_walk_functional_ex}
 n_steps <- 100
 coords <- walk_randomly_2d(n_steps)
 coords
@@ -339,9 +417,6 @@ coords_dat <- data.frame(x = coords[, 1],
 ggplot(coords_dat, aes(x = x, y = y, color = step)) + geom_path()
 ```
 
-```{r}
-knitr::knit_exit()
-```
 
 ## A two-dimensional random walk
 
@@ -355,5 +430,5 @@ library(gganimate)
 anim_walk <- ggplot(coords_dat, aes(x = x, y = y, color = step)) +
   geom_path() +
   transition_reveal(along = step)
-animate(anim_walk)
+anim_walk
 ```
