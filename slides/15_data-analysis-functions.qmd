@@ -325,7 +325,7 @@ vapply(bestseller_lists, function(x) x$title[1], character(1))
 
 ## Looping through many data files
 
-Suppose we wish to see the performance of the current top five books over the last 12 weeks:
+Suppose we wish to see the performance of the books that have been top three at some point in the last three months
 
 ```{r}
 #| echo: TRUE
@@ -401,7 +401,7 @@ Finally, we can combine some of these functions into a larger function that we c
 #| eval: FALSE
 download_data <- function() {
   # automatically pull today's date
-  dates <- seq(as.Date("2025-03-05"), by = -7, length.out = 12)
+  dates <- seq(Sys.Date(), by = -7, length.out = 12)
   bestseller_lists <- lapply(
     dates,
     function(x) {
