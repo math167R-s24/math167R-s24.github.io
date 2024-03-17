@@ -57,9 +57,7 @@ pnorm(q = 1, mean = 1, sd = 1)
 
 ## The `r`, `p`, `d`, and `q` functions
 
-`qnorm()` can be used to compute the quantile function at a percentile `p`. In other words, if $Z$ is a standard normal
-the quantile function returns the value $x$ such that 
-$$P\left(Z\leq \frac{x-\mu}{\sigma}\right)=p$$
+`qnorm()` can be used to compute the quantile function at a percentile `p`. In other words, if $Z$ is a standard normal the quantile function returns the value $x$ such that $$P\left(Z\leq \frac{x-\mu}{\sigma}\right)=p$$
 
 ```{r}
 #| echo: TRUE
@@ -70,8 +68,7 @@ qnorm(p = .5, mean = 1, sd = 1)
 
 ## The `r`, `p`, `d`, and `q` functions
 
-`dnorm()` can be used to compute the density function at a value `x`:
-$$ f(x)={\frac {1}{\sigma {\sqrt {2\pi }}}}\exp\left\{-{\frac {1}{2}}\left({\frac {x-\mu }{\sigma }}\right)^{2}\right\}$$
+`dnorm()` can be used to compute the density function at a value `x`: $$ f(x)={\frac {1}{\sigma {\sqrt {2\pi }}}}\exp\left\{-{\frac {1}{2}}\left({\frac {x-\mu }{\sigma }}\right)^{2}\right\}$$
 
 ```{r}
 #| echo: TRUE
@@ -111,11 +108,11 @@ Suppose we perform a two-sided hypothesis test using a normal distribution and o
 
 Practice with the `rbinom()`, `pbinom()`, `dbinom()` and `qbinom()` functions:
 
-1. If I flip a coin with probability of heads = 0.6 ten times, what is the probability of observing **exactly** 6 heads.
+1.  If I flip a coin with probability of heads = 0.6 ten times, what is the probability of observing **exactly** 6 heads.
 
-2. If I flip a coin with probability of heads = 0.6 ten times, what is the probability of observing 6 or fewer heads?
+2.  If I flip a coin with probability of heads = 0.6 ten times, what is the probability of observing 6 or fewer heads?
 
-3. Consider an experiment where you flip a coin with a probability of heads = .6 ten times. Simulate this experiment 1000 times and create a histogram of your results.
+3.  Consider an experiment where you flip a coin with a probability of heads = .6 ten times. Simulate this experiment 1000 times and create a histogram of your results.
 
 ## Random seeds
 
@@ -357,7 +354,6 @@ walk_randomly <- function(n_steps, start = 0) {
 }
 ```
 
-
 ## A more functional version with recursion
 
 ```{r random_walk_functional_plot}
@@ -416,7 +412,6 @@ coords_dat <- data.frame(x = coords[, 1],
                          step = 1:n_steps)
 ggplot(coords_dat, aes(x = x, y = y, color = step)) + geom_path()
 ```
-
 
 ## A two-dimensional random walk
 
