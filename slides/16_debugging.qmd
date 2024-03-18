@@ -40,8 +40,7 @@ When you encounter a bug, try to repeat it. Likely, it came about for a reason.
 When you do repeat it, you should repeat it with a **minimal reproducible example**. This means you should remove as much code and simplify as much data as possible.
 
 -   Small and simple inputs
--   No extraneous packages
--   No unnecessary function calls
+-   No extraneous packages or function calls
 
 Example: did your function break with a large data matrix of real-world data stored within a package? How about if you just use a $3\times 3$ matrix of $1$'s?
 
@@ -88,7 +87,16 @@ If you call the `traceback()` function immediately after triggering an error, th
 f <- function(x) x + 1
 g <- function(x) f(x)
 g("a")
+```
+```{r}
+#| echo: true
+#| eval: FALSE
+#| error: TRUE
 traceback()
+```
+```         
+2: f(x) at #1
+1: g("a")
 ```
 
 ## `traceback()`: call stack
@@ -397,7 +405,13 @@ If you execute the step of a function where the error occurs, you will exit inte
 
 This can get annoying, because it stops you from interacting right when you hit the bug.
 
-Strategy: \* Call `browser()` and execute until you hit the error. Remember exactly where it occurs. \* Call `browser()` again and execute again, stopping just before triggering the error. \* You can copy and paste the next line of code into the `Browse` console to trigger the error without exiting the interactive debugger.
+## A warning
+
+Strategy: 
+
+- Call `browser()` and execute until you hit the error. Remember exactly where it occurs. 
+- Call `browser()` again and execute again, stopping just before triggering the error. 
+- You can copy and paste the next line of code into the `Browse` console to trigger the error without exiting the interactive debugger.
 
 ## Tips
 
@@ -492,6 +506,40 @@ loop_fun(c("a", "b", "c"))
 -   [Debugging with RStudio Article - Jonathan McPherson](https://support.rstudio.com/hc/en-us/articles/200713843)
 -   [Introduction to debugging in R and RStudio - Jim Hester](https://www.jimhester.com/talk/2019-crug-debugging/)
 -   [Cheatsheet](https://github.com/ajmcoqui/debuggingRStudio/blob/b70a3575a3ff5e7867b05fb5e84568abba426c4b/RStudio_Debugging_Cheatsheet.pdf)
+
+
+## Debugging exercise {.smaller}
+
+A number is a palindrome if it is the same when the digits are reversed (ex. 484). Can you fix the following code to print numbers between 1 and 1000 that are both prime and palindromes?
+
+## Debugging exercise {.smaller}
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| error: TRUE
+is_prime <- function(x) {
+  if (x == 2) {
+    return(TRUE)
+  } else if (any(x %% 2:(x-1) == 0)) {
+    return(FALSE)
+  } else {
+    return(TRUE)
+  }
+}
+is_palindrome <- function(x) {
+  x_char <- as.character(x)
+  x_char <- stringr::str_split(x_char, "")[[1]]
+  x_rev <- rev(x_char)
+  return(x_char == x_rev)
+}
+for (i in 1:1000) {
+  if (is_prime(i) & is_palindrome(i)) {
+    print(i)
+  }
+}
+```
+
 
 ```{r echo = FALSE}
 knitr::knit_exit()

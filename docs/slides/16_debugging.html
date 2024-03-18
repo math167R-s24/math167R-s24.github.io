@@ -437,8 +437,7 @@ Peter Gao
 <p>When you do repeat it, you should repeat it with a <strong>minimal reproducible example</strong>. This means you should remove as much code and simplify as much data as possible.</p>
 <ul>
 <li>Small and simple inputs</li>
-<li>No extraneous packages</li>
-<li>No unnecessary function calls</li>
+<li>No extraneous packages or function calls</li>
 </ul>
 <p>Example: did your function break with a large data matrix of real-world data stored within a package? How about if you just use a <span class="math inline">\(3\times 3\)</span> matrix of <span class="math inline">\(1\)</span>’s?</p>
 <p>For more guidelines, see StackOverflow’s <a href="https://stackoverflow.com/help/minimal-reproducible-example">guide to creating minimal reproducible examples</a>.</p>
@@ -473,11 +472,12 @@ Peter Gao
 <div class="cell-output cell-output-error">
 <pre><code>Error in x + 1: non-numeric argument to binary operator</code></pre>
 </div>
+</div>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">traceback</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>No traceback available </code></pre>
 </div>
-</div>
+<pre><code>2: f(x) at #1
+1: g("a")</code></pre>
 </section>
 <section id="traceback-call-stack-2" class="slide level2">
 <h2><code>traceback()</code>: call stack</h2>
@@ -731,7 +731,15 @@ debug at &lt;text&gt;#4: stop("`d` must be numeric", call. = FALSE)</code></pre>
 <h2>A warning</h2>
 <p>If you execute the step of a function where the error occurs, you will exit interactive debugging mode, the error message will print, and you will be returned to the R prompt.</p>
 <p>This can get annoying, because it stops you from interacting right when you hit the bug.</p>
-<p>Strategy: * Call <code>browser()</code> and execute until you hit the error. Remember exactly where it occurs. * Call <code>browser()</code> again and execute again, stopping just before triggering the error. * You can copy and paste the next line of code into the <code>Browse</code> console to trigger the error without exiting the interactive debugger.</p>
+</section>
+<section id="a-warning-1" class="slide level2">
+<h2>A warning</h2>
+<p>Strategy:</p>
+<ul>
+<li>Call <code>browser()</code> and execute until you hit the error. Remember exactly where it occurs.</li>
+<li>Call <code>browser()</code> again and execute again, stopping just before triggering the error.</li>
+<li>You can copy and paste the next line of code into the <code>Browse</code> console to trigger the error without exiting the interactive debugger.</li>
+</ul>
 </section>
 <section id="tips" class="slide level2">
 <h2>Tips</h2>
@@ -838,6 +846,44 @@ $z
 <li><a href="https://www.jimhester.com/talk/2019-crug-debugging/">Introduction to debugging in R and RStudio - Jim Hester</a></li>
 <li><a href="https://github.com/ajmcoqui/debuggingRStudio/blob/b70a3575a3ff5e7867b05fb5e84568abba426c4b/RStudio_Debugging_Cheatsheet.pdf">Cheatsheet</a></li>
 </ul>
+</section>
+<section id="debugging-exercise" class="slide level2 smaller">
+<h2>Debugging exercise</h2>
+<p>A number is a palindrome if it is the same when the digits are reversed (ex. 484). Can you fix the following code to print numbers between 1 and 1000 that are both prime and palindromes?</p>
+</section>
+<section id="debugging-exercise-1" class="slide level2 smaller">
+<h2>Debugging exercise</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>is_prime <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb37-2"><a href="#cb37-2"></a>  <span class="cf">if</span> (x <span class="sc">==</span> <span class="dv">2</span>) {</span>
+<span id="cb37-3"><a href="#cb37-3"></a>    <span class="fu">return</span>(<span class="cn">TRUE</span>)</span>
+<span id="cb37-4"><a href="#cb37-4"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">any</span>(x <span class="sc">%%</span> <span class="dv">2</span><span class="sc">:</span>(x<span class="dv">-1</span>) <span class="sc">==</span> <span class="dv">0</span>)) {</span>
+<span id="cb37-5"><a href="#cb37-5"></a>    <span class="fu">return</span>(<span class="cn">FALSE</span>)</span>
+<span id="cb37-6"><a href="#cb37-6"></a>  } <span class="cf">else</span> {</span>
+<span id="cb37-7"><a href="#cb37-7"></a>    <span class="fu">return</span>(<span class="cn">TRUE</span>)</span>
+<span id="cb37-8"><a href="#cb37-8"></a>  }</span>
+<span id="cb37-9"><a href="#cb37-9"></a>}</span>
+<span id="cb37-10"><a href="#cb37-10"></a>is_palindrome <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb37-11"><a href="#cb37-11"></a>  x_char <span class="ot">&lt;-</span> <span class="fu">as.character</span>(x)</span>
+<span id="cb37-12"><a href="#cb37-12"></a>  x_char <span class="ot">&lt;-</span> stringr<span class="sc">::</span><span class="fu">str_split</span>(x_char, <span class="st">""</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb37-13"><a href="#cb37-13"></a>  x_rev <span class="ot">&lt;-</span> <span class="fu">rev</span>(x_char)</span>
+<span id="cb37-14"><a href="#cb37-14"></a>  <span class="fu">return</span>(x_char <span class="sc">==</span> x_rev)</span>
+<span id="cb37-15"><a href="#cb37-15"></a>}</span>
+<span id="cb37-16"><a href="#cb37-16"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>) {</span>
+<span id="cb37-17"><a href="#cb37-17"></a>  <span class="cf">if</span> (<span class="fu">is_prime</span>(i) <span class="sc">&amp;</span> <span class="fu">is_palindrome</span>(i)) {</span>
+<span id="cb37-18"><a href="#cb37-18"></a>    <span class="fu">print</span>(i)</span>
+<span id="cb37-19"><a href="#cb37-19"></a>  }</span>
+<span id="cb37-20"><a href="#cb37-20"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2
+[1] 3
+[1] 5
+[1] 7</code></pre>
+</div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in if (is_prime(i) &amp; is_palindrome(i)) {: the condition has length &gt; 1</code></pre>
+</div>
+</div>
 
 <div class="footer footer-default">
 
