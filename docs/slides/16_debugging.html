@@ -483,35 +483,38 @@ Peter Gao
 <h2><code>traceback()</code>: call stack</h2>
 <p><strong>Exercise</strong>: What will the following code return?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) x <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>g <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">f</span>(x)</span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="fu">g</span>(<span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="cell-output cell-output-error">
-<pre><code>Error in x + 1: non-numeric argument to binary operator</code></pre>
-</div>
-</div>
-</section>
-<section id="traceback-call-stack-3" class="slide level2">
-<h2><code>traceback()</code>: call stack</h2>
-<p><strong>Exercise</strong>: What will the following code return?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(a) <span class="fu">g</span>(a)</span>
-<span id="cb9-2"><a href="#cb9-2"></a>g <span class="ot">&lt;-</span> <span class="cf">function</span>(b) <span class="fu">h</span>(b)</span>
-<span id="cb9-3"><a href="#cb9-3"></a>h <span class="ot">&lt;-</span> <span class="cf">function</span>(c) <span class="fu">i</span>(c)</span>
-<span id="cb9-4"><a href="#cb9-4"></a>i <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
-<span id="cb9-5"><a href="#cb9-5"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.numeric</span>(d)) {</span>
-<span id="cb9-6"><a href="#cb9-6"></a>    <span class="fu">stop</span>(<span class="st">"`d` must be numeric"</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-7"><a href="#cb9-7"></a>  }</span>
-<span id="cb9-8"><a href="#cb9-8"></a>  d <span class="sc">+</span> <span class="dv">10</span></span>
-<span id="cb9-9"><a href="#cb9-9"></a>}</span>
-<span id="cb9-10"><a href="#cb9-10"></a><span class="fu">f</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(a) <span class="fu">g</span>(a)</span>
+<span id="cb7-2"><a href="#cb7-2"></a>g <span class="ot">&lt;-</span> <span class="cf">function</span>(b) <span class="fu">h</span>(b)</span>
+<span id="cb7-3"><a href="#cb7-3"></a>h <span class="ot">&lt;-</span> <span class="cf">function</span>(c) <span class="fu">i</span>(c)</span>
+<span id="cb7-4"><a href="#cb7-4"></a>i <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
+<span id="cb7-5"><a href="#cb7-5"></a>  d <span class="sc">+</span> <span class="dv">10</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a>}</span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="fu">f</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 15</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="traceback-call-stack-3" class="slide level2">
+<h2><code>traceback()</code>: call stack</h2>
+<p>What about this code?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(a) <span class="fu">g</span>(a)</span>
+<span id="cb9-2"><a href="#cb9-2"></a>g <span class="ot">&lt;-</span> <span class="cf">function</span>(b) <span class="fu">h</span>(b)</span>
+<span id="cb9-3"><a href="#cb9-3"></a>h <span class="ot">&lt;-</span> <span class="cf">function</span>(c) <span class="fu">i</span>(c)</span>
+<span id="cb9-4"><a href="#cb9-4"></a>i <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
+<span id="cb9-5"><a href="#cb9-5"></a>  d <span class="sc">+</span> <span class="dv">10</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a>}</span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="fu">f</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 11 12 13</code></pre>
 </div>
 </div>
 </div>
@@ -524,40 +527,14 @@ Peter Gao
 <span id="cb11-2"><a href="#cb11-2"></a>g <span class="ot">&lt;-</span> <span class="cf">function</span>(b) <span class="fu">h</span>(b)</span>
 <span id="cb11-3"><a href="#cb11-3"></a>h <span class="ot">&lt;-</span> <span class="cf">function</span>(c) <span class="fu">i</span>(c)</span>
 <span id="cb11-4"><a href="#cb11-4"></a>i <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
-<span id="cb11-5"><a href="#cb11-5"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.numeric</span>(d)) {</span>
-<span id="cb11-6"><a href="#cb11-6"></a>    <span class="fu">stop</span>(<span class="st">"`d` must be numeric"</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb11-7"><a href="#cb11-7"></a>  }</span>
-<span id="cb11-8"><a href="#cb11-8"></a>  d <span class="sc">+</span> <span class="dv">10</span></span>
-<span id="cb11-9"><a href="#cb11-9"></a>}</span>
-<span id="cb11-10"><a href="#cb11-10"></a><span class="fu">f</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="fragment">
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 11 12 13</code></pre>
-</div>
-</div>
-</div>
-</section>
-<section id="traceback-call-stack-5" class="slide level2">
-<h2><code>traceback()</code>: call stack</h2>
-<p>What about this code?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(a) <span class="fu">g</span>(a)</span>
-<span id="cb13-2"><a href="#cb13-2"></a>g <span class="ot">&lt;-</span> <span class="cf">function</span>(b) <span class="fu">h</span>(b)</span>
-<span id="cb13-3"><a href="#cb13-3"></a>h <span class="ot">&lt;-</span> <span class="cf">function</span>(c) <span class="fu">i</span>(c)</span>
-<span id="cb13-4"><a href="#cb13-4"></a>i <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
-<span id="cb13-5"><a href="#cb13-5"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.numeric</span>(d)) {</span>
-<span id="cb13-6"><a href="#cb13-6"></a>    <span class="fu">stop</span>(<span class="st">"`d` must be numeric"</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb13-7"><a href="#cb13-7"></a>  }</span>
-<span id="cb13-8"><a href="#cb13-8"></a>  d <span class="sc">+</span> <span class="dv">10</span></span>
-<span id="cb13-9"><a href="#cb13-9"></a>}</span>
-<span id="cb13-10"><a href="#cb13-10"></a><span class="fu">f</span>(<span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-5"><a href="#cb11-5"></a>  d <span class="sc">+</span> <span class="dv">10</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a>}</span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="fu">f</span>(<span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <div class="cell">
 <div class="cell-output cell-output-error">
-<pre><code>Error: `d` must be numeric</code></pre>
+<pre><code>Error in d + 10: non-numeric argument to binary operator</code></pre>
 </div>
 </div>
 </div>
@@ -565,10 +542,10 @@ Peter Gao
 <p>Why doesn’t it say <code>'a' must be numeric</code>?</p>
 </div>
 </section>
-<section id="traceback-call-stack-6" class="slide level2">
+<section id="traceback-call-stack-5" class="slide level2">
 <h2><code>traceback()</code>: call stack</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">traceback</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">traceback</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <pre><code>5: stop("`d` must be numeric", call. = FALSE) 
 4: i(c) 
@@ -576,7 +553,7 @@ Peter Gao
 2: g(a) 
 1: f("a")</code></pre>
 </section>
-<section id="traceback-call-stack-7" class="slide level2">
+<section id="traceback-call-stack-6" class="slide level2">
 <h2><code>traceback()</code>: call stack</h2>
 <p>Read from bottom to top:</p>
 <ol type="1">
@@ -588,7 +565,7 @@ Peter Gao
 </ol>
 <p>We now know that our error occurred within <code>i(c)</code>, but we don’t know <em>where</em> within <code>i(c)</code> our error occurred.</p>
 </section>
-<section id="traceback-call-stack-8" class="slide level2">
+<section id="traceback-call-stack-7" class="slide level2">
 <h2><code>traceback()</code>: call stack</h2>
 <p>Note this is done in your <strong>Console</strong>, not your <strong>Editor</strong> pane. This is typically not a part of your reproducible workflow, this is you figuring out your own problems until you fix what actually belongs in your workflow.</p>
 <p>Once you have the bug fixed, <em>then</em> put the debugged code in your Editor pane. In general, most debugging will be done through the <strong>Console</strong>.</p>
@@ -597,19 +574,16 @@ Peter Gao
 <h2><code>print(), cat(), str()</code>: messages</h2>
 <p>Use <code>print()</code> statements to test out <code>print()</code> statements to see the values used during execution.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>i <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
-<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">print</span>(d)</span>
-<span id="cb17-3"><a href="#cb17-3"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.numeric</span>(d)) {</span>
-<span id="cb17-4"><a href="#cb17-4"></a>    <span class="fu">stop</span>(<span class="st">"`d` must be numeric"</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb17-5"><a href="#cb17-5"></a>  }</span>
-<span id="cb17-6"><a href="#cb17-6"></a>  d <span class="sc">+</span> <span class="dv">10</span></span>
-<span id="cb17-7"><a href="#cb17-7"></a>}</span>
-<span id="cb17-8"><a href="#cb17-8"></a><span class="fu">f</span>(<span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>i <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
+<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">print</span>(d)</span>
+<span id="cb15-3"><a href="#cb15-3"></a>  d <span class="sc">+</span> <span class="dv">10</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a>}</span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="fu">f</span>(<span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "a"</code></pre>
 </div>
 <div class="cell-output cell-output-error">
-<pre><code>Error: `d` must be numeric</code></pre>
+<pre><code>Error in d + 10: non-numeric argument to binary operator</code></pre>
 </div>
 </div>
 <div class="fragment">
@@ -620,21 +594,18 @@ Peter Gao
 <h2><code>print(), cat(), str()</code>: messages</h2>
 <p>Take your function and throw in a <code>cat()</code> statement to see what the function is seeing.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20" data-code-line-numbers="2-3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>i <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">cat</span>(<span class="st">"The value of input parameter d is:"</span>, d, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb20-3"><a href="#cb20-3"></a>  <span class="fu">cat</span>(<span class="st">"The class of input parameter d is:"</span>, <span class="fu">class</span>(d), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb20-4"><a href="#cb20-4"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.numeric</span>(d)) {</span>
-<span id="cb20-5"><a href="#cb20-5"></a>    <span class="fu">stop</span>(<span class="st">"`d` must be numeric"</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb20-6"><a href="#cb20-6"></a>  }</span>
-<span id="cb20-7"><a href="#cb20-7"></a>  d <span class="sc">+</span> <span class="dv">10</span></span>
-<span id="cb20-8"><a href="#cb20-8"></a>}</span>
-<span id="cb20-9"><a href="#cb20-9"></a><span class="fu">f</span>(<span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="2-3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>i <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">cat</span>(<span class="st">"The value of input parameter d is:"</span>, d, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">cat</span>(<span class="st">"The class of input parameter d is:"</span>, <span class="fu">class</span>(d), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb18-4"><a href="#cb18-4"></a>  d <span class="sc">+</span> <span class="dv">10</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a>}</span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="fu">f</span>(<span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The value of input parameter d is: a 
 The class of input parameter d is: character </code></pre>
 </div>
 <div class="cell-output cell-output-error">
-<pre><code>Error: `d` must be numeric</code></pre>
+<pre><code>Error in d + 10: non-numeric argument to binary operator</code></pre>
 </div>
 </div>
 </section>
@@ -642,19 +613,16 @@ The class of input parameter d is: character </code></pre>
 <h2><code>print(), cat(), str()</code>: messages</h2>
 <p>We can similarly use <code>str()</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>i <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
-<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">str</span>(d)</span>
-<span id="cb23-3"><a href="#cb23-3"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.numeric</span>(d)) {</span>
-<span id="cb23-4"><a href="#cb23-4"></a>    <span class="fu">stop</span>(<span class="st">"`d` must be numeric"</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb23-5"><a href="#cb23-5"></a>  }</span>
-<span id="cb23-6"><a href="#cb23-6"></a>  d <span class="sc">+</span> <span class="dv">10</span></span>
-<span id="cb23-7"><a href="#cb23-7"></a>}</span>
-<span id="cb23-8"><a href="#cb23-8"></a><span class="fu">f</span>(<span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>i <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">str</span>(d)</span>
+<span id="cb21-3"><a href="#cb21-3"></a>  d <span class="sc">+</span> <span class="dv">10</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a>}</span>
+<span id="cb21-5"><a href="#cb21-5"></a><span class="fu">f</span>(<span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> chr "a"</code></pre>
 </div>
 <div class="cell-output cell-output-error">
-<pre><code>Error: `d` must be numeric</code></pre>
+<pre><code>Error in d + 10: non-numeric argument to binary operator</code></pre>
 </div>
 </div>
 <p>More specifically, <code>str()</code> can be used to see <em>the structure of</em> what the function is seeing. This can often be more informative if the structure is not what you expect (a common source of bugs).</p>
@@ -672,23 +640,17 @@ The class of input parameter d is: character </code></pre>
 <h2><code>browser()</code>: Interactive debugger</h2>
 <p>Alternatively, we can plug <code>browser()</code> into our function, as with the print statements.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>i <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
-<span id="cb26-2"><a href="#cb26-2"></a>  <span class="fu">browser</span>()</span>
-<span id="cb26-3"><a href="#cb26-3"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.numeric</span>(d)) {</span>
-<span id="cb26-4"><a href="#cb26-4"></a>    <span class="fu">stop</span>(<span class="st">"`d` must be numeric"</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb26-5"><a href="#cb26-5"></a>  }</span>
-<span id="cb26-6"><a href="#cb26-6"></a>  d <span class="sc">+</span> <span class="dv">10</span></span>
-<span id="cb26-7"><a href="#cb26-7"></a>}</span>
-<span id="cb26-8"><a href="#cb26-8"></a><span class="fu">f</span>(<span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>i <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
+<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">browser</span>()</span>
+<span id="cb24-3"><a href="#cb24-3"></a>  d <span class="sc">+</span> <span class="dv">10</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a>}</span>
+<span id="cb24-5"><a href="#cb24-5"></a><span class="fu">f</span>(<span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Called from: i(c)
-debug at &lt;text&gt;#3: if (!is.numeric(d)) {
-    stop("`d` must be numeric", call. = FALSE)
-}
-debug at &lt;text&gt;#4: stop("`d` must be numeric", call. = FALSE)</code></pre>
+debug at &lt;text&gt;#3: d + 10</code></pre>
 </div>
 <div class="cell-output cell-output-error">
-<pre><code>Error: `d` must be numeric</code></pre>
+<pre><code>Error in d + 10: non-numeric argument to binary operator</code></pre>
 </div>
 </div>
 </section>
@@ -752,17 +714,17 @@ debug at &lt;text&gt;#4: stop("`d` must be numeric", call. = FALSE)</code></pre>
 <section id="example" class="slide level2">
 <h2>Example</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>create_p_norm <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">p =</span> <span class="dv">2</span>) {</span>
-<span id="cb29-2"><a href="#cb29-2"></a>  <span class="fu">return</span>(</span>
-<span id="cb29-3"><a href="#cb29-3"></a>    <span class="cf">function</span>(x) <span class="fu">return</span>(<span class="fu">sum</span>(<span class="fu">abs</span>(x) <span class="sc">^</span> p) <span class="sc">^</span> (<span class="dv">1</span> <span class="sc">/</span> p))</span>
-<span id="cb29-4"><a href="#cb29-4"></a>  )</span>
-<span id="cb29-5"><a href="#cb29-5"></a>}</span>
-<span id="cb29-6"><a href="#cb29-6"></a>calculate_p_norm <span class="ot">&lt;-</span> <span class="cf">function</span>(x, p) {</span>
-<span id="cb29-7"><a href="#cb29-7"></a>  <span class="co"># browser()</span></span>
-<span id="cb29-8"><a href="#cb29-8"></a>  norm_fn <span class="ot">&lt;-</span> <span class="fu">create_p_norm</span>(p)</span>
-<span id="cb29-9"><a href="#cb29-9"></a>  <span class="fu">return</span>(<span class="fu">norm_fn</span>(x))</span>
-<span id="cb29-10"><a href="#cb29-10"></a>}</span>
-<span id="cb29-11"><a href="#cb29-11"></a><span class="fu">calculate_p_norm</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>create_p_norm <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">p =</span> <span class="dv">2</span>) {</span>
+<span id="cb27-2"><a href="#cb27-2"></a>  <span class="fu">return</span>(</span>
+<span id="cb27-3"><a href="#cb27-3"></a>    <span class="cf">function</span>(x) <span class="fu">return</span>(<span class="fu">sum</span>(<span class="fu">abs</span>(x) <span class="sc">^</span> p) <span class="sc">^</span> (<span class="dv">1</span> <span class="sc">/</span> p))</span>
+<span id="cb27-4"><a href="#cb27-4"></a>  )</span>
+<span id="cb27-5"><a href="#cb27-5"></a>}</span>
+<span id="cb27-6"><a href="#cb27-6"></a>calculate_p_norm <span class="ot">&lt;-</span> <span class="cf">function</span>(x, p) {</span>
+<span id="cb27-7"><a href="#cb27-7"></a>  <span class="co"># browser()</span></span>
+<span id="cb27-8"><a href="#cb27-8"></a>  norm_fn <span class="ot">&lt;-</span> <span class="fu">create_p_norm</span>(p)</span>
+<span id="cb27-9"><a href="#cb27-9"></a>  <span class="fu">return</span>(<span class="fu">norm_fn</span>(x))</span>
+<span id="cb27-10"><a href="#cb27-10"></a>}</span>
+<span id="cb27-11"><a href="#cb27-11"></a><span class="fu">calculate_p_norm</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 15</code></pre>
 </div>
@@ -772,18 +734,18 @@ debug at &lt;text&gt;#4: stop("`d` must be numeric", call. = FALSE)</code></pre>
 <section id="example-1" class="slide level2">
 <h2>Example</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>loop_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb31-2"><a href="#cb31-2"></a>  <span class="co"># browser()</span></span>
-<span id="cb31-3"><a href="#cb31-3"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(x)</span>
-<span id="cb31-4"><a href="#cb31-4"></a>  y <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n)</span>
-<span id="cb31-5"><a href="#cb31-5"></a>  z <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n)</span>
-<span id="cb31-6"><a href="#cb31-6"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
-<span id="cb31-7"><a href="#cb31-7"></a>    y[i] <span class="ot">&lt;-</span> x[i] <span class="sc">*</span> <span class="dv">2</span></span>
-<span id="cb31-8"><a href="#cb31-8"></a>    z[i] <span class="ot">&lt;-</span> y[i] <span class="sc">*</span> <span class="dv">2</span></span>
-<span id="cb31-9"><a href="#cb31-9"></a>  }</span>
-<span id="cb31-10"><a href="#cb31-10"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="st">"y"</span> <span class="ot">=</span> y, <span class="st">"z"</span> <span class="ot">=</span> z))</span>
-<span id="cb31-11"><a href="#cb31-11"></a>}</span>
-<span id="cb31-12"><a href="#cb31-12"></a><span class="fu">loop_fun</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>loop_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb29-2"><a href="#cb29-2"></a>  <span class="co"># browser()</span></span>
+<span id="cb29-3"><a href="#cb29-3"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(x)</span>
+<span id="cb29-4"><a href="#cb29-4"></a>  y <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n)</span>
+<span id="cb29-5"><a href="#cb29-5"></a>  z <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n)</span>
+<span id="cb29-6"><a href="#cb29-6"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb29-7"><a href="#cb29-7"></a>    y[i] <span class="ot">&lt;-</span> x[i] <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb29-8"><a href="#cb29-8"></a>    z[i] <span class="ot">&lt;-</span> y[i] <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb29-9"><a href="#cb29-9"></a>  }</span>
+<span id="cb29-10"><a href="#cb29-10"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="st">"y"</span> <span class="ot">=</span> y, <span class="st">"z"</span> <span class="ot">=</span> z))</span>
+<span id="cb29-11"><a href="#cb29-11"></a>}</span>
+<span id="cb29-12"><a href="#cb29-12"></a><span class="fu">loop_fun</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$y
 [1]  2  4  6  8 10
@@ -791,7 +753,7 @@ debug at &lt;text&gt;#4: stop("`d` must be numeric", call. = FALSE)</code></pre>
 $z
 [1]  4  8 12 16 20</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="fu">loop_fun</span>(<span class="fu">diag</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">loop_fun</span>(<span class="fu">diag</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$y
  [1]  2  0  0  0  0  0  4  0  0  0  0  0  6  0  0  0  0  0  8  0  0  0  0  0 10
@@ -805,18 +767,18 @@ $z
 <h2>Breakpoints</h2>
 <p>In RStudio, you may also use breakpoints by writing your code in an R file. A breakpoint is like a <code>browser()</code> call, but you avoid having to change your code.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>loop_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb35-2"><a href="#cb35-2"></a>  <span class="co"># browser()</span></span>
-<span id="cb35-3"><a href="#cb35-3"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(x)</span>
-<span id="cb35-4"><a href="#cb35-4"></a>  y <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n)</span>
-<span id="cb35-5"><a href="#cb35-5"></a>  z <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n)</span>
-<span id="cb35-6"><a href="#cb35-6"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
-<span id="cb35-7"><a href="#cb35-7"></a>    y[i] <span class="ot">&lt;-</span> x[i] <span class="sc">*</span> <span class="dv">2</span></span>
-<span id="cb35-8"><a href="#cb35-8"></a>    z[i] <span class="ot">&lt;-</span> y[i] <span class="sc">*</span> <span class="dv">2</span></span>
-<span id="cb35-9"><a href="#cb35-9"></a>  }</span>
-<span id="cb35-10"><a href="#cb35-10"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="st">"y"</span> <span class="ot">=</span> y, <span class="st">"z"</span> <span class="ot">=</span> z))</span>
-<span id="cb35-11"><a href="#cb35-11"></a>}</span>
-<span id="cb35-12"><a href="#cb35-12"></a><span class="fu">loop_fun</span>(<span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>loop_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb33-2"><a href="#cb33-2"></a>  <span class="co"># browser()</span></span>
+<span id="cb33-3"><a href="#cb33-3"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(x)</span>
+<span id="cb33-4"><a href="#cb33-4"></a>  y <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n)</span>
+<span id="cb33-5"><a href="#cb33-5"></a>  z <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n)</span>
+<span id="cb33-6"><a href="#cb33-6"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb33-7"><a href="#cb33-7"></a>    y[i] <span class="ot">&lt;-</span> x[i] <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb33-8"><a href="#cb33-8"></a>    z[i] <span class="ot">&lt;-</span> y[i] <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb33-9"><a href="#cb33-9"></a>  }</span>
+<span id="cb33-10"><a href="#cb33-10"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="st">"y"</span> <span class="ot">=</span> y, <span class="st">"z"</span> <span class="ot">=</span> z))</span>
+<span id="cb33-11"><a href="#cb33-11"></a>}</span>
+<span id="cb33-12"><a href="#cb33-12"></a><span class="fu">loop_fun</span>(<span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in x[i] * 2: non-numeric argument to binary operator</code></pre>
 </div>
@@ -854,26 +816,26 @@ $z
 <section id="debugging-exercise-1" class="slide level2 smaller">
 <h2>Debugging exercise</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>is_prime <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb37-2"><a href="#cb37-2"></a>  <span class="cf">if</span> (x <span class="sc">==</span> <span class="dv">2</span>) {</span>
-<span id="cb37-3"><a href="#cb37-3"></a>    <span class="fu">return</span>(<span class="cn">TRUE</span>)</span>
-<span id="cb37-4"><a href="#cb37-4"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">any</span>(x <span class="sc">%%</span> <span class="dv">2</span><span class="sc">:</span>(x<span class="dv">-1</span>) <span class="sc">==</span> <span class="dv">0</span>)) {</span>
-<span id="cb37-5"><a href="#cb37-5"></a>    <span class="fu">return</span>(<span class="cn">FALSE</span>)</span>
-<span id="cb37-6"><a href="#cb37-6"></a>  } <span class="cf">else</span> {</span>
-<span id="cb37-7"><a href="#cb37-7"></a>    <span class="fu">return</span>(<span class="cn">TRUE</span>)</span>
-<span id="cb37-8"><a href="#cb37-8"></a>  }</span>
-<span id="cb37-9"><a href="#cb37-9"></a>}</span>
-<span id="cb37-10"><a href="#cb37-10"></a>is_palindrome <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb37-11"><a href="#cb37-11"></a>  x_char <span class="ot">&lt;-</span> <span class="fu">as.character</span>(x)</span>
-<span id="cb37-12"><a href="#cb37-12"></a>  x_char <span class="ot">&lt;-</span> stringr<span class="sc">::</span><span class="fu">str_split</span>(x_char, <span class="st">""</span>)[[<span class="dv">1</span>]]</span>
-<span id="cb37-13"><a href="#cb37-13"></a>  x_rev <span class="ot">&lt;-</span> <span class="fu">rev</span>(x_char)</span>
-<span id="cb37-14"><a href="#cb37-14"></a>  <span class="fu">return</span>(x_char <span class="sc">==</span> x_rev)</span>
-<span id="cb37-15"><a href="#cb37-15"></a>}</span>
-<span id="cb37-16"><a href="#cb37-16"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>) {</span>
-<span id="cb37-17"><a href="#cb37-17"></a>  <span class="cf">if</span> (<span class="fu">is_prime</span>(i) <span class="sc">&amp;</span> <span class="fu">is_palindrome</span>(i)) {</span>
-<span id="cb37-18"><a href="#cb37-18"></a>    <span class="fu">print</span>(i)</span>
-<span id="cb37-19"><a href="#cb37-19"></a>  }</span>
-<span id="cb37-20"><a href="#cb37-20"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>is_prime <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb35-2"><a href="#cb35-2"></a>  <span class="cf">if</span> (x <span class="sc">==</span> <span class="dv">2</span>) {</span>
+<span id="cb35-3"><a href="#cb35-3"></a>    <span class="fu">return</span>(<span class="cn">TRUE</span>)</span>
+<span id="cb35-4"><a href="#cb35-4"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">any</span>(x <span class="sc">%%</span> <span class="dv">2</span><span class="sc">:</span>(x<span class="dv">-1</span>) <span class="sc">==</span> <span class="dv">0</span>)) {</span>
+<span id="cb35-5"><a href="#cb35-5"></a>    <span class="fu">return</span>(<span class="cn">FALSE</span>)</span>
+<span id="cb35-6"><a href="#cb35-6"></a>  } <span class="cf">else</span> {</span>
+<span id="cb35-7"><a href="#cb35-7"></a>    <span class="fu">return</span>(<span class="cn">TRUE</span>)</span>
+<span id="cb35-8"><a href="#cb35-8"></a>  }</span>
+<span id="cb35-9"><a href="#cb35-9"></a>}</span>
+<span id="cb35-10"><a href="#cb35-10"></a>is_palindrome <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb35-11"><a href="#cb35-11"></a>  x_char <span class="ot">&lt;-</span> <span class="fu">as.character</span>(x)</span>
+<span id="cb35-12"><a href="#cb35-12"></a>  x_char <span class="ot">&lt;-</span> stringr<span class="sc">::</span><span class="fu">str_split</span>(x_char, <span class="st">""</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb35-13"><a href="#cb35-13"></a>  x_rev <span class="ot">&lt;-</span> <span class="fu">rev</span>(x_char)</span>
+<span id="cb35-14"><a href="#cb35-14"></a>  <span class="fu">return</span>(x_char <span class="sc">==</span> x_rev)</span>
+<span id="cb35-15"><a href="#cb35-15"></a>}</span>
+<span id="cb35-16"><a href="#cb35-16"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>) {</span>
+<span id="cb35-17"><a href="#cb35-17"></a>  <span class="cf">if</span> (<span class="fu">is_prime</span>(i) <span class="sc">&amp;</span> <span class="fu">is_palindrome</span>(i)) {</span>
+<span id="cb35-18"><a href="#cb35-18"></a>    <span class="fu">print</span>(i)</span>
+<span id="cb35-19"><a href="#cb35-19"></a>  }</span>
+<span id="cb35-20"><a href="#cb35-20"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2
 [1] 3
