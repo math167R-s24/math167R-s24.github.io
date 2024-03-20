@@ -70,7 +70,7 @@ What if we want to simulate this game many times? One approach is to wrap our co
 #| eval: TRUE
 run_one_sim <- function(seed, n) {
   set.seed(seed)
-  flips <- sample(x = c("H", "T"), size = 100, replace = T)
+  flips <- sample(x = c("H", "T"), size = n, replace = T)
   HH_score <- 0
   HT_score <- 0
   for (i in 2:n) {
@@ -114,7 +114,6 @@ Why does Bob win more often? Intuitively, both "HH" and "HT" are equally likely 
 
 Here's a histogram of Alice and Bob's scores across the simulations. What do you notice? How might this explain our results?
 
-
 ```{r}
 #| echo: FALSE
 #| eval: TRUE
@@ -146,7 +145,6 @@ ggplot() +
 ## The `r`, `p`, `d`, and `q` functions
 
 What if we want to generate $n$ samples from a normal distribution? Or a binomial distribution?
-
 
 R provides functions for working with a variety of probability distributions. For most distributions, there are four functions: `r`, `p`, `d`, and `q`. As an example, let's look at the normal distribution.
 
@@ -262,11 +260,8 @@ We could use the change of variable formula to compute the expectation. Or we co
 #| eval: TRUE
 #| error: TRUE
 n_sim <- 1000
-n <- 100
-exp_X <- numeric(n_sim)
-for (i in 1:n_sim) {
-  exp_X[i] <- exp(rnorm(n))
-}
+x <- rnorm(n_sim)
+exp_X <- exp(x)
 mean(exp_X)
 ```
 
@@ -411,4 +406,3 @@ plot(n_values, max_by_n,
                    "and theoretical expectation (red)"))
 lines(n_values, -digamma(1) + log(n_values), col = "red")
 ```
-

@@ -423,7 +423,7 @@ Peter Gao
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">9</span>, <span class="dv">10</span>, <span class="at">replace =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] 9 5 3 7 3 9 0 6 1 2</code></pre>
+<pre><code> [1] 7 2 6 8 5 7 2 3 8 7</code></pre>
 </div>
 </div>
 <p>What if we want to generate <span class="math inline">\(n\)</span> samples from a normal distribution? Or a binomial distribution?</p>
@@ -450,11 +450,11 @@ Peter Gao
 <span id="cb3-12"><a href="#cb3-12"></a>}</span>
 <span id="cb3-13"><a href="#cb3-13"></a>HH_score</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 24</code></pre>
+<pre><code>[1] 11</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>HT_score</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 22</code></pre>
+<pre><code>[1] 28</code></pre>
 </div>
 </div>
 </section>
@@ -467,7 +467,7 @@ Peter Gao
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>run_one_sim <span class="ot">&lt;-</span> <span class="cf">function</span>(seed, n) {</span>
 <span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">set.seed</span>(seed)</span>
-<span id="cb7-3"><a href="#cb7-3"></a>  flips <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="st">"H"</span>, <span class="st">"T"</span>), <span class="at">size =</span> <span class="dv">100</span>, <span class="at">replace =</span> T)</span>
+<span id="cb7-3"><a href="#cb7-3"></a>  flips <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="st">"H"</span>, <span class="st">"T"</span>), <span class="at">size =</span> n, <span class="at">replace =</span> T)</span>
 <span id="cb7-4"><a href="#cb7-4"></a>  HH_score <span class="ot">&lt;-</span> <span class="dv">0</span></span>
 <span id="cb7-5"><a href="#cb7-5"></a>  HT_score <span class="ot">&lt;-</span> <span class="dv">0</span></span>
 <span id="cb7-6"><a href="#cb7-6"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n) {</span>
@@ -643,14 +643,11 @@ Peter Gao
 <p>We could use the change of variable formula to compute the expectation. Or we could use simulation to approximate this quantity. Asymptotic analysis is needed to study the convergence of our approximation.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>n_sim <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb33-2"><a href="#cb33-2"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb33-3"><a href="#cb33-3"></a>exp_X <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_sim)</span>
-<span id="cb33-4"><a href="#cb33-4"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_sim) {</span>
-<span id="cb33-5"><a href="#cb33-5"></a>  exp_X[i] <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">rnorm</span>(n))</span>
-<span id="cb33-6"><a href="#cb33-6"></a>}</span>
-<span id="cb33-7"><a href="#cb33-7"></a><span class="fu">mean</span>(exp_X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb33-2"><a href="#cb33-2"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_sim)</span>
+<span id="cb33-3"><a href="#cb33-3"></a>exp_X <span class="ot">&lt;-</span> <span class="fu">exp</span>(x)</span>
+<span id="cb33-4"><a href="#cb33-4"></a><span class="fu">mean</span>(exp_X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.583819</code></pre>
+<pre><code>[1] 1.696632</code></pre>
 </div>
 </div>
 </section>
