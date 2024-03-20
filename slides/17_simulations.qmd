@@ -32,7 +32,121 @@ sample(0:9, 10, replace = T)
 
 What if we want to generate $n$ samples from a normal distribution? Or a binomial distribution?
 
+## Simulating a coin-flipping game
+
+Can we write code to simulate this game?
+
+![](images/alice-bob.jpeg)
+
+## Simulating a coin-flipping game
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+n <- 100
+flips <- sample(x = c("H", "T"), size = n, replace = T)
+HH_score <- 0
+HT_score <- 0
+for (i in 2:n) {
+  if (flips[i-1] == "H" & flips[i] == "H") {
+    HH_score <- HH_score + 1
+  } 
+  if (flips[i-1] == "H" & flips[i] == "T") {
+    HT_score <- HT_score + 1
+  }
+}
+HH_score
+HT_score
+```
+
+## Simulating a coin-flipping game
+
+What if we want to simulate this game many times? One approach is to wrap our code in a function, which we can run many times.
+
+## Simulating a coin-flipping game {.smaller}
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+run_one_sim <- function(seed, n) {
+  set.seed(seed)
+  flips <- sample(x = c("H", "T"), size = 100, replace = T)
+  HH_score <- 0
+  HT_score <- 0
+  for (i in 2:n) {
+    if (flips[i-1] == "H" & flips[i] == "H") {
+      HH_score <- HH_score + 1
+    } 
+    if (flips[i-1] == "H" & flips[i] == "T") {
+      HT_score <- HT_score + 1
+    }
+  }
+  return(list(HH = HH_score, HT = HT_score))
+}
+# run 100000 simulations with n = 100
+results <- lapply(1:10000, run_one_sim, n = 100)
+
+HH_scores <- sapply(results, function(x) x$HH)
+HT_scores <- sapply(results, function(x) x$HT)
+```
+
+## Simulating a coin-flipping game
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+
+# proportion of Alice wins
+mean(HH_scores > HT_scores)
+
+# proportion of Bob wins
+mean(HT_scores > HH_scores)
+
+# proportion of ties
+mean(HH_scores == HT_scores)
+```
+
+## Simulating a coin-flipping game
+
+Why does Bob win more often? Intuitively, both "HH" and "HT" are equally likely when we flip a fair coin twice.
+
+## Simulating a coin-flipping game
+
+Here's a histogram of Alice and Bob's scores across the simulations. What do you notice? How might this explain our results?
+
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+library(ggplot2)
+ggplot() +
+  geom_histogram(aes(x = HH_scores, fill = "HH"), 
+                 alpha = .5, binwidth = 1) +
+  geom_histogram(aes(x = HT_scores, fill = "HT"), 
+                 alpha = .5, binwidth = 1) + 
+  ggtitle("Histogram of scores for Alice and Bob") +
+  xlab("Score")
+```
+
+## Simulating a coin-flipping game
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+library(ggplot2)
+ggplot() +
+  geom_histogram(aes(x = HH_scores, fill = "HH"), 
+                 alpha = .5, binwidth = 1) +
+  geom_histogram(aes(x = HT_scores, fill = "HT"), 
+                 alpha = .5, binwidth = 1) + 
+  ggtitle("Histogram of scores for Alice and Bob") +
+  xlab("Score")
+```
+
 ## The `r`, `p`, `d`, and `q` functions
+
+What if we want to generate $n$ samples from a normal distribution? Or a binomial distribution?
+
 
 R provides functions for working with a variety of probability distributions. For most distributions, there are four functions: `r`, `p`, `d`, and `q`. As an example, let's look at the normal distribution.
 
@@ -108,7 +222,7 @@ Suppose we perform a two-sided hypothesis test using a normal distribution and o
 
 Practice with the `rbinom()`, `pbinom()`, `dbinom()` and `qbinom()` functions:
 
-1.  If I flip a coin with probability of heads = 0.6 ten times, what is the probability of observing **exactly** 6 heads.
+1.  If I flip a coin with probability of heads = 0.6 ten times, what is the probability of observing **exactly** 6 heads?
 
 2.  If I flip a coin with probability of heads = 0.6 ten times, what is the probability of observing 6 or fewer heads?
 
@@ -298,132 +412,3 @@ plot(n_values, max_by_n,
 lines(n_values, -digamma(1) + log(n_values), col = "red")
 ```
 
-## Random walks
-
-Random walks are stochastic processes that describe a sequence of random steps on some space.
-
-A simple example is the one-dimensional random walk on the integer number line which starts at 0 and for each step, moves forward (+1) or backward (-1) with equal probability.
-
-## Random walks
-
-We can simulate a one-dimensional random walk:
-
-```{r random_walk}
-#| echo: TRUE
-#| eval: TRUE
-#| cache: TRUE
-set.seed(123)
-n_steps <- 100
-x <- numeric(n_steps)
-x[1] <- 0
-for (i in 2:n_steps) {
-  x[i] <- x[i - 1] + sample(c(1, -1), 1)
-}
-```
-
-## Random walks
-
-We can then plot our results:
-
-```{r random_walk_plot}
-#| echo: TRUE
-#| eval: TRUE
-#| cache: TRUE
-plot(1:n_steps, x, type = "l",
-     xlab = "Step", ylab = "x",
-     main = "A one-dimensional random walk")
-```
-
-## A more functional version with recursion
-
-We can also adopt a more functional approach:
-
-```{r random_walk_functional}
-#| echo: TRUE
-#| eval: TRUE
-#| cache: TRUE
-take_step <- function() {
-  return(sample(c(1, -1), 1))
-}
-walk_randomly <- function(n_steps, start = 0) {
-  if (n_steps <= 1) {
-    return(start)
-  }
-  x <- c(start, walk_randomly(n_steps - 1, start + take_step()))
-  return(x)
-}
-```
-
-## A more functional version with recursion
-
-```{r random_walk_functional_plot}
-#| echo: TRUE
-#| eval: TRUE
-#| cache: TRUE
-plot(1:100, walk_randomly(100), type = "l",
-     xlab = "Step", ylab = "x",
-     main = "A one-dimensional random walk")
-```
-
-## A two-dimensional random walk
-
-A two-dimensional random walk takes place on the integer grid, where at each step, we can either walk north, south, east, or west.
-
-```{r 2d_random_walk_functional}
-#| echo: TRUE
-#| eval: TRUE
-#| cache: TRUE
-take_step_2d <- function() {
-  steps <- rbind(c(0, 1),
-                 c(0, -1), 
-                 c(1, 0),
-                 c(-1, 0))
-  return(steps[sample(1:4, 1), ])
-}
-walk_randomly_2d <- function(n_steps, start = c(0, 0)) {
-  if (n_steps <= 1) {
-    return(start)
-  }
-  x <- rbind(start, walk_randomly_2d(n_steps - 1, start + take_step_2d()))
-  rownames(x) <- NULL
-  return(x)
-}
-```
-
-## A two-dimensional random walk
-
-```{r 2d_random_walk_functional_ex}
-n_steps <- 100
-coords <- walk_randomly_2d(n_steps)
-coords
-```
-
-## A two-dimensional random walk
-
-We can use `geom_path()` to illustrate the path taken by the random walker:
-
-```{r 2d_random_walk_functional_plot}
-#| echo: TRUE
-#| eval: TRUE
-#| cache: TRUE
-library(ggplot2)
-coords_dat <- data.frame(x = coords[, 1],
-                         y = coords[, 2],
-                         step = 1:n_steps)
-ggplot(coords_dat, aes(x = x, y = y, color = step)) + geom_path()
-```
-
-## A two-dimensional random walk
-
-We can use the `gganimate` package to animate our visualization:
-
-```{r 2d_random_walk_functional_anim}
-#| echo: TRUE
-#| eval: TRUE
-#| cache: TRUE
-library(gganimate)
-anim_walk <- ggplot(coords_dat, aes(x = x, y = y, color = step)) +
-  geom_path() +
-  transition_reveal(along = step)
-anim_walk
-```

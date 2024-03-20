@@ -7,7 +7,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="YOUR NAME HERE">
-<meta name="dcterms.date" content="2023-10-18">
 
 <title>MATH167R - Lab 7</title>
 <style>
@@ -4685,9 +4684,9 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#collaborators" id="toc-collaborators" class="nav-link active" data-scroll-target="#collaborators">Collaborators</a></li>
-  <li><a href="#a.-skewness-and-kurtosis" id="toc-a.-skewness-and-kurtosis" class="nav-link" data-scroll-target="#a.-skewness-and-kurtosis">A. Skewness and Kurtosis</a></li>
-  <li><a href="#b.-finding-an-error" id="toc-b.-finding-an-error" class="nav-link" data-scroll-target="#b.-finding-an-error">B. Finding an error</a></li>
+  <li><a href="#a.-random-sampling-in-r" id="toc-a.-random-sampling-in-r" class="nav-link active" data-scroll-target="#a.-random-sampling-in-r">A. Random sampling in R</a></li>
+  <li><a href="#b.-gamblers-ruin" id="toc-b.-gamblers-ruin" class="nav-link" data-scroll-target="#b.-gamblers-ruin">B. Gambler’s ruin</a></li>
+  <li><a href="#c.-one-dimensional-random-walks" id="toc-c.-one-dimensional-random-walks" class="nav-link" data-scroll-target="#c.-one-dimensional-random-walks">C. One-dimensional random walks</a></li>
   </ul>
 </nav>
     </div>
@@ -4710,12 +4709,6 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
           </div>
   </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">October 18, 2023</p>
-    </div>
-  </div>
   
     
   </div>
@@ -4723,66 +4716,30 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
 
 </header>
 
-<p>Remember, you must submit <em>both</em> your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.</p>
-<section id="collaborators" class="level3">
-<h3 class="anchored" data-anchor-id="collaborators">Collaborators</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LOAD ANY RELEVANT PACKAGES HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="a.-skewness-and-kurtosis" class="level2">
-<h2 class="anchored" data-anchor-id="a.-skewness-and-kurtosis">A. Skewness and Kurtosis</h2>
-<p>Skewness describes how asymmetrical the distribution of a numerical variable is around its mean. Given observations <span class="math inline">\(x_1,\ldots, x_n\)</span>, we can calculate the sample skewness <span class="math inline">\(s\)</span> of a variable using the following formula:</p>
-<p><span class="math display">\[s = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^3}{\left[\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right]^{3/2}}\]</span> Kurtosis is a measure of the “tailedness” of the distribution of a numerical variable is around its mean. Higher values of kurtosis indicate more extreme outliers. Given observations <span class="math inline">\(x_1,\ldots, x_n\)</span>, we can calculate the sample kurtosis <span class="math inline">\(k\)</span> of a variable using the following formula:</p>
-<p><span class="math display">\[k = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^4}{\left[\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right]^{2}}-3\]</span></p>
+<p>Remember, <strong>follow the instructions below and use R Markdown to create a pdf document with your code and answers to the following questions on Gradescope.</strong> You may find a template file by clicking “Code” in the top right corner of this page.</p>
+<section id="a.-random-sampling-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="a.-random-sampling-in-r">A. Random sampling in R</h2>
 <ol type="1">
-<li><p>Write a function <code>skewness()</code> that takes as input a numeric vector <code>x</code> and returns the sample skewness. There are functions in R that compute skewness, but you cannot use any of them–write your own implementation.</p></li>
-<li><p>Write a function <code>kurtosis()</code> that takes as input a numeric vector <code>x</code> and returns the sample skewness. There are functions in R that compute kurtosis, but you cannot use any of them–write your own implementation.</p></li>
-<li><p>Use your function to compute the sample skewness of the <code>arr_delay</code> variable in the <code>flights</code> dataset contained in the <code>nycflights13</code> package.</p></li>
-<li><p>Use your function to compute the sample kurtosis of the <code>arr_delay</code> variable in the <code>flights</code> dataset contained in the <code>nycflights13</code> package.</p></li>
+<li><p>In your own words, explain the difference between <code>dnorm()</code>, <code>pnorm()</code>, <code>qnorm()</code>, and <code>rnorm()</code>.</p></li>
+<li><p>Suppose we simulate <code>x &lt;- runif(1)</code>. What is the distribution of <code>qnorm(x)</code>?</p></li>
+<li><p>Suppose we simulate <code>x &lt;- rnorm(1)</code>. What is the distribution of <code>pnorm(x)</code>?</p></li>
 </ol>
 </section>
-<section id="b.-finding-an-error" class="level2">
-<h2 class="anchored" data-anchor-id="b.-finding-an-error">B. Finding an error</h2>
-<p>Suppose you have two teams of runners participating in a 5k. We wish to write a function that takes as input two vectors representing the times of the runners in each team and returns a list of two vectors representing the ranks of each team’s runners.</p>
-<p>For example, if the first team’s times are <code>c(16.8, 21.2, 19.1)</code> and the second team’s times are <code>c(17.2, 18.1, 20.0)</code>, the function should return <code>c(1, 6, 4)</code> for the first team and <code>c(2, 3, 5)</code> for the second team.</p>
-<p>Below is a draft version of the function <code>get_runner_ranks()</code>. However, there is an error somewhere. Use any method we discussed in class to identify the error.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>get_runner_ranks <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># combine all runner times</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  combined_times <span class="ot">&lt;-</span> <span class="fu">c</span>(x, y) </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sort all runner times from fastest to slowest</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(combined_times, <span class="at">decreasing =</span> T)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create ranks vectors</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  ranks_x <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(x))</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  ranks_y <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(y))</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ranks_x)) {</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># look up rank of time i in x in combined_times</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    ranks_x[i] <span class="ot">&lt;-</span> <span class="fu">match</span>(x[i], combined_times)</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ranks_y)) {</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># look up rank of time i in y in combined_times</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    ranks_y[i] <span class="ot">&lt;-</span> <span class="fu">match</span>(y[i], combined_times)</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># return a list of first team and second team ranks</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">x =</span> ranks_x, <span class="at">y =</span> ranks_y))</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<ol start="5" type="1">
-<li>Below, write a corrected version of <code>get_runner_ranks()</code> and compute <code>get_runner_ranks(c(16.8, 21.2, 19.1), c(17.2, 18.1, 20.0))</code>.</li>
+<section id="b.-gamblers-ruin" class="level2">
+<h2 class="anchored" data-anchor-id="b.-gamblers-ruin">B. Gambler’s ruin</h2>
+<p>A and B are playing a coin flipping game. A starts with <span class="math inline">\(n_a\)</span> pennies and B starts with <span class="math inline">\(n_b\)</span> pennies. A coin is flipped repeatedly and if it comes up heads, B gives A a penny. If it comes up tails, A gives B a penny. The game ends when one player has no more pennies.</p>
+<ol start="3" type="1">
+<li><p>Write a function <code>run_one_sim(seed, n_a, n_b)</code> to simulate one game. Repeatedly use your code with different values of <code>seed</code> to estimate each player’s probability of winning when <span class="math inline">\(n_a = n_b = 10\)</span>.</p></li>
+<li><p>Use your function to estimate each player’s probability of winning when <span class="math inline">\(n_a = 1,\ldots, 5\)</span> and <span class="math inline">\(n_b = 1,\ldots, 5\)</span>, testing every combination. Organize your results in a 5 by 5 table. What do you notice?</p></li>
 </ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>get_runner_ranks <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># YOUR CODE HERE</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<ol start="6" type="1">
-<li>Explain in your own words what the error was.</li>
+</section>
+<section id="c.-one-dimensional-random-walks" class="level2">
+<h2 class="anchored" data-anchor-id="c.-one-dimensional-random-walks">C. One-dimensional random walks</h2>
+<p>In this part, you will simulate a one-dimensional random walk. Suppose you are at the point <span class="math inline">\(x\)</span> at time <span class="math inline">\(t\)</span>. At time <span class="math inline">\(t+1\)</span>, the probability of moving forwards to <span class="math inline">\(x+1\)</span> is <span class="math inline">\(p\)</span> and the chance of moving backwards to <span class="math inline">\(x-1\)</span> is <span class="math inline">\(1-p\)</span>. Assume that at time <span class="math inline">\(t=1\)</span>, you are at <span class="math inline">\(x_1=0\)</span>.</p>
+<ol start="5" type="1">
+<li><p>Write a function <code>random_walk()</code> that takes as input a numeric <code>n_steps</code> and a numeric <span class="math inline">\(p\)</span> and simulates <code>n_steps</code> steps of the one-dimensional random walk with forward probability <span class="math inline">\(p\)</span>. You may have other input arguments if desired. The output should be a length vector of length <code>n_steps</code> starting with 0 where the <span class="math inline">\(i\)</span>th entry represents the location of the random walker at time <span class="math inline">\(t=i\)</span>. For example, <code>random_walk(5, .5)</code> may return the vector <span class="math inline">\((0, 1, 2, 1, 2)\)</span>.</p></li>
+<li><p>Use your function to generate a random walk of 500 steps with probability <span class="math inline">\(.6\)</span> and generate a line graph with <span class="math inline">\(t=1,\ldots, 500\)</span> on the x-axis and <span class="math inline">\(x_1,\ldots, x_{500}\)</span> on the y-axis.</p></li>
+<li><p>Use your function to generate two more random walks of 500 steps with probability <span class="math inline">\(.6\)</span> and create a line graph with all three of your random walks, using different colors for each walk.</p></li>
 </ol>
 
 
@@ -5075,87 +5032,43 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class>
-<div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Lab 7&quot;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> &quot;YOUR NAME HERE&quot;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> &quot;2023-10-18&quot;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-summary: &quot;Code&quot;</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">### Collaborators</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co"># LOAD ANY RELEVANT PACKAGES HERE</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="fu">## A. Skewness and Kurtosis</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>Skewness describes how asymmetrical the distribution of a numerical variable is around its mean. Given observations $x_1,\ldots, x_n$, we can calculate the sample skewness $s$ of a variable using the following formula:</span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>$$s = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^3}{\left<span class="co">[</span><span class="ot">\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right</span><span class="co">]</span>^{3/2}}$$</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>Kurtosis is a measure of the &quot;tailedness&quot; of the distribution of a numerical variable is around its mean. Higher values of kurtosis indicate more extreme outliers. Given observations $x_1,\ldots, x_n$, we can calculate the sample kurtosis $k$ of a variable using the following formula:</span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>$$k = \frac{\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^4}{\left<span class="co">[</span><span class="ot">\frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2\right</span><span class="co">]</span>^{2}}-3$$</span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Write a function <span class="in">`skewness()`</span> that takes as input a numeric vector <span class="in">`x`</span> and returns the sample skewness. There are functions in R that compute skewness, but you cannot use any of them--write your own implementation.</span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Write a function <span class="in">`kurtosis()`</span> that takes as input a numeric vector <span class="in">`x`</span> and returns the sample skewness. There are functions in R that compute kurtosis, but you cannot use any of them--write your own implementation.</span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Use your function to compute the sample skewness of the <span class="in">`arr_delay`</span> variable in the <span class="in">`flights`</span> dataset contained in the <span class="in">`nycflights13`</span> package.</span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Use your function to compute the sample kurtosis of the <span class="in">`arr_delay`</span> variable in the <span class="in">`flights`</span> dataset contained in the <span class="in">`nycflights13`</span> package.</span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="fu">## B. Finding an error</span></span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>Suppose you have two teams of runners participating in a 5k. We wish to write a function that takes as input two vectors representing the times of the runners in each team and returns a list of two vectors representing the ranks of each team&#39;s runners.</span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>For example, if the first team&#39;s times are <span class="in">`c(16.8, 21.2, 19.1)`</span> and the second team&#39;s times are <span class="in">`c(17.2, 18.1, 20.0)`</span>, the function should return <span class="in">`c(1, 6, 4)`</span> for the first team and <span class="in">`c(2, 3, 5)`</span> for the second team. </span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>Below is a draft version of the function <span class="in">`get_runner_ranks()`</span>. However, there is an error somewhere. Use any method we discussed in class to identify the error.</span>
-<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, error = T, echo = T, eval = T}</span></span>
-<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>get_runner_ranks <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>  <span class="co"># combine all runner times</span></span>
-<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>  combined_times <span class="ot">&lt;-</span> <span class="fu">c</span>(x, y) </span>
-<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sort all runner times from fastest to slowest</span></span>
-<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(combined_times, <span class="at">decreasing =</span> T)</span>
-<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create ranks vectors</span></span>
-<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>  ranks_x <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(x))</span>
-<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>  ranks_y <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(y))</span>
-<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ranks_x)) {</span>
-<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>    <span class="co"># look up rank of time i in x in combined_times</span></span>
-<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>    ranks_x[i] <span class="ot">&lt;-</span> <span class="fu">match</span>(x[i], combined_times)</span>
-<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ranks_y)) {</span>
-<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>    <span class="co"># look up rank of time i in y in combined_times</span></span>
-<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>    ranks_y[i] <span class="ot">&lt;-</span> <span class="fu">match</span>(y[i], combined_times)</span>
-<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>  <span class="co"># return a list of first team and second team ranks</span></span>
-<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">x =</span> ranks_x, <span class="at">y =</span> ranks_y))</span>
-<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Below, write a corrected version of <span class="in">`get_runner_ranks()`</span> and compute <span class="in">`get_runner_ranks(c(16.8, 21.2, 19.1), c(17.2, 18.1, 20.0))`</span>.</span>
-<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, error = T, echo = T, eval = T}</span></span>
-<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>get_runner_ranks <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>  <span class="co"># YOUR CODE HERE</span></span>
-<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Explain in your own words what the error was.</span>
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Lab 7&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> &quot;YOUR NAME HERE&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-summary: &quot;Code&quot;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>Remember, **follow the instructions below and use R Markdown to create a pdf document with your code and answers to the following questions on Gradescope.** You may find a template file by clicking &quot;Code&quot; in the top right corner of this page.</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## A. Random sampling in R</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>In your own words, explain the difference between <span class="in">`dnorm()`</span>, <span class="in">`pnorm()`</span>, <span class="in">`qnorm()`</span>, and <span class="in">`rnorm()`</span>.</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Suppose we simulate <span class="in">`x &lt;- runif(1)`</span>. What is the distribution of <span class="in">`qnorm(x)`</span>?</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Suppose we simulate <span class="in">`x &lt;- rnorm(1)`</span>. What is the distribution of <span class="in">`pnorm(x)`</span>?</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## B. Gambler&#39;s ruin</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>A and B are playing a coin flipping game. A starts with $n_a$ pennies and B starts with $n_b$ pennies. A coin is flipped repeatedly and if it comes up heads, B gives A a penny. If it comes up tails, A gives B a penny. The game ends when one player has no more pennies.</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Write a function <span class="in">`run_one_sim(seed, n_a, n_b)`</span> to simulate one game. Repeatedly use your code with different values of <span class="in">`seed`</span> to estimate each player&#39;s probability of winning when $n_a = n_b = 10$.</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Use your function to estimate each player&#39;s probability of winning when $n_a = 1,\ldots, 5$ and $n_b = 1,\ldots, 5$, testing every combination. Organize your results in a 5 by 5 table. What do you notice?</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## C. One-dimensional random walks</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>In this part, you will simulate a one-dimensional random walk. Suppose you are at the point $x$ at time $t$. At time $t+1$, the probability of moving forwards to $x+1$ is $p$ and the chance of moving backwards to $x-1$ is $1-p$. Assume that at time $t=1$, you are at $x_1=0$.</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Write a function <span class="in">`random_walk()`</span> that takes as input a numeric <span class="in">`n_steps`</span> and a numeric $p$ and simulates <span class="in">`n_steps`</span> steps of the one-dimensional random walk with forward probability $p$. You may have other input arguments if desired. The output should be a length vector of length <span class="in">`n_steps`</span> starting with 0 where the $i$th entry represents the location of the random walker at time $t=i$. For example, <span class="in">`random_walk(5, .5)`</span> may return the vector $(0, 1, 2, 1, 2)$. </span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Use your function to generate a random walk of 500 steps with probability $.6$ and generate a line graph with $t=1,\ldots, 500$ on the x-axis and $x_1,\ldots, x_{500}$ on the y-axis.</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>Use your function to generate two more random walks of 500 steps with probability $.6$ and create a line graph with all three of your random walks, using different colors for each walk.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

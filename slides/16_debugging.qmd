@@ -192,7 +192,7 @@ f("a")
 
 . . .
 
-Why doesn't it say `'a' must be numeric`?
+Why doesn't it say `error in a + 10`?
 
 ## `traceback()`: call stack
 
