@@ -158,7 +158,7 @@ rnorm(n = 5, mean = 0, sd = 1)
 
 ## The `r`, `p`, `d`, and `q` functions
 
-`pnorm()` can be used to compute the distribution function at a value `q`. In other words, if $Z$ is a standard normal, pnorm returns the value of $$F(q)= P\left(Z < \frac{q-\mu}{\sigma}\right)$$
+`pnorm()` can be used to compute the distribution function at a value `q`. In other words, if $Z$ is a standard normal, pnorm returns the value of $$F(q)= P\left(Z \leq \frac{q-\mu}{\sigma}\right)$$
 
 ```{r}
 #| echo: TRUE

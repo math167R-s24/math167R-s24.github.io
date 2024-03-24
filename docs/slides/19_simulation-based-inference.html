@@ -448,7 +448,7 @@ Peter Gao
 <img data-src="19_simulation-based-inference_files/figure-revealjs/sample_mean_pois-1.png" width="960" class="r-stretch"></section>
 <section id="simulating-a-sampling-distribution-3" class="slide level2">
 <h2>Simulating a sampling distribution</h2>
-<p>By the central limit theorem, all of these sampling distributions are asymptotically Gaussian with variance 1 (though the mean values differ between the three). Since <span class="math inline">\(n=100\)</span> is fairly large (for these examples), all of the previous examples are close to Gaussian.</p>
+<p>By the central limit theorem, all of these sampling distributions are asymptotically Gaussian with variance 1/100 (though the mean values differ between the three). Since <span class="math inline">\(n=100\)</span> is fairly large (for these examples), all of the previous examples are close to Gaussian.</p>
 <p>What about if <span class="math inline">\(n\)</span> is smaller? Or if we consider other distributions?</p>
 <p>Simulation is a powerful strategy for testing out methods:</p>
 <ul>
@@ -522,13 +522,231 @@ Peter Gao
 <h2>Resampling methods</h2>
 <p>The previous simulations are all based on parametric models (normal, exponential, Poisson). However, we can also simulate sampling distributions without parametric assumptions on the data generating mechanism.</p>
 </section>
+<section id="estimating-the-age-of-us-pennies" class="slide level2">
+<h2>Estimating the age of US pennies</h2>
+<p>Suppose we want to estimate the average age of US pennies. We can’t observe every single penny—so what if we take a sample of 50 pennies?</p>
+
+<img data-src="images/pennies.png" class="r-stretch"><p>Based on an example from <a href="https://moderndive.com/8-confidence-intervals.html">ModernDive</a>.</p>
+</section>
+<section id="estimating-the-age-of-us-pennies-1" class="slide level2">
+<h2>Estimating the age of US pennies</h2>
+<p>The <code>moderndive</code> package contains data on a sample of 50 pennies in the <code>pennies_sample</code> data frame.</p>
+<div class="cell" data-hash="19_simulation-based-inference_cache/revealjs/pennies_1_552ae43730699cfeaf9d8df99724392f">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">library</span>(moderndive)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="fu">data</span>(pennies_sample)</span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="fu">head</span>(pennies_sample)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+     ID  year
+  &lt;int&gt; &lt;dbl&gt;
+1     1  2002
+2     2  1986
+3     3  2017
+4     4  1988
+5     5  2008
+6     6  1983</code></pre>
+</div>
+</div>
+</section>
+<section id="estimating-the-age-of-us-pennies-2" class="slide level2">
+<h2>Estimating the age of US pennies</h2>
+<p>The <code>moderndive</code> package contains data on a sample of 50 pennies in the <code>pennies_sample</code> data frame.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="fu">ggplot</span>(pennies_sample, <span class="fu">aes</span>(<span class="at">x =</span> year)) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="19_simulation-based-inference_files/figure-revealjs/pennies_2-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"></section>
+<section id="estimating-the-age-of-us-pennies-3" class="slide level2">
+<h2>Estimating the age of US pennies</h2>
+<p>Based on this sample, we can compute the sample mean:</p>
+<div class="cell" data-layout-align="center" data-hash="19_simulation-based-inference_cache/revealjs/pennies_3_721691b5ad457cc7fbf2912ff8066f7c">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>x_bar <span class="ot">&lt;-</span> pennies_sample <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">summarize</span>(<span class="at">mean_year =</span> <span class="fu">mean</span>(year))</span>
+<span id="cb10-3"><a href="#cb10-3"></a>x_bar</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  mean_year
+      &lt;dbl&gt;
+1     1995.</code></pre>
+</div>
+</div>
+</section>
+<section id="resampling-the-pennies" class="slide level2">
+<h2>Resampling the pennies</h2>
+<p>Imagine we put our 50 pennies in a bag and draw a <strong>new</strong> sample of 50 pennies by sampling with replacement. This is called <strong>resampling with replacement.</strong></p>
+<div class="cell" data-layout-align="center" data-hash="19_simulation-based-inference_cache/revealjs/pennies_4_545dd62000056a0e7e56776a5ee7f26d">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">set.seed</span>(<span class="dv">327</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a>pennies_resample <span class="ot">&lt;-</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">data.frame</span>(<span class="at">year =</span> <span class="fu">sample</span>(pennies<span class="sc">$</span>year, <span class="dv">50</span>, <span class="at">replace =</span> T))</span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="fu">head</span>(pennies_resample)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  year
+1 1973
+2 1977
+3 1976
+4 2004
+5 1981
+6 2000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>pennies_resample <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">summarize</span>(<span class="at">mean_year =</span> <span class="fu">mean</span>(year))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  mean_year
+1   1987.58</code></pre>
+</div>
+</div>
+</section>
+<section id="resampling-the-pennies-1" class="slide level2 smaller">
+<h2>Resampling the pennies</h2>
+<p>Imagine we put our 50 pennies in a bag and draw a <strong>new</strong> sample of 50 pennies by sampling with replacement. This is called <strong>resampling with replacement.</strong></p>
+<div class="cell" data-layout-align="center" data-hash="19_simulation-based-inference_cache/revealjs/pennies_5_a252ab911fcd5649cd3697cf740713b6">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>pennies_combined <span class="ot">&lt;-</span> </span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">bind_rows</span>(pennies_sample <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">title =</span> <span class="st">"Original sample"</span>),</span>
+<span id="cb16-3"><a href="#cb16-3"></a>            pennies_resample <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">title =</span> <span class="st">"Resample"</span>))</span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="fu">ggplot</span>(pennies_combined, <span class="fu">aes</span>(<span class="at">x =</span> year)) <span class="sc">+</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>title) <span class="sc">+</span> </span>
+<span id="cb16-7"><a href="#cb16-7"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="19_simulation-based-inference_files/figure-revealjs/pennies_5-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="resampling-the-pennies-2" class="slide level2">
+<h2>Resampling the pennies</h2>
+<p>Note that our resample is not the same as drawing a new sample from the population. However, we can still learn about the <strong>sampling variability</strong> of the sample mean. Suppose we repeat this process many times.</p>
+<div class="cell" data-layout-align="center" data-hash="19_simulation-based-inference_cache/revealjs/pennies_6_e86185079b6f97f30ec424361c94deda">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">head</span>(pennies_resamples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+# Groups:   name [1]
+  replicate name     year
+      &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;
+1         1 Arianna  1988
+2         1 Arianna  2002
+3         1 Arianna  2015
+4         1 Arianna  1998
+5         1 Arianna  1979
+6         1 Arianna  1971</code></pre>
+</div>
+</div>
+</section>
+<section id="resampling-the-pennies-3" class="slide level2">
+<h2>Resampling the pennies</h2>
+<p>We can compute each resample mean:</p>
+<div class="cell" data-layout-align="center" data-hash="19_simulation-based-inference_cache/revealjs/pennies_7_060c53570506f6ebe54b3d0d8c8a460f">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>resampled_means <span class="ot">&lt;-</span> pennies_resamples <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">group_by</span>(name) <span class="sc">|&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">summarize</span>(<span class="at">mean_year =</span> <span class="fu">mean</span>(year))</span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="fu">head</span>(resampled_means)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  name      mean_year
+  &lt;chr&gt;         &lt;dbl&gt;
+1 Arianna       1992.
+2 Artemis       1996.
+3 Bea           1996.
+4 Camryn        1997.
+5 Cassandra     1991.
+6 Cindy         1995.</code></pre>
+</div>
+</div>
+</section>
+<section id="resampling-the-pennies-4" class="slide level2">
+<h2>Resampling the pennies</h2>
+<p>We can compute each resample mean:</p>
+<div class="cell" data-layout-align="center" data-hash="19_simulation-based-inference_cache/revealjs/pennies_8_7404d1fbfae33e5736823d444b0d33e9">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">ggplot</span>(resampled_means, <span class="fu">aes</span>(<span class="at">x =</span> mean_year)) <span class="sc">+</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">boundary =</span> <span class="dv">1990</span>) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Sampled mean year"</span>) <span class="sc">+</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="19_simulation-based-inference_files/figure-revealjs/pennies_8-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="resampling-the-pennies-1000-times" class="slide level2">
+<h2>Resampling the pennies 1000 times</h2>
+<p>Using simulation, we can repeat this process virtually 1000 times:</p>
+<div class="cell" data-layout-align="center" data-hash="19_simulation-based-inference_cache/revealjs/pennies_9_f352edd547e23176e280689cfd4794be">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># Repeat resampling 1000 times</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a>virtual_resamples <span class="ot">&lt;-</span> pennies_sample <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a>  <span class="fu">rep_sample_n</span>(<span class="at">size =</span> <span class="dv">50</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">reps =</span> <span class="dv">1000</span>)</span>
+<span id="cb22-4"><a href="#cb22-4"></a></span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="co"># Compute 1000 sample means</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a>virtual_resampled_means <span class="ot">&lt;-</span> virtual_resamples <span class="sc">|&gt;</span></span>
+<span id="cb22-7"><a href="#cb22-7"></a>  <span class="fu">group_by</span>(replicate) <span class="sc">|&gt;</span></span>
+<span id="cb22-8"><a href="#cb22-8"></a>  <span class="fu">summarize</span>(<span class="at">mean_year =</span> <span class="fu">mean</span>(year))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="resampling-the-pennies-1000-times-1" class="slide level2">
+<h2>Resampling the pennies 1000 times</h2>
+<p>Using simulation, we can repeat this process virtually 1000 times:</p>
+<div class="cell" data-layout-align="center" data-hash="19_simulation-based-inference_cache/revealjs/pennies_10_301f5f2e52da7782fef0a292bc88055a">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">ggplot</span>(virtual_resampled_means, <span class="fu">aes</span>(<span class="at">x =</span> mean_year)) <span class="sc">+</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">boundary =</span> <span class="dv">1990</span>) <span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"sample mean"</span>) <span class="sc">+</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="19_simulation-based-inference_files/figure-revealjs/pennies_10-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="resampling-the-pennies-1000-times-2" class="slide level2">
+<h2>Resampling the pennies 1000 times</h2>
+<p>Note that our resampled means are centered around our original sample mean. This means that resampling doesn’t tell us about how far off our particular sample is–only about the variability of the observed values.</p>
+<div class="cell" data-layout-align="center" data-hash="19_simulation-based-inference_cache/revealjs/pennies_11_ef9208b9f258785de3c564b5175cd2a7">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>virtual_resampled_means <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">summarize</span>(<span class="at">mean_of_means =</span> <span class="fu">mean</span>(mean_year))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  mean_of_means
+          &lt;dbl&gt;
+1         1995.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">mean</span>(pennies_sample<span class="sc">$</span>year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1995.44</code></pre>
+</div>
+</div>
+</section>
+<section id="resampling-confidence-intervals" class="slide level2 smaller">
+<h2>Resampling confidence intervals</h2>
+<p>We can obtain a confidence interval based on our resample means:</p>
+<div class="cell" data-layout-align="center" data-hash="19_simulation-based-inference_cache/revealjs/pennies_12_2fbc8a6e6a294a5abd4ed98a90234eac">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">quantile</span>(virtual_resampled_means<span class="sc">$</span>mean_year, <span class="fu">c</span>(.<span class="dv">025</span>, .<span class="dv">975</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    2.5%    97.5% 
+1991.358 1999.441 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">ggplot</span>(virtual_resampled_means, <span class="fu">aes</span>(<span class="at">x =</span> mean_year)) <span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">boundary =</span> <span class="dv">1990</span>) <span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">quantile</span>(virtual_resampled_means<span class="sc">$</span>mean_year, <span class="fu">c</span>(.<span class="dv">025</span>, .<span class="dv">975</span>)), </span>
+<span id="cb30-4"><a href="#cb30-4"></a>             <span class="at">color =</span> <span class="st">'red'</span>) <span class="sc">+</span></span>
+<span id="cb30-5"><a href="#cb30-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"sample mean"</span>) <span class="sc">+</span></span>
+<span id="cb30-6"><a href="#cb30-6"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="19_simulation-based-inference_files/figure-revealjs/pennies_12-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="resampling-confidence-intervals-1" class="slide level2">
+<h2>Resampling confidence intervals</h2>
+<p>Compare with a normal sampling distribution based confidence interval:</p>
+<div class="cell" data-layout-align="center" data-hash="19_simulation-based-inference_cache/revealjs/pennies_113_2b16abbda35f522a26ebed02e902ee9d">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>virtual_resampled_means <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">summarize</span>(<span class="at">lower =</span> <span class="fu">mean</span>(mean_year) <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="fu">sd</span>(mean_year),</span>
+<span id="cb31-3"><a href="#cb31-3"></a>            <span class="at">upper =</span> <span class="fu">mean</span>(mean_year) <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="fu">sd</span>(mean_year))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  lower upper
+  &lt;dbl&gt; &lt;dbl&gt;
+1 1991. 2000.</code></pre>
+</div>
+</div>
+</section>
 <section id="resampling-methods-1" class="slide level2">
 <h2>Resampling methods</h2>
 <p>Suppose we know <span class="math inline">\(X_1,\ldots, X_{20}\sim \mathrm{Exp}(1)\)</span>. The sampling distribution of the sample mean can be simulated as follows:</p>
 <div class="cell" data-hash="19_simulation-based-inference_cache/revealjs/exp_samp_dist_4e55ee7ec70e7e3acc44ed910c30792c">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb7-2"><a href="#cb7-2"></a>Xbar_exp <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">mean</span>(<span class="fu">rexp</span>(<span class="dv">20</span>, <span class="at">rate =</span> <span class="dv">1</span>)))</span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="fu">hist</span>(Xbar_exp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb33-2"><a href="#cb33-2"></a>Xbar_exp <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">mean</span>(<span class="fu">rexp</span>(<span class="dv">20</span>, <span class="at">rate =</span> <span class="dv">1</span>)))</span>
+<span id="cb33-3"><a href="#cb33-3"></a><span class="fu">hist</span>(Xbar_exp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="19_simulation-based-inference_files/figure-revealjs/exp_samp_dist-1.png" width="960" class="r-stretch"></section>
@@ -536,14 +754,14 @@ Peter Gao
 <h2>Resampling methods</h2>
 <p>What if we observe <span class="math inline">\(X_1,\ldots, X_{20}\)</span>, but we don’t know that <span class="math inline">\(X_i\)</span> is exponentially distributed? We could just try the normal approximation to approximate the sampling distribution.</p>
 <div class="cell" data-hash="19_simulation-based-inference_cache/revealjs/exp_samp_dist_2_0c89708bd2b14bc99e1cfaa2ffc02a85">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">20</span>, <span class="at">rate =</span> <span class="dv">1</span>)</span>
-<span id="cb8-2"><a href="#cb8-2"></a>x_axis <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
-<span id="cb8-3"><a href="#cb8-3"></a></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="co"># plot "true" simulated sampling distribution</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="fu">hist</span>(Xbar_exp, <span class="at">freq =</span> F, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>))</span>
-<span id="cb8-6"><a href="#cb8-6"></a></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="co"># plot normal theory</span></span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="fu">lines</span>(x_axis, <span class="fu">dnorm</span>(x_axis, <span class="at">mean =</span> <span class="fu">mean</span>(X), <span class="at">sd =</span> <span class="fu">sd</span>(X) <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">20</span>)), <span class="at">col =</span> <span class="st">'red'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">20</span>, <span class="at">rate =</span> <span class="dv">1</span>)</span>
+<span id="cb34-2"><a href="#cb34-2"></a>x_axis <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
+<span id="cb34-3"><a href="#cb34-3"></a></span>
+<span id="cb34-4"><a href="#cb34-4"></a><span class="co"># plot "true" simulated sampling distribution</span></span>
+<span id="cb34-5"><a href="#cb34-5"></a><span class="fu">hist</span>(Xbar_exp, <span class="at">freq =</span> F, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>))</span>
+<span id="cb34-6"><a href="#cb34-6"></a></span>
+<span id="cb34-7"><a href="#cb34-7"></a><span class="co"># plot normal theory</span></span>
+<span id="cb34-8"><a href="#cb34-8"></a><span class="fu">lines</span>(x_axis, <span class="fu">dnorm</span>(x_axis, <span class="at">mean =</span> <span class="fu">mean</span>(X), <span class="at">sd =</span> <span class="fu">sd</span>(X) <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">20</span>)), <span class="at">col =</span> <span class="st">'red'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="resampling-methods-3" class="slide level2">
@@ -554,16 +772,16 @@ Peter Gao
 <h2>Bootstrap samples</h2>
 <p>Bootstrapping is a resampling method that uses random samples with replacement from the sample data to approximate the sampling distribution of sample-based statistics.</p>
 <div class="cell" data-hash="19_simulation-based-inference_cache/revealjs/exp_samp_dist_3_b2350d1d481e0495aecf642e101cba07">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">print</span>(<span class="fu">sort</span>(X))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="fu">print</span>(<span class="fu">sort</span>(X))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 0.00816693 0.06263315 0.11949335 0.12600941 0.14474580 0.14660666
  [7] 0.15582213 0.17485277 0.23514296 0.35492087 0.48980207 0.52215538
 [13] 0.72200938 1.27034542 1.56551624 1.74866229 1.82459209 1.84311722
 [19] 2.14225230 2.24995288</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># sample with replacement from X</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>X_resample <span class="ot">&lt;-</span> <span class="fu">sample</span>(X, <span class="at">size =</span> <span class="dv">20</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="fu">print</span>(<span class="fu">sort</span>(X_resample))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="co"># sample with replacement from X</span></span>
+<span id="cb37-2"><a href="#cb37-2"></a>X_resample <span class="ot">&lt;-</span> <span class="fu">sample</span>(X, <span class="at">size =</span> <span class="dv">20</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb37-3"><a href="#cb37-3"></a><span class="fu">print</span>(<span class="fu">sort</span>(X_resample))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 0.06263315 0.11949335 0.11949335 0.11949335 0.11949335 0.12600941
  [7] 0.14474580 0.14474580 0.15582213 0.15582213 0.17485277 0.35492087
@@ -576,8 +794,8 @@ Peter Gao
 <h2>Bootstrap samples</h2>
 <p>We can repeatedly resample from <span class="math inline">\(X\)</span>, then compute the resample sample means and plot the distribution:</p>
 <div class="cell" data-hash="19_simulation-based-inference_cache/revealjs/exp_samp_dist_4_7d0ded409fd1da8f97679cdf41f9ddad">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>bootstrap_Xbar <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">mean</span>(<span class="fu">sample</span>(X, <span class="at">size =</span> <span class="dv">20</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">hist</span>(bootstrap_Xbar <span class="sc">-</span> <span class="fu">mean</span>(X) <span class="sc">+</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>bootstrap_Xbar <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">mean</span>(<span class="fu">sample</span>(X, <span class="at">size =</span> <span class="dv">20</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb39-2"><a href="#cb39-2"></a><span class="fu">hist</span>(bootstrap_Xbar <span class="sc">-</span> <span class="fu">mean</span>(X) <span class="sc">+</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="19_simulation-based-inference_files/figure-revealjs/exp_samp_dist_4-1.png" width="960" class="r-stretch"></section>
@@ -585,16 +803,16 @@ Peter Gao
 <h2>Bootstrap samples</h2>
 <p>We can compare the bootstrap sampling distributions and true sampling distributions for <span class="math inline">\(\overline{X}-E(\overline{X})\)</span>.</p>
 <div class="cell" data-hash="19_simulation-based-inference_cache/revealjs/exp_samp_dist_5_c00e11897869b58847bbf7f3dc69ed1a">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb14-2"><a href="#cb14-2"></a>plot_dat <span class="ot">&lt;-</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">data.frame</span>(<span class="at">Xbar =</span> <span class="fu">c</span>(Xbar_exp <span class="sc">-</span> <span class="dv">1</span>, bootstrap_Xbar <span class="sc">-</span> <span class="fu">mean</span>(X)),</span>
-<span id="cb14-4"><a href="#cb14-4"></a>             <span class="at">source =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Parametric (Exp)"</span>, <span class="st">"Bootstrap"</span>), <span class="at">each =</span> <span class="dv">10000</span>))</span>
-<span id="cb14-5"><a href="#cb14-5"></a><span class="fu">ggplot</span>(plot_dat, <span class="fu">aes</span>(<span class="at">x =</span> Xbar, <span class="at">color =</span> source)) <span class="sc">+</span></span>
-<span id="cb14-6"><a href="#cb14-6"></a>  <span class="fu">geom_density</span>() <span class="sc">+</span></span>
-<span id="cb14-7"><a href="#cb14-7"></a>  <span class="fu">geom_function</span>(<span class="at">fun =</span> dnorm, </span>
-<span id="cb14-8"><a href="#cb14-8"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span> <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">20</span>)),</span>
-<span id="cb14-9"><a href="#cb14-9"></a>                <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"Parametric (Normal)"</span>)) <span class="sc">+</span></span>
-<span id="cb14-10"><a href="#cb14-10"></a>  <span class="fu">xlab</span>(<span class="st">"Xbar - E(Xbar)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb40-2"><a href="#cb40-2"></a>plot_dat <span class="ot">&lt;-</span></span>
+<span id="cb40-3"><a href="#cb40-3"></a>  <span class="fu">data.frame</span>(<span class="at">Xbar =</span> <span class="fu">c</span>(Xbar_exp <span class="sc">-</span> <span class="dv">1</span>, bootstrap_Xbar <span class="sc">-</span> <span class="fu">mean</span>(X)),</span>
+<span id="cb40-4"><a href="#cb40-4"></a>             <span class="at">source =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Parametric (Exp)"</span>, <span class="st">"Bootstrap"</span>), <span class="at">each =</span> <span class="dv">10000</span>))</span>
+<span id="cb40-5"><a href="#cb40-5"></a><span class="fu">ggplot</span>(plot_dat, <span class="fu">aes</span>(<span class="at">x =</span> Xbar, <span class="at">color =</span> source)) <span class="sc">+</span></span>
+<span id="cb40-6"><a href="#cb40-6"></a>  <span class="fu">geom_density</span>() <span class="sc">+</span></span>
+<span id="cb40-7"><a href="#cb40-7"></a>  <span class="fu">geom_function</span>(<span class="at">fun =</span> dnorm, </span>
+<span id="cb40-8"><a href="#cb40-8"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span> <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">20</span>)),</span>
+<span id="cb40-9"><a href="#cb40-9"></a>                <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"Parametric (Normal)"</span>)) <span class="sc">+</span></span>
+<span id="cb40-10"><a href="#cb40-10"></a>  <span class="fu">xlab</span>(<span class="st">"Xbar - E(Xbar)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="bootstrap-samples-3" class="slide level2">
@@ -606,7 +824,7 @@ Peter Gao
 <h2>Bootstrap confidence intervals</h2>
 <p>We can take appropriate quantiles of the bootstrap samples to construct a bootstrap confidence interval using the <code>quantile()</code> function:</p>
 <div class="cell" data-hash="19_simulation-based-inference_cache/revealjs/exp_samp_dist_6_15a94a72faf27caa3d5f92afb5da315d">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">quantile</span>(bootstrap_Xbar, <span class="at">probs =</span> <span class="fu">c</span>(.<span class="dv">025</span>, .<span class="dv">975</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="fu">quantile</span>(bootstrap_Xbar, <span class="at">probs =</span> <span class="fu">c</span>(.<span class="dv">025</span>, .<span class="dv">975</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    2.5%    97.5% 
 0.467759 1.157051 </code></pre>

@@ -9,7 +9,7 @@ editor: visual
 
 ## Overview of today
 
--   Random walks continued
+-   Simulations continued
 -   Timing code
 
 ## Warm up: Estimating $\pi$
@@ -140,9 +140,6 @@ plot(1:100, walk_randomly(100), type = "l",
      main = "A one-dimensional random walk")
 ```
 
-
-
-
 ## A two-dimensional random walk
 
 A two-dimensional random walk takes place on the integer grid, where at each step, we can either walk north, south, east, or west.
@@ -207,7 +204,6 @@ anim_walk <- ggplot(coords_dat, aes(x = x, y = y, color = step)) +
   transition_reveal(along = step)
 anim_walk
 ```
-
 
 ## Random walks continued
 
@@ -372,7 +368,6 @@ plot(ns, expected_returns, type = "l",
      ylab = "Mean visits to x = 10")
 ```
 
-
 ## Random walks continued
 
 *If we consider a random walk of length* $n$, how often will the walker visit $x=10$, on average?
@@ -426,7 +421,6 @@ plot(ns, proportion_no_returns, type = "l",
 proportion_no_returns
 ```
 
-
 ## Expected time of return
 
 ```{r expected_return2}
@@ -447,7 +441,6 @@ plot(ns, proportion_no_returns, type = "l",
      ylab = "Mean visits to x = 10")
 proportion_no_returns
 ```
-
 
 ## Expected time of return
 
@@ -595,4 +588,4 @@ compare_mat <-
 compare_mat
 ```
 
-## Parallelizing code
+## 

@@ -61,7 +61,7 @@ hist(Xbar, main = "Sampling distribution of mean of 100 Poisson(1) variables")
 
 ## Simulating a sampling distribution
 
-By the central limit theorem, all of these sampling distributions are asymptotically Gaussian with variance 1 (though the mean values differ between the three). Since $n=100$ is fairly large (for these examples), all of the previous examples are close to Gaussian.
+By the central limit theorem, all of these sampling distributions are asymptotically Gaussian with variance 1/100 (though the mean values differ between the three). Since $n=100$ is fairly large (for these examples), all of the previous examples are close to Gaussian.
 
 What about if $n$ is smaller? Or if we consider other distributions?
 
@@ -182,6 +182,289 @@ hist(Xbar_poisson, main = "Poisson(1) squared")
 ## Resampling methods
 
 The previous simulations are all based on parametric models (normal, exponential, Poisson). However, we can also simulate sampling distributions without parametric assumptions on the data generating mechanism.
+
+## Estimating the age of US pennies
+
+Suppose we want to estimate the average age of US pennies. We can't observe every single penny---so what if we take a sample of 50 pennies?
+
+![](images/pennies.png)
+
+Based on an example from [ModernDive](https://moderndive.com/8-confidence-intervals.html).
+
+
+## Estimating the age of US pennies
+
+The `moderndive` package contains data on a sample of 50 pennies in the `pennies_sample` data frame.
+
+```{r pennies_1}
+#| echo: true
+#| eval: TRUE
+#| cache: TRUE
+library(moderndive)
+data(pennies_sample)
+head(pennies_sample)
+```
+
+## Estimating the age of US pennies
+
+The `moderndive` package contains data on a sample of 50 pennies in the `pennies_sample` data frame.
+
+```{r pennies_2}
+#| echo: true
+#| eval: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 6
+#| out.width: "80%"
+#| fig.align: "center"
+#| fig-cap: ""
+library(tidyverse)
+ggplot(pennies_sample, aes(x = year)) +
+  geom_histogram(binwidth = 10, color = "white") +
+  theme_minimal()
+```
+
+
+## Estimating the age of US pennies
+
+Based on this sample, we can compute the sample mean:
+
+```{r pennies_3}
+#| echo: true
+#| eval: true
+#| message: false
+#| warning: false
+#| cache: true
+#| fig-width: 8
+#| fig-height: 6
+#| out.width: "80%"
+#| fig.align: "center"
+#| fig-cap: ""
+x_bar <- pennies_sample |>
+  summarize(mean_year = mean(year))
+x_bar
+```
+
+## Resampling the pennies
+
+Imagine we put our 50 pennies in a bag and draw a **new** sample of 50 pennies by sampling with replacement. This is called **resampling with replacement.**
+
+```{r pennies_4}
+#| echo: true
+#| eval: true
+#| message: false
+#| warning: false
+#| cache: true
+#| fig-width: 8
+#| fig-height: 6
+#| out.width: "80%"
+#| fig.align: "center"
+#| fig-cap: ""
+set.seed(327)
+pennies_resample <-
+  data.frame(year = sample(pennies$year, 50, replace = T))
+head(pennies_resample)
+pennies_resample %>% 
+  summarize(mean_year = mean(year))
+```
+
+
+## Resampling the pennies {.smaller}
+
+Imagine we put our 50 pennies in a bag and draw a **new** sample of 50 pennies by sampling with replacement. This is called **resampling with replacement.**
+
+```{r pennies_5}
+#| echo: true
+#| eval: true
+#| message: false
+#| warning: false
+#| cache: true
+#| fig-width: 4
+#| fig-height: 2
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+pennies_combined <- 
+  bind_rows(pennies_sample |> mutate(title = "Original sample"),
+            pennies_resample |> mutate(title = "Resample"))
+ggplot(pennies_combined, aes(x = year)) +
+  geom_histogram(binwidth = 10, color = "white") +
+  facet_wrap(~title) + 
+  theme_minimal()
+```
+
+## Resampling the pennies
+
+Note that our resample is not the same as drawing a new sample from the population. However, we can still learn about the **sampling variability** of the sample mean. Suppose we repeat this process many times.
+
+```{r pennies_6}
+#| echo: true
+#| eval: true
+#| message: false
+#| warning: false
+#| cache: true
+#| fig-width: 8
+#| fig-height: 6
+#| out.width: "80%"
+#| fig.align: "center"
+#| fig-cap: ""
+head(pennies_resamples)
+```
+
+## Resampling the pennies
+
+We can compute each resample mean:
+
+```{r pennies_7}
+#| echo: true
+#| eval: true
+#| message: false
+#| warning: false
+#| cache: true
+#| fig-width: 8
+#| fig-height: 6
+#| out.width: "80%"
+#| fig.align: "center"
+#| fig-cap: ""
+resampled_means <- pennies_resamples |>
+  group_by(name) |>
+  summarize(mean_year = mean(year))
+head(resampled_means)
+```
+
+## Resampling the pennies
+
+We can compute each resample mean:
+
+```{r pennies_8}
+#| echo: true
+#| eval: true
+#| message: false
+#| warning: false
+#| cache: true
+#| fig-width: 5
+#| fig-height: 2.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+ggplot(resampled_means, aes(x = mean_year)) +
+  geom_histogram(binwidth = 1, color = "white", boundary = 1990) +
+  labs(x = "Sampled mean year") +
+  theme_minimal()
+```
+
+
+## Resampling the pennies 1000 times
+
+Using simulation, we can repeat this process virtually 1000 times:
+
+```{r pennies_9}
+#| echo: true
+#| eval: true
+#| message: false
+#| warning: false
+#| cache: true
+#| fig-width: 5
+#| fig-height: 2.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+# Repeat resampling 1000 times
+virtual_resamples <- pennies_sample |>
+  rep_sample_n(size = 50, replace = TRUE, reps = 1000)
+
+# Compute 1000 sample means
+virtual_resampled_means <- virtual_resamples |>
+  group_by(replicate) |>
+  summarize(mean_year = mean(year))
+```
+
+## Resampling the pennies 1000 times
+
+Using simulation, we can repeat this process virtually 1000 times:
+
+```{r pennies_10}
+#| echo: true
+#| eval: true
+#| message: false
+#| warning: false
+#| cache: true
+#| fig-width: 5
+#| fig-height: 2.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+ggplot(virtual_resampled_means, aes(x = mean_year)) +
+  geom_histogram(binwidth = 1, color = "white", boundary = 1990) +
+  labs(x = "sample mean") +
+  theme_minimal()
+```
+
+## Resampling the pennies 1000 times
+
+Note that our resampled means are centered around our original sample mean. This means that resampling doesn't tell us about how far off our particular sample is--only about the variability of the observed values.
+
+```{r pennies_11}
+#| echo: true
+#| eval: true
+#| message: false
+#| warning: false
+#| cache: true
+#| fig-width: 5
+#| fig-height: 2.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+virtual_resampled_means |>
+  summarize(mean_of_means = mean(mean_year))
+mean(pennies_sample$year)
+```
+
+## Resampling confidence intervals {.smaller}
+
+We can obtain a confidence interval based on our resample means:
+
+```{r pennies_12}
+#| echo: true
+#| eval: true
+#| message: false
+#| warning: false
+#| cache: true
+#| fig-width: 5
+#| fig-height: 2.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+quantile(virtual_resampled_means$mean_year, c(.025, .975))
+ggplot(virtual_resampled_means, aes(x = mean_year)) +
+  geom_histogram(binwidth = 1, color = "white", boundary = 1990) +
+  geom_vline(xintercept = quantile(virtual_resampled_means$mean_year, c(.025, .975)), 
+             color = 'red') +
+  labs(x = "sample mean") +
+  theme_minimal()
+```
+
+## Resampling confidence intervals
+
+Compare with a normal sampling distribution based confidence interval:
+
+```{r pennies_113}
+#| echo: true
+#| eval: true
+#| message: false
+#| warning: false
+#| cache: true
+#| fig-width: 5
+#| fig-height: 2.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+virtual_resampled_means |>
+  summarize(lower = mean(mean_year) - 1.96 * sd(mean_year),
+            upper = mean(mean_year) + 1.96 * sd(mean_year))
+```
+
 
 ## Resampling methods
 

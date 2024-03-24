@@ -1,1 +1,11 @@
 ggplot2
+moderndive
+tidyverse
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+lubridate

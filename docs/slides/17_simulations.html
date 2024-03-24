@@ -423,7 +423,7 @@ Peter Gao
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">9</span>, <span class="dv">10</span>, <span class="at">replace =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] 7 2 6 8 5 7 2 3 8 7</code></pre>
+<pre><code> [1] 1 1 2 5 3 3 3 0 0 6</code></pre>
 </div>
 </div>
 <p>What if we want to generate <span class="math inline">\(n\)</span> samples from a normal distribution? Or a binomial distribution?</p>
@@ -450,11 +450,11 @@ Peter Gao
 <span id="cb3-12"><a href="#cb3-12"></a>}</span>
 <span id="cb3-13"><a href="#cb3-13"></a>HH_score</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 11</code></pre>
+<pre><code>[1] 24</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>HT_score</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 28</code></pre>
+<pre><code>[1] 23</code></pre>
 </div>
 </div>
 </section>
@@ -543,7 +543,7 @@ Peter Gao
 </section>
 <section id="the-r-p-d-and-q-functions-1" class="slide level2">
 <h2>The <code>r</code>, <code>p</code>, <code>d</code>, and <code>q</code> functions</h2>
-<p><code>pnorm()</code> can be used to compute the distribution function at a value <code>q</code>. In other words, if <span class="math inline">\(Z\)</span> is a standard normal, pnorm returns the value of <span class="math display">\[F(q)= P\left(Z &lt; \frac{q-\mu}{\sigma}\right)\]</span></p>
+<p><code>pnorm()</code> can be used to compute the distribution function at a value <code>q</code>. In other words, if <span class="math inline">\(Z\)</span> is a standard normal, pnorm returns the value of <span class="math display">\[F(q)= P\left(Z \leq \frac{q-\mu}{\sigma}\right)\]</span></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">pnorm</span>(<span class="at">q =</span> <span class="dv">1</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
