@@ -7,7 +7,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="YOUR NAME HERE">
-<meta name="dcterms.date" content="2023-10-18">
 
 <title>MATH167R - Lab 8</title>
 <style>
@@ -4685,9 +4684,10 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#collaborators" id="toc-collaborators" class="nav-link active" data-scroll-target="#collaborators">Collaborators</a></li>
-  <li><a href="#a.-writing-a-simulation." id="toc-a.-writing-a-simulation." class="nav-link" data-scroll-target="#a.-writing-a-simulation.">A. Writing a simulation.</a></li>
-  <li><a href="#b.-one-dimensional-random-walks" id="toc-b.-one-dimensional-random-walks" class="nav-link" data-scroll-target="#b.-one-dimensional-random-walks">B. One-dimensional random walks</a></li>
+  <li><a href="#a.-bootstrapping-the-sampling-distribution-of-the-median" id="toc-a.-bootstrapping-the-sampling-distribution-of-the-median" class="nav-link active" data-scroll-target="#a.-bootstrapping-the-sampling-distribution-of-the-median">A. Bootstrapping the sampling distribution of the median</a></li>
+  <li><a href="#b.-simulations" id="toc-b.-simulations" class="nav-link" data-scroll-target="#b.-simulations">B. Simulations</a></li>
+  <li><a href="#c.-hypothesis-testing" id="toc-c.-hypothesis-testing" class="nav-link" data-scroll-target="#c.-hypothesis-testing">C. Hypothesis Testing</a></li>
+  <li><a href="#d.-linear-regression" id="toc-d.-linear-regression" class="nav-link" data-scroll-target="#d.-linear-regression">D. Linear Regression</a></li>
   </ul>
 </nav>
     </div>
@@ -4710,12 +4710,6 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
           </div>
   </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">October 18, 2023</p>
-    </div>
-  </div>
   
     
   </div>
@@ -4723,28 +4717,57 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
 
 </header>
 
-<p>Remember, you must submit <em>both</em> your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.</p>
-<section id="collaborators" class="level3">
-<h3 class="anchored" data-anchor-id="collaborators">Collaborators</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LOAD ANY RELEVANT PACKAGES HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="a.-writing-a-simulation." class="level2">
-<h2 class="anchored" data-anchor-id="a.-writing-a-simulation.">A. Writing a simulation.</h2>
-<p>Suppose <span class="math inline">\(X_i\sim \mathrm{N}(0, 1)\)</span> for <span class="math inline">\(1\leq i\leq n\)</span>, for some <span class="math inline">\(n\)</span>.</p>
+<p>Remember, <strong>follow the instructions below and use R Markdown to create a pdf document with your code and answers to the following questions on Gradescope.</strong> You may find a template file by clicking “Code” in the top right corner of this page.</p>
+<section id="a.-bootstrapping-the-sampling-distribution-of-the-median" class="level2">
+<h2 class="anchored" data-anchor-id="a.-bootstrapping-the-sampling-distribution-of-the-median">A. Bootstrapping the sampling distribution of the median</h2>
 <ol type="1">
-<li><p>For <span class="math inline">\(n=10, 20, 40, 80, 160, 320, 640, 1280\)</span>, carry out a simulation to estimate <span class="math inline">\(E(\mathrm{max}(X_1,\ldots, X_n))\)</span>. For each value of <span class="math inline">\(n\)</span>, simulate 1000 values of <span class="math inline">\(\mathrm{max}(X_1,\ldots, X_n)\)</span> and compute their mean. Store these means in a vector.</p></li>
-<li><p>Create a line graph with <span class="math inline">\(n\)</span> on the x-axis and your simulation-based estimates of <span class="math inline">\(E(\mathrm{max}(X_1,\ldots, X_n))\)</span> on the y-axis. Comment on your findings. Does there seem to be an upper limit of <span class="math inline">\(E(\mathrm{max}(X_1,\ldots, X_n))\)</span>?</p></li>
+<li><p>Using the <code>penguins</code> dataset in the <code>palmerpenguins</code> package, construct a confidence interval for the mean <code>body_mass_g</code> for female Adelie penguins based on using a normal distribution based on the central limit theorem. You should compute the confidence interval without using <code>confint()</code>.</p></li>
+<li><p>Construct a bootstrap confidence interval for the mean <code>body_mass_g</code> for female Adelie penguins using 10000 resamples.</p></li>
+<li><p>Construct a bootstrap confidence interval for the median <code>body_mass_g</code> for female Adelie penguins using 10000 resamples.</p></li>
 </ol>
 </section>
-<section id="b.-one-dimensional-random-walks" class="level2">
-<h2 class="anchored" data-anchor-id="b.-one-dimensional-random-walks">B. One-dimensional random walks</h2>
-<p>In this part, you will simulate a one-dimensional random walk. Suppose you are at the point <span class="math inline">\(x\)</span> at time <span class="math inline">\(t\)</span>. At time <span class="math inline">\(t+1\)</span>, the probability of moving forwards to <span class="math inline">\(x+1\)</span> is <span class="math inline">\(p\)</span> and the chance of moving backwards to <span class="math inline">\(x-1\)</span> is <span class="math inline">\(1-p\)</span>. Assume that at time <span class="math inline">\(t=1\)</span>, you are at <span class="math inline">\(x_1=0\)</span>.</p>
-<ol start="3" type="1">
-<li><p>Write a function <code>random_walk()</code> that takes as input a numeric <code>n_steps</code> and a numeric <span class="math inline">\(p\)</span> and simulates <code>n_steps</code> steps of the one-dimensional random walk with forward probability <span class="math inline">\(p\)</span>. You may have other input arguments if desired. The output should be a length vector of length <code>n_steps</code> starting with 0 where the <span class="math inline">\(i\)</span>th entry represents the location of the random walker at time <span class="math inline">\(t=i\)</span>. For example, <code>random_walk(5, .5)</code> may return the vector <span class="math inline">\((0, 1, 2, 1, 2)\)</span>.</p></li>
-<li><p>Use your function to generate a random walk of 500 steps with probability <span class="math inline">\(.6\)</span> and generate a line graph with <span class="math inline">\(t=1,\ldots, 500\)</span> on the x-axis and <span class="math inline">\(x_1,\ldots, x_{500}\)</span> on the y-axis.</p></li>
-<li><p>Use your function to generate two more random walks of 500 steps with probability <span class="math inline">\(.6\)</span> and create a line graph with all three of your random walks, using different colors for each walk.</p></li>
+<section id="b.-simulations" class="level2">
+<h2 class="anchored" data-anchor-id="b.-simulations">B. Simulations</h2>
+<ol start="4" type="1">
+<li><p>Suppose that <span class="math inline">\(Y\sim \mathrm{Poisson}(X)\)</span> where <span class="math inline">\(X\sim \mathrm{Exponential}(1)\)</span>. Use simulation to estimate <span class="math inline">\(E(Y)\)</span> and <span class="math inline">\(\mathrm{Var}(Y)\)</span>.</p></li>
+<li><p>For this question, you will write a simulation to test the frequentist coverage of a 95% confidence interval for a proportion based on the normal approximation.</p>
+<ol type="a">
+<li>First, write a function that takes two inputs: <code>n</code> and <code>p</code>. Your function should randomly generate some <span class="math inline">\(X\sim \mathrm{Binomial}(n, p)\)</span>, compute <span class="math inline">\(\widehat{p}= X/n\)</span>, and then compute the corresponding normal distribution-based confidence interval for <span class="math inline">\(p\)</span> <strong>based on your sample</strong> <span class="math inline">\(\widehat{p}\)</span>. Your function should return <code>TRUE</code> if <span class="math inline">\(p\)</span> is in the confidence interval. You may use the following formula for the confidence interval:</li>
+</ol>
+<p><span class="math display">\[\widehat{p}\pm z_{.975}\sqrt{\frac{\widehat{p}(1-\widehat{p})}{n}}\]</span></p>
+<ol start="2" type="a">
+<li><p>Next, write a second function that takes three inputs: <code>n</code>, <code>p</code>, and <code>n_runs</code>, representing the number of times to run your simulation. This function should use your function from (a) to simulate <code>n_runs</code> binomial random variables and return the proportion of the <code>n_runs</code> for which <span class="math inline">\(p\)</span> is contained in the confidence interval.</p></li>
+<li><p>Test your function from (b) with <code>n = 20</code>, <code>p = .5</code>, and <code>n_runs = 1000</code>.</p></li>
+<li><p>Use your simulation code to investigate the following questions: For what values of <code>n</code> and <code>p</code> is the frequentist coverage close to the expected 95% value? For what values of <code>n</code> and <code>p</code> is the frequentist coverage very different to the expected 95% value?</p></li>
+</ol></li>
+</ol>
+</section>
+<section id="c.-hypothesis-testing" class="level2">
+<h2 class="anchored" data-anchor-id="c.-hypothesis-testing">C. Hypothesis Testing</h2>
+<p>Use the following code to obtain the Hawaiian Airlines and Alaska Airlines flights from the <code>nycflights13</code> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;flights&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>flights_sample <span class="ot">&lt;-</span> flights <span class="sc">|&gt;</span> </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(carrier <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;HA&quot;</span>, <span class="st">&quot;AS&quot;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="6" type="1">
+<li><p>Compute a 95% confidence interval for the mean <code>arr_delay</code> for Alaska Airlines flights. Interpret your results.</p></li>
+<li><p>Compute a 95% confidence interval for the mean <code>arr_delay</code> for Hawaiian Airlines flights. Interpret your results.</p></li>
+<li><p>Compute a 95% confidence interval for the proportion of flights for which <code>arr_delay &gt; 0</code> for Hawaiian Airlines flights. Interpret your results.</p></li>
+<li><p>Consider the null hypothesis that the mean <code>arr_delay</code> for Alaska is equal to the mean <code>arr_delay</code> for Hawaiian and the alternative hypothesis that the mean <code>arr_delay</code> values are different for the two airlines. Perform an appropriate hypothesis test and interpret your results.</p></li>
+</ol>
+</section>
+<section id="d.-linear-regression" class="level2">
+<h2 class="anchored" data-anchor-id="d.-linear-regression">D. Linear Regression</h2>
+<p>Researchers at the University of Texas in Austin, Texas tried to figure out what causes differences in instructor teaching evaluation scores. Use the following code to load data on 463 courses. A full description of the data can be found <a href="https://www.openintro.org/book/statdata/?data=evals">here</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>evals <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">&quot;https://www.openintro.org/book/statdata/evals.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="10" type="1">
+<li><p>Carry out a linear regression with <code>score</code> as the response variable and <code>age</code> as the single explanatory variable. Interpret your results.</p></li>
+<li><p>Extend your regression model by adding an additional explanatory variable. What happens to your results? Are the new <span class="math inline">\(p\)</span>-values appropriate to use?</p></li>
 </ol>
 
 
@@ -5037,44 +5060,75 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class>
-<div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Lab 8&quot;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> &quot;YOUR NAME HERE&quot;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> &quot;2023-10-18&quot;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-summary: &quot;Code&quot;</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>Remember, you must submit *both* your .Rmd and the compiled .html in order to receive full credit! In addition, to receive full credit, your code output and plots must be correctly formatted.</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">### Collaborators</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># LOAD ANY RELEVANT PACKAGES HERE</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## A. Writing a simulation.</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>Suppose $X_i\sim \mathrm{N}(0, 1)$ for $1\leq i\leq n$, for some $n$. </span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>For $n=10, 20, 40, 80, 160, 320, 640, 1280$, carry out a simulation to estimate $E(\mathrm{max}(X_1,\ldots, X_n))$. For each value of $n$, simulate 1000 values of $\mathrm{max}(X_1,\ldots, X_n)$ and compute their mean. Store these means in a vector.</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Create a line graph with $n$ on the x-axis and your simulation-based estimates of $E(\mathrm{max}(X_1,\ldots, X_n))$ on the y-axis. Comment on your findings. Does there seem to be an upper limit of $E(\mathrm{max}(X_1,\ldots, X_n))$?</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="fu">## B. One-dimensional random walks</span></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>In this part, you will simulate a one-dimensional random walk. Suppose you are at the point $x$ at time $t$. At time $t+1$, the probability of moving forwards to $x+1$ is $p$ and the chance of moving backwards to $x-1$ is $1-p$. Assume that at time $t=1$, you are at $x_1=0$.</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Write a function <span class="in">`random_walk()`</span> that takes as input a numeric <span class="in">`n_steps`</span> and a numeric $p$ and simulates <span class="in">`n_steps`</span> steps of the one-dimensional random walk with forward probability $p$. You may have other input arguments if desired. The output should be a length vector of length <span class="in">`n_steps`</span> starting with 0 where the $i$th entry represents the location of the random walker at time $t=i$. For example, <span class="in">`random_walk(5, .5)`</span> may return the vector $(0, 1, 2, 1, 2)$. </span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Use your function to generate a random walk of 500 steps with probability $.6$ and generate a line graph with $t=1,\ldots, 500$ on the x-axis and $x_1,\ldots, x_{500}$ on the y-axis.</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Use your function to generate two more random walks of 500 steps with probability $.6$ and create a line graph with all three of your random walks, using different colors for each walk.</span>
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Lab 8&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> &quot;YOUR NAME HERE&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-summary: &quot;Code&quot;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>Remember, **follow the instructions below and use R Markdown to create a pdf document with your code and answers to the following questions on Gradescope.** You may find a template file by clicking &quot;Code&quot; in the top right corner of this page.</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## A. Bootstrapping the sampling distribution of the median</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Using the <span class="in">`penguins`</span> dataset in the <span class="in">`palmerpenguins`</span> package, construct a confidence interval for the mean <span class="in">`body_mass_g`</span> for female Adelie penguins based on using a normal distribution based on the central limit theorem. You should compute the confidence interval without using <span class="in">`confint()`</span>.</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Construct a bootstrap confidence interval for the mean <span class="in">`body_mass_g`</span> for female Adelie penguins using 10000 resamples.</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Construct a bootstrap confidence interval for the median <span class="in">`body_mass_g`</span> for female Adelie penguins using 10000 resamples.</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## B. Simulations</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Suppose that $Y\sim \mathrm{Poisson}(X)$ where $X\sim \mathrm{Exponential}(1)$. Use simulation to estimate $E(Y)$ and $\mathrm{Var}(Y)$.</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>For this question, you will write a simulation to test the frequentist coverage of a 95\% confidence interval for a proportion based on the normal approximation. </span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    a. First, write a function that takes two inputs: <span class="in">`n`</span> and <span class="in">`p`</span>. Your function should randomly generate some $X\sim \mathrm{Binomial}(n, p)$, compute $\widehat{p}= X/n$, and then compute the corresponding normal distribution-based confidence interval for $p$ **based on your sample** $\widehat{p}$. Your function should return <span class="in">`TRUE`</span> if $p$ is in the confidence interval. You may use the following formula for the confidence interval:</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    $$\widehat{p}\pm z_{.975}\sqrt{\frac{\widehat{p}(1-\widehat{p})}{n}}$$</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    b. Next, write a second function that takes three inputs: <span class="in">`n`</span>, <span class="in">`p`</span>, and <span class="in">`n_runs`</span>, representing the number of times to run your simulation. This function should use your function from (a) to simulate <span class="in">`n_runs`</span> binomial random variables and return the proportion of the <span class="in">`n_runs`</span> for which $p$ is contained in the confidence interval.</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    c. Test your function from (b) with <span class="in">`n = 20`</span>, <span class="in">`p = .5`</span>, and <span class="in">`n_runs = 1000`</span>.</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    d. Use your simulation code to investigate the following questions: For what values of <span class="in">`n`</span> and <span class="in">`p`</span> is the frequentist coverage close to the expected 95\% value? For what values of <span class="in">`n`</span> and <span class="in">`p`</span> is the frequentist coverage very different to the expected 95\% value?</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="fu">## C. Hypothesis Testing</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>Use the following code to obtain the Hawaiian Airlines and Alaska Airlines flights from the <span class="in">`nycflights13`</span> package.</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, warning = F, message = F}</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;flights&quot;</span>)</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>flights_sample <span class="ot">&lt;-</span> flights <span class="sc">|&gt;</span> </span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(carrier <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;HA&quot;</span>, <span class="st">&quot;AS&quot;</span>))</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Compute a 95% confidence interval for the mean <span class="in">`arr_delay`</span> for Alaska Airlines flights. Interpret your results.</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>Compute a 95% confidence interval for the mean <span class="in">`arr_delay`</span> for Hawaiian Airlines flights. Interpret your results.</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="ss">8. </span>Compute a 95% confidence interval for the proportion of flights for which <span class="in">`arr_delay &gt; 0`</span> for Hawaiian Airlines flights. Interpret your results.</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="ss">9. </span>Consider the null hypothesis that the mean <span class="in">`arr_delay`</span> for Alaska is equal to the mean <span class="in">`arr_delay`</span> for Hawaiian and the alternative hypothesis that the mean <span class="in">`arr_delay`</span> values are different for the two airlines. Perform an appropriate hypothesis test and interpret your results.</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="fu">## D. Linear Regression</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>Researchers at the University of Texas in Austin, Texas tried to figure out what causes differences in instructor teaching evaluation scores. Use the following code to load data on 463 courses. A full description of the data can be found <span class="co">[</span><span class="ot">here</span><span class="co">](https://www.openintro.org/book/statdata/?data=evals)</span>.</span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, warning = F, message = F}</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>evals <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">&quot;https://www.openintro.org/book/statdata/evals.csv&quot;</span>)</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>Carry out a linear regression with <span class="in">`score`</span> as the response variable and <span class="in">`age`</span> as the single explanatory variable. Interpret your results.</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="ss">11. </span>Extend your regression model by adding an additional explanatory variable. What happens to your results? Are the new $p$-values appropriate to use?</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

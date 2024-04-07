@@ -44,3 +44,36 @@ Remember, you must submit *both* your .Rmd and the compiled .html in order to re
     d. Use your simulation code to investigate the following questions: For what values of `n` and `p` is the frequentist coverage close to the expected 95\% value? For what values of `n` and `p` is the frequentist coverage very different to the expected 95\% value?
 
 
+## C. Hypothesis Testing
+
+Use the following code to obtain the Hawaiian Airlines and Alaska Airlines flights from the `nycflights13` package.
+
+```{r, warning = F, message = F}
+library(tidyverse)
+library(nycflights13)
+data("flights")
+flights_sample <- flights |> 
+  filter(carrier %in% c("HA", "AS"))
+```
+
+6. Compute a 95% confidence interval for the mean `arr_delay` for Alaska Airlines flights. Interpret your results.
+
+7. Compute a 95% confidence interval for the mean `arr_delay` for Hawaiian Airlines flights. Interpret your results.
+
+8. Compute a 95% confidence interval for the proportion of flights for which `arr_delay > 0` for Hawaiian Airlines flights. Interpret your results.
+
+9. Consider the null hypothesis that the mean `arr_delay` for Alaska is equal to the mean `arr_delay` for Hawaiian and the alternative hypothesis that the mean `arr_delay` values are different for the two airlines. Perform an appropriate hypothesis test and interpret your results.
+
+## D. Linear Regression
+
+Researchers at the University of Texas in Austin, Texas tried to figure out what causes differences in instructor teaching evaluation scores. Use the following code to load data on 463 courses. A full description of the data can be found [here](https://www.openintro.org/book/statdata/?data=evals).
+
+```{r, warning = F, message = F}
+evals <- readr::read_csv("https://www.openintro.org/book/statdata/evals.csv")
+```
+
+10. Carry out a linear regression with `score` as the response variable and `age` as the single explanatory variable. Interpret your results.
+
+11. Extend your regression model by adding an additional explanatory variable. What happens to your results? Are the new $p$-values appropriate to use?
+
+
