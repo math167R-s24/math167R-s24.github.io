@@ -45,7 +45,7 @@ What does the central limit theorem say?
 
 . . .
 
-Let $X_1,\ldots, X_n$ be a random sample from a distribution with mean $\mu$ and variance $\sigma^2$. Then if $n$ is sufficiently large, $\overline{X}_n$ has approximately a normal distribution with
+Let $X_1,\ldots, X_n$ be independent samples from a distribution with mean $\mu$ and variance $\sigma^2$. Then if $n$ is sufficiently large, $\overline{X}_n$ has approximately a normal distribution with
 
 -   $E(\overline{X}_n)=\mu$
 -   $\mathrm{Var}(\overline{X}_n)=\sigma^2/n$.
