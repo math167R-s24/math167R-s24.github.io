@@ -178,6 +178,18 @@ Problems begin when our null distribution is misspecified (for example, when ass
 2.  Compute a test statistic for which the null distribution is known.
 3.  Compare the test statistic with the null distribution to obtain a P-value.
 
+## Which man is named "Tim" and which is named "Bob"?
+
+![[Lea et al. (2007)](https://link.springer.com/article/10.3758/BF03194119)](images/tim_bob.png)
+
+## Which man is named "Tim" and which is named "Bob"?
+
+Suppose we wish to see whether our data represents evidence for the existence of "facial stereotypes."
+
+1.  What are our null and alternative hypotheses?
+2.  What is an appropriate test statistic?
+3.  Calculate an appropriate P-value.
+
 ## Example: two sample $t$-test
 
 1.  Hypotheses:

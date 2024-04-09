@@ -9,8 +9,8 @@ editor: visual
 
 ## Overview of today
 
-- anova
-- Chi squared tests
+-   anova
+-   Chi squared tests
 
 ## Sampling distributions
 

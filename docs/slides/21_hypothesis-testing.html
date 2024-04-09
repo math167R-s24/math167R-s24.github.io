@@ -477,7 +477,7 @@ H_a: p&amp;\neq 1/2
 <section id="example-flipping-coins" class="slide level2">
 <h2>Example: flipping coins</h2>
 <p>Instead of actually flipping the coin, let’s carry out this example in R.</p>
-<div class="cell" data-hash="21_hypothesis-testing_cache/html/unnamed-chunk-1_0281da7e947fb1fb6d24183d8aa83a69">
+<div class="cell" data-hash="21_hypothesis-testing_cache/revealjs/unnamed-chunk-1_ed809816310f1de4f64eabc43fc0a611">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">set.seed</span>(<span class="dv">302</span>)</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="co"># the true population parameter (in practice, we don't know this).</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a>p <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
@@ -515,7 +515,7 @@ H_a: p&amp;\neq 1/2
 </section>
 <section id="example-flipping-coins-4" class="slide level2">
 <h2>Example: flipping coins</h2>
-<div class="cell" data-hash="21_hypothesis-testing_cache/html/unnamed-chunk-2_264010494ed444995a803a84358c7f68">
+<div class="cell" data-hash="21_hypothesis-testing_cache/revealjs/unnamed-chunk-2_8a8aed18e578fcba89e4307edd038513">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># record test statistic</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>test_stat <span class="ot">&lt;-</span> <span class="fu">sum</span>(coin_flips)</span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="co"># record how "extreme" our test statistic is</span></span>
@@ -558,6 +558,19 @@ H_a: p&amp;\neq 1/2
 <li>Compare the test statistic with the null distribution to obtain a P-value.</li>
 </ol>
 </section>
+<section id="which-man-is-named-tim-and-which-is-named-bob" class="slide level2">
+<h2>Which man is named “Tim” and which is named “Bob”?</h2>
+
+<img data-src="images/tim_bob.png" class="r-stretch quarto-figure-center"><p class="caption"><a href="https://link.springer.com/article/10.3758/BF03194119">Lea et al.&nbsp;(2007)</a></p></section>
+<section id="which-man-is-named-tim-and-which-is-named-bob-1" class="slide level2">
+<h2>Which man is named “Tim” and which is named “Bob”?</h2>
+<p>Suppose we wish to see whether our data represents evidence for the existence of “facial stereotypes.”</p>
+<ol type="1">
+<li>What are our null and alternative hypotheses?</li>
+<li>What is an appropriate test statistic?</li>
+<li>Calculate an appropriate P-value.</li>
+</ol>
+</section>
 <section id="example-two-sample-t-test" class="slide level2">
 <h2>Example: two sample <span class="math inline">\(t\)</span>-test</h2>
 <ol type="1">
@@ -584,7 +597,7 @@ H_a: \mu_x &amp;\neq  \mu_y
 </section>
 <section id="t.test-t-tests-in-r-1" class="slide level2">
 <h2><code>t.test()</code>: t-tests in R</h2>
-<div class="cell" data-hash="21_hypothesis-testing_cache/html/unnamed-chunk-3_c8d9dea2557e5334aa46074354afd483">
+<div class="cell" data-hash="21_hypothesis-testing_cache/revealjs/unnamed-chunk-3_d022fdd8056479317a9f6a1e25370501">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">set.seed</span>(<span class="dv">302</span>)</span>
 <span id="cb7-2"><a href="#cb7-2"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
 <span id="cb7-3"><a href="#cb7-3"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="at">mean =</span> <span class="fl">1.5</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
@@ -613,7 +626,7 @@ H_0: \mu_x &amp;= \mu_y\\
 H_a: \mu_x &amp;&lt; \mu_y
 \end{align}
 \]</span></p>
-<div class="cell" data-hash="21_hypothesis-testing_cache/html/unnamed-chunk-4_eb73973152d4396e59765787154315ee">
+<div class="cell" data-hash="21_hypothesis-testing_cache/revealjs/unnamed-chunk-4_9175854e0430c7eb2b5eb0b2a680a681">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">t.test</span>(x, y, <span class="at">alternative =</span> <span class="st">"less"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -643,7 +656,7 @@ H_a: \mu_x &amp;\neq 0
 </section>
 <section id="t.test-t-tests-in-r-4" class="slide level2">
 <h2><code>t.test()</code>: t-tests in R</h2>
-<div class="cell" data-hash="21_hypothesis-testing_cache/html/unnamed-chunk-5_4b402e37cd6596ffb7f94e7dd4d7b04e">
+<div class="cell" data-hash="21_hypothesis-testing_cache/revealjs/unnamed-chunk-5_f08e1d188b293c6b2714073aa40ec0e2">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">t.test</span>(x, <span class="at">mu =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -919,6 +932,44 @@ mean of x
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {

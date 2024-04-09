@@ -419,33 +419,33 @@ Peter Gao
 <section id="simulating-a-sampling-distribution" class="slide level2">
 <h2>Simulating a sampling distribution</h2>
 <p>Example simulation: Suppose <span class="math inline">\(X_1,\ldots, X_{100}\sim N(0,1)\)</span>.</p>
-<div class="cell" data-hash="27_cross-validation_cache/html/sample_mean_6521a1d1de8315340c2511adcbe781e8">
+<div class="cell" data-hash="27_cross-validation_cache/revealjs/sample_mean_fdb572dad36532a5b84b7629c69c3856">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb1-2"><a href="#cb1-2"></a>Xbar <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">mean</span>(<span class="fu">rnorm</span>(<span class="dv">100</span>)))</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="fu">hist</span>(Xbar, <span class="at">main =</span> <span class="st">"Sampling distribution of mean of 100 N(0, 1) variables"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="27_cross-validation_files/figure-html/sample_mean-1.png" width="672" class="r-stretch"></section>
+<img data-src="27_cross-validation_files/figure-revealjs/sample_mean-1.png" width="960" class="r-stretch"></section>
 <section id="simulating-a-sampling-distribution-1" class="slide level2">
 <h2>Simulating a sampling distribution</h2>
 <p>What if <span class="math inline">\(X_1,\ldots, X_{100}\sim \mathrm{Exp}(1)\)</span>?</p>
-<div class="cell" data-hash="27_cross-validation_cache/html/sample_mean_exp_e99b690935b372f6c251114879e45539">
+<div class="cell" data-hash="27_cross-validation_cache/revealjs/sample_mean_exp_846d563cb030bfb053b15470f3efeee3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb2-2"><a href="#cb2-2"></a>Xbar <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">mean</span>(<span class="fu">rexp</span>(<span class="dv">100</span>, <span class="at">rate =</span> <span class="dv">1</span>)))</span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="fu">hist</span>(Xbar, <span class="at">main =</span> <span class="st">"Sampling distribution of mean of 100 Exponential(1) variables"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="27_cross-validation_files/figure-html/sample_mean_exp-1.png" width="672" class="r-stretch"></section>
+<img data-src="27_cross-validation_files/figure-revealjs/sample_mean_exp-1.png" width="960" class="r-stretch"></section>
 <section id="simulating-a-sampling-distribution-2" class="slide level2">
 <h2>Simulating a sampling distribution</h2>
 <p>What if <span class="math inline">\(X_1,\ldots, X_{100}\sim \mathrm{Poisson}(1)\)</span>?</p>
-<div class="cell" data-hash="27_cross-validation_cache/html/sample_mean_pois_f95baaab01399f5620758f42dca47129">
+<div class="cell" data-hash="27_cross-validation_cache/revealjs/sample_mean_pois_fd540e3b94fa73fe5b0a62d0573ec17e">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb3-2"><a href="#cb3-2"></a>Xbar <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">mean</span>(<span class="fu">rpois</span>(<span class="dv">100</span>, <span class="at">lambda =</span> <span class="dv">1</span>)))</span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="fu">hist</span>(Xbar, <span class="at">main =</span> <span class="st">"Sampling distribution of mean of 100 Poisson(1) variables"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="27_cross-validation_files/figure-html/sample_mean_pois-1.png" width="672" class="r-stretch"></section>
+<img data-src="27_cross-validation_files/figure-revealjs/sample_mean_pois-1.png" width="960" class="r-stretch"></section>
 <section id="simulating-a-sampling-distribution-3" class="slide level2">
 <h2>Simulating a sampling distribution</h2>
 <p>By the central limit theorem, all of these sampling distributions are asymptotically Gaussian with variance 1 (though the mean values differ between the three). Since <span class="math inline">\(n=100\)</span> is fairly large (for these examples), all of the previous examples are close to Gaussian.</p>
@@ -459,7 +459,7 @@ Peter Gao
 </section>
 <section id="smaller-sample-sizes" class="slide level2">
 <h2>Smaller sample sizes</h2>
-<div class="cell" data-hash="27_cross-validation_cache/html/smaller_sample_e9730dfaab8b9029d6b1043e53d0e1b7">
+<div class="cell" data-hash="27_cross-validation_cache/revealjs/smaller_sample_ea67472114e1dde0567fc4ef813e3238">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb4-2"><a href="#cb4-2"></a>Xbar_normal <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">mean</span>(<span class="fu">rnorm</span>(<span class="dv">10</span>)))</span>
 <span id="cb4-3"><a href="#cb4-3"></a>Xbar_exp <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">mean</span>(<span class="fu">rexp</span>(<span class="dv">10</span>, <span class="at">rate =</span> <span class="dv">1</span>)))</span>
@@ -470,11 +470,11 @@ Peter Gao
 <span id="cb4-8"><a href="#cb4-8"></a><span class="fu">hist</span>(Xbar_poisson, <span class="at">main =</span> <span class="st">"Poisson(1)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="27_cross-validation_files/figure-html/smaller_sample-1.png" width="672" class="r-stretch"></section>
+<img data-src="27_cross-validation_files/figure-revealjs/smaller_sample-1.png" width="960" class="r-stretch"></section>
 <section id="other-statistics" class="slide level2">
 <h2>Other statistics</h2>
 <p>What if we want the sampling distribution of the maximum? For each of these population models, the sampling distribution of the maximum is different.</p>
-<div class="cell" data-hash="27_cross-validation_cache/html/max_sampling_dist_40701da842f5ff88a91773cdef713b0b">
+<div class="cell" data-hash="27_cross-validation_cache/revealjs/max_sampling_dist_6cc2ea401ceab2f43d98465d1f520524">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb5-2"><a href="#cb5-2"></a>Xmax_normal <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">max</span>(<span class="fu">rnorm</span>(<span class="dv">10</span>)))</span>
 <span id="cb5-3"><a href="#cb5-3"></a>Xmax_exp <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">max</span>(<span class="fu">rexp</span>(<span class="dv">10</span>, <span class="at">rate =</span> <span class="dv">1</span>)))</span>
@@ -485,11 +485,11 @@ Peter Gao
 <span id="cb5-8"><a href="#cb5-8"></a><span class="fu">hist</span>(Xmax_poisson, <span class="at">main =</span> <span class="st">"Poisson(1)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="27_cross-validation_files/figure-html/max_sampling_dist-1.png" width="672" class="r-stretch"></section>
+<img data-src="27_cross-validation_files/figure-revealjs/max_sampling_dist-1.png" width="960" class="r-stretch"></section>
 <section id="transformations" class="slide level2">
 <h2>Transformations</h2>
 <p>We can easily simulate sampling distributions for statistics summarizing the distribution of random variables that are defined as transformations of other random variables.</p>
-<div class="cell" data-hash="27_cross-validation_cache/html/mean_transformed_d3710ae85e10cc9ff074770806095061">
+<div class="cell" data-hash="27_cross-validation_cache/revealjs/mean_transformed_0d3f926417d27a2c198b3a0c20d4cc41">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb6-2"><a href="#cb6-2"></a>Xbar_normal <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">mean</span>(<span class="fu">rnorm</span>(<span class="dv">10</span>) <span class="sc">^</span> <span class="dv">2</span>))</span>
 <span id="cb6-3"><a href="#cb6-3"></a>Xbar_exp <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">mean</span>(<span class="fu">rexp</span>(<span class="dv">10</span>, <span class="at">rate =</span> <span class="dv">1</span>) <span class="sc">^</span> <span class="dv">2</span>))</span>
@@ -500,7 +500,7 @@ Peter Gao
 <span id="cb6-8"><a href="#cb6-8"></a><span class="fu">hist</span>(Xbar_poisson, <span class="at">main =</span> <span class="st">"Poisson(1) squared"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="27_cross-validation_files/figure-html/mean_transformed-1.png" width="672" class="r-stretch"></section>
+<img data-src="27_cross-validation_files/figure-revealjs/mean_transformed-1.png" width="960" class="r-stretch"></section>
 <section id="exercise" class="slide level2">
 <h2>Exercise</h2>
 <ul>
@@ -511,17 +511,17 @@ Peter Gao
 <h2>Resampling methods</h2>
 <p>The previous simulations are all based on parametric models (normal, exponential, Poisson). However, we can also simulate sampling distributions without parametric assumptions on the data generating mechanism.</p>
 <p>Suppose we know <span class="math inline">\(X_1,\ldots, X_{20}\sim \mathrm{Exp}(1)\)</span>. The sampling distribution can be simulated as follows:</p>
-<div class="cell" data-hash="27_cross-validation_cache/html/exp_samp_dist_fc5b492c37dd4d5ed9f9117f8bcd8eeb">
+<div class="cell" data-hash="27_cross-validation_cache/revealjs/exp_samp_dist_dc83ecfc05e349ef646fc91fffe1c128">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb7-2"><a href="#cb7-2"></a>Xbar_exp <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">mean</span>(<span class="fu">rexp</span>(<span class="dv">20</span>, <span class="at">rate =</span> <span class="dv">1</span>)))</span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="fu">hist</span>(Xbar_exp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="27_cross-validation_files/figure-html/exp_samp_dist-1.png" width="672" class="r-stretch"></section>
+<img data-src="27_cross-validation_files/figure-revealjs/exp_samp_dist-1.png" width="960" class="r-stretch"></section>
 <section id="resampling-methods-1" class="slide level2">
 <h2>Resampling methods</h2>
 <p>What if we observe <span class="math inline">\(X_1,\ldots, X_{20}\)</span>, but we don’t know that <span class="math inline">\(X_i\)</span> is exponentially distributed? We could just try the normal approximation to approximate the sampling distribution:</p>
-<div class="cell" data-hash="27_cross-validation_cache/html/exp_samp_dist_2_62c8ae17b307a30981975f34dbdf9fde">
+<div class="cell" data-hash="27_cross-validation_cache/revealjs/exp_samp_dist_2_8517cacbc1ee39c4fb4557b15ce2bc97">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">20</span>, <span class="at">rate =</span> <span class="dv">1</span>)</span>
 <span id="cb8-2"><a href="#cb8-2"></a>x_axis <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
 <span id="cb8-3"><a href="#cb8-3"></a></span>
@@ -532,11 +532,11 @@ Peter Gao
 <span id="cb8-8"><a href="#cb8-8"></a><span class="fu">lines</span>(x_axis, <span class="fu">dnorm</span>(x_axis, <span class="at">mean =</span> <span class="fu">mean</span>(X), <span class="at">sd =</span> <span class="fu">sd</span>(X) <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">20</span>)), <span class="at">col =</span> <span class="st">'red'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="27_cross-validation_files/figure-html/exp_samp_dist_2-1.png" width="480" class="r-stretch"></section>
+<img data-src="27_cross-validation_files/figure-revealjs/exp_samp_dist_2-1.png" width="480" class="r-stretch"></section>
 <section id="bootstrap-samples" class="slide level2">
 <h2>Bootstrap samples</h2>
 <p>Bootstrapping is a resampling method that uses random samples with replacement from the sample data to approximate the sampling distribution of sample-based statistics.</p>
-<div class="cell" data-hash="27_cross-validation_cache/html/exp_samp_dist_3_b15792f5fc7f4ae9dc79c29655c44fb8">
+<div class="cell" data-hash="27_cross-validation_cache/revealjs/exp_samp_dist_3_bccc6850d9f8c16717b9d69641fe215b">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">print</span>(<span class="fu">sort</span>(X))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 0.00816693 0.06263315 0.11949335 0.12600941 0.14474580 0.14660666
@@ -558,16 +558,16 @@ Peter Gao
 <section id="bootstrap-samples-1" class="slide level2">
 <h2>Bootstrap samples</h2>
 <p>We can repeatedly resample from <span class="math inline">\(X\)</span>, then compute the resample sample means and plot the distribution:</p>
-<div class="cell" data-hash="27_cross-validation_cache/html/exp_samp_dist_4_3607489e5be184aa05acb38e171f7895">
+<div class="cell" data-hash="27_cross-validation_cache/revealjs/exp_samp_dist_4_2cbc7ddd5495ef2fb7c34fb7cd5f12f9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>bootstrap_Xbar <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">mean</span>(<span class="fu">sample</span>(X, <span class="at">size =</span> <span class="dv">20</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
 <span id="cb13-2"><a href="#cb13-2"></a><span class="fu">hist</span>(bootstrap_Xbar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="27_cross-validation_files/figure-html/exp_samp_dist_4-1.png" width="672" class="r-stretch"></section>
+<img data-src="27_cross-validation_files/figure-revealjs/exp_samp_dist_4-1.png" width="960" class="r-stretch"></section>
 <section id="bootstrap-samples-2" class="slide level2">
 <h2>Bootstrap samples</h2>
 <p>We can compare the bootstrap sampling distributions and true sampling distributions. In this case, the bootstrap does not seem that different from the normal approximation.</p>
-<div class="cell" data-hash="27_cross-validation_cache/html/exp_samp_dist_5_3d2652cc7f1d1dd4dd20b2e92bcfad43">
+<div class="cell" data-hash="27_cross-validation_cache/revealjs/exp_samp_dist_5_01ccfa222319c6eee5d444ea25968e0b">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb14-2"><a href="#cb14-2"></a>plot_dat <span class="ot">&lt;-</span></span>
 <span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">data.frame</span>(<span class="at">Xbar =</span> <span class="fu">c</span>(Xbar_exp, bootstrap_Xbar),</span>
@@ -579,11 +579,11 @@ Peter Gao
 <span id="cb14-9"><a href="#cb14-9"></a>                <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"Parametric (Normal)"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="27_cross-validation_files/figure-html/exp_samp_dist_5-1.png" width="672" class="r-stretch"></section>
+<img data-src="27_cross-validation_files/figure-revealjs/exp_samp_dist_5-1.png" width="960" class="r-stretch"></section>
 <section id="bootstrap-confidence-intervals" class="slide level2">
 <h2>Bootstrap confidence intervals</h2>
 <p>We can take appropriate quantiles of the bootstrap samples to construct a bootstrap confidence interval using the <code>quantile()</code> function:</p>
-<div class="cell" data-hash="27_cross-validation_cache/html/exp_samp_dist_6_9df2e9b7131cfcac8a228f404dba5153">
+<div class="cell" data-hash="27_cross-validation_cache/revealjs/exp_samp_dist_6_9a3fad75f44c6aef46a8c02415504612">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">quantile</span>(bootstrap_Xbar, <span class="at">probs =</span> <span class="fu">c</span>(.<span class="dv">025</span>, .<span class="dv">975</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    2.5%    97.5% 
@@ -812,6 +812,44 @@ Peter Gao
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {

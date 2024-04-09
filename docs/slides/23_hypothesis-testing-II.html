@@ -525,13 +525,13 @@ mean in group 1 mean in group 2
     Two Sample t-test
 
 data:  null_y[carrier == 0] and null_y[carrier == 1]
-t = -0.20376, df = 298, p-value = 0.8387
+t = 1.8142, df = 298, p-value = 0.07065
 alternative hypothesis: true difference in means is not equal to 0
 95 percent confidence interval:
- -0.2703315  0.2196040
+ -0.01880447  0.46255258
 sample estimates:
- mean of x  mean of y 
-0.08703446 0.11239820 </code></pre>
+  mean of x   mean of y 
+ 0.08460564 -0.13726841 </code></pre>
 </div>
 </div>
 </section>
@@ -545,13 +545,13 @@ sample estimates:
     Two Sample t-test
 
 data:  alt_y[carrier == 0] and alt_y[carrier == 1]
-t = -42.775, df = 298, p-value &lt; 2.2e-16
+t = -40.319, df = 298, p-value &lt; 2.2e-16
 alternative hypothesis: true difference in means is not equal to 0
 95 percent confidence interval:
- -5.360905 -4.889319
+ -5.246876 -4.758518
 sample estimates:
- mean of x  mean of y 
-0.01365367 5.13876563 </code></pre>
+  mean of x   mean of y 
+-0.03375467  4.96894218 </code></pre>
 </div>
 </div>
 </section>
@@ -577,7 +577,7 @@ sample estimates:
 
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">mean</span>(<span class="fu">abs</span>(test_stats_null) <span class="sc">&gt;</span> <span class="fu">abs</span>(null_diff)) <span class="co"># P-value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.828</code></pre>
+<pre><code>[1] 0.075</code></pre>
 </div>
 </div>
 <img data-src="23_hypothesis-testing-II_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"></section>

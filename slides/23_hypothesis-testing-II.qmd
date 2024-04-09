@@ -37,9 +37,7 @@ editor: visual
 3.  The $X$ and $Y$ samples are independent of one another.
 4.  The sample sizes are adequately large (usually appropriate if $m>40$ and $n>40$.
 
-
 ## Example: Two-sample $z$-test
-
 
 **Hypotheses**:
 
