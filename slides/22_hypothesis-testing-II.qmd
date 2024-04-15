@@ -96,6 +96,7 @@ Suppose we have five sequences of 200 coin flips.
 #| out.width: "70%"
 #| fig.align: "center"
 #| fig-cap: ""
+library(tidyverse)
 flips <- read_csv("~/Dropbox/teaching/math167R-s24/math167R-s24.github.io/static/flips.csv")
 head(flips)
 ```
@@ -114,7 +115,7 @@ First, load the flips using the following code.
 
 ```{r load_flips_dummy}
 #| echo: true
-#| eval: false
+#| eval: true
 #| cache: true
 #| message: false
 #| warning: false
@@ -123,6 +124,7 @@ First, load the flips using the following code.
 #| out.width: "70%"
 #| fig.align: "center"
 #| fig-cap: ""
+library(tidyverse)
 flips <- read_csv("https://math167r-s24.github.io/static/flips.csv")
 head(flips)
 ```
@@ -412,6 +414,7 @@ Note that calculating the P-value is tricky here--a one-sided test may make the 
 #| fig-cap: ""
 p_vals <- sapply(flip_streaks$longest_streak,
                  function (x) mean(sim_streaks$x > x))
+p_vals
 ```
 
 This suggests that the longest streaks are too long for sequence B. Note that we could try other test statistics. What about average streak length?
