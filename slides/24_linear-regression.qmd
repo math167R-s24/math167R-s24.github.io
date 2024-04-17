@@ -74,6 +74,122 @@ We want to know the relationship between our covariates and our response, we can
 
 ![](https://upload.wikimedia.org/wikipedia/commons/b/b2/Galton%27s_correlation_diagram_1875.jpg){fig-align="center"}
 
+## Simple linear regression
+
+How does the speed of a car affect its stopping distance?
+
+```{r cars}
+#| echo: true
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "60%"
+#| fig.align: "center"
+#| fig-cap: ""
+plot(dist ~ speed, data = cars,
+     xlab = "Speed (mph)",
+     ylab = "Stopping Distance (ft)",
+     pch  = 16, col = "blue")
+```
+
+## Why is it called regression?
+
+![](https://upload.wikimedia.org/wikipedia/commons/b/b2/Galton%27s_correlation_diagram_1875.jpg){fig-align="center"}
+
+## Simple linear regression
+
+Suppose $x_1,\ldots, x_n$ represent the `speed` values of each car in our dataset. Let $Y_1,\ldots, Y_n$ represent the `dist` variable.
+
+The **simple linear regression model** is given by 
+$$Y_i=\beta_0+\beta_1x_i+\epsilon_i$$
+where:
+-   $\beta_0$ is the intercept parameter
+-   $\beta_1$ is the slope parameter
+-   $\epsilon_i$ represents iid $N(0,\sigma^2)$ errors, where $\sigma^2$ is the variance of $\epsilon_i$.
+
+
+## Simple linear regression
+
+Under this model, we can also write that
+$$Y_i\mid X_i= x_i\sim N(\beta_0+\beta_1x_i, \sigma^2)$$
+As a result
+$$E(Y_i\mid X_i= x_i)= \beta_0+\beta_1x_i$$
+$$\mathrm{Var}(Y_i\mid X_i= x_i)= \sigma^2$$
+
+## Simple linear regression
+
+Typically, we say there are four assumptions for simple linear regression:
+
+- **Linearity**: The relationship between $X$ and $E(Y\mid X)$ is linear: $$E(Y_i\mid X_i= x_i)= \beta_0+\beta_1x_i$$
+- **Independence**: The observations $Y_1,\ldots, Y_n$ are independent of each other.
+- **Normality**: $$Y_i\mid X_i= x_i\sim N(\beta_0+\beta_1x_i, \sigma^2)$$
+- **Equal variance**: The variance of the errors $\epsilon_i$ is the same for all values of $x_i$.
+
+Note that even if one or more of these assumptions breaks, linear regression can still be useful if used with caution.
+
+## Simple linear regression: Least squares
+
+Typically, we start with data $Y_1,\ldots, Y_n$ and $x_1,\ldots, x_n$. How do we estimate $\beta_0$ and $\beta_1$?
+
+In other words, what is the best line to use for modeling the relationship between $X$ and $Y$?
+
+Usually, we use the least squares line, which is the solution to the following optimization problem:
+$$\arg\min\sum_{i=1}^n (y_i-(\beta_0+\beta_1x_i))^2=\arg\min\sum_{i=1}^n (y_i-\hat{y}_i)^2$$
+where $\hat{y}_i$ is the model prediction for $y_i$.
+
+
+## Simple linear regression: the `lm` function
+
+```{r cars2}
+#| echo: true
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "60%"
+#| fig.align: "center"
+#| fig-cap: ""
+lm_res = lm(dist ~ speed, data = cars)
+lm_res
+```
+
+## Simple linear regression: the `lm` function
+
+```{r cars3}
+#| echo: true
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "60%"
+#| fig.align: "center"
+#| fig-cap: ""
+plot(dist ~ speed, data = cars,
+     xlab = "Speed (mph)",
+     ylab = "Stopping Distance (ft)", 
+     pch  = 16, col  = "blue")
+abline(lm_res,  col = "red")
+```
+
+## Multiple linear regression
+
+What if we have multiple input variables?
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+data(mtcars)
+head(mtcars)
+```
+
 ## Linear Regression
 
 Given our response $Y$ and our predictors $X_1, \ldots, X_p$, a **linear regression model** takes the form:
@@ -414,6 +530,38 @@ The vector $\widehat{\beta}$ that minimizes the sum of the squared distances is 
 $$ \widehat{\beta}=\left(\mathbf{X}^T \mathbf{X} \right)^{-1}\mathbf{X}^T \mathbf{Y}.$$
 
 Note: In statistics, once we have estimated a parameter we put a "hat" on it, e.g. $\widehat{\beta_0}$ is the estimate of the true parameter $\beta_0$.
+
+## Collinearity
+
+What if our predictor variables are closely related? Consider the following simulation:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+n <- 50
+x1 <- rnorm(n)
+x2 <- x1 * 2
+e <- rnorm(n)
+y <- 1 + 3 * x1 + e
+lm(y ~ x1)
+lm(y ~ x1 + x2)
+```
+
+
+## Collinearity
+
+What if our predictor variables are closely related? Consider the following simulation:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+
+x2b <- x1 * 2 + rnorm(n, sd = .01)
+lm(y ~ x1 + x2b)
+```
+
 
 ```{r}
 knitr::knit_exit()

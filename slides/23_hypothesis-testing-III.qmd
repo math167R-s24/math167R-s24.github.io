@@ -12,56 +12,104 @@ editor: visual
 -   Simulations for power analysis
 -   P-hacking simulations
 
-## Summary: hypothesis testing
+## Designing your own hypothesis test
 
-1.  Define null and alternative hypotheses.
+First, load the flips using the following code.
 
-    -   ex. $H_0:\mu = 0$ and $H_a:\mu\neq 0$
-
-2.  Compute a test statistic for which the null sampling distribution is known (based on assumptions about the population/sample).
-
-    -   ex. $T=(\overline{X}_n-\mu)/(S^2/\sqrt{n})\sim t_{n-1}$
-
-3.  Compare the test statistic with the null distribution to obtain a P-value.
-
-    -   ex. $P(|T|>|t|)$ where $t$ is the observed test statistic.
-
-## Example: Two-sample $z$-test
-
-**Assumptions**:
-
-1.  $X_1, \ldots, X_m$ is a random sample from a distribution with mean $\mu_1$ and variance $\sigma_1^2$.
-2.  $Y_1, \ldots, Y_n$ is a random sample from a distribution with mean $\mu_2$ and variance $\sigma_2^2$.
-3.  The $X$ and $Y$ samples are independent of one another.
-4.  The sample sizes are adequately large (usually appropriate if $m>40$ and $n>40$.
-
-## Example: Two-sample $z$-test
-
-**Hypotheses**:
-
--   H_0: $\mu_1=\mu_2$
--   H_a: $\mu_1\not=\mu_2$
-
-## Example: Two-sample $z$-test
-
-Under these assumptions, $\overline{X}-\overline{Y}$ is approximately normal and the test statistic $$Z=\frac{\overline{X}-\overline{Y}-(\mu_1-\mu_2)}{\sqrt{\frac{S_1^2}{m}+\frac{S_2^2}{n}}}$$ has approximately a standard normal distribution when $H_0$ is true.
-
-## Example: Two-sample $t$-test
-
-When the samples are small, but the population distributions are approximately normal, the standardized test statistic $$T=\frac{\overline{X}-\overline{Y}-(\mu_1-\mu_2)}{\sqrt{\frac{S_1^2}{m}+\frac{S_2^2}{n}}}$$ has approximately a $t$ distribution with df $v$ estimated from the data by
-
-$$\nu =\frac{\left(\frac{s_1^2}{m}+\frac{s_2^2}{n}\right)^2}{\frac{(s_1^2/m)^2}{m-1}+\frac{(s_2^2/n)^2}{n-1}}$$
-
-## Example: Two-sample $t$-test
-
-We can use the `sleep` data in R, which contains Student's example data on the effect of two sleeping drugs on 10 patients, to test out the `t.test()` function.
-
-```{r}
-#| eval: true
+```{r load_flips_dummy}
 #| echo: true
+#| eval: true
+#| cache: true
 #| message: false
 #| warning: false
-t.test(extra ~ group, data = sleep)
+#| fig-width: 6
+#| fig-height: 5
+#| out.width: "70%"
+#| fig.align: "center"
+#| fig-cap: ""
+library(tidyverse)
+flips <- read_csv("https://math167r-s24.github.io/static/flips.csv")
+head(flips)
+```
+
+Can you tell which is real and which are fake?
+
+## Visual inspection
+
+```{r visualize_flips}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+flips_long <- flips |>
+  mutate(id = 1:200) |>
+  pivot_longer(-id,  names_to = "Sequence", values_to = "Flip")
+
+flips_long |> 
+  ggplot(aes(x = id, y = Flip, group = Sequence)) +
+  geom_line() +
+  geom_point(aes(color = Flip)) +
+  facet_grid(rows = vars(Sequence)) + 
+  theme(
+    legend.position = "none",
+    axis.title = element_blank()
+  )
+```
+
+## A slightly different test: streak length
+
+We can also consider a different test statistic: longest streak.
+
+```{r streaks}
+#| echo: true
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+flip_streaks <- flips_long |>
+  group_by(Sequence) |>
+  summarize(longest_streak = max(rle(Flip)$length))
+flip_streaks
+```
+
+## A slightly different test: streak length
+
+We can then simulate the null distribution of streak length.
+
+```{r streaks_sim_dummy}
+#| echo: true
+#| eval: false
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+#| 
+sim_streaks <- 
+  data.frame(
+    x = replicate(10000, 
+                  max(rle(sample(c("H", "T"), size = 200, replace = T))$length)
+    )
+  )
+ggplot() +
+  geom_histogram(data = sim_streaks, aes(x = x), binwidth = 1) +
+  geom_vline(data = flip_streaks,
+             aes(color = Sequence, xintercept = longest_streak)) +
+  xlab("Longest streak")
 ```
 
 ## Permutation tests
@@ -247,6 +295,35 @@ abline(v = alt_diff, lwd=2, col="purple")
 mean(abs(test_stats_alt) > abs(alt_diff)) # P-value
 ```
 
+## Permutation tests: `sleep` data
+
+What if we apply this idea to the `sleep` data?
+
+```{r}
+#| eval: true
+#| echo: true
+head(sleep)
+```
+
+
+## Permutation tests: `sleep` data
+
+```{r}
+#| eval: true
+#| echo: true
+test_stat <- mean(sleep$extra[sleep$group == 1]) - 
+  mean(sleep$extra[sleep$group == 2])
+single_test <- function(label, y) {
+  resample <- sample(label)
+  # resample test statistic
+  mean(y[resample == 1]) - mean(y[resample == 2])
+}
+test_stats_alt <- replicate(1000, single_test(sleep$group, sleep$extra))
+hist(test_stats_alt, xlim = c(-0.5, 6))
+abline(v = test_stat, lwd=2, col="purple")
+mean(abs(test_stats_alt) > abs(test_stat)) # P-value
+```
+
 ## Power analysis
 
 Recall that the power of a hypothesis test is the probability of rejecting the null hypothesis when the null hypothesis is false.
@@ -393,6 +470,13 @@ ggplot(mu_a, aes(x = mu_a)) +
   xlab("True population mean") + ylab("Power") +
   theme_bw()
 ```
+
+
+## Exercise: estimating power
+
+If $X_1,\ldots X_n\sim N(1, 1)$, what is the power for a one-sample $t$ test for the hypotheses $H_0:\mu = 0$ and $H_a:\mu\not=0$ if $n=30$?
+
+Create a simulation to estimate the power.
 
 ## P-hacking simulations
 

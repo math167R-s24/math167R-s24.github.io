@@ -579,7 +579,7 @@ H_a: p&amp;\neq 1/2
 <section id="a-simple-test-counting-the-number-of-heads-2" class="slide level2">
 <h2>A simple test: Counting the number of heads</h2>
 <p>Do any of these indicate that certain sequences are fake? How could we get corresponding P-values?</p>
-<p><strong>Approach one</strong>: Use the normal approximation: <span class="math display">\[\hat{p}\sim N\left(p, \sqrt{\frac{p(1-p)}{n}}\right)\]</span></p>
+<p><strong>Approach one</strong>: Use the normal approximation: <span class="math display">\[\widehat{p}\sim N\left(p, \sqrt{\frac{p(1-p)}{n}}\right)\]</span></p>
 <div class="cell" data-layout-align="center" data-hash="22_hypothesis-testing-II_cache/revealjs/Pvalues_5834dfc8e618fccad8aa9d795d687c09">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>phats <span class="ot">&lt;-</span> flips_long <span class="sc">|&gt;</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">group_by</span>(Sequence) <span class="sc">|&gt;</span></span>
@@ -614,12 +614,12 @@ H_a: p&amp;\neq 1/2
 <section id="a-simple-test-counting-the-number-of-heads-5" class="slide level2">
 <h2>A simple test: Counting the number of heads</h2>
 <p><strong>Approach two</strong>: Use simulations to estimate the distribution of number of heads <strong>under the null</strong>:</p>
-<div class="cell" data-layout-align="center" data-hash="22_hypothesis-testing-II_cache/revealjs/Pvalues_sim_dummy_0c4bffa06f8ae05db55a67442c47f519">
+<div class="cell" data-layout-align="center" data-hash="22_hypothesis-testing-II_cache/revealjs/Pvalues_sim_dummy_9cb82adabefa1f5965f6118b0ba08315">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>p_vals <span class="ot">&lt;-</span> <span class="fu">sapply</span>(flip_totals<span class="sc">$</span>nHeads,</span>
-<span id="cb11-2"><a href="#cb11-2"></a>                 <span class="cf">function</span>(x) <span class="fu">mean</span>(<span class="fu">abs</span>(sim_totals <span class="sc">-</span> <span class="dv">100</span>) <span class="sc">&lt;</span> (x <span class="sc">-</span> <span class="dv">100</span>)))</span>
+<span id="cb11-2"><a href="#cb11-2"></a>                 <span class="cf">function</span>(x) <span class="fu">mean</span>(<span class="fu">abs</span>(sim_totals <span class="sc">-</span> <span class="dv">100</span>) <span class="sc">&gt;=</span> (x <span class="sc">-</span> <span class="dv">100</span>)))</span>
 <span id="cb11-3"><a href="#cb11-3"></a>p_vals</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.00000000 0.71376667 0.94426667 0.05513333 0.00000000</code></pre>
+<pre><code>[1] 1.00000000 0.28623333 0.05573333 0.94486667 1.00000000</code></pre>
 </div>
 </div>
 </section>
@@ -646,7 +646,7 @@ H_a: p&amp;\neq 1/2
 <section id="a-slightly-different-test-streak-length-1" class="slide level2">
 <h2>A slightly different test: streak length</h2>
 <p>We can then simulate the null distribution of streak length.</p>
-<div class="cell" data-layout-align="center" data-hash="22_hypothesis-testing-II_cache/revealjs/streaks_sim_dummy_718310b471cf4a31902faa07ac5fb167">
+<div class="cell" data-layout-align="center" data-hash="22_hypothesis-testing-II_cache/revealjs/streaks_sim_dummy_0cae9273331f7c1dc20d019e72e64044">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>sim_streaks <span class="ot">&lt;-</span> </span>
 <span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">data.frame</span>(</span>
 <span id="cb15-3"><a href="#cb15-3"></a>    <span class="at">x =</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, </span>
@@ -654,7 +654,7 @@ H_a: p&amp;\neq 1/2
 <span id="cb15-5"><a href="#cb15-5"></a>    )</span>
 <span id="cb15-6"><a href="#cb15-6"></a>  )</span>
 <span id="cb15-7"><a href="#cb15-7"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb15-8"><a href="#cb15-8"></a>  <span class="fu">geom_histogram</span>(<span class="at">data =</span> sim_streaks, <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a>  <span class="fu">geom_histogram</span>(<span class="at">data =</span> sim_streaks, <span class="fu">aes</span>(<span class="at">x =</span> x), <span class="at">binwidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb15-9"><a href="#cb15-9"></a>  <span class="fu">geom_vline</span>(<span class="at">data =</span> flip_streaks,</span>
 <span id="cb15-10"><a href="#cb15-10"></a>             <span class="fu">aes</span>(<span class="at">color =</span> Sequence, <span class="at">xintercept =</span> longest_streak)) <span class="sc">+</span></span>
 <span id="cb15-11"><a href="#cb15-11"></a>  <span class="fu">xlab</span>(<span class="st">"Longest streak"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

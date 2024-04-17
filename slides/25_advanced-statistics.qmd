@@ -9,9 +9,137 @@ editor: visual
 
 ## Overview of today
 
+-   Logistic regression
 -   ANOVA
 -   The $F$-test for Regression Analysis
--   Logistic regression
+
+## Logistic regression
+
+When we have binary outcomes $Y_1,\ldots, Y_n$ where $Y_i\in \{0, 1\}$ for all $i$, it may be inappropriate to use linear regression to model the relationships between $Y$ and covariates $X$.
+
+**Logistic regression** can be used to relate the **probability** that $Y_i=1$ to available covariates.
+
+## Logistic regression
+
+**Model:**
+
+$$P(Y_i=1)=p_i$$ $$\text{logit}(p_i)=\log\left(\frac{p_i}{1-p_i}\right)=\mathbf{x}_i^\top\boldsymbol\beta$$ where $\mathbf{X}_i$ is the covariate vector for individual $i$ and $\boldsymbol\beta$ is a vector of regression covariates.
+
+Note that the logit transformation has domain $(0,1)$ and range $(-\infty, \infty)$.
+
+## Logistic regression
+
+When we have only one covariate $x$, the model is as follows:
+
+$$\text{logit}(p(x))=\log\left(\frac{p(x)}{1-p(x)}\right)=\beta_0+\beta_1 x$$
+
+where $p(x)$ represents the probability that an individual with covariate value $x$ experiences the response/event of interest.
+
+## Example: *Challenger* disaster
+
+On January 28, 1986, the Challenger space shuttle suffered an accident shortly after launch, killing all crew members on board. An investigation suspected that damage to a set of critical parts called O-rings caused the disaster. It is believed that the damage is related to the temperature at launch time. The following data summarize data on O-rings for 23 shuttle missions.
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+#| message: FALSE
+#| warning: FALSE
+orings <- readr::read_csv("https://www.openintro.org/data/csv/orings.csv")
+head(orings)
+```
+
+## Example: *Challenger* disaster
+
+This plot visualizes the empirical proportion of damaged O-rings for each mission:
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+#| message: FALSE
+#| warning: FALSE
+plot((damaged / 6) ~ temperature, data = orings, pch = 16,
+     ylab = "Proportion of O-rings damaged", xlab = "Temperature (F)")
+```
+
+## Example: *Challenger* disaster
+
+The `glm()` function can be used to fit generalized linear models including logistic regression models. The `family` argument is used to specify the distribution of the response variable (in this case, binomial for a logistic rgression).
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+#| message: FALSE
+#| warning: FALSE
+orings_res <- glm((damaged > 0) ~ temperature, data = orings, family = binomial)
+summary(orings_res)
+```
+
+## Example: *Challenger* disaster
+
+Here, our estimate of $\beta_0$ is $b_0=15.04$ and our estimate of $\beta_1$ is $b_1=-.23$.
+
+We can interpret $\beta_1$ as follows: for each additional degree of ambient temperature, the log-odds of experiencing an O-ring failure decreases by $.23$.
+
+In other words, the odds changes by a factor of $\exp(.23)\approx.79$ as temperature increases by one degree.
+
+Note that the $p$-value for $\beta_1$ is significant at the $.05$ level, suggesting evidence that temperature is associated with O-ring failure.
+
+## Example: *Challenger* disaster
+
+We can use many of the functions we used with `lm` objects, including:
+
+-   `fitted()` returns the predicted probabilities for a logistic regression
+-   `predict()` can be used to generate predictions
+-   `plot()` returns a series of diagnostic plots
+-   `residuals()` returns residuals--not that these are not usually the typical observed minus predicted residuals.
+-   `anova()` can be used to assess the model fit for `glm` objects.
+
+## Example: *Challenger* disaster
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+#| message: FALSE
+#| warning: FALSE
+fitted(orings_res)
+```
+
+## Example: *Challenger* disaster
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+#| message: FALSE
+#| warning: FALSE
+base_res <- glm((damaged > 0) ~ 1, data = orings, family = binomial)
+anova(orings_res, base_res, test = "F")
+```
+
+# Other hypothesis tests
+
+## Fisher's exact test
+
+*Agresti (1990): A British woman claimed to be able to distinguish whether milk or tea was added to the cup first. To test, she was given 8 cups of tea, in four of which milk was added first. The null hypothesis is that there is no association between the true order of pouring and the woman's guess. The alternative that there is a positive association (that the odds ratio is greater than 1).*
+
+## Fisher's exact test
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+TeaTasting <-
+  matrix(c(3, 1, 1, 3),
+         nrow = 2,
+         dimnames = list(Guess = c("Milk", "Tea"),
+                         Truth = c("Milk", "Tea")))
+fisher.test(TeaTasting, alternative = "greater")
+```
+
 
 ## Analysis of Variance
 
@@ -214,131 +342,4 @@ We can explicitly specify the full and reduced models:
 my_lm_full <- lm(mpg ~ hp + wt, data = mtcars)
 my_lm_reduced <- lm(mpg ~ 1, data = mtcars)
 anova(my_lm_full, my_lm_reduced)
-```
-
-## Logistic regression
-
-When we have binary outcomes $Y_1,\ldots, Y_n$ where $Y_i\in \{0, 1\}$ for all $i$, it may be inappropriate to use linear regression to model the relationships between $Y$ and covariates $X$.
-
-**Logistic regression** can be used to relate the **probability** that $Y_i=1$ to available covariates.
-
-## Logistic regression
-
-**Model:**
-
-$$P(Y_i=1)=p_i$$ $$\text{logit}(p_i)=\log\left(\frac{p_i}{1-p_i}\right)=\mathbf{x}_i^\top\boldsymbol\beta$$ where $\mathbf{X}_i$ is the covariate vector for individual $i$ and $\boldsymbol\beta$ is a vector of regression covariates.
-
-Note that the logit transformation has domain $(0,1)$ and range $(-\infty, \infty)$.
-
-## Logistic regression
-
-When we have only one covariate $x$, the model is as follows:
-
-$$\text{logit}(p(x))=\log\left(\frac{p(x)}{1-p(x)}\right)=\beta_0+\beta_1 x$$
-
-where $p(x)$ represents the probability that an individual with covariate value $x$ experiences the response/event of interest.
-
-## Example: *Challenger* disaster
-
-On January 28, 1986, the Challenger space shuttle suffered an accident shortly after launch, killing all crew members on board. An investigation suspected that damage to a set of critical parts called O-rings caused the disaster. It is believed that the damage is related to the temperature at launch time. The following data summarize data on O-rings for 23 shuttle missions.
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-#| cache: TRUE
-#| message: FALSE
-#| warning: FALSE
-orings <- readr::read_csv("https://www.openintro.org/data/csv/orings.csv")
-head(orings)
-```
-
-## Example: *Challenger* disaster
-
-This plot visualizes the empirical proportion of damaged O-rings for each mission:
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-#| cache: TRUE
-#| message: FALSE
-#| warning: FALSE
-plot((damaged / 6) ~ temperature, data = orings, pch = 16,
-     ylab = "Proportion of O-rings damaged", xlab = "Temperature (F)")
-```
-
-## Example: *Challenger* disaster
-
-The `glm()` function can be used to fit generalized linear models including logistic regression models. The `family` argument is used to specify the distribution of the response variable (in this case, binomial for a logistic rgression).
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-#| cache: TRUE
-#| message: FALSE
-#| warning: FALSE
-orings_res <- glm((damaged > 0) ~ temperature, data = orings, family = binomial)
-summary(orings_res)
-```
-
-## Example: *Challenger* disaster
-
-Here, our estimate of $\beta_0$ is $b_0=15.04$ and our estimate of $\beta_1$ is $b_1=-.23$.
-
-We can interpret $\beta_1$ as follows: for each additional degree of ambient temperature, the log-odds of experiencing an O-ring failure decreases by $.23$.
-
-In other words, the odds changes by a factor of $\exp(.23)\approx.79$ as temperature increases by one degree.
-
-Note that the $p$-value for $\beta_1$ is significant at the $.05$ level, suggesting evidence that temperature is associated with O-ring failure.
-
-## Example: *Challenger* disaster
-
-We can use many of the functions we used with `lm` objects, including:
-
--   `fitted()` returns the predicted probabilities for a logistic regression
--   `predict()` can be used to generate predictions
--   `plot()` returns a series of diagnostic plots
--   `residuals()` returns residuals--not that these are not usually the typical observed minus predicted residuals.
--   `anova()` can be used to assess the model fit for `glm` objects.
-
-## Example: *Challenger* disaster
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-#| cache: TRUE
-#| message: FALSE
-#| warning: FALSE
-fitted(orings_res)
-```
-
-## Example: *Challenger* disaster
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-#| cache: TRUE
-#| message: FALSE
-#| warning: FALSE
-base_res <- glm((damaged > 0) ~ 1, data = orings, family = binomial)
-anova(orings_res, base_res, test = "F")
-```
-
-# Other hypothesis tests
-
-## Fisher's exact test
-
-*Agresti (1990): A British woman claimed to be able to distinguish whether milk or tea was added to the cup first. To test, she was given 8 cups of tea, in four of which milk was added first. The null hypothesis is that there is no association between the true order of pouring and the woman's guess. The alternative that there is a positive association (that the odds ratio is greater than 1).*
-
-## Fisher's exact test
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-#| cache: TRUE
-TeaTasting <-
-  matrix(c(3, 1, 1, 3),
-         nrow = 2,
-         dimnames = list(Guess = c("Milk", "Tea"),
-                         Truth = c("Milk", "Tea")))
-fisher.test(TeaTasting, alternative = "greater")
 ```

@@ -406,257 +406,10 @@ Peter Gao
 <section id="overview-of-today" class="slide level2">
 <h2>Overview of today</h2>
 <ul>
+<li>Logistic regression</li>
 <li>ANOVA</li>
 <li>The <span class="math inline">\(F\)</span>-test for Regression Analysis</li>
-<li>Logistic regression</li>
 </ul>
-</section>
-<section id="analysis-of-variance" class="slide level2">
-<h2>Analysis of Variance</h2>
-<p>The analysis of variance or ANOVA is a collection of statistical methods used to compare two or more groups to assess the differences between group means.</p>
-<p>The simplest ANOVA provides a test of whether two or more population means are equivalent. As such the ANOVA is a generalization of the two sample <span class="math inline">\(t\)</span>-test.</p>
-<p>ANOVA is typically said to be introduced by Ronald Fisher, who applied the method to study the variation in crop yield related to different fertiliser treatments.</p>
-</section>
-<section id="one-way-anova" class="slide level2">
-<h2>One-way ANOVA</h2>
-<p>One-way ANOVA or single-factor ANOVA is used to compare two or more population means. Let <span class="math inline">\(I\)</span> be the number of groups/populations and <span class="math inline">\(\mu_I\)</span> to be the population mean of the response of interest for group <span class="math inline">\(I\)</span>.</p>
-<p><strong>Hypotheses</strong>:</p>
-<ul>
-<li><span class="math inline">\(H_0:\mu_1=\ldots=\mu_I\)</span></li>
-<li><span class="math inline">\(H_a: \text{at least two of the means are different}\)</span></li>
-</ul>
-<p><strong>Assumptions</strong>:</p>
-<ul>
-<li>The population distributions are all normal with the same variance <span class="math inline">\(\sigma^2\)</span>.</li>
-</ul>
-</section>
-<section id="test-statistic" class="slide level2">
-<h2>Test Statistic</h2>
-<p>The <span class="math inline">\(F\)</span> test is commonly used to compare the causes of the total variation. In particular, the <span class="math inline">\(F\)</span> test statistic is defined as</p>
-<p><span class="math display">\[F=\frac{\text{variance between groups}}{\text{variance within groups}}\]</span></p>
-<p>If <span class="math inline">\(F\)</span> is large, then there may be evidence to reject the hypothesis that the group means are all equal.</p>
-</section>
-<section id="test-statistic-1" class="slide level2">
-<h2>Test Statistic</h2>
-<p><span class="math display">\[F=\frac{\text{variance between groups}}{\text{variance within groups}}=\frac{
-\text{Mean Square for Treatments}}{\text{Mean Square for Error}}\]</span></p>
-<p>In a balanced design, where each group has the same number of <span class="math inline">\(J\)</span> samples, and <span class="math inline">\(X_{i, j}\)</span> denotes the <span class="math inline">\(j\)</span>th measurement from group <span class="math inline">\(i\)</span>, the mean square terms have the following formulas:</p>
-<p><span class="math display">\[\text{Mean Square for Treatments}=\frac{J}{I-1}\sum_i(\overline{X}_i-\overline{X}_{\cdot\cdot})^2\]</span></p>
-<p>where <span class="math inline">\(\overline{X}_i\)</span> is the sample group mean and <span class="math inline">\(\overline{X}_{\cdot\cdot}\)</span> is the overall sample mean.</p>
-<p><span class="math display">\[\text{Mean Square for Error}=\frac{S_1^2+S_2^2+\cdots+S_I^2}{I}\]</span></p>
-</section>
-<section id="example-plantgrowth" class="slide level2">
-<h2>Example: <code>PlantGrowth</code></h2>
-<p>The <code>PlantGrowth</code> data provides results from an experiment comparing plant growth under a control and two different treatment conditions.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">boxplot</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth, <span class="at">main =</span> <span class="st">"PlantGrowth data"</span>,</span>
-<span id="cb1-2"><a href="#cb1-2"></a>        <span class="at">ylab =</span> <span class="st">"Dried weight of plants"</span>, <span class="at">col =</span> <span class="st">"lightgray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="25_advanced-statistics_files/figure-revealjs/unnamed-chunk-1-1.png" width="960" class="r-stretch"></section>
-<section id="example-plantgrowth-1" class="slide level2">
-<h2>Example: <code>PlantGrowth</code></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>anova_res <span class="ot">&lt;-</span> <span class="fu">anova</span>(<span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth))</span>
-<span id="cb2-2"><a href="#cb2-2"></a>anova_res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Analysis of Variance Table
-
-Response: weight
-          Df  Sum Sq Mean Sq F value  Pr(&gt;F)  
-group      2  3.7663  1.8832  4.8461 0.01591 *
-Residuals 27 10.4921  0.3886                  
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
-</div>
-</div>
-</section>
-<section id="obtaining-a-p-value-with-an-f-test-statistic" class="slide level2">
-<h2>Obtaining a <span class="math inline">\(p\)</span>-value with an <span class="math inline">\(F\)</span>-test statistic</h2>
-<p>When <span class="math inline">\(H_0\)</span> is true, <span class="math inline">\(F\)</span> follows an <span class="math inline">\(F\)</span>-distribution with <span class="math inline">\(\nu_1=I-1\)</span> and <span class="math inline">\(\nu_2=I(J-1)\)</span>.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb4-2"><a href="#cb4-2"></a>x <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">8</span>, <span class="at">length.out =</span> <span class="dv">3</span>))</span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="fu">ggplot</span>(x, <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span> </span>
-<span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">geom_function</span>(<span class="at">fun =</span> df, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">df1 =</span> <span class="dv">2</span>, <span class="at">df2 =</span> <span class="dv">27</span>)) <span class="sc">+</span> </span>
-<span id="cb4-5"><a href="#cb4-5"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> anova_res<span class="sc">$</span><span class="st">`</span><span class="at">F value</span><span class="st">`</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="25_advanced-statistics_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch quarto-figure-center"></section>
-<section id="the-f-distribution" class="slide level2">
-<h2>The <span class="math inline">\(F\)</span>-distribution</h2>
-<p>The <span class="math inline">\(F\)</span> distribution has two parameters:</p>
-<ul>
-<li>numerator degrees of freedom <span class="math inline">\(\nu_1\)</span></li>
-<li>denominator degrees of freedom <span class="math inline">\(\nu_2\)</span></li>
-</ul>
-<p>The <span class="math inline">\(F\)</span> distribution was derived as the ratio of (scaled) chi-square random variables and is frequently used to model the null distribution of test statistics.</p>
-<p><span class="math display">\[F = \frac{U_1/d_1}{U_2/d_2}\]</span></p>
-<p>where <span class="math inline">\(U_1\)</span> is chi-square with <span class="math inline">\(d_1\)</span> degrees of freedom, <span class="math inline">\(U_2\)</span> is chi-square with <span class="math inline">\(d_2\)</span> degrees of freedom, and <span class="math inline">\(U_1\)</span> and <span class="math inline">\(U_2\)</span> are independent.</p>
-</section>
-<section id="example-emails" class="slide level2">
-<h2>Example: <code>emails</code></h2>
-<p>The <code>emails</code> data provides information on emails categorized as spam and non-spam.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>emails <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://www.openintro.org/data/csv/email50.csv"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">boxplot</span>(num_char <span class="sc">~</span> spam, <span class="at">data =</span> emails, <span class="at">main =</span> <span class="st">"Emails data"</span>,</span>
-<span id="cb5-3"><a href="#cb5-3"></a>        <span class="at">ylab =</span> <span class="st">"Length of email (characters)"</span>, <span class="at">col =</span> <span class="st">"lightgray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="25_advanced-statistics_files/figure-revealjs/unnamed-chunk-4-1.png" width="960" class="r-stretch"></section>
-<section id="example-emails-1" class="slide level2">
-<h2>Example: <code>emails</code></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>anova_res <span class="ot">&lt;-</span> <span class="fu">anova</span>(<span class="fu">lm</span>(num_char <span class="sc">~</span> spam, <span class="at">data =</span> emails))</span>
-<span id="cb6-2"><a href="#cb6-2"></a>anova_res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Analysis of Variance Table
-
-Response: num_char
-          Df Sum Sq Mean Sq F value Pr(&gt;F)
-spam       1    0.1   0.052   3e-04 0.9863
-Residuals 48 8441.3 175.860               </code></pre>
-</div>
-</div>
-</section>
-<section id="the-general-linear-f-test" class="slide level2">
-<h2>The General Linear <span class="math inline">\(F\)</span>-test</h2>
-<p>In general, the <code>anova()</code> function can be used to test the fit of a model for sample data.</p>
-<p>For a simple linear regression case, the <span class="math inline">\(F\)</span> test can be used to compare a <strong>full</strong> model of the form</p>
-<p><span class="math display">\[y_i = (\beta_0+\beta_1x_{i1})+\epsilon_i\]</span></p>
-<p>with a <strong>reduced</strong> model:</p>
-<p><span class="math display">\[y_i=\beta_0+\epsilon_i\]</span></p>
-<p><strong>Hypotheses</strong>:</p>
-<ul>
-<li><span class="math inline">\(H_0:y_i=\beta_0+\epsilon_i\)</span></li>
-<li><span class="math inline">\(H_a: y_i=\beta_0+\beta_1x_{i1}+\epsilon_i\)</span></li>
-</ul>
-</section>
-<section id="the-general-linear-f-test-1" class="slide level2">
-<h2>The General Linear <span class="math inline">\(F\)</span>-test</h2>
-<p>Let <span class="math inline">\(p_{full}\)</span> be the number of parameters in the full model and <span class="math inline">\(p_{reduced}\)</span> be the number of parameters in the reduced model.</p>
-<p>Let <span class="math inline">\(SSE_{full}\)</span> and <span class="math inline">\(SSE_{reduced}\)</span> be the sum of squared errors for the full and reduced models, respectively.</p>
-<p><span class="math display">\[
-F = \frac{(SSE_{reduced}-SSE_{full})/(p_{full}-p_{reduced})}{SSE_{full}/p_{full}}
-\]</span></p>
-<p>Then <span class="math inline">\(F\)</span> follows an <span class="math inline">\(F\)</span> distribution with <span class="math inline">\(p_{full}-p_{reduced}\)</span> and <span class="math inline">\(p_{full}\)</span> degrees of freedom.</p>
-</section>
-<section id="example-mtcars" class="slide level2">
-<h2>Example: <code>mtcars</code></h2>
-<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-6_fc0669dbc59445fad52164a0f7ffa8ff">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>my_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt, <span class="at">data =</span> mtcars)</span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">anova</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Analysis of Variance Table
-
-Response: mpg
-          Df Sum Sq Mean Sq F value    Pr(&gt;F)    
-wt         1 847.73  847.73  91.375 1.294e-10 ***
-Residuals 30 278.32    9.28                      
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
-</div>
-</div>
-</section>
-<section id="example-mtcars-1" class="slide level2">
-<h2>Example: <code>mtcars</code></h2>
-<p>Note that this is equivalent to the Wald test for the coefficient for <code>wt</code> in the univariate case:</p>
-<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-7_019af16f285e2d0263baeaa0d958d784">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">summary</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = mpg ~ wt, data = mtcars)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--4.5432 -2.3647 -0.1252  1.4096  6.8727 
-
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
-wt           -5.3445     0.5591  -9.559 1.29e-10 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 3.046 on 30 degrees of freedom
-Multiple R-squared:  0.7528,    Adjusted R-squared:  0.7446 
-F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10</code></pre>
-</div>
-</div>
-</section>
-<section id="the-general-linear-f-test-2" class="slide level2">
-<h2>The General Linear <span class="math inline">\(F\)</span>-test</h2>
-<p>More generally the <span class="math inline">\(F\)</span>-test can be used to test sets of nested models, when a reduced model can be compared with a full model.</p>
-<p><strong>Hypotheses</strong>:</p>
-<ul>
-<li><span class="math inline">\(H_0: \text{reduced model true}\)</span></li>
-<li><span class="math inline">\(H_a: \text{full model fits better}\)</span></li>
-</ul>
-</section>
-<section id="example-mtcars-2" class="slide level2">
-<h2>Example: <code>mtcars</code></h2>
-<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-8_ea9eb877deeb2a4594bf659f6453bf19">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>my_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp <span class="sc">+</span> wt, <span class="at">data =</span> mtcars)</span>
-<span id="cb12-2"><a href="#cb12-2"></a><span class="fu">anova</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Analysis of Variance Table
-
-Response: mpg
-          Df Sum Sq Mean Sq F value    Pr(&gt;F)    
-hp         1 678.37  678.37 100.862 5.987e-11 ***
-wt         1 252.63  252.63  37.561 1.120e-06 ***
-Residuals 29 195.05    6.73                      
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
-</div>
-</div>
-<p>When we have more than one explanatory variable, the <span class="math inline">\(F\)</span>-test is different from the univariate Wald test.</p>
-<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-9_e6fbe068472e5e14be868d6c74a07947">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">summary</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = mpg ~ hp + wt, data = mtcars)
-
-Residuals:
-   Min     1Q Median     3Q    Max 
--3.941 -1.600 -0.182  1.050  5.854 
-
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 37.22727    1.59879  23.285  &lt; 2e-16 ***
-hp          -0.03177    0.00903  -3.519  0.00145 ** 
-wt          -3.87783    0.63273  -6.129 1.12e-06 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 2.593 on 29 degrees of freedom
-Multiple R-squared:  0.8268,    Adjusted R-squared:  0.8148 
-F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12</code></pre>
-</div>
-</div>
-</section>
-<section id="example-mtcars-3" class="slide level2">
-<h2>Example: <code>mtcars</code></h2>
-<p>We can explicitly specify the full and reduced models:</p>
-<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-10_63e21054965ef28f44e6220c82d0cc88">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>my_lm_full <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp <span class="sc">+</span> wt, <span class="at">data =</span> mtcars)</span>
-<span id="cb16-2"><a href="#cb16-2"></a>my_lm_reduced <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> mtcars)</span>
-<span id="cb16-3"><a href="#cb16-3"></a><span class="fu">anova</span>(my_lm_full, my_lm_reduced)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Analysis of Variance Table
-
-Model 1: mpg ~ hp + wt
-Model 2: mpg ~ 1
-  Res.Df     RSS Df Sum of Sq      F    Pr(&gt;F)    
-1     29  195.05                                  
-2     31 1126.05 -2      -931 69.211 9.109e-12 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
-</div>
-</div>
 </section>
 <section id="logistic-regression" class="slide level2">
 <h2>Logistic regression</h2>
@@ -678,9 +431,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <section id="example-challenger-disaster" class="slide level2">
 <h2>Example: <em>Challenger</em> disaster</h2>
 <p>On January 28, 1986, the Challenger space shuttle suffered an accident shortly after launch, killing all crew members on board. An investigation suspected that damage to a set of critical parts called O-rings caused the disaster. It is believed that the damage is related to the temperature at launch time. The following data summarize data on O-rings for 23 shuttle missions.</p>
-<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-11_f3685b9405425053a132b8883a51e5da">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>orings <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://www.openintro.org/data/csv/orings.csv"</span>)</span>
-<span id="cb18-2"><a href="#cb18-2"></a><span class="fu">head</span>(orings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-1_ac52b17d9463b5b1ebbe4ff5aa0fc142">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>orings <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://www.openintro.org/data/csv/orings.csv"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">head</span>(orings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 4
   mission temperature damaged undamaged
@@ -697,18 +450,18 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <section id="example-challenger-disaster-1" class="slide level2">
 <h2>Example: <em>Challenger</em> disaster</h2>
 <p>This plot visualizes the empirical proportion of damaged O-rings for each mission:</p>
-<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-12_ece7a339b6c338d1168a7e5965cd54ea">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">plot</span>((damaged <span class="sc">/</span> <span class="dv">6</span>) <span class="sc">~</span> temperature, <span class="at">data =</span> orings, <span class="at">pch =</span> <span class="dv">16</span>,</span>
-<span id="cb20-2"><a href="#cb20-2"></a>     <span class="at">ylab =</span> <span class="st">"Proportion of O-rings damaged"</span>, <span class="at">xlab =</span> <span class="st">"Temperature (F)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-2_fba4051fc17952454a774839b855ad95">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">plot</span>((damaged <span class="sc">/</span> <span class="dv">6</span>) <span class="sc">~</span> temperature, <span class="at">data =</span> orings, <span class="at">pch =</span> <span class="dv">16</span>,</span>
+<span id="cb3-2"><a href="#cb3-2"></a>     <span class="at">ylab =</span> <span class="st">"Proportion of O-rings damaged"</span>, <span class="at">xlab =</span> <span class="st">"Temperature (F)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="25_advanced-statistics_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
+<img data-src="25_advanced-statistics_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" class="r-stretch"></section>
 <section id="example-challenger-disaster-2" class="slide level2">
 <h2>Example: <em>Challenger</em> disaster</h2>
 <p>The <code>glm()</code> function can be used to fit generalized linear models including logistic regression models. The <code>family</code> argument is used to specify the distribution of the response variable (in this case, binomial for a logistic rgression).</p>
-<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-13_ff3cab426708c3dfceaa9095d2492b36">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>orings_res <span class="ot">&lt;-</span> <span class="fu">glm</span>((damaged <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">~</span> temperature, <span class="at">data =</span> orings, <span class="at">family =</span> binomial)</span>
-<span id="cb21-2"><a href="#cb21-2"></a><span class="fu">summary</span>(orings_res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-3_fd0acfa00a9fd8016835facb2ef79715">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>orings_res <span class="ot">&lt;-</span> <span class="fu">glm</span>((damaged <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">~</span> temperature, <span class="at">data =</span> orings, <span class="at">family =</span> binomial)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">summary</span>(orings_res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -752,8 +505,8 @@ Number of Fisher Scoring iterations: 5</code></pre>
 </section>
 <section id="example-challenger-disaster-5" class="slide level2">
 <h2>Example: <em>Challenger</em> disaster</h2>
-<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-14_8766ad5d13e7dc1e2997c651922ce6f6">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">fitted</span>(orings_res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-4_7ee3ca42efe1064dacf34965be21cd9d">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">fitted</span>(orings_res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         1          2          3          4          5          6          7 
 0.93924781 0.85931657 0.82884484 0.60268105 0.43049313 0.37472428 0.37472428 
@@ -768,9 +521,9 @@ Number of Fisher Scoring iterations: 5</code></pre>
 </section>
 <section id="example-challenger-disaster-6" class="slide level2">
 <h2>Example: <em>Challenger</em> disaster</h2>
-<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-15_80d334e5b9e874bb819da9a11d1cc0cc">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>base_res <span class="ot">&lt;-</span> <span class="fu">glm</span>((damaged <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> orings, <span class="at">family =</span> binomial)</span>
-<span id="cb25-2"><a href="#cb25-2"></a><span class="fu">anova</span>(orings_res, base_res, <span class="at">test =</span> <span class="st">"F"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-5_30aecc2980f5f3afb53ad3fc34041559">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>base_res <span class="ot">&lt;-</span> <span class="fu">glm</span>((damaged <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> orings, <span class="at">family =</span> binomial)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">anova</span>(orings_res, base_res, <span class="at">test =</span> <span class="st">"F"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Deviance Table
 
@@ -795,13 +548,13 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </section>
 <section id="fishers-exact-test-1" class="slide level2">
 <h2>Fisher’s exact test</h2>
-<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-16_6561fcda363934724a5b19b2240aeebb">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>TeaTasting <span class="ot">&lt;-</span></span>
-<span id="cb27-2"><a href="#cb27-2"></a>  <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>),</span>
-<span id="cb27-3"><a href="#cb27-3"></a>         <span class="at">nrow =</span> <span class="dv">2</span>,</span>
-<span id="cb27-4"><a href="#cb27-4"></a>         <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="at">Guess =</span> <span class="fu">c</span>(<span class="st">"Milk"</span>, <span class="st">"Tea"</span>),</span>
-<span id="cb27-5"><a href="#cb27-5"></a>                         <span class="at">Truth =</span> <span class="fu">c</span>(<span class="st">"Milk"</span>, <span class="st">"Tea"</span>)))</span>
-<span id="cb27-6"><a href="#cb27-6"></a><span class="fu">fisher.test</span>(TeaTasting, <span class="at">alternative =</span> <span class="st">"greater"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-6_c8bba9f820531e139faef0e13ef002f0">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>TeaTasting <span class="ot">&lt;-</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>),</span>
+<span id="cb10-3"><a href="#cb10-3"></a>         <span class="at">nrow =</span> <span class="dv">2</span>,</span>
+<span id="cb10-4"><a href="#cb10-4"></a>         <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="at">Guess =</span> <span class="fu">c</span>(<span class="st">"Milk"</span>, <span class="st">"Tea"</span>),</span>
+<span id="cb10-5"><a href="#cb10-5"></a>                         <span class="at">Truth =</span> <span class="fu">c</span>(<span class="st">"Milk"</span>, <span class="st">"Tea"</span>)))</span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="fu">fisher.test</span>(TeaTasting, <span class="at">alternative =</span> <span class="st">"greater"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Fisher's Exact Test for Count Data
@@ -814,6 +567,253 @@ alternative hypothesis: true odds ratio is greater than 1
 sample estimates:
 odds ratio 
   6.408309 </code></pre>
+</div>
+</div>
+</section>
+<section id="analysis-of-variance" class="slide level2">
+<h2>Analysis of Variance</h2>
+<p>The analysis of variance or ANOVA is a collection of statistical methods used to compare two or more groups to assess the differences between group means.</p>
+<p>The simplest ANOVA provides a test of whether two or more population means are equivalent. As such the ANOVA is a generalization of the two sample <span class="math inline">\(t\)</span>-test.</p>
+<p>ANOVA is typically said to be introduced by Ronald Fisher, who applied the method to study the variation in crop yield related to different fertiliser treatments.</p>
+</section>
+<section id="one-way-anova" class="slide level2">
+<h2>One-way ANOVA</h2>
+<p>One-way ANOVA or single-factor ANOVA is used to compare two or more population means. Let <span class="math inline">\(I\)</span> be the number of groups/populations and <span class="math inline">\(\mu_I\)</span> to be the population mean of the response of interest for group <span class="math inline">\(I\)</span>.</p>
+<p><strong>Hypotheses</strong>:</p>
+<ul>
+<li><span class="math inline">\(H_0:\mu_1=\ldots=\mu_I\)</span></li>
+<li><span class="math inline">\(H_a: \text{at least two of the means are different}\)</span></li>
+</ul>
+<p><strong>Assumptions</strong>:</p>
+<ul>
+<li>The population distributions are all normal with the same variance <span class="math inline">\(\sigma^2\)</span>.</li>
+</ul>
+</section>
+<section id="test-statistic" class="slide level2">
+<h2>Test Statistic</h2>
+<p>The <span class="math inline">\(F\)</span> test is commonly used to compare the causes of the total variation. In particular, the <span class="math inline">\(F\)</span> test statistic is defined as</p>
+<p><span class="math display">\[F=\frac{\text{variance between groups}}{\text{variance within groups}}\]</span></p>
+<p>If <span class="math inline">\(F\)</span> is large, then there may be evidence to reject the hypothesis that the group means are all equal.</p>
+</section>
+<section id="test-statistic-1" class="slide level2">
+<h2>Test Statistic</h2>
+<p><span class="math display">\[F=\frac{\text{variance between groups}}{\text{variance within groups}}=\frac{
+\text{Mean Square for Treatments}}{\text{Mean Square for Error}}\]</span></p>
+<p>In a balanced design, where each group has the same number of <span class="math inline">\(J\)</span> samples, and <span class="math inline">\(X_{i, j}\)</span> denotes the <span class="math inline">\(j\)</span>th measurement from group <span class="math inline">\(i\)</span>, the mean square terms have the following formulas:</p>
+<p><span class="math display">\[\text{Mean Square for Treatments}=\frac{J}{I-1}\sum_i(\overline{X}_i-\overline{X}_{\cdot\cdot})^2\]</span></p>
+<p>where <span class="math inline">\(\overline{X}_i\)</span> is the sample group mean and <span class="math inline">\(\overline{X}_{\cdot\cdot}\)</span> is the overall sample mean.</p>
+<p><span class="math display">\[\text{Mean Square for Error}=\frac{S_1^2+S_2^2+\cdots+S_I^2}{I}\]</span></p>
+</section>
+<section id="example-plantgrowth" class="slide level2">
+<h2>Example: <code>PlantGrowth</code></h2>
+<p>The <code>PlantGrowth</code> data provides results from an experiment comparing plant growth under a control and two different treatment conditions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">boxplot</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth, <span class="at">main =</span> <span class="st">"PlantGrowth data"</span>,</span>
+<span id="cb12-2"><a href="#cb12-2"></a>        <span class="at">ylab =</span> <span class="st">"Dried weight of plants"</span>, <span class="at">col =</span> <span class="st">"lightgray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="25_advanced-statistics_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"></section>
+<section id="example-plantgrowth-1" class="slide level2">
+<h2>Example: <code>PlantGrowth</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>anova_res <span class="ot">&lt;-</span> <span class="fu">anova</span>(<span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth))</span>
+<span id="cb13-2"><a href="#cb13-2"></a>anova_res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: weight
+          Df  Sum Sq Mean Sq F value  Pr(&gt;F)  
+group      2  3.7663  1.8832  4.8461 0.01591 *
+Residuals 27 10.4921  0.3886                  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+</section>
+<section id="obtaining-a-p-value-with-an-f-test-statistic" class="slide level2">
+<h2>Obtaining a <span class="math inline">\(p\)</span>-value with an <span class="math inline">\(F\)</span>-test statistic</h2>
+<p>When <span class="math inline">\(H_0\)</span> is true, <span class="math inline">\(F\)</span> follows an <span class="math inline">\(F\)</span>-distribution with <span class="math inline">\(\nu_1=I-1\)</span> and <span class="math inline">\(\nu_2=I(J-1)\)</span>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb15-2"><a href="#cb15-2"></a>x <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">8</span>, <span class="at">length.out =</span> <span class="dv">3</span>))</span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="fu">ggplot</span>(x, <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span> </span>
+<span id="cb15-4"><a href="#cb15-4"></a>  <span class="fu">geom_function</span>(<span class="at">fun =</span> df, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">df1 =</span> <span class="dv">2</span>, <span class="at">df2 =</span> <span class="dv">27</span>)) <span class="sc">+</span> </span>
+<span id="cb15-5"><a href="#cb15-5"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> anova_res<span class="sc">$</span><span class="st">`</span><span class="at">F value</span><span class="st">`</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="25_advanced-statistics_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch quarto-figure-center"></section>
+<section id="the-f-distribution" class="slide level2">
+<h2>The <span class="math inline">\(F\)</span>-distribution</h2>
+<p>The <span class="math inline">\(F\)</span> distribution has two parameters:</p>
+<ul>
+<li>numerator degrees of freedom <span class="math inline">\(\nu_1\)</span></li>
+<li>denominator degrees of freedom <span class="math inline">\(\nu_2\)</span></li>
+</ul>
+<p>The <span class="math inline">\(F\)</span> distribution was derived as the ratio of (scaled) chi-square random variables and is frequently used to model the null distribution of test statistics.</p>
+<p><span class="math display">\[F = \frac{U_1/d_1}{U_2/d_2}\]</span></p>
+<p>where <span class="math inline">\(U_1\)</span> is chi-square with <span class="math inline">\(d_1\)</span> degrees of freedom, <span class="math inline">\(U_2\)</span> is chi-square with <span class="math inline">\(d_2\)</span> degrees of freedom, and <span class="math inline">\(U_1\)</span> and <span class="math inline">\(U_2\)</span> are independent.</p>
+</section>
+<section id="example-emails" class="slide level2">
+<h2>Example: <code>emails</code></h2>
+<p>The <code>emails</code> data provides information on emails categorized as spam and non-spam.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>emails <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://www.openintro.org/data/csv/email50.csv"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="fu">boxplot</span>(num_char <span class="sc">~</span> spam, <span class="at">data =</span> emails, <span class="at">main =</span> <span class="st">"Emails data"</span>,</span>
+<span id="cb16-3"><a href="#cb16-3"></a>        <span class="at">ylab =</span> <span class="st">"Length of email (characters)"</span>, <span class="at">col =</span> <span class="st">"lightgray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="25_advanced-statistics_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
+<section id="example-emails-1" class="slide level2">
+<h2>Example: <code>emails</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>anova_res <span class="ot">&lt;-</span> <span class="fu">anova</span>(<span class="fu">lm</span>(num_char <span class="sc">~</span> spam, <span class="at">data =</span> emails))</span>
+<span id="cb17-2"><a href="#cb17-2"></a>anova_res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: num_char
+          Df Sum Sq Mean Sq F value Pr(&gt;F)
+spam       1    0.1   0.052   3e-04 0.9863
+Residuals 48 8441.3 175.860               </code></pre>
+</div>
+</div>
+</section>
+<section id="the-general-linear-f-test" class="slide level2">
+<h2>The General Linear <span class="math inline">\(F\)</span>-test</h2>
+<p>In general, the <code>anova()</code> function can be used to test the fit of a model for sample data.</p>
+<p>For a simple linear regression case, the <span class="math inline">\(F\)</span> test can be used to compare a <strong>full</strong> model of the form</p>
+<p><span class="math display">\[y_i = (\beta_0+\beta_1x_{i1})+\epsilon_i\]</span></p>
+<p>with a <strong>reduced</strong> model:</p>
+<p><span class="math display">\[y_i=\beta_0+\epsilon_i\]</span></p>
+<p><strong>Hypotheses</strong>:</p>
+<ul>
+<li><span class="math inline">\(H_0:y_i=\beta_0+\epsilon_i\)</span></li>
+<li><span class="math inline">\(H_a: y_i=\beta_0+\beta_1x_{i1}+\epsilon_i\)</span></li>
+</ul>
+</section>
+<section id="the-general-linear-f-test-1" class="slide level2">
+<h2>The General Linear <span class="math inline">\(F\)</span>-test</h2>
+<p>Let <span class="math inline">\(p_{full}\)</span> be the number of parameters in the full model and <span class="math inline">\(p_{reduced}\)</span> be the number of parameters in the reduced model.</p>
+<p>Let <span class="math inline">\(SSE_{full}\)</span> and <span class="math inline">\(SSE_{reduced}\)</span> be the sum of squared errors for the full and reduced models, respectively.</p>
+<p><span class="math display">\[
+F = \frac{(SSE_{reduced}-SSE_{full})/(p_{full}-p_{reduced})}{SSE_{full}/p_{full}}
+\]</span></p>
+<p>Then <span class="math inline">\(F\)</span> follows an <span class="math inline">\(F\)</span> distribution with <span class="math inline">\(p_{full}-p_{reduced}\)</span> and <span class="math inline">\(p_{full}\)</span> degrees of freedom.</p>
+</section>
+<section id="example-mtcars" class="slide level2">
+<h2>Example: <code>mtcars</code></h2>
+<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-12_483d3a42dfdc101b99894b8eda7c7310">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>my_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt, <span class="at">data =</span> mtcars)</span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">anova</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: mpg
+          Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+wt         1 847.73  847.73  91.375 1.294e-10 ***
+Residuals 30 278.32    9.28                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+</section>
+<section id="example-mtcars-1" class="slide level2">
+<h2>Example: <code>mtcars</code></h2>
+<p>Note that this is equivalent to the Wald test for the coefficient for <code>wt</code> in the univariate case:</p>
+<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-13_20956a3a7386ea0bf6fab06a6c27bc73">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">summary</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = mpg ~ wt, data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.5432 -2.3647 -0.1252  1.4096  6.8727 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
+wt           -5.3445     0.5591  -9.559 1.29e-10 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.046 on 30 degrees of freedom
+Multiple R-squared:  0.7528,    Adjusted R-squared:  0.7446 
+F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10</code></pre>
+</div>
+</div>
+</section>
+<section id="the-general-linear-f-test-2" class="slide level2">
+<h2>The General Linear <span class="math inline">\(F\)</span>-test</h2>
+<p>More generally the <span class="math inline">\(F\)</span>-test can be used to test sets of nested models, when a reduced model can be compared with a full model.</p>
+<p><strong>Hypotheses</strong>:</p>
+<ul>
+<li><span class="math inline">\(H_0: \text{reduced model true}\)</span></li>
+<li><span class="math inline">\(H_a: \text{full model fits better}\)</span></li>
+</ul>
+</section>
+<section id="example-mtcars-2" class="slide level2">
+<h2>Example: <code>mtcars</code></h2>
+<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-14_c9d529838bc2855c90f1604636e61f3f">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>my_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp <span class="sc">+</span> wt, <span class="at">data =</span> mtcars)</span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="fu">anova</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: mpg
+          Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+hp         1 678.37  678.37 100.862 5.987e-11 ***
+wt         1 252.63  252.63  37.561 1.120e-06 ***
+Residuals 29 195.05    6.73                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>When we have more than one explanatory variable, the <span class="math inline">\(F\)</span>-test is different from the univariate Wald test.</p>
+<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-15_2963d2c237ef23d1932600f136f26d0d">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">summary</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = mpg ~ hp + wt, data = mtcars)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-3.941 -1.600 -0.182  1.050  5.854 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 37.22727    1.59879  23.285  &lt; 2e-16 ***
+hp          -0.03177    0.00903  -3.519  0.00145 ** 
+wt          -3.87783    0.63273  -6.129 1.12e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.593 on 29 degrees of freedom
+Multiple R-squared:  0.8268,    Adjusted R-squared:  0.8148 
+F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12</code></pre>
+</div>
+</div>
+</section>
+<section id="example-mtcars-3" class="slide level2">
+<h2>Example: <code>mtcars</code></h2>
+<p>We can explicitly specify the full and reduced models:</p>
+<div class="cell" data-hash="25_advanced-statistics_cache/revealjs/unnamed-chunk-16_a3db32f2ccb6a281748ea00f160f6b81">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>my_lm_full <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp <span class="sc">+</span> wt, <span class="at">data =</span> mtcars)</span>
+<span id="cb27-2"><a href="#cb27-2"></a>my_lm_reduced <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> mtcars)</span>
+<span id="cb27-3"><a href="#cb27-3"></a><span class="fu">anova</span>(my_lm_full, my_lm_reduced)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: mpg ~ hp + wt
+Model 2: mpg ~ 1
+  Res.Df     RSS Df Sum of Sq      F    Pr(&gt;F)    
+1     29  195.05                                  
+2     31 1126.05 -2      -931 69.211 9.109e-12 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
 
