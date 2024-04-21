@@ -435,14 +435,32 @@ Peter Gao
 <h2>Visual inspection</h2>
 
 <img data-src="23_hypothesis-testing-III_files/figure-revealjs/visualize_flips-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="visual-inspection-1" class="slide level2">
+<h2>Visual inspection</h2>
+<div class="cell" data-layout-align="center" data-hash="23_hypothesis-testing-III_cache/revealjs/visualize_flips_dummy_dc3e765fe4598eb24191be2880bc70e0">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>flips_long <span class="ot">&lt;-</span> flips <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">mutate</span>(<span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>id,  <span class="at">names_to =</span> <span class="st">"Sequence"</span>, <span class="at">values_to =</span> <span class="st">"Flip"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a>flips_long <span class="sc">|&gt;</span> </span>
+<span id="cb3-6"><a href="#cb3-6"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> id, <span class="at">y =</span> Flip, <span class="at">group =</span> Sequence)) <span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> Flip)) <span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a>  <span class="fu">facet_grid</span>(<span class="at">rows =</span> <span class="fu">vars</span>(Sequence)) <span class="sc">+</span> </span>
+<span id="cb3-10"><a href="#cb3-10"></a>  <span class="fu">theme</span>(</span>
+<span id="cb3-11"><a href="#cb3-11"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb3-12"><a href="#cb3-12"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb3-13"><a href="#cb3-13"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 <section id="a-slightly-different-test-streak-length" class="slide level2">
 <h2>A slightly different test: streak length</h2>
 <p>We can also consider a different test statistic: longest streak.</p>
 <div class="cell" data-layout-align="center" data-hash="23_hypothesis-testing-III_cache/revealjs/streaks_ce186dbc08d0c8fe2cab9c41257948a5">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>flip_streaks <span class="ot">&lt;-</span> flips_long <span class="sc">|&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">group_by</span>(Sequence) <span class="sc">|&gt;</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">summarize</span>(<span class="at">longest_streak =</span> <span class="fu">max</span>(<span class="fu">rle</span>(Flip)<span class="sc">$</span>length))</span>
-<span id="cb3-4"><a href="#cb3-4"></a>flip_streaks</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>flip_streaks <span class="ot">&lt;-</span> flips_long <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">group_by</span>(Sequence) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">summarize</span>(<span class="at">longest_streak =</span> <span class="fu">max</span>(<span class="fu">rle</span>(Flip)<span class="sc">$</span>length))</span>
+<span id="cb4-4"><a href="#cb4-4"></a>flip_streaks</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 2
   Sequence longest_streak
@@ -459,17 +477,17 @@ Peter Gao
 <h2>A slightly different test: streak length</h2>
 <p>We can then simulate the null distribution of streak length.</p>
 <div class="cell" data-layout-align="center" data-hash="23_hypothesis-testing-III_cache/revealjs/streaks_sim_dummy_6796df54ee59229a9333d99f40e06da4">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>sim_streaks <span class="ot">&lt;-</span> </span>
-<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">data.frame</span>(</span>
-<span id="cb5-3"><a href="#cb5-3"></a>    <span class="at">x =</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, </span>
-<span id="cb5-4"><a href="#cb5-4"></a>                  <span class="fu">max</span>(<span class="fu">rle</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"H"</span>, <span class="st">"T"</span>), <span class="at">size =</span> <span class="dv">200</span>, <span class="at">replace =</span> T))<span class="sc">$</span>length)</span>
-<span id="cb5-5"><a href="#cb5-5"></a>    )</span>
-<span id="cb5-6"><a href="#cb5-6"></a>  )</span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a>  <span class="fu">geom_histogram</span>(<span class="at">data =</span> sim_streaks, <span class="fu">aes</span>(<span class="at">x =</span> x), <span class="at">binwidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a>  <span class="fu">geom_vline</span>(<span class="at">data =</span> flip_streaks,</span>
-<span id="cb5-10"><a href="#cb5-10"></a>             <span class="fu">aes</span>(<span class="at">color =</span> Sequence, <span class="at">xintercept =</span> longest_streak)) <span class="sc">+</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a>  <span class="fu">xlab</span>(<span class="st">"Longest streak"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>sim_streaks <span class="ot">&lt;-</span> </span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb6-3"><a href="#cb6-3"></a>    <span class="at">x =</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, </span>
+<span id="cb6-4"><a href="#cb6-4"></a>                  <span class="fu">max</span>(<span class="fu">rle</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"H"</span>, <span class="st">"T"</span>), <span class="at">size =</span> <span class="dv">200</span>, <span class="at">replace =</span> T))<span class="sc">$</span>length)</span>
+<span id="cb6-5"><a href="#cb6-5"></a>    )</span>
+<span id="cb6-6"><a href="#cb6-6"></a>  )</span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a>  <span class="fu">geom_histogram</span>(<span class="at">data =</span> sim_streaks, <span class="fu">aes</span>(<span class="at">x =</span> x), <span class="at">binwidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a>  <span class="fu">geom_vline</span>(<span class="at">data =</span> flip_streaks,</span>
+<span id="cb6-10"><a href="#cb6-10"></a>             <span class="fu">aes</span>(<span class="at">color =</span> Sequence, <span class="at">xintercept =</span> longest_streak)) <span class="sc">+</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a>  <span class="fu">xlab</span>(<span class="st">"Longest streak"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="permutation-tests" class="slide level2">
@@ -482,12 +500,12 @@ Peter Gao
 <h2>Permutation tests</h2>
 <p><strong>Example:</strong> Suppose we want to understand whether carrying a particular genetic variant affects an individual’s height <span class="math inline">\(y\)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>carrier <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="fu">c</span>(<span class="dv">100</span>,<span class="dv">200</span>))</span>
-<span id="cb6-2"><a href="#cb6-2"></a></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="co"># an example where y is independent of the gene</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a>null_y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">300</span>) </span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="co"># an example where y is dependent on the gene</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a>alt_y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">300</span>, <span class="at">mean =</span> carrier <span class="sc">*</span> <span class="dv">5</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>carrier <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="fu">c</span>(<span class="dv">100</span>,<span class="dv">200</span>))</span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co"># an example where y is independent of the gene</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>null_y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">300</span>) </span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co"># an example where y is dependent on the gene</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a>alt_y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">300</span>, <span class="at">mean =</span> carrier <span class="sc">*</span> <span class="dv">5</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="permutation-tests-2" class="slide level2">
@@ -515,19 +533,19 @@ Peter Gao
 <h2>Permutation tests</h2>
 <p>In the case of our simulated data, we know the true distribution of the difference of sample means. We can thus use a <span class="math inline">\(t\)</span>-test to perform our hypothesis test:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">t.test</span>(null_y[carrier <span class="sc">==</span> <span class="dv">0</span>], null_y[carrier <span class="sc">==</span> <span class="dv">1</span>], <span class="at">var.equal=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">t.test</span>(null_y[carrier <span class="sc">==</span> <span class="dv">0</span>], null_y[carrier <span class="sc">==</span> <span class="dv">1</span>], <span class="at">var.equal=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Two Sample t-test
 
 data:  null_y[carrier == 0] and null_y[carrier == 1]
-t = 0.37161, df = 298, p-value = 0.7104
+t = -0.55208, df = 298, p-value = 0.5813
 alternative hypothesis: true difference in means is not equal to 0
 95 percent confidence interval:
- -0.1925865  0.2822493
+ -0.3175650  0.1784227
 sample estimates:
   mean of x   mean of y 
-0.049604698 0.004773323 </code></pre>
+-0.09674072 -0.02716956 </code></pre>
 </div>
 </div>
 </section>
@@ -535,19 +553,19 @@ sample estimates:
 <h2>Permutation tests</h2>
 <p>Compare with the <span class="math inline">\(t\)</span>-test for the alternative hypothesis data:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">t.test</span>(alt_y[carrier <span class="sc">==</span> <span class="dv">0</span>], alt_y[carrier <span class="sc">==</span> <span class="dv">1</span>], <span class="at">var.equal=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">t.test</span>(alt_y[carrier <span class="sc">==</span> <span class="dv">0</span>], alt_y[carrier <span class="sc">==</span> <span class="dv">1</span>], <span class="at">var.equal=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Two Sample t-test
 
 data:  alt_y[carrier == 0] and alt_y[carrier == 1]
-t = -40.589, df = 298, p-value &lt; 2.2e-16
+t = -41.762, df = 298, p-value &lt; 2.2e-16
 alternative hypothesis: true difference in means is not equal to 0
 95 percent confidence interval:
- -5.287759 -4.798718
+ -5.246960 -4.774709
 sample estimates:
  mean of x  mean of y 
-0.02883726 5.07207597 </code></pre>
+0.01439314 5.02522740 </code></pre>
 </div>
 </div>
 </section>
@@ -555,25 +573,25 @@ sample estimates:
 <h2>Permutation tests</h2>
 <p>For now, though, let’s pretend we don’t know the true null sampling distribution of our test statistic.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb11-2"><a href="#cb11-2"></a>null_diff <span class="ot">&lt;-</span> <span class="fu">mean</span>(null_y[carrier<span class="sc">==</span><span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(null_y[carrier<span class="sc">==</span><span class="dv">0</span>])</span>
-<span id="cb11-3"><a href="#cb11-3"></a>single_test <span class="ot">&lt;-</span> <span class="cf">function</span>(label, y) {</span>
-<span id="cb11-4"><a href="#cb11-4"></a>  resample <span class="ot">&lt;-</span> <span class="fu">sample</span>(label)</span>
-<span id="cb11-5"><a href="#cb11-5"></a>  <span class="co"># resample test statistic</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a>  <span class="fu">mean</span>(y[resample <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(y[resample <span class="sc">==</span> <span class="dv">0</span>])</span>
-<span id="cb11-7"><a href="#cb11-7"></a>}</span>
-<span id="cb11-8"><a href="#cb11-8"></a>test_stats_null <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">single_test</span>(carrier, null_y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a>null_diff <span class="ot">&lt;-</span> <span class="fu">mean</span>(null_y[carrier<span class="sc">==</span><span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(null_y[carrier<span class="sc">==</span><span class="dv">0</span>])</span>
+<span id="cb12-3"><a href="#cb12-3"></a>single_test <span class="ot">&lt;-</span> <span class="cf">function</span>(label, y) {</span>
+<span id="cb12-4"><a href="#cb12-4"></a>  resample <span class="ot">&lt;-</span> <span class="fu">sample</span>(label)</span>
+<span id="cb12-5"><a href="#cb12-5"></a>  <span class="co"># resample test statistic</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a>  <span class="fu">mean</span>(y[resample <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(y[resample <span class="sc">==</span> <span class="dv">0</span>])</span>
+<span id="cb12-7"><a href="#cb12-7"></a>}</span>
+<span id="cb12-8"><a href="#cb12-8"></a>test_stats_null <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">single_test</span>(carrier, null_y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="permutation-tests-7" class="slide level2">
 <h2>Permutation tests</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">hist</span>(test_stats_null)</span>
-<span id="cb12-2"><a href="#cb12-2"></a><span class="fu">abline</span>(<span class="at">v =</span> null_diff, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"purple"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">hist</span>(test_stats_null)</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">abline</span>(<span class="at">v =</span> null_diff, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"purple"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">mean</span>(<span class="fu">abs</span>(test_stats_null) <span class="sc">&gt;</span> <span class="fu">abs</span>(null_diff)) <span class="co"># P-value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">mean</span>(<span class="fu">abs</span>(test_stats_null) <span class="sc">&gt;</span> <span class="fu">abs</span>(null_diff)) <span class="co"># P-value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.705</code></pre>
+<pre><code>[1] 0.546</code></pre>
 </div>
 </div>
 <img data-src="23_hypothesis-testing-III_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"></section>
@@ -581,13 +599,13 @@ sample estimates:
 <h2>Permutation tests</h2>
 <p>Compare with the case where the null hypothesis is false.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb15-2"><a href="#cb15-2"></a>alt_diff <span class="ot">&lt;-</span> <span class="fu">mean</span>(alt_y[carrier<span class="sc">==</span><span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(alt_y[carrier<span class="sc">==</span><span class="dv">0</span>])</span>
-<span id="cb15-3"><a href="#cb15-3"></a>test_stats_alt <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">single_test</span>(carrier, alt_y))</span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="fu">hist</span>(test_stats_alt, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="dv">6</span>))</span>
-<span id="cb15-5"><a href="#cb15-5"></a><span class="fu">abline</span>(<span class="at">v =</span> alt_diff, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"purple"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb16-2"><a href="#cb16-2"></a>alt_diff <span class="ot">&lt;-</span> <span class="fu">mean</span>(alt_y[carrier<span class="sc">==</span><span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(alt_y[carrier<span class="sc">==</span><span class="dv">0</span>])</span>
+<span id="cb16-3"><a href="#cb16-3"></a>test_stats_alt <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">single_test</span>(carrier, alt_y))</span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="fu">hist</span>(test_stats_alt, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="dv">6</span>))</span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="fu">abline</span>(<span class="at">v =</span> alt_diff, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"purple"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">mean</span>(<span class="fu">abs</span>(test_stats_alt) <span class="sc">&gt;</span> <span class="fu">abs</span>(alt_diff)) <span class="co"># P-value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">mean</span>(<span class="fu">abs</span>(test_stats_alt) <span class="sc">&gt;</span> <span class="fu">abs</span>(alt_diff)) <span class="co"># P-value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0</code></pre>
 </div>
@@ -597,7 +615,7 @@ sample estimates:
 <h2>Permutation tests: <code>sleep</code> data</h2>
 <p>What if we apply this idea to the <code>sleep</code> data?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">head</span>(sleep)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">head</span>(sleep)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  extra group ID
 1   0.7     1  1
@@ -612,18 +630,18 @@ sample estimates:
 <section id="permutation-tests-sleep-data-1" class="slide level2">
 <h2>Permutation tests: <code>sleep</code> data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>test_stat <span class="ot">&lt;-</span> <span class="fu">mean</span>(sleep<span class="sc">$</span>extra[sleep<span class="sc">$</span>group <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> </span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">mean</span>(sleep<span class="sc">$</span>extra[sleep<span class="sc">$</span>group <span class="sc">==</span> <span class="dv">2</span>])</span>
-<span id="cb20-3"><a href="#cb20-3"></a>single_test <span class="ot">&lt;-</span> <span class="cf">function</span>(label, y) {</span>
-<span id="cb20-4"><a href="#cb20-4"></a>  resample <span class="ot">&lt;-</span> <span class="fu">sample</span>(label)</span>
-<span id="cb20-5"><a href="#cb20-5"></a>  <span class="co"># resample test statistic</span></span>
-<span id="cb20-6"><a href="#cb20-6"></a>  <span class="fu">mean</span>(y[resample <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(y[resample <span class="sc">==</span> <span class="dv">2</span>])</span>
-<span id="cb20-7"><a href="#cb20-7"></a>}</span>
-<span id="cb20-8"><a href="#cb20-8"></a>test_stats_alt <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">single_test</span>(sleep<span class="sc">$</span>group, sleep<span class="sc">$</span>extra))</span>
-<span id="cb20-9"><a href="#cb20-9"></a><span class="fu">hist</span>(test_stats_alt, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="dv">6</span>))</span>
-<span id="cb20-10"><a href="#cb20-10"></a><span class="fu">abline</span>(<span class="at">v =</span> test_stat, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"purple"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>test_stat <span class="ot">&lt;-</span> <span class="fu">mean</span>(sleep<span class="sc">$</span>extra[sleep<span class="sc">$</span>group <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> </span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">mean</span>(sleep<span class="sc">$</span>extra[sleep<span class="sc">$</span>group <span class="sc">==</span> <span class="dv">2</span>])</span>
+<span id="cb21-3"><a href="#cb21-3"></a>single_test <span class="ot">&lt;-</span> <span class="cf">function</span>(label, y) {</span>
+<span id="cb21-4"><a href="#cb21-4"></a>  resample <span class="ot">&lt;-</span> <span class="fu">sample</span>(label)</span>
+<span id="cb21-5"><a href="#cb21-5"></a>  <span class="co"># resample test statistic</span></span>
+<span id="cb21-6"><a href="#cb21-6"></a>  <span class="fu">mean</span>(y[resample <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(y[resample <span class="sc">==</span> <span class="dv">2</span>])</span>
+<span id="cb21-7"><a href="#cb21-7"></a>}</span>
+<span id="cb21-8"><a href="#cb21-8"></a>test_stats_alt <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">single_test</span>(sleep<span class="sc">$</span>group, sleep<span class="sc">$</span>extra))</span>
+<span id="cb21-9"><a href="#cb21-9"></a><span class="fu">hist</span>(test_stats_alt)</span>
+<span id="cb21-10"><a href="#cb21-10"></a><span class="fu">abline</span>(<span class="at">v =</span> test_stat, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"purple"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">mean</span>(<span class="fu">abs</span>(test_stats_alt) <span class="sc">&gt;</span> <span class="fu">abs</span>(test_stat)) <span class="co"># P-value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">mean</span>(<span class="fu">abs</span>(test_stats_alt) <span class="sc">&gt;</span> <span class="fu">abs</span>(test_stat)) <span class="co"># P-value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.099</code></pre>
 </div>
@@ -655,25 +673,25 @@ P\left(|\overline{X}_n| &gt; \frac{z_{\alpha/2}}{\sqrt{n}}\right)&amp;=P\left(\o
 <section id="one-sample-z-test-2" class="slide level2">
 <h2>One sample <span class="math inline">\(z\)</span>-test</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>one_sample_z_power <span class="ot">&lt;-</span> <span class="cf">function</span>(mu_a, alpha, n) {</span>
-<span id="cb23-2"><a href="#cb23-2"></a>  z <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha <span class="sc">/</span> <span class="dv">2</span>)</span>
-<span id="cb23-3"><a href="#cb23-3"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(z <span class="sc">-</span> mu_a <span class="sc">*</span> <span class="fu">sqrt</span>(n)) <span class="sc">+</span> <span class="fu">pnorm</span>(<span class="sc">-</span>z <span class="sc">-</span> mu_a <span class="sc">*</span> <span class="fu">sqrt</span>(n)))</span>
-<span id="cb23-4"><a href="#cb23-4"></a>}</span>
-<span id="cb23-5"><a href="#cb23-5"></a></span>
-<span id="cb23-6"><a href="#cb23-6"></a><span class="co"># plot the power function</span></span>
-<span id="cb23-7"><a href="#cb23-7"></a>x <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="at">length.out =</span> <span class="dv">1000</span>))</span>
-<span id="cb23-8"><a href="#cb23-8"></a><span class="fu">ggplot</span>(x, <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span> </span>
-<span id="cb23-9"><a href="#cb23-9"></a>  <span class="fu">geom_function</span>(<span class="at">fun =</span> one_sample_z_power, </span>
-<span id="cb23-10"><a href="#cb23-10"></a>                <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"n = 5"</span>),</span>
-<span id="cb23-11"><a href="#cb23-11"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">alpha =</span> .<span class="dv">05</span>, <span class="at">n =</span> <span class="dv">5</span>)) <span class="sc">+</span></span>
-<span id="cb23-12"><a href="#cb23-12"></a>  <span class="fu">geom_function</span>(<span class="at">fun =</span> one_sample_z_power, </span>
-<span id="cb23-13"><a href="#cb23-13"></a>                <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"n = 10"</span>),</span>
-<span id="cb23-14"><a href="#cb23-14"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">alpha =</span> .<span class="dv">05</span>, <span class="at">n =</span> <span class="dv">10</span>)) <span class="sc">+</span></span>
-<span id="cb23-15"><a href="#cb23-15"></a>  <span class="fu">geom_function</span>(<span class="at">fun =</span> one_sample_z_power, </span>
-<span id="cb23-16"><a href="#cb23-16"></a>                <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"n = 20"</span>),</span>
-<span id="cb23-17"><a href="#cb23-17"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">alpha =</span> .<span class="dv">05</span>, <span class="at">n =</span> <span class="dv">20</span>)) <span class="sc">+</span></span>
-<span id="cb23-18"><a href="#cb23-18"></a>  <span class="fu">xlab</span>(<span class="st">"True population mean"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Power"</span>) <span class="sc">+</span></span>
-<span id="cb23-19"><a href="#cb23-19"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>one_sample_z_power <span class="ot">&lt;-</span> <span class="cf">function</span>(mu_a, alpha, n) {</span>
+<span id="cb24-2"><a href="#cb24-2"></a>  z <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(z <span class="sc">-</span> mu_a <span class="sc">*</span> <span class="fu">sqrt</span>(n)) <span class="sc">+</span> <span class="fu">pnorm</span>(<span class="sc">-</span>z <span class="sc">-</span> mu_a <span class="sc">*</span> <span class="fu">sqrt</span>(n)))</span>
+<span id="cb24-4"><a href="#cb24-4"></a>}</span>
+<span id="cb24-5"><a href="#cb24-5"></a></span>
+<span id="cb24-6"><a href="#cb24-6"></a><span class="co"># plot the power function</span></span>
+<span id="cb24-7"><a href="#cb24-7"></a>x <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="at">length.out =</span> <span class="dv">1000</span>))</span>
+<span id="cb24-8"><a href="#cb24-8"></a><span class="fu">ggplot</span>(x, <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span> </span>
+<span id="cb24-9"><a href="#cb24-9"></a>  <span class="fu">geom_function</span>(<span class="at">fun =</span> one_sample_z_power, </span>
+<span id="cb24-10"><a href="#cb24-10"></a>                <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"n = 5"</span>),</span>
+<span id="cb24-11"><a href="#cb24-11"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">alpha =</span> .<span class="dv">05</span>, <span class="at">n =</span> <span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb24-12"><a href="#cb24-12"></a>  <span class="fu">geom_function</span>(<span class="at">fun =</span> one_sample_z_power, </span>
+<span id="cb24-13"><a href="#cb24-13"></a>                <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"n = 10"</span>),</span>
+<span id="cb24-14"><a href="#cb24-14"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">alpha =</span> .<span class="dv">05</span>, <span class="at">n =</span> <span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb24-15"><a href="#cb24-15"></a>  <span class="fu">geom_function</span>(<span class="at">fun =</span> one_sample_z_power, </span>
+<span id="cb24-16"><a href="#cb24-16"></a>                <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"n = 20"</span>),</span>
+<span id="cb24-17"><a href="#cb24-17"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">alpha =</span> .<span class="dv">05</span>, <span class="at">n =</span> <span class="dv">20</span>)) <span class="sc">+</span></span>
+<span id="cb24-18"><a href="#cb24-18"></a>  <span class="fu">xlab</span>(<span class="st">"True population mean"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Power"</span>) <span class="sc">+</span></span>
+<span id="cb24-19"><a href="#cb24-19"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="one-sample-z-test-3" class="slide level2">
@@ -683,32 +701,32 @@ P\left(|\overline{X}_n| &gt; \frac{z_{\alpha/2}}{\sqrt{n}}\right)&amp;=P\left(\o
 <section id="using-simulations-to-estimate-power" class="slide level2">
 <h2>Using simulations to estimate power</h2>
 <div class="cell" data-hash="23_hypothesis-testing-III_cache/revealjs/power.sim_145c2348bf5aa41b2d2f30d40abd4a85">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>simulate_test <span class="ot">&lt;-</span> <span class="cf">function</span>(mu_a, alpha, n) {</span>
-<span id="cb24-2"><a href="#cb24-2"></a>  Xbar <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">rnorm</span>(n, <span class="at">mean =</span> mu_a, <span class="at">sd =</span> <span class="dv">1</span>))</span>
-<span id="cb24-3"><a href="#cb24-3"></a>  Z_score <span class="ot">&lt;-</span> Xbar <span class="sc">*</span> <span class="fu">sqrt</span>(n)</span>
-<span id="cb24-4"><a href="#cb24-4"></a>  <span class="fu">return</span>(<span class="fu">abs</span>(Z_score) <span class="sc">&gt;</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha <span class="sc">/</span> <span class="dv">2</span>))</span>
-<span id="cb24-5"><a href="#cb24-5"></a>}</span>
-<span id="cb24-6"><a href="#cb24-6"></a>power_sim <span class="ot">&lt;-</span> <span class="cf">function</span>(mu_a, alpha, n) {</span>
-<span id="cb24-7"><a href="#cb24-7"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(<span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">simulate_test</span>(mu_a, alpha, n))))</span>
-<span id="cb24-8"><a href="#cb24-8"></a>}</span>
-<span id="cb24-9"><a href="#cb24-9"></a></span>
-<span id="cb24-10"><a href="#cb24-10"></a>mu_a <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">mu_a =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span>, <span class="at">length.out =</span> <span class="dv">100</span>))</span>
-<span id="cb24-11"><a href="#cb24-11"></a>sample_sizes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">20</span>)</span>
-<span id="cb24-12"><a href="#cb24-12"></a></span>
-<span id="cb24-13"><a href="#cb24-13"></a><span class="co"># matrix of simulation results</span></span>
-<span id="cb24-14"><a href="#cb24-14"></a>sim_results <span class="ot">&lt;-</span> </span>
-<span id="cb24-15"><a href="#cb24-15"></a>  <span class="fu">sapply</span>(sample_sizes,</span>
-<span id="cb24-16"><a href="#cb24-16"></a>         <span class="cf">function</span>(n) </span>
-<span id="cb24-17"><a href="#cb24-17"></a>           <span class="fu">sapply</span>(mu_a<span class="sc">$</span>mu_a, </span>
-<span id="cb24-18"><a href="#cb24-18"></a>                  <span class="cf">function</span>(mu)</span>
-<span id="cb24-19"><a href="#cb24-19"></a>                    <span class="fu">power_sim</span>(mu, .<span class="dv">05</span>, n)))</span>
-<span id="cb24-20"><a href="#cb24-20"></a></span>
-<span id="cb24-21"><a href="#cb24-21"></a><span class="fu">ggplot</span>(mu_a, <span class="fu">aes</span>(<span class="at">x =</span> mu_a)) <span class="sc">+</span></span>
-<span id="cb24-22"><a href="#cb24-22"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> sim_results[, <span class="dv">1</span>], <span class="at">color =</span> <span class="st">"n = 5"</span>)) <span class="sc">+</span></span>
-<span id="cb24-23"><a href="#cb24-23"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> sim_results[, <span class="dv">2</span>], <span class="at">color =</span> <span class="st">"n = 10"</span>)) <span class="sc">+</span></span>
-<span id="cb24-24"><a href="#cb24-24"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> sim_results[, <span class="dv">3</span>], <span class="at">color =</span> <span class="st">"n = 20"</span>)) <span class="sc">+</span></span>
-<span id="cb24-25"><a href="#cb24-25"></a>  <span class="fu">xlab</span>(<span class="st">"True population mean"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Power"</span>) <span class="sc">+</span></span>
-<span id="cb24-26"><a href="#cb24-26"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>simulate_test <span class="ot">&lt;-</span> <span class="cf">function</span>(mu_a, alpha, n) {</span>
+<span id="cb25-2"><a href="#cb25-2"></a>  Xbar <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">rnorm</span>(n, <span class="at">mean =</span> mu_a, <span class="at">sd =</span> <span class="dv">1</span>))</span>
+<span id="cb25-3"><a href="#cb25-3"></a>  Z_score <span class="ot">&lt;-</span> Xbar <span class="sc">*</span> <span class="fu">sqrt</span>(n)</span>
+<span id="cb25-4"><a href="#cb25-4"></a>  <span class="fu">return</span>(<span class="fu">abs</span>(Z_score) <span class="sc">&gt;</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha <span class="sc">/</span> <span class="dv">2</span>))</span>
+<span id="cb25-5"><a href="#cb25-5"></a>}</span>
+<span id="cb25-6"><a href="#cb25-6"></a>power_sim <span class="ot">&lt;-</span> <span class="cf">function</span>(mu_a, alpha, n) {</span>
+<span id="cb25-7"><a href="#cb25-7"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(<span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">simulate_test</span>(mu_a, alpha, n))))</span>
+<span id="cb25-8"><a href="#cb25-8"></a>}</span>
+<span id="cb25-9"><a href="#cb25-9"></a></span>
+<span id="cb25-10"><a href="#cb25-10"></a>mu_a <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">mu_a =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span>, <span class="at">length.out =</span> <span class="dv">100</span>))</span>
+<span id="cb25-11"><a href="#cb25-11"></a>sample_sizes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">20</span>)</span>
+<span id="cb25-12"><a href="#cb25-12"></a></span>
+<span id="cb25-13"><a href="#cb25-13"></a><span class="co"># matrix of simulation results</span></span>
+<span id="cb25-14"><a href="#cb25-14"></a>sim_results <span class="ot">&lt;-</span> </span>
+<span id="cb25-15"><a href="#cb25-15"></a>  <span class="fu">sapply</span>(sample_sizes,</span>
+<span id="cb25-16"><a href="#cb25-16"></a>         <span class="cf">function</span>(n) </span>
+<span id="cb25-17"><a href="#cb25-17"></a>           <span class="fu">sapply</span>(mu_a<span class="sc">$</span>mu_a, </span>
+<span id="cb25-18"><a href="#cb25-18"></a>                  <span class="cf">function</span>(mu)</span>
+<span id="cb25-19"><a href="#cb25-19"></a>                    <span class="fu">power_sim</span>(mu, .<span class="dv">05</span>, n)))</span>
+<span id="cb25-20"><a href="#cb25-20"></a></span>
+<span id="cb25-21"><a href="#cb25-21"></a><span class="fu">ggplot</span>(mu_a, <span class="fu">aes</span>(<span class="at">x =</span> mu_a)) <span class="sc">+</span></span>
+<span id="cb25-22"><a href="#cb25-22"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> sim_results[, <span class="dv">1</span>], <span class="at">color =</span> <span class="st">"n = 5"</span>)) <span class="sc">+</span></span>
+<span id="cb25-23"><a href="#cb25-23"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> sim_results[, <span class="dv">2</span>], <span class="at">color =</span> <span class="st">"n = 10"</span>)) <span class="sc">+</span></span>
+<span id="cb25-24"><a href="#cb25-24"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> sim_results[, <span class="dv">3</span>], <span class="at">color =</span> <span class="st">"n = 20"</span>)) <span class="sc">+</span></span>
+<span id="cb25-25"><a href="#cb25-25"></a>  <span class="fu">xlab</span>(<span class="st">"True population mean"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Power"</span>) <span class="sc">+</span></span>
+<span id="cb25-26"><a href="#cb25-26"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="using-simulations-to-estimate-power-1" class="slide level2">
@@ -728,16 +746,16 @@ P\left(|\overline{X}_n| &gt; \frac{z_{\alpha/2}}{\sqrt{n}}\right)&amp;=P\left(\o
 <h2>P-hacking simulations</h2>
 <p>Suppose we simulate 25 observations of 8 variables which we know to be uncorrelated.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>no_signal_data <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">200</span>), <span class="at">ncol =</span> <span class="dv">8</span>) <span class="co"># 25 x 8 matrix</span></span>
-<span id="cb25-2"><a href="#cb25-2"></a><span class="fu">pairs</span>(no_signal_data) <span class="co"># pairwise scatter plots</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>no_signal_data <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">200</span>), <span class="at">ncol =</span> <span class="dv">8</span>) <span class="co"># 25 x 8 matrix</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="fu">pairs</span>(no_signal_data) <span class="co"># pairwise scatter plots</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="23_hypothesis-testing-III_files/figure-revealjs/phack.sim-1.png" width="960" class="r-stretch"></section>
 <section id="p-hacking-simulations-2" class="slide level2">
 <h2>P-hacking simulations</h2>
 <div class="cell" data-hash="23_hypothesis-testing-III_cache/revealjs/phack.sim.eval_037964407f914c55a0f2dfa1b5d7ca4f">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>no_signal_data <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">200</span>), <span class="at">ncol =</span> <span class="dv">8</span>) <span class="co"># 25 x 8 matrix</span></span>
-<span id="cb26-2"><a href="#cb26-2"></a><span class="fu">pairs</span>(no_signal_data) <span class="co"># pairwise scatter plots</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>no_signal_data <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">200</span>), <span class="at">ncol =</span> <span class="dv">8</span>) <span class="co"># 25 x 8 matrix</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a><span class="fu">pairs</span>(no_signal_data) <span class="co"># pairwise scatter plots</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="23_hypothesis-testing-III_files/figure-revealjs/phack.sim.eval-1.png" width="960" class="r-stretch"></section>
@@ -745,7 +763,7 @@ P\left(|\overline{X}_n| &gt; \frac{z_{\alpha/2}}{\sqrt{n}}\right)&amp;=P\left(\o
 <h2>Multiple testing simulations</h2>
 <p>What if we perform a hypothesis test to test whether the correlation is zero between each pair of variables using <code>cor.test()</code>? With only 8 variables, we have 28 potential comparisons, the probability that we will (falsely) reject the null is already:</p>
 <div class="cell" data-hash="23_hypothesis-testing-III_cache/revealjs/comp_bfb8b7b186496dffdaf5c750df367d01">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="dv">1</span> <span class="sc">-</span> (<span class="fl">0.95</span>) <span class="sc">^</span> <span class="dv">28</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="dv">1</span> <span class="sc">-</span> (<span class="fl">0.95</span>) <span class="sc">^</span> <span class="dv">28</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.7621731</code></pre>
 </div>
@@ -754,19 +772,19 @@ P\left(|\overline{X}_n| &gt; \frac{z_{\alpha/2}}{\sqrt{n}}\right)&amp;=P\left(\o
 <section id="multiple-testing-simulations-1" class="slide level2">
 <h2>Multiple testing simulations</h2>
 <div class="cell" data-hash="23_hypothesis-testing-III_cache/revealjs/phack.sim.p_07d0e5b9f9a2832c58435dff44a60332">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">set.seed</span>(<span class="dv">1029</span>)</span>
-<span id="cb29-2"><a href="#cb29-2"></a>no_signal_data<span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">200</span>), <span class="at">ncol =</span> <span class="dv">8</span>) <span class="co"># 25 x 8 matrix</span></span>
-<span id="cb29-3"><a href="#cb29-3"></a>pairs_to_compare <span class="ot">&lt;-</span> <span class="fu">combn</span>(<span class="dv">8</span>, <span class="dv">2</span>) <span class="co"># all combinations of 2 numbers from 1-8</span></span>
-<span id="cb29-4"><a href="#cb29-4"></a>p_values <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb29-5"><a href="#cb29-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(pairs_to_compare)) {</span>
-<span id="cb29-6"><a href="#cb29-6"></a>  index_1 <span class="ot">&lt;-</span> pairs_to_compare[<span class="dv">1</span>, i]</span>
-<span id="cb29-7"><a href="#cb29-7"></a>  index_2 <span class="ot">&lt;-</span> pairs_to_compare[<span class="dv">2</span>, i]</span>
-<span id="cb29-8"><a href="#cb29-8"></a>  test_res <span class="ot">&lt;-</span> </span>
-<span id="cb29-9"><a href="#cb29-9"></a>    <span class="fu">cor.test</span>(no_signal_data[, index_1],</span>
-<span id="cb29-10"><a href="#cb29-10"></a>             no_signal_data[, index_2])</span>
-<span id="cb29-11"><a href="#cb29-11"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">c</span>(p_values, test_res<span class="sc">$</span>p.value)</span>
-<span id="cb29-12"><a href="#cb29-12"></a>}</span>
-<span id="cb29-13"><a href="#cb29-13"></a><span class="fu">print</span>(<span class="fu">min</span>(p_values))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">set.seed</span>(<span class="dv">1029</span>)</span>
+<span id="cb30-2"><a href="#cb30-2"></a>no_signal_data<span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">200</span>), <span class="at">ncol =</span> <span class="dv">8</span>) <span class="co"># 25 x 8 matrix</span></span>
+<span id="cb30-3"><a href="#cb30-3"></a>pairs_to_compare <span class="ot">&lt;-</span> <span class="fu">combn</span>(<span class="dv">8</span>, <span class="dv">2</span>) <span class="co"># all combinations of 2 numbers from 1-8</span></span>
+<span id="cb30-4"><a href="#cb30-4"></a>p_values <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb30-5"><a href="#cb30-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(pairs_to_compare)) {</span>
+<span id="cb30-6"><a href="#cb30-6"></a>  index_1 <span class="ot">&lt;-</span> pairs_to_compare[<span class="dv">1</span>, i]</span>
+<span id="cb30-7"><a href="#cb30-7"></a>  index_2 <span class="ot">&lt;-</span> pairs_to_compare[<span class="dv">2</span>, i]</span>
+<span id="cb30-8"><a href="#cb30-8"></a>  test_res <span class="ot">&lt;-</span> </span>
+<span id="cb30-9"><a href="#cb30-9"></a>    <span class="fu">cor.test</span>(no_signal_data[, index_1],</span>
+<span id="cb30-10"><a href="#cb30-10"></a>             no_signal_data[, index_2])</span>
+<span id="cb30-11"><a href="#cb30-11"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">c</span>(p_values, test_res<span class="sc">$</span>p.value)</span>
+<span id="cb30-12"><a href="#cb30-12"></a>}</span>
+<span id="cb30-13"><a href="#cb30-13"></a><span class="fu">print</span>(<span class="fu">min</span>(p_values))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.006656272</code></pre>
 </div>

@@ -557,7 +557,6 @@ What if our predictor variables are closely related? Consider the following simu
 #| echo: TRUE
 #| eval: TRUE
 #| cache: TRUE
-
 x2b <- x1 * 2 + rnorm(n, sd = .01)
 lm(y ~ x1 + x2b)
 ```

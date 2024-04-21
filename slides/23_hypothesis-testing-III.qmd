@@ -34,6 +34,8 @@ head(flips)
 
 Can you tell which is real and which are fake?
 
+
+
 ## Visual inspection
 
 ```{r visualize_flips}
@@ -61,6 +63,36 @@ flips_long |>
     axis.title = element_blank()
   )
 ```
+
+
+## Visual inspection
+
+```{r visualize_flips_dummy}
+#| echo: true
+#| eval: false
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+flips_long <- flips |>
+  mutate(id = 1:200) |>
+  pivot_longer(-id,  names_to = "Sequence", values_to = "Flip")
+
+flips_long |> 
+  ggplot(aes(x = id, y = Flip, group = Sequence)) +
+  geom_line() +
+  geom_point(aes(color = Flip)) +
+  facet_grid(rows = vars(Sequence)) + 
+  theme(
+    legend.position = "none",
+    axis.title = element_blank()
+  )
+```
+
 
 ## A slightly different test: streak length
 
@@ -319,7 +351,7 @@ single_test <- function(label, y) {
   mean(y[resample == 1]) - mean(y[resample == 2])
 }
 test_stats_alt <- replicate(1000, single_test(sleep$group, sleep$extra))
-hist(test_stats_alt, xlim = c(-0.5, 6))
+hist(test_stats_alt)
 abline(v = test_stat, lwd=2, col="purple")
 mean(abs(test_stats_alt) > abs(test_stat)) # P-value
 ```
