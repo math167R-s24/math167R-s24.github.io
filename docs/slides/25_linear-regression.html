@@ -406,87 +406,22 @@ Peter Gao
 <section id="overview-of-today" class="slide level2">
 <h2>Overview of today</h2>
 <ul>
-<li>Covariance and correlation</li>
-<li>Linear regression</li>
+<li>Review of linear regression</li>
+<li>Why use a linear model?</li>
+<li>Pitfalls of linear regression: breaking assumptions and more</li>
 </ul>
 </section>
-<section id="relating-numerical-variables" class="slide level2">
-<h2>Relating numerical variables</h2>
-
-<img data-src="images/Screenshot 2023-10-29 at 10.20.45 AM.png" class="r-stretch"></section>
-<section id="covariance-and-correlation" class="slide level2">
-<h2>Covariance and correlation</h2>
-<p>In statistics, correlation and covariance usually refer to a specific type of association.</p>
-<ul>
-<li>If <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are linearly associated, then they are correlated.</li>
-</ul>
-</section>
-<section id="correlation" class="slide level2">
-<h2>Correlation</h2>
-<p>Correlation can also refer to the correlation coefficient.</p>
-<p>The (Pearson) correlation coefficient <span class="math inline">\(R\)</span> is a statistic between <span class="math inline">\(-1\)</span> and 1 that describes the strength and direction of the linear relationship between two variables.</p>
-<p><span class="math display">\[R = \frac{1}{n-1}\sum_{i=1}^n\frac{x_i-\overline{x}}{s_x}\frac{y_i-\overline{y}}{s_y}\]</span></p>
-<p>The sign of <span class="math inline">\(R\)</span> indicates the direction of the relationship. The absolute value of <span class="math inline">\(R\)</span> indicates the strength.</p>
-</section>
-<section id="correlation-and-covariance" class="slide level2">
-<h2>Correlation and covariance</h2>
-<div class="cell" data-hash="24_linear-regression_cache/revealjs/unnamed-chunk-1_1a139a6310d72e25265f29807261e8dc">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">attach</span>(mtcars)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">cor</span>(mpg, wt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.8676594</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">cov</span>(mpg, wt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] -5.116685</code></pre>
-</div>
-</div>
-</section>
-<section id="pairs-plots-for-assessing-many-relationships" class="slide level2">
-<h2>Pairs plots for assessing many relationships</h2>
-<div class="cell" data-hash="24_linear-regression_cache/revealjs/unnamed-chunk-2_3f1e4eaaaf2fadc8f331413f4fa5f1a7">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">pairs</span>(<span class="sc">~</span>mpg <span class="sc">+</span> hp <span class="sc">+</span> wt, mtcars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="24_linear-regression_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" class="r-stretch"></section>
-<section id="regression-methods" class="slide level2">
-<h2>Regression methods</h2>
-<p>Assume we have some data:</p>
-<ul>
-<li><span class="math inline">\(X_1,\ldots, X_p\)</span>: <span class="math inline">\(p\)</span> <strong>independent variables/explanatory variables/covariates/predictors</strong></li>
-<li><span class="math inline">\(Y\)</span>: the <strong>dependent variables/response/outcome</strong>.</li>
-</ul>
-<p>We want to know the relationship between our covariates and our response, we can do this with a method called <strong>regression</strong>. Regression provides us with a statistical method to conduct inference and prediction.</p>
-</section>
-<section id="regression-methods-1" class="slide level2">
-<h2>Regression methods</h2>
-<ul>
-<li><strong>inference:</strong> assess the relationship between our variables, our statistical model as a whole, predictor importance
-<ul>
-<li>What is the relationship between sleep and GPA?</li>
-<li>Is parents’ education or parents’ income more important for explaining income?</li>
-</ul></li>
-<li><strong>prediction:</strong> predict new/future outcomes from new/future covariates
-<ul>
-<li>Can we predict test scores based on hours spent studying?</li>
-</ul></li>
-</ul>
-</section>
-<section id="why-is-it-called-regression" class="slide level2">
-<h2>Why is it called regression?</h2>
-
-<img data-src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Galton%27s_correlation_diagram_1875.jpg" class="r-stretch quarto-figure-center"></section>
 <section id="simple-linear-regression" class="slide level2">
 <h2>Simple linear regression</h2>
 <p>How does the speed of a car affect its stopping distance?</p>
-<div class="cell" data-layout-align="center" data-hash="24_linear-regression_cache/revealjs/cars_383e332520c414f10e79be23993768a5">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">plot</span>(dist <span class="sc">~</span> speed, <span class="at">data =</span> cars,</span>
-<span id="cb6-2"><a href="#cb6-2"></a>     <span class="at">xlab =</span> <span class="st">"Speed (mph)"</span>,</span>
-<span id="cb6-3"><a href="#cb6-3"></a>     <span class="at">ylab =</span> <span class="st">"Stopping Distance (ft)"</span>,</span>
-<span id="cb6-4"><a href="#cb6-4"></a>     <span class="at">pch  =</span> <span class="dv">16</span>, <span class="at">col =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-layout-align="center" data-hash="25_linear-regression_cache/revealjs/cars_cf1fcb4e04c2dfb08cc6467a03975001">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">plot</span>(dist <span class="sc">~</span> speed, <span class="at">data =</span> cars,</span>
+<span id="cb1-2"><a href="#cb1-2"></a>     <span class="at">xlab =</span> <span class="st">"Speed (mph)"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3"></a>     <span class="at">ylab =</span> <span class="st">"Stopping Distance (ft)"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4"></a>     <span class="at">pch  =</span> <span class="dv">16</span>, <span class="at">col =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="24_linear-regression_files/figure-revealjs/cars-1.png" style="width:60.0%" class="r-stretch quarto-figure-center"></section>
+<img data-src="25_linear-regression_files/figure-revealjs/cars-1.png" style="width:60.0%" class="r-stretch quarto-figure-center"></section>
 <section id="simple-linear-regression-1" class="slide level2">
 <h2>Simple linear regression</h2>
 <p>Suppose <span class="math inline">\(x_1,\ldots, x_n\)</span> represent the <code>speed</code> values of each car in our dataset. Let <span class="math inline">\(Y_1,\ldots, Y_n\)</span> represent the <code>dist</code> variable.</p>
@@ -513,11 +448,221 @@ Peter Gao
 <p>In other words, what is the best line to use for modeling the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>?</p>
 <p>Usually, we use the least squares line, which is the solution to the following optimization problem: <span class="math display">\[\arg\min\sum_{i=1}^n (y_i-(\beta_0+\beta_1x_i))^2=\arg\min\sum_{i=1}^n (y_i-\hat{y}_i)^2\]</span> where <span class="math inline">\(\hat{y}_i\)</span> is the model prediction for <span class="math inline">\(y_i\)</span>.</p>
 </section>
+<section id="regression-methods" class="slide level2">
+<h2>Regression methods</h2>
+<p>Assume we have some data:</p>
+<ul>
+<li><span class="math inline">\(X_1,\ldots, X_p\)</span>: <span class="math inline">\(p\)</span> <strong>independent variables/explanatory variables/covariates/predictors</strong></li>
+<li><span class="math inline">\(Y\)</span>: the <strong>dependent variables/response/outcome</strong>.</li>
+</ul>
+<p>We want to know the relationship between our covariates and our response, we can do this with a method called <strong>regression</strong>. Regression provides us with a statistical method to conduct inference and prediction.</p>
+</section>
+<section id="regression-methods-1" class="slide level2">
+<h2>Regression methods</h2>
+<ul>
+<li><strong>inference:</strong> assess the relationship between our variables, our statistical model as a whole, predictor importance</li>
+<li>What is the relationship between sleep and GPA?</li>
+<li>Is parents’ education or parents’ income more important for explaining income?</li>
+<li><strong>prediction:</strong> predict new/future outcomes from new/future covariates</li>
+<li>Can we predict test scores based on hours spent studying?</li>
+</ul>
+</section>
+<section id="exercise" class="slide level2">
+<h2>Exercise</h2>
+<p>Classify the following questions as <strong>inference</strong> or <strong>prediction</strong>:</p>
+<ol type="1">
+<li>Can we use high school students’ SAT/ACT scores to estimate their college GPAs?</li>
+<li>Is there an association between political candidates’ heights and the number of votes they receive?</li>
+<li>Do states with higher minimum wages have lower poverty rates?</li>
+</ol>
+</section>
+<section id="why-linear-regression" class="slide level2">
+<h2>Why linear regression?</h2>
+<p>Regression methods focus on modeling the relationship between response <span class="math inline">\(Y\)</span> and explanatory variables <span class="math inline">\(X_1,\ldots, X_p\)</span>.</p>
+<p>Linear regression proposes a model of the form <span class="math display">\[Y=\beta_0+\beta_1X_1+\cdots +\beta_p X_p+\epsilon; \hspace{1em} \epsilon\sim N(0, \sigma^2)\]</span> Sometimes, the following weaker form is used (why is this weaker?) <span class="math display">\[E(Y\mid X_1,\ldots, X_p)=\beta_0+\beta_1X_1+\cdots +\beta_p X_p\]</span> In other words, the expected value of <span class="math inline">\(Y\)</span> (given <span class="math inline">\(X_1,\ldots, X_p\)</span>) is a linear transformation of <span class="math inline">\(X_1,\ldots, X_p\)</span>.</p>
+</section>
+<section id="other-models" class="slide level2">
+<h2>Other models</h2>
+<p>Height/gravity</p>
+</section>
+<section id="other-models-use-cases" class="slide level2">
+<h2>Other models: use cases</h2>
+</section>
+<section id="why-linear-regression-1" class="slide level2">
+<h2>Why linear regression?</h2>
+<ol type="1">
+<li><strong>Simplicity</strong>: Easy to fit, usually gets the general trend correct, hard to <strong>overfit</strong></li>
+<li><strong>Interpretability</strong>: Consider the following log-normal model: <span class="math display">\[Y=\exp(\beta_0+\beta_1X_1+\cdots +\beta_p X_p+\epsilon); \hspace{1em} \epsilon\sim N(0, \sigma^2)\]</span> How do we interpret <span class="math inline">\(\beta_1\)</span>?</li>
+</ol>
+</section>
+<section id="additivity" class="slide level2">
+<h2>Additivity</h2>
+<p>Note that linear regression can often be generalized to encompass other models. Consider the following model: <span class="math display">\[Y=\beta_0+\beta_1X_1 +\beta_2X_1^2\]</span> This is an example of polynomial regression, but the methods for fitting this model are essentially the same as ordinary least squares, using <span class="math inline">\(X_1^2\)</span> as an extra covariate.</p>
+<p>Many alternative models can be written in this form by transforming the covariates or transforming the response <span class="math inline">\(Y\)</span>.</p>
+</section>
+<section id="breaking-the-assumptions" class="slide level2">
+<h2>Breaking the assumptions</h2>
+<p>What happens if we break the standard assumptions of linear regression? Recall the assumptions:</p>
+<ul>
+<li><strong>Linearity</strong>: The relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(E(Y\mid X)\)</span> is linear: <span class="math display">\[E(Y_i\mid X_i= x_i)= \beta_0+\beta_1x_i\]</span></li>
+<li><strong>Independence</strong>: The observations <span class="math inline">\(Y_1,\ldots, Y_n\)</span> are independent of each other.</li>
+<li><strong>Normality</strong>: <span class="math display">\[Y_i\mid X_i= x_i\sim N(\beta_0+\beta_1x_i, \sigma^2)\]</span></li>
+<li><strong>Equal variance</strong>: The variance of the errors <span class="math inline">\(\epsilon_i\)</span> is the same for all values of <span class="math inline">\(x_i\)</span>.</li>
+</ul>
+<p>We can observe what happens when we break each assumption in terms of our ability to conduct <strong>inference</strong> and <strong>prediction</strong>.</p>
+</section>
+<section id="all-assumptions-true" class="slide level2">
+<h2>All assumptions true</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="smaller">
+<div class="cell" data-layout-align="center" data-hash="25_linear-regression_cache/revealjs/lm_ex_dummy_c7c543a09e1c4915e1680e319c5e830e">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n =</span> <span class="dv">40</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">5</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">40</span>, <span class="at">mean =</span> <span class="dv">1</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> x)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>lm_res <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x)</span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>  <span class="fu">geom_abline</span>(</span>
+<span id="cb2-8"><a href="#cb2-8"></a>    <span class="at">slope =</span> lm_res<span class="sc">$</span>coefficients[<span class="dv">2</span>], </span>
+<span id="cb2-9"><a href="#cb2-9"></a>    <span class="at">intercept =</span> lm_res<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb2-10"><a href="#cb2-10"></a>    <span class="at">color =</span> <span class="st">"red"</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a>  ) <span class="sc">+</span> </span>
+<span id="cb2-12"><a href="#cb2-12"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div><div class="column" style="width:40%;">
+<div class="cell" data-layout-align="center" data-hash="25_linear-regression_cache/revealjs/lm_ex_f01b08d703833c09007bc1a680b418ed">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="25_linear-regression_files/figure-revealjs/lm_ex-1.png" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="all-assumptions-true-1" class="slide level2">
+<h2>All assumptions true</h2>
+<div class="columns">
+<div class="column" style="width:45%;">
+<div class="smaller">
+<p><strong>Inference</strong>: Asymptotically valid confidence intervals and hypothesis tests for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.</p>
+</div>
+</div><div class="column" style="width:55%;">
+<div class="cell" data-layout-align="center" data-hash="25_linear-regression_cache/revealjs/lm_res_inf_010148342524591a96f8bdbe848495bb">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">summary</span>(lm_res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = y ~ x)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.9766 -0.5870 -0.1388  0.5345  1.8733 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   1.2927     0.2728   4.738    3e-05 ***
+x             1.9568     0.1006  19.448   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.8904 on 38 degrees of freedom
+Multiple R-squared:  0.9087,    Adjusted R-squared:  0.9063 
+F-statistic: 378.2 on 1 and 38 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="all-assumptions-true-2" class="slide level2">
+<h2>All assumptions true</h2>
+<div class="columns">
+<div class="column" style="width:45%;">
+<div class="smaller">
+<p><strong>Prediction</strong>: Assuming the model holds for new data, unbiased point predictions and asymptotically valid prediction intervals for <span class="math inline">\(Y_{n+1}\)</span>.</p>
+</div>
+</div><div class="column" style="width:55%;">
+<div class="cell" data-layout-align="center" data-hash="25_linear-regression_cache/revealjs/lm_res_pred_8d1bb5efef71c4a06dea5efccae1c1a5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">predict</span>(lm_res, </span>
+<span id="cb5-2"><a href="#cb5-2"></a>        <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="dv">1</span>), </span>
+<span id="cb5-3"><a href="#cb5-3"></a>        <span class="at">interval =</span> <span class="st">"prediction"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       fit      lwr      upr
+1 3.249552 1.404936 5.094169</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="breaking-linearity" class="slide level2">
+<h2>Breaking linearity</h2>
+<p>What if <span class="math inline">\(E(Y_i\mid X_i= x_i)\not= \beta_0+\beta_1x_i\)</span>?</p>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="smaller">
+<div class="cell" data-layout-align="center" data-hash="25_linear-regression_cache/revealjs/cubic_ex_dummy_757dc37910d5695f00f0d40f5fea0073">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n =</span> <span class="dv">40</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">5</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">40</span>, <span class="at">mean =</span> <span class="dv">1</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> x<span class="sc">^</span><span class="dv">3</span>)</span>
+<span id="cb7-3"><a href="#cb7-3"></a>lm_res <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x)</span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a>  <span class="fu">geom_abline</span>(</span>
+<span id="cb7-7"><a href="#cb7-7"></a>    <span class="at">slope =</span> lm_res<span class="sc">$</span>coefficients[<span class="dv">2</span>], </span>
+<span id="cb7-8"><a href="#cb7-8"></a>    <span class="at">intercept =</span> lm_res<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb7-9"><a href="#cb7-9"></a>    <span class="at">color =</span> <span class="st">"red"</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a>  ) <span class="sc">+</span> </span>
+<span id="cb7-11"><a href="#cb7-11"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div><div class="column" style="width:40%;">
+<div class="cell" data-layout-align="center" data-hash="25_linear-regression_cache/revealjs/cubic_ex_653e72928569cefd5d91a69bdba9dae6">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="25_linear-regression_files/figure-revealjs/cubic_ex-1.png" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="breaking-linearity-1" class="slide level2">
+<h2>Breaking linearity</h2>
+<p>Our standard inference and prediction strategies no longer work in general.</p>
+<p><strong>Inference</strong>: Confidence intervals and hypothesis tests for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are no longer valid.</p>
+<p><strong>Prediction</strong>: Point predictions are no longer unbiased and prediction intervals are no longer valid.</p>
+</section>
+<section id="breaking-normality-of-errors" class="slide level2">
+<h2>Breaking normality of errors</h2>
+<p>What if <span class="math inline">\(E(Y_i\mid X_i= x_i)\not= \beta_0+\beta_1x_i\)</span>?</p>
+<p>::: columns ::: {.column width=“60%”} ::: {.smaller}</p>
+<div class="cell" data-layout-align="center" data-hash="25_linear-regression_cache/revealjs/norm_ex_dummy_ab610527b210d9fa70147c47ce1bb7a7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n =</span> <span class="dv">40</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">5</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">40</span>, <span class="at">mean =</span> <span class="dv">1</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> x<span class="sc">^</span><span class="dv">3</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a>lm_res <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x)</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a>  <span class="fu">geom_abline</span>(</span>
+<span id="cb8-7"><a href="#cb8-7"></a>    <span class="at">slope =</span> lm_res<span class="sc">$</span>coefficients[<span class="dv">2</span>], </span>
+<span id="cb8-8"><a href="#cb8-8"></a>    <span class="at">intercept =</span> lm_res<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb8-9"><a href="#cb8-9"></a>    <span class="at">color =</span> <span class="st">"red"</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a>  ) <span class="sc">+</span> </span>
+<span id="cb8-11"><a href="#cb8-11"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>::: :::</p>
+<p>::: {.column width=“40%”}</p>
+
+<img data-src="25_linear-regression_files/figure-revealjs/norm_ex-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
 <section id="simple-linear-regression-the-lm-function" class="slide level2">
 <h2>Simple linear regression: the <code>lm</code> function</h2>
-<div class="cell" data-layout-align="center" data-hash="24_linear-regression_cache/revealjs/cars2_8797e070922b7733b0aa252703533a8c">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>lm_res <span class="ot">=</span> <span class="fu">lm</span>(dist <span class="sc">~</span> speed, <span class="at">data =</span> cars)</span>
-<span id="cb7-2"><a href="#cb7-2"></a>lm_res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-layout-align="center" data-hash="25_linear-regression_cache/revealjs/cars2_a10bbc9272246125859a03caefa04196">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>lm_res <span class="ot">=</span> <span class="fu">lm</span>(dist <span class="sc">~</span> speed, <span class="at">data =</span> cars)</span>
+<span id="cb9-2"><a href="#cb9-2"></a>lm_res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -531,110 +676,21 @@ Coefficients:
 </section>
 <section id="simple-linear-regression-the-lm-function-1" class="slide level2">
 <h2>Simple linear regression: the <code>lm</code> function</h2>
-<div class="cell" data-layout-align="center" data-hash="24_linear-regression_cache/revealjs/cars3_acfc57ee61f091f9152c64a6979afb47">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">plot</span>(dist <span class="sc">~</span> speed, <span class="at">data =</span> cars,</span>
-<span id="cb9-2"><a href="#cb9-2"></a>     <span class="at">xlab =</span> <span class="st">"Speed (mph)"</span>,</span>
-<span id="cb9-3"><a href="#cb9-3"></a>     <span class="at">ylab =</span> <span class="st">"Stopping Distance (ft)"</span>, </span>
-<span id="cb9-4"><a href="#cb9-4"></a>     <span class="at">pch  =</span> <span class="dv">16</span>, <span class="at">col  =</span> <span class="st">"blue"</span>)</span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="fu">abline</span>(lm_res,  <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-layout-align="center" data-hash="25_linear-regression_cache/revealjs/cars3_76cae1327833426428fe5964a4fdebdb">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">plot</span>(dist <span class="sc">~</span> speed, <span class="at">data =</span> cars,</span>
+<span id="cb11-2"><a href="#cb11-2"></a>     <span class="at">xlab =</span> <span class="st">"Speed (mph)"</span>,</span>
+<span id="cb11-3"><a href="#cb11-3"></a>     <span class="at">ylab =</span> <span class="st">"Stopping Distance (ft)"</span>, </span>
+<span id="cb11-4"><a href="#cb11-4"></a>     <span class="at">pch  =</span> <span class="dv">16</span>, <span class="at">col  =</span> <span class="st">"blue"</span>)</span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="fu">abline</span>(lm_res,  <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="24_linear-regression_files/figure-revealjs/cars3-1.png" style="width:60.0%" class="r-stretch quarto-figure-center"></section>
-<section id="simple-linear-regression-inference" class="slide level2">
-<h2>Simple linear regression: Inference</h2>
-<p>For the simple linear regression model, typically we wish to carry out inference on <span class="math inline">\(\beta_1\)</span>. One way to do so is via a hypothesis test:</p>
-<p><span class="math inline">\(H_0:\beta_1=0\)</span> <span class="math inline">\(H_a:\beta_1\not=0\)</span></p>
-<div class="cell" data-layout-align="center" data-hash="24_linear-regression_cache/revealjs/cars_inf_8e4c230cd91aa391f2224148d0a0b668">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">summary</span>(lm_res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = dist ~ speed, data = cars)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--29.069  -9.525  -2.272   9.215  43.201 
-
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) -17.5791     6.7584  -2.601   0.0123 *  
-speed         3.9324     0.4155   9.464 1.49e-12 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 15.38 on 48 degrees of freedom
-Multiple R-squared:  0.6511,    Adjusted R-squared:  0.6438 
-F-statistic: 89.57 on 1 and 48 DF,  p-value: 1.49e-12</code></pre>
-</div>
-</div>
-</section>
-<section id="simple-linear-regression-inference-1" class="slide level2">
-<h2>Simple linear regression: Inference</h2>
-<p>We can also construct a confidence interval for <span class="math inline">\(\beta_1\)</span> if our focus isn’t on developing evidence against any null hypothesis:</p>
-<div class="cell" data-layout-align="center" data-hash="24_linear-regression_cache/revealjs/cars_inf2_e633622282b5266bdf581bcf5039f6ec">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">confint</span>(lm_res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                 2.5 %    97.5 %
-(Intercept) -31.167850 -3.990340
-speed         3.096964  4.767853</code></pre>
-</div>
-</div>
-</section>
-<section id="simple-linear-regression-prediction" class="slide level2">
-<h2>Simple linear regression: Prediction</h2>
-<p>Prediction generally involves estimating the value of new data <span class="math inline">\(Y_{n+1}\)</span> given <span class="math inline">\(X_{n+1}\)</span>. We can use the <code>predict()</code> function with our <code>lm()</code> results:</p>
-<div class="cell" data-layout-align="center" data-hash="24_linear-regression_cache/revealjs/cars_pred_c6578d1e2a7f32c3d7b0d40178cd8d40">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">predict</span>(lm_res,</span>
-<span id="cb14-2"><a href="#cb14-2"></a>        <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">speed =</span> <span class="fl">19.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       1 
-59.10288 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># get prediction interval</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="fu">predict</span>(lm_res, </span>
-<span id="cb16-3"><a href="#cb16-3"></a>        <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">speed =</span> <span class="fl">19.5</span>),</span>
-<span id="cb16-4"><a href="#cb16-4"></a>        <span class="at">interval =</span> <span class="st">"prediction"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       fit      lwr      upr
-1 59.10288 27.68517 90.52059</code></pre>
-</div>
-</div>
-</section>
-<section id="simple-linear-regression-prediction-1" class="slide level2">
-<h2>Simple linear regression: Prediction</h2>
-<p>Note that the <code>predict()</code> function can also be used to generate “confidence” intervals:</p>
-<ul>
-<li><code>interval = "prediction"</code>: Construct a confidence interval for <span class="math inline">\(Y_{n+1}|X_{n+1}=x_{n+1}\)</span>, the value of a new <strong>observation</strong> for which <span class="math inline">\(X_{n+1}=x_{n+1}\)</span></li>
-<li><code>interval = "confidence"</code>: Construct a confidence interval for <span class="math inline">\(E(Y_{n+1}|X_{n+1}=x_{n+1})\)</span>, the value of the <strong>conditional mean</strong> when <span class="math inline">\(X_{n+1}=x_{n+1}\)</span></li>
-</ul>
-</section>
-<section id="simple-linear-regression-prediction-2" class="slide level2">
-<h2>Simple linear regression: Prediction</h2>
-<div class="cell" data-layout-align="center" data-hash="24_linear-regression_cache/revealjs/cars_pred2_518b3f84b754d5e0435d129d2f4cde1a">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># prediction interval</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a><span class="fu">predict</span>(lm_res, </span>
-<span id="cb18-3"><a href="#cb18-3"></a>        <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">speed =</span> <span class="fl">19.5</span>),</span>
-<span id="cb18-4"><a href="#cb18-4"></a>        <span class="at">interval =</span> <span class="st">"prediction"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       fit      lwr      upr
-1 59.10288 27.68517 90.52059</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># confidence interval</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a><span class="fu">predict</span>(lm_res, </span>
-<span id="cb20-3"><a href="#cb20-3"></a>        <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">speed =</span> <span class="fl">19.5</span>),</span>
-<span id="cb20-4"><a href="#cb20-4"></a>        <span class="at">interval =</span> <span class="st">"confidence"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       fit      lwr     upr
-1 59.10288 53.54796 64.6578</code></pre>
-</div>
-</div>
-</section>
+<img data-src="25_linear-regression_files/figure-revealjs/cars3-1.png" style="width:60.0%" class="r-stretch quarto-figure-center"></section>
 <section id="multiple-linear-regression" class="slide level2">
 <h2>Multiple linear regression</h2>
 <p>What if we have multiple input variables?</p>
-<div class="cell" data-hash="24_linear-regression_cache/revealjs/unnamed-chunk-3_91b000e86b54bd6b9a2e6ebed27e8db8">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">data</span>(mtcars)</span>
-<span id="cb22-2"><a href="#cb22-2"></a><span class="fu">head</span>(mtcars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_linear-regression_cache/revealjs/unnamed-chunk-1_27fec7554c1e079c568769813da8285b">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">data</span>(mtcars)</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="fu">head</span>(mtcars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
 Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
@@ -745,14 +801,14 @@ Y &amp;= \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \epsilon,\\
 </section>
 <section id="lm-linear-model-1" class="slide level2">
 <h2><code>lm()</code>: Linear Model</h2>
-<div class="cell" data-hash="24_linear-regression_cache/revealjs/unnamed-chunk-5_be02ddecafd0e83f88e7fd43d203d653">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">data</span>(mtcars)</span>
-<span id="cb24-2"><a href="#cb24-2"></a>my_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp <span class="sc">+</span> wt, <span class="at">data =</span> mtcars)</span>
-<span id="cb24-3"><a href="#cb24-3"></a><span class="fu">class</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_linear-regression_cache/revealjs/unnamed-chunk-3_4e1f9bf3dd97dbf2dc12e52ee4c6c4b1">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">data</span>(mtcars)</span>
+<span id="cb14-2"><a href="#cb14-2"></a>my_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp <span class="sc">+</span> wt, <span class="at">data =</span> mtcars)</span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="fu">class</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "lm"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>my_lm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>my_lm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -767,8 +823,8 @@ Coefficients:
 <section id="lm-linear-model-2" class="slide level2">
 <h2><code>lm()</code>: Linear Model</h2>
 <p>We can see from <code>names()</code> that <code>lm</code> objects contain a lot more than they print out by default.</p>
-<div class="cell" data-hash="24_linear-regression_cache/revealjs/unnamed-chunk-6_0d38a1213fd226f53904ec8ae9aac7ef">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">names</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_linear-regression_cache/revealjs/unnamed-chunk-4_f432314a05f3c3a3920c0705a2011e1d">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">names</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "coefficients"  "residuals"     "effects"       "rank"         
  [5] "fitted.values" "assign"        "qr"            "df.residual"  
@@ -788,8 +844,8 @@ Coefficients:
 </section>
 <section id="summary-model-summaries-1" class="slide level2">
 <h2><code>summary()</code> Model summaries</h2>
-<div class="cell" data-hash="24_linear-regression_cache/revealjs/unnamed-chunk-7_5ec8fd56d206f9b0c069a8d199d7808a">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">summary</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_linear-regression_cache/revealjs/unnamed-chunk-5_6b5ee7bbff9e0ebe4e9c001aa7c7a4ed">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">summary</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -830,28 +886,28 @@ F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12</code></pre>
 </section>
 <section id="plot-regression-model-diagnostics-2" class="slide level2">
 <h2><code>plot()</code>: Regression model diagnostics</h2>
-<div class="cell" data-hash="24_linear-regression_cache/revealjs/unnamed-chunk-8_31012482bdc3cbf55357b74c15eafac3">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">plot</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_linear-regression_cache/revealjs/unnamed-chunk-6_98bc54d71db19e307923d821542d3a6f">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">plot</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
-<img data-src="24_linear-regression_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"></section>
+<img data-src="25_linear-regression_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"></section>
 <section id="plot-regression-model-diagnostics-3" class="slide level2">
 <h2><code>plot()</code>: Regression model diagnostics</h2>
 
-<img data-src="24_linear-regression_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
+<img data-src="25_linear-regression_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"></section>
 <section id="plot-regression-model-diagnostics-4" class="slide level2">
 <h2><code>plot()</code>: Regression model diagnostics</h2>
 
-<img data-src="24_linear-regression_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
+<img data-src="25_linear-regression_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"></section>
 <section id="plot-regression-model-diagnostics-5" class="slide level2">
 <h2><code>plot()</code>: Regression model diagnostics</h2>
 
-<img data-src="24_linear-regression_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
+<img data-src="25_linear-regression_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
 <section id="coef-extract-coefficients" class="slide level2">
 <h2><code>coef()</code>: Extract coefficients</h2>
 <p>Use <code>coef()</code> to extract estimated coefficients as a vector.</p>
-<div class="cell" data-hash="24_linear-regression_cache/revealjs/unnamed-chunk-13_60cf8561a1f99a618bdf5a9018b370d1">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="fu">coef</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_linear-regression_cache/revealjs/unnamed-chunk-11_b2a5252a0c146c3ec06a4dea8936b7fc">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">coef</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>(Intercept)          hp          wt 
 37.22727012 -0.03177295 -3.87783074 </code></pre>
@@ -861,29 +917,29 @@ F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12</code></pre>
 <section id="fitted-extract-fitted-values" class="slide level2">
 <h2><code>fitted()</code> Extract fitted values</h2>
 <p>Use <code>fitted()</code> to extract the fitted/estimated values for the response. This can be useful to compare how our fitted values compare to the estimated values to help assess model fit.</p>
-<div class="cell" data-hash="24_linear-regression_cache/revealjs/unnamed-chunk-14_98d220184bb5d57224080cf40eecef71">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb35-2"><a href="#cb35-2"></a>mod_fits <span class="ot">&lt;-</span> <span class="fu">fitted</span>(my_lm)</span>
-<span id="cb35-3"><a href="#cb35-3"></a>my_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">actual =</span> mtcars<span class="sc">$</span>mpg, <span class="at">fitted =</span> mod_fits)</span>
-<span id="cb35-4"><a href="#cb35-4"></a><span class="fu">ggplot</span>(my_df, <span class="fu">aes</span>(<span class="at">x =</span> fitted, <span class="at">y =</span> actual)) <span class="sc">+</span></span>
-<span id="cb35-5"><a href="#cb35-5"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb35-6"><a href="#cb35-6"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="dv">2</span>) <span class="sc">+</span> </span>
-<span id="cb35-7"><a href="#cb35-7"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>) <span class="sc">+</span></span>
-<span id="cb35-8"><a href="#cb35-8"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Fitted values"</span>, <span class="at">y =</span> <span class="st">"Actual values"</span>, <span class="at">title =</span> <span class="st">"Actual vs. Fitted"</span>) <span class="sc">+</span></span>
-<span id="cb35-9"><a href="#cb35-9"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_linear-regression_cache/revealjs/unnamed-chunk-12_11e58b66c0866bdcd46ff1d2cc6b1248">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb25-2"><a href="#cb25-2"></a>mod_fits <span class="ot">&lt;-</span> <span class="fu">fitted</span>(my_lm)</span>
+<span id="cb25-3"><a href="#cb25-3"></a>my_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">actual =</span> mtcars<span class="sc">$</span>mpg, <span class="at">fitted =</span> mod_fits)</span>
+<span id="cb25-4"><a href="#cb25-4"></a><span class="fu">ggplot</span>(my_df, <span class="fu">aes</span>(<span class="at">x =</span> fitted, <span class="at">y =</span> actual)) <span class="sc">+</span></span>
+<span id="cb25-5"><a href="#cb25-5"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb25-6"><a href="#cb25-6"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="dv">2</span>) <span class="sc">+</span> </span>
+<span id="cb25-7"><a href="#cb25-7"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>) <span class="sc">+</span></span>
+<span id="cb25-8"><a href="#cb25-8"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Fitted values"</span>, <span class="at">y =</span> <span class="st">"Actual values"</span>, <span class="at">title =</span> <span class="st">"Actual vs. Fitted"</span>) <span class="sc">+</span></span>
+<span id="cb25-9"><a href="#cb25-9"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="fitted-extract-fitted-values-1" class="slide level2">
 <h2><code>fitted()</code> Extract fitted values</h2>
 
-<img data-src="24_linear-regression_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section>
+<img data-src="25_linear-regression_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
 <section id="predict-predict-new-outcomes" class="slide level2">
 <h2><code>predict()</code>: Predict new outcomes</h2>
 <p>Use <code>predict()</code> to predict new outcomes given new explanatory variables. For example, pretend we observe two new cars with horsepowers of <code>100</code> and <code>150</code>, respectively, and weights of <code>3000</code> and <code>3500</code>, respectively.</p>
-<div class="cell" data-hash="24_linear-regression_cache/revealjs/unnamed-chunk-16_6bd642a896b25b0f917ad61d17302199">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="co"># Note: wt is in 1000s of lbs</span></span>
-<span id="cb36-2"><a href="#cb36-2"></a>new_obs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">hp =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">150</span>), <span class="at">wt =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="fl">3.5</span>))</span>
-<span id="cb36-3"><a href="#cb36-3"></a><span class="fu">predict</span>(my_lm, new_obs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_linear-regression_cache/revealjs/unnamed-chunk-14_39e4f47d74c1069a84fd6f2789e3f772">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># Note: wt is in 1000s of lbs</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>new_obs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">hp =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">150</span>), <span class="at">wt =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="fl">3.5</span>))</span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="fu">predict</span>(my_lm, new_obs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       1        2 
 22.41648 18.88892 </code></pre>
@@ -894,8 +950,8 @@ F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12</code></pre>
 <section id="residuals-compute-residuals" class="slide level2">
 <h2><code>residuals()</code>: Compute residuals</h2>
 <p>Use <code>residuals()</code> to compute the residuals for fitted values.</p>
-<div class="cell" data-hash="24_linear-regression_cache/revealjs/unnamed-chunk-17_84d9fe4ef01d097d83629cf37b6b5c57">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="fu">residuals</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_linear-regression_cache/revealjs/unnamed-chunk-15_b6a9614ebc057bc3fadf0fe17cb4ccde">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">residuals</span>(my_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive 
         -2.57232940         -1.58348256         -2.47581872          0.13497989 
@@ -923,9 +979,9 @@ F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12</code></pre>
 <section id="section" class="slide level2">
 <h2><code>- 1</code></h2>
 <p>Use <code>- 1</code> to remove an intercept from your model. Only do this if you are very sure that what you are doing is appropriate. I don’t recommend doing this in practice.</p>
-<div class="cell" data-hash="24_linear-regression_cache/revealjs/unnamed-chunk-18_90f922470d97b24a0babf20de3c7ede9">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>no_intercept <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp <span class="sc">+</span> wt <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> mtcars)</span>
-<span id="cb40-2"><a href="#cb40-2"></a><span class="fu">summary</span>(no_intercept)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_linear-regression_cache/revealjs/unnamed-chunk-16_47875455c2f1600c4f0a5d2d27a185bf">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>no_intercept <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp <span class="sc">+</span> wt <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> mtcars)</span>
+<span id="cb30-2"><a href="#cb30-2"></a><span class="fu">summary</span>(no_intercept)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -955,9 +1011,9 @@ F-statistic: 39.83 on 2 and 30 DF,  p-value: 3.599e-09</code></pre>
 </section>
 <section id="operator-1" class="slide level2">
 <h2><code>:</code> operator</h2>
-<div class="cell" data-hash="24_linear-regression_cache/revealjs/unnamed-chunk-19_1d44fb9ff30124541041a64fd0f25eb9">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>interact <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp<span class="sc">:</span>wt, <span class="at">data =</span> mtcars)</span>
-<span id="cb42-2"><a href="#cb42-2"></a><span class="fu">summary</span>(interact)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_linear-regression_cache/revealjs/unnamed-chunk-17_6a52f8797e94a297ec44abe41af9e8dc">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>interact <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp<span class="sc">:</span>wt, <span class="at">data =</span> mtcars)</span>
+<span id="cb32-2"><a href="#cb32-2"></a><span class="fu">summary</span>(interact)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -982,9 +1038,9 @@ F-statistic: 74.14 on 1 and 30 DF,  p-value: 1.321e-09</code></pre>
 </section>
 <section id="operator-2" class="slide level2">
 <h2><code>*</code> operator</h2>
-<div class="cell" data-hash="24_linear-regression_cache/revealjs/unnamed-chunk-20_05dafa583c5457e21a5d2f680f25a9c5">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>interact <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp<span class="sc">*</span>wt, <span class="at">data =</span> mtcars)</span>
-<span id="cb44-2"><a href="#cb44-2"></a><span class="fu">summary</span>(interact)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_linear-regression_cache/revealjs/unnamed-chunk-18_a1a50dc0f7ec0a05b8a914697dc6b9d5">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>interact <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp<span class="sc">*</span>wt, <span class="at">data =</span> mtcars)</span>
+<span id="cb34-2"><a href="#cb34-2"></a><span class="fu">summary</span>(interact)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -1055,13 +1111,13 @@ F-statistic: 13.93 on 10 and 21 DF,  p-value: 3.793e-07</code></pre>
 <section id="collinearity" class="slide level2">
 <h2>Collinearity</h2>
 <p>What if our predictor variables are closely related? Consider the following simulation:</p>
-<div class="cell" data-hash="24_linear-regression_cache/revealjs/unnamed-chunk-22_b5cde243af13aa6feb9fbf85508067d7">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>n <span class="ot">&lt;-</span> <span class="dv">50</span></span>
-<span id="cb47-2"><a href="#cb47-2"></a>x1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb47-3"><a href="#cb47-3"></a>x2 <span class="ot">&lt;-</span> x1 <span class="sc">*</span> <span class="dv">2</span></span>
-<span id="cb47-4"><a href="#cb47-4"></a>e <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb47-5"><a href="#cb47-5"></a>y <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> x1 <span class="sc">+</span> e</span>
-<span id="cb47-6"><a href="#cb47-6"></a><span class="fu">lm</span>(y <span class="sc">~</span> x1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_linear-regression_cache/revealjs/unnamed-chunk-20_07bfe66ec759a985d1298f3bf9d80041">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>n <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb37-2"><a href="#cb37-2"></a>x1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb37-3"><a href="#cb37-3"></a>x2 <span class="ot">&lt;-</span> x1 <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb37-4"><a href="#cb37-4"></a>e <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb37-5"><a href="#cb37-5"></a>y <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> x1 <span class="sc">+</span> e</span>
+<span id="cb37-6"><a href="#cb37-6"></a><span class="fu">lm</span>(y <span class="sc">~</span> x1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -1069,9 +1125,9 @@ lm(formula = y ~ x1)
 
 Coefficients:
 (Intercept)           x1  
-     0.8597       2.7042  </code></pre>
+      1.146        2.814  </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x1 <span class="sc">+</span> x2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x1 <span class="sc">+</span> x2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -1079,16 +1135,16 @@ lm(formula = y ~ x1 + x2)
 
 Coefficients:
 (Intercept)           x1           x2  
-     0.8597       2.7042           NA  </code></pre>
+      1.146        2.814           NA  </code></pre>
 </div>
 </div>
 </section>
 <section id="collinearity-1" class="slide level2">
 <h2>Collinearity</h2>
 <p>What if our predictor variables are closely related? Consider the following simulation:</p>
-<div class="cell" data-hash="24_linear-regression_cache/revealjs/unnamed-chunk-23_5d6e882cd8fd0b6eca36557b7af55690">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a>x2b <span class="ot">&lt;-</span> x1 <span class="sc">*</span> <span class="dv">2</span> <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> .<span class="dv">01</span>)</span>
-<span id="cb51-2"><a href="#cb51-2"></a><span class="fu">lm</span>(y <span class="sc">~</span> x1 <span class="sc">+</span> x2b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="25_linear-regression_cache/revealjs/unnamed-chunk-21_8d0d6f798f4d2511dd5a8f74c4f5707f">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>x2b <span class="ot">&lt;-</span> x1 <span class="sc">*</span> <span class="dv">2</span> <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> .<span class="dv">01</span>)</span>
+<span id="cb41-2"><a href="#cb41-2"></a><span class="fu">lm</span>(y <span class="sc">~</span> x1 <span class="sc">+</span> x2b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -1096,7 +1152,7 @@ lm(formula = y ~ x1 + x2b)
 
 Coefficients:
 (Intercept)           x1          x2b  
-     0.8372     -35.8202      19.2636  </code></pre>
+      1.114      -44.331       23.580  </code></pre>
 </div>
 </div>
 

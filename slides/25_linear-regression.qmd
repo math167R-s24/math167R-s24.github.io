@@ -9,70 +9,10 @@ editor: source
 
 ## Overview of today
 
--   Covariance and correlation
--   Linear regression
+- Review of linear regression 
+- Why use a linear model?
+- Pitfalls of linear regression: breaking assumptions and more
 
-## Relating numerical variables
-
-![](images/Screenshot 2023-10-29 at 10.20.45 AM.png)
-
-## Covariance and correlation
-
-In statistics, correlation and covariance usually refer to a specific type of association.
-
-* If $X$ and $Y$ are linearly associated, then they are correlated.
-
-## Correlation
-
-Correlation can also refer to the correlation coefficient.
-
-The (Pearson) correlation coefficient $R$ is a statistic between $-1$ and 1 that describes the strength and direction of the linear relationship between two variables.
-
-$$R = \frac{1}{n-1}\sum_{i=1}^n\frac{x_i-\overline{x}}{s_x}\frac{y_i-\overline{y}}{s_y}$$
-
-The sign of $R$ indicates the direction of the relationship.
-The absolute value of $R$ indicates the strength.
-
-## Correlation and covariance
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-#| cache: TRUE
-attach(mtcars)
-cor(mpg, wt)
-cov(mpg, wt)
-```
-
-## Pairs plots for assessing many relationships
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-#| cache: TRUE
-pairs(~mpg + hp + wt, mtcars)
-```
-
-## Regression methods
-
-Assume we have some data:
-
--   $X_1,\ldots, X_p$: $p$ **independent variables/explanatory variables/covariates/predictors**
--   $Y$: the **dependent variables/response/outcome**.
-
-We want to know the relationship between our covariates and our response, we can do this with a method called **regression**. Regression provides us with a statistical method to conduct inference and prediction.
-
-## Regression methods
-
--   **inference:** assess the relationship between our variables, our statistical model as a whole, predictor importance
-    -   What is the relationship between sleep and GPA?
-    -   Is parents' education or parents' income more important for explaining income?
--   **prediction:** predict new/future outcomes from new/future covariates
-    -   Can we predict test scores based on hours spent studying?
-
-## Why is it called regression?
-
-![](https://upload.wikimedia.org/wikipedia/commons/b/b2/Galton%27s_correlation_diagram_1875.jpg){fig-align="center"}
 
 ## Simple linear regression
 
@@ -106,7 +46,6 @@ where:
 -   $\beta_1$ is the slope parameter
 -   $\epsilon_i$ represents iid $N(0,\sigma^2)$ errors, where $\sigma^2$ is the variance of $\epsilon_i$.
 
-
 ## Simple linear regression
 
 Under this model, we can also write that
@@ -135,6 +74,321 @@ In other words, what is the best line to use for modeling the relationship betwe
 Usually, we use the least squares line, which is the solution to the following optimization problem:
 $$\arg\min\sum_{i=1}^n (y_i-(\beta_0+\beta_1x_i))^2=\arg\min\sum_{i=1}^n (y_i-\hat{y}_i)^2$$
 where $\hat{y}_i$ is the model prediction for $y_i$.
+
+## Regression methods
+
+Assume we have some data:
+
+-   $X_1,\ldots, X_p$: $p$ **independent variables/explanatory variables/covariates/predictors**
+-   $Y$: the **dependent variables/response/outcome**.
+
+We want to know the relationship between our covariates and our response, we can do this with a method called **regression**. Regression provides us with a statistical method to conduct inference and prediction.
+
+## Regression methods
+
+-   **inference:** assess the relationship between our variables, our statistical model as a whole, predictor importance
+-   What is the relationship between sleep and GPA?
+-   Is parents' education or parents' income more important for explaining income?
+-   **prediction:** predict new/future outcomes from new/future covariates
+-   Can we predict test scores based on hours spent studying?
+
+## Exercise
+
+Classify the following questions as **inference** or **prediction**:
+
+1. Can we use high school students' SAT/ACT scores to estimate their college GPAs?
+2. Is there an association between political candidates' heights and the number of votes they receive?
+3. Do states with higher minimum wages have lower poverty rates?
+
+## Why linear regression?
+
+Regression methods focus on modeling the relationship between response $Y$ and explanatory variables $X_1,\ldots, X_p$. 
+
+Linear regression proposes a model of the form
+$$Y=\beta_0+\beta_1X_1+\cdots +\beta_p X_p+\epsilon; \hspace{1em} \epsilon\sim N(0, \sigma^2)$$
+Sometimes, the following weaker form is used (why is this weaker?)
+$$E(Y\mid X_1,\ldots, X_p)=\beta_0+\beta_1X_1+\cdots +\beta_p X_p$$
+In other words, the expected value of $Y$ (given $X_1,\ldots, X_p$) is a linear transformation of $X_1,\ldots, X_p$.
+
+## Other models
+
+Height/gravity
+
+
+## Other models: use cases
+
+
+
+## Why linear regression?
+
+1. **Simplicity**: Easy to fit, usually gets the general trend correct, hard to **overfit**
+2. **Interpretability**: Consider the following log-normal model:
+$$Y=\exp(\beta_0+\beta_1X_1+\cdots +\beta_p X_p+\epsilon); \hspace{1em} \epsilon\sim N(0, \sigma^2)$$
+How do we interpret $\beta_1$? 
+
+## Additivity
+
+Note that linear regression can often be generalized to encompass other models. Consider the following model:
+$$Y=\beta_0+\beta_1X_1 +\beta_2X_1^2$$
+This is an example of polynomial regression, but the methods for fitting this model are essentially the same as ordinary least squares, using $X_1^2$ as an extra covariate.
+
+Many alternative models can be written in this form by transforming the covariates or transforming the response $Y$.
+
+## Breaking the assumptions
+
+What happens if we break the standard assumptions of linear regression? Recall the assumptions:
+
+- **Linearity**: The relationship between $X$ and $E(Y\mid X)$ is linear: $$E(Y_i\mid X_i= x_i)= \beta_0+\beta_1x_i$$
+- **Independence**: The observations $Y_1,\ldots, Y_n$ are independent of each other.
+- **Normality**: $$Y_i\mid X_i= x_i\sim N(\beta_0+\beta_1x_i, \sigma^2)$$
+- **Equal variance**: The variance of the errors $\epsilon_i$ is the same for all values of $x_i$.
+
+We can observe what happens when we break each assumption in terms of our ability to conduct **inference** and **prediction**.
+
+## All assumptions true
+
+::: columns
+::: {.column width="60%"}
+::: {.smaller}
+```{r lm_ex_dummy}
+#| echo: true
+#| eval: false
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "60%"
+#| fig.align: "center"
+#| fig-cap: ""
+library(tidyverse)
+x <- runif(n = 40, min = 0, max = 5)
+y <- rnorm(n = 40, mean = 1 + 2 * x)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = y)) +
+  geom_point(size = 1.5) +
+  geom_abline(
+    slope = lm_res$coefficients[2], 
+    intercept = lm_res$coefficients[1],
+    color = "red"
+  ) + 
+  theme_minimal()
+```
+:::
+:::
+
+::: {.column width="40%"}
+```{r lm_ex}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 4
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+library(tidyverse)
+x <- runif(n = 40, min = 0, max = 5)
+y <- rnorm(n = 40, mean = 1 + 2 * x)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = y)) +
+  geom_point(size = 1.5) +
+  geom_abline(
+    slope = lm_res$coefficients[2], 
+    intercept = lm_res$coefficients[1],
+    color = "red"
+  ) + 
+  theme_minimal()
+```
+:::
+:::
+
+## All assumptions true
+
+::: columns
+::: {.column width="45%"}
+::: {.smaller}
+**Inference**: Asymptotically valid confidence intervals and hypothesis tests for $\beta_0$ and $\beta_1$.
+:::
+:::
+
+::: {.column width="55%"}
+```{r lm_res_inf}
+#| echo: true
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 4
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+summary(lm_res)
+```
+:::
+:::
+
+
+## All assumptions true
+
+::: columns
+::: {.column width="45%"}
+::: {.smaller}
+**Prediction**: Assuming the model holds for new data, unbiased point predictions and asymptotically valid prediction intervals for $Y_{n+1}$.
+:::
+:::
+
+::: {.column width="55%"}
+```{r lm_res_pred}
+#| echo: true
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 4
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+predict(lm_res, 
+        newdata = list(x = 1), 
+        interval = "prediction")
+```
+:::
+:::
+
+## Breaking linearity
+
+What if $E(Y_i\mid X_i= x_i)\not= \beta_0+\beta_1x_i$?
+
+
+::: columns
+::: {.column width="60%"}
+::: {.smaller}
+```{r cubic_ex_dummy}
+#| echo: true
+#| eval: false
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "60%"
+#| fig.align: "center"
+#| fig-cap: ""
+x <- runif(n = 40, min = 0, max = 5)
+y <- rnorm(n = 40, mean = 1 + 2 * x^3)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = y)) +
+  geom_point(size = 1.5) +
+  geom_abline(
+    slope = lm_res$coefficients[2], 
+    intercept = lm_res$coefficients[1],
+    color = "red"
+  ) + 
+  theme_minimal()
+```
+:::
+:::
+
+::: {.column width="40%"}
+```{r cubic_ex}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 4
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+x <- runif(n = 40, min = 0, max = 5)
+y <- rnorm(n = 40, mean = 1 + 2 * x^3)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = y)) +
+  geom_point(size = 1.5) +
+  geom_abline(
+    slope = lm_res$coefficients[2], 
+    intercept = lm_res$coefficients[1],
+    color = "red"
+  ) + 
+  theme_minimal()
+```
+:::
+:::
+
+
+## Breaking linearity
+
+Our standard inference and prediction strategies no longer work in general.
+
+**Inference**: Confidence intervals and hypothesis tests for $\beta_0$ and $\beta_1$ are no longer valid.
+
+**Prediction**: Point predictions are no longer unbiased and prediction intervals are no longer valid.
+
+
+## Breaking normality of errors
+
+What if $E(Y_i\mid X_i= x_i)\not= \beta_0+\beta_1x_i$?
+
+
+::: columns
+::: {.column width="60%"}
+::: {.smaller}
+```{r norm_ex_dummy}
+#| echo: true
+#| eval: false
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "60%"
+#| fig.align: "center"
+#| fig-cap: ""
+x <- runif(n = 40, min = 0, max = 5)
+y <- rnorm(n = 40, mean = 1 + 2 * x^3)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = y)) +
+  geom_point(size = 1.5) +
+  geom_abline(
+    slope = lm_res$coefficients[2], 
+    intercept = lm_res$coefficients[1],
+    color = "red"
+  ) + 
+  theme_minimal()
+```
+:::
+:::
+
+::: {.column width="40%"}
+```{r norm_ex}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 4
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+x <- runif(n = 40, min = 0, max = 5)
+y <- 1 + 2 * x^3
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = y)) +
+  geom_point(size = 1.5) +
+  geom_abline(
+    slope = lm_res$coefficients[2], 
+    intercept = lm_res$coefficients[1],
+    color = "red"
+  ) + 
+  theme_minimal()
+```
 
 
 ## Simple linear regression: the `lm` function
@@ -172,99 +426,6 @@ plot(dist ~ speed, data = cars,
      ylab = "Stopping Distance (ft)", 
      pch  = 16, col  = "blue")
 abline(lm_res,  col = "red")
-```
-
-
-## Simple linear regression: Inference
-
-For the simple linear regression model, typically we wish to carry out inference on $\beta_1$. One way to do so is via a hypothesis test:
-
-$H_0:\beta_1=0$
-$H_a:\beta_1\not=0$
-
-```{r cars_inf}
-#| echo: true
-#| eval: true
-#| cache: true
-#| message: false
-#| warning: false
-#| fig-width: 8
-#| fig-height: 5
-#| out.width: "60%"
-#| fig.align: "center"
-#| fig-cap: ""
-summary(lm_res)
-```
-
-## Simple linear regression: Inference
-
-We can also construct a confidence interval for $\beta_1$ if our focus isn't on developing evidence against any null hypothesis:
-
-```{r cars_inf2}
-#| echo: true
-#| eval: true
-#| cache: true
-#| message: false
-#| warning: false
-#| fig-width: 8
-#| fig-height: 5
-#| out.width: "60%"
-#| fig.align: "center"
-#| fig-cap: ""
-confint(lm_res)
-```
-
-## Simple linear regression: Prediction
-
-Prediction generally involves estimating the value of new data $Y_{n+1}$ given $X_{n+1}$. We can use the `predict()` function with our `lm()` results:
-
-```{r cars_pred}
-#| echo: true
-#| eval: true
-#| cache: true
-#| message: false
-#| warning: false
-#| fig-width: 8
-#| fig-height: 5
-#| out.width: "60%"
-#| fig.align: "center"
-#| fig-cap: ""
-predict(lm_res,
-        newdata = list(speed = 19.5))
-# get prediction interval
-predict(lm_res, 
-        newdata = list(speed = 19.5),
-        interval = "prediction")
-```
-
-## Simple linear regression: Prediction
-
-Note that the `predict()` function can also be used to generate "confidence" intervals:
-
-* `interval = "prediction"`: Construct a confidence interval for $Y_{n+1}|X_{n+1}=x_{n+1}$, the value of a new **observation** for which $X_{n+1}=x_{n+1}$
-* `interval = "confidence"`: Construct a confidence interval for $E(Y_{n+1}|X_{n+1}=x_{n+1})$, the value of the **conditional mean** when $X_{n+1}=x_{n+1}$
-
-## Simple linear regression: Prediction
-
-```{r cars_pred2}
-#| echo: true
-#| eval: true
-#| cache: true
-#| message: false
-#| warning: false
-#| fig-width: 8
-#| fig-height: 5
-#| out.width: "60%"
-#| fig.align: "center"
-#| fig-cap: ""
-# prediction interval
-predict(lm_res, 
-        newdata = list(speed = 19.5),
-        interval = "prediction")
-# confidence interval
-predict(lm_res, 
-        newdata = list(speed = 19.5),
-        interval = "confidence")
 ```
 
 ## Multiple linear regression
