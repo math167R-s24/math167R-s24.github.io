@@ -4,7 +4,6 @@ author: "Peter Gao"
 format: 
   revealjs:
     theme: [./slides.scss, ../theme.scss]
-editor: source
 ---
 
 ## Overview of today
@@ -14,13 +13,13 @@ editor: source
 
 ## Relating numerical variables
 
-![](images/Screenshot 2023-10-29 at 10.20.45 AM.png)
+![](images/Screenshot%202023-10-29%20at%2010.20.45%20AM.png)
 
 ## Covariance and correlation
 
 In statistics, correlation and covariance usually refer to a specific type of association.
 
-* If $X$ and $Y$ are linearly associated, then they are correlated.
+-   If $X$ and $Y$ are linearly associated, then they are correlated.
 
 ## Correlation
 
@@ -30,8 +29,7 @@ The (Pearson) correlation coefficient $R$ is a statistic between $-1$ and 1 that
 
 $$R = \frac{1}{n-1}\sum_{i=1}^n\frac{x_i-\overline{x}}{s_x}\frac{y_i-\overline{y}}{s_y}$$
 
-The sign of $R$ indicates the direction of the relationship.
-The absolute value of $R$ indicates the strength.
+The sign of $R$ indicates the direction of the relationship. The absolute value of $R$ indicates the strength.
 
 ## Correlation and covariance
 
@@ -99,30 +97,26 @@ plot(dist ~ speed, data = cars,
 
 Suppose $x_1,\ldots, x_n$ represent the `speed` values of each car in our dataset. Let $Y_1,\ldots, Y_n$ represent the `dist` variable.
 
-The **simple linear regression model** is given by 
-$$Y_i=\beta_0+\beta_1x_i+\epsilon_i$$
-where:
--   $\beta_0$ is the intercept parameter
--   $\beta_1$ is the slope parameter
--   $\epsilon_i$ represents iid $N(0,\sigma^2)$ errors, where $\sigma^2$ is the variance of $\epsilon_i$.
+The **simple linear regression model** is given by $$Y_i=\beta_0+\beta_1x_i+\epsilon_i$$ where:
 
+-   $\beta_0$ is the intercept parameter
+
+-   $\beta_1$ is the slope parameter
+
+-   $\epsilon_i$ represents iid $N(0,\sigma^2)$ errors, where $\sigma^2$ is the variance of $\epsilon_i$.
 
 ## Simple linear regression
 
-Under this model, we can also write that
-$$Y_i\mid X_i= x_i\sim N(\beta_0+\beta_1x_i, \sigma^2)$$
-As a result
-$$E(Y_i\mid X_i= x_i)= \beta_0+\beta_1x_i$$
-$$\mathrm{Var}(Y_i\mid X_i= x_i)= \sigma^2$$
+Under this model, we can also write that $$Y_i\mid X_i= x_i\sim N(\beta_0+\beta_1x_i, \sigma^2)$$ As a result $$E(Y_i\mid X_i= x_i)= \beta_0+\beta_1x_i$$ $$\mathrm{Var}(Y_i\mid X_i= x_i)= \sigma^2$$
 
 ## Simple linear regression
 
 Typically, we say there are four assumptions for simple linear regression:
 
-- **Linearity**: The relationship between $X$ and $E(Y\mid X)$ is linear: $$E(Y_i\mid X_i= x_i)= \beta_0+\beta_1x_i$$
-- **Independence**: The observations $Y_1,\ldots, Y_n$ are independent of each other.
-- **Normality**: $$Y_i\mid X_i= x_i\sim N(\beta_0+\beta_1x_i, \sigma^2)$$
-- **Equal variance**: The variance of the errors $\epsilon_i$ is the same for all values of $x_i$.
+-   **Linearity**: The relationship between $X$ and $E(Y\mid X)$ is linear: $$E(Y_i\mid X_i= x_i)= \beta_0+\beta_1x_i$$
+-   **Independence**: The observations $Y_1,\ldots, Y_n$ are independent of each other.
+-   **Normality**: $$Y_i\mid X_i= x_i\sim N(\beta_0+\beta_1x_i, \sigma^2)$$
+-   **Equal variance**: The variance of the errors $\epsilon_i$ is the same for all values of $x_i$.
 
 Note that even if one or more of these assumptions breaks, linear regression can still be useful if used with caution.
 
@@ -132,10 +126,7 @@ Typically, we start with data $Y_1,\ldots, Y_n$ and $x_1,\ldots, x_n$. How do we
 
 In other words, what is the best line to use for modeling the relationship between $X$ and $Y$?
 
-Usually, we use the least squares line, which is the solution to the following optimization problem:
-$$\arg\min\sum_{i=1}^n (y_i-(\beta_0+\beta_1x_i))^2=\arg\min\sum_{i=1}^n (y_i-\hat{y}_i)^2$$
-where $\hat{y}_i$ is the model prediction for $y_i$.
-
+Usually, we use the least squares line, which is the solution to the following optimization problem: $$\arg\min\sum_{i=1}^n (y_i-(\beta_0+\beta_1x_i))^2=\arg\min\sum_{i=1}^n (y_i-\widehat{y}_i)^2$$ where $\widehat{y}_i$ is the model prediction for $y_i$.
 
 ## Simple linear regression: the `lm` function
 
@@ -174,13 +165,11 @@ plot(dist ~ speed, data = cars,
 abline(lm_res,  col = "red")
 ```
 
-
 ## Simple linear regression: Inference
 
 For the simple linear regression model, typically we wish to carry out inference on $\beta_1$. One way to do so is via a hypothesis test:
 
-$H_0:\beta_1=0$
-$H_a:\beta_1\not=0$
+$H_0:\beta_1=0$ $H_a:\beta_1\not=0$
 
 ```{r cars_inf}
 #| echo: true
@@ -241,8 +230,8 @@ predict(lm_res,
 
 Note that the `predict()` function can also be used to generate "confidence" intervals:
 
-* `interval = "prediction"`: Construct a confidence interval for $Y_{n+1}|X_{n+1}=x_{n+1}$, the value of a new **observation** for which $X_{n+1}=x_{n+1}$
-* `interval = "confidence"`: Construct a confidence interval for $E(Y_{n+1}|X_{n+1}=x_{n+1})$, the value of the **conditional mean** when $X_{n+1}=x_{n+1}$
+-   `interval = "prediction"`: Construct a confidence interval for $Y_{n+1}|X_{n+1}=x_{n+1}$, the value of a new **observation** for which $X_{n+1}=x_{n+1}$
+-   `interval = "confidence"`: Construct a confidence interval for $E(Y_{n+1}|X_{n+1}=x_{n+1})$, the value of the **conditional mean** when $X_{n+1}=x_{n+1}$
 
 ## Simple linear regression: Prediction
 
@@ -267,6 +256,455 @@ predict(lm_res,
         interval = "confidence")
 ```
 
+## Warm-up
+
+What is the method of least squares and how does it relate to linear regression?
+
+Classify the following questions as **inference** or **prediction**:
+
+1. Can we use high school students' SAT/ACT scores to estimate their college GPAs?
+2. Is there an association between political candidates' heights and the number of votes they receive?
+3. Do states with higher minimum wages have lower poverty rates?
+
+## Simple linear regression: Checking assumptions
+
+Typically, we say there are four assumptions for simple linear regression:
+
+-   **Linearity**: The relationship between $X$ and $E(Y\mid X)$ is linear: $$E(Y_i\mid X_i= x_i)= \beta_0+\beta_1x_i$$
+-   **Independence**: The observations $Y_1,\ldots, Y_n$ are independent of each other.
+-   **Normality**: $$Y_i\mid X_i= x_i\sim N(\beta_0+\beta_1x_i, \sigma^2)$$
+-   **Equal variance**: The variance of the errors $\epsilon_i$ is the same for all values of $x_i$.
+
+## Checking linearity
+
+::: columns
+::: {.column width="50%"}
+**Linear**
+```{r lin}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+library(tidyverse)
+set.seed(123)
+x <- runif(n = 40, min = 0, max = 5)
+y <- rnorm(n = 40, mean = 1 + 2 * x)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = y)) +
+  geom_point(size = 1.5) +
+  geom_abline(
+    slope = lm_res$coefficients[2], 
+    intercept = lm_res$coefficients[1],
+    color = "red"
+  ) + 
+  theme_minimal()
+```
+:::
+
+::: {.column width="50%"}
+**Nonlinear**
+```{r nonlin}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+library(tidyverse)
+set.seed(123)
+x <- runif(n = 40, min = 0, max = 5)
+y <- rnorm(n = 40, mean = (x - 2.5) ^ 2 + x)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = y)) +
+  geom_point(size = 1.5) +
+  geom_abline(
+    slope = lm_res$coefficients[2], 
+    intercept = lm_res$coefficients[1],
+    color = "red"
+  ) + 
+  theme_minimal()
+```
+:::
+:::
+
+## Checking linearity with residual plot
+
+We can also plot the residuals against our independent variable, where we define the **residual** as follows:
+$$\widehat{\epsilon}_i = \mathrm{Residual} = \mathrm{Observed} - \mathrm{Predicted}=y -\widehat{y}$$
+```{r cars_resid}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "60%"
+#| fig.align: "center"
+#| fig-cap: ""
+lm_res <- lm(dist ~ speed, cars)
+plot(resid(lm_res) ~ speed, data = cars,
+     xlab = "Speed (mph)",
+     ylab = "Residual", 
+     pch  = 16, col  = "blue")
+abline(h = 0,  col = "red")
+```
+## Checking linearity with residual plot
+
+::: columns
+::: {.column width="50%"}
+**Linear**
+```{r lin_resid}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+set.seed(123)
+x <- runif(n = 40, min = 0, max = 5)
+y <- rnorm(n = 40, mean = 1 + 2 * x)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = resid(lm_res))) +
+  geom_point(size = 1.5) +
+  geom_hline(
+    yintercept = 0,
+    color = "red"
+  ) + 
+  ylab("Residual") +
+  theme_minimal()
+```
+:::
+
+::: {.column width="50%"}
+**Nonlinear**
+```{r nonlin_resid}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+set.seed(123)
+x <- runif(n = 40, min = 0, max = 5)
+y <- rnorm(n = 40, mean = (x - 2.5) ^ 2 + x)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = resid(lm_res))) +
+  geom_point(size = 1.5) +
+  geom_hline(
+    yintercept = 0,
+    color = "red"
+  ) + 
+  ylab("Residual") +
+  theme_minimal()
+```
+:::
+:::
+
+## Checking independence
+
+Checking independence is typically more difficult. We require that conditional on the dependent variables $x_1,\ldots, x_n$, the response variables $Y_1,\ldots, Y_n$ are independent. 
+
+Example of independence: survey data obtained via simple random sampling
+
+Example of dependence: height and weight measurements of penguins, where each penguin is measured twice
+
+## Checking normality of errors
+
+Can you spot the difference?
+
+::: columns
+::: {.column width="50%"}
+**Normal errors**
+```{r norm_err}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+set.seed(123)
+x <- runif(n = 80, min = 0, max = 5)
+y <- rnorm(n = 80, mean = 1 + 2 * x)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = y)) +
+  geom_point(size = 1.5) +
+  geom_abline(
+    slope = lm_res$coefficients[2], 
+    intercept = lm_res$coefficients[1],
+    color = "red"
+  ) + 
+  theme_minimal()
+```
+:::
+
+::: {.column width="50%"}
+**Non-normal errors**
+```{r nonnorm_err}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+set.seed(125)
+x <- runif(n = 80, min = 0, max = 5)
+y <- 1 + 2 * x + rt(n = 80, df = 2)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = y)) +
+  geom_point(size = 1.5) +
+  geom_abline(
+    slope = lm_res$coefficients[2], 
+    intercept = lm_res$coefficients[1],
+    color = "red"
+  ) + 
+  theme_minimal()
+```
+:::
+:::
+
+## Checking normality of errors with quantile-quantile plot
+
+We can use a quantile-quantile plot to see whether our estimated residuals are approximately normally distributed.
+
+```{r cars_resid_qq_dummy}
+#| echo: true
+#| eval: false
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "60%"
+#| fig.align: "center"
+#| fig-cap: ""
+lm_res <- lm(dist ~ speed, cars)
+qqnorm(resid(lm_res))
+qqline(resid(lm_res))
+```
+
+## Checking normality of errors with quantile-quantile plot
+
+What do you notice?
+
+```{r cars_resid_qq}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "60%"
+#| fig.align: "center"
+#| fig-cap: ""
+lm_res <- lm(dist ~ speed, cars)
+qqnorm(resid(lm_res))
+qqline(resid(lm_res))
+```
+
+
+## Checking normality of errors with quantile-quantile plot
+
+
+::: columns
+::: {.column width="50%"}
+**Normal errors**
+```{r norm_err_qq}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+set.seed(123)
+x <- runif(n = 80, min = 0, max = 5)
+y <- rnorm(n = 80, mean = 1 + 2 * x)
+lm_res <- lm(y ~ x)
+qqnorm(resid(lm_res))
+qqline(resid(lm_res))
+```
+:::
+
+::: {.column width="50%"}
+**Non-normal errors**
+```{r nonnorm_err_qq}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+set.seed(125)
+x <- runif(n = 80, min = 0, max = 5)
+y <- 1 + 2 * x + rt(n = 80, df = 2)
+lm_res <- lm(y ~ x)
+qqnorm(resid(lm_res))
+qqline(resid(lm_res))
+```
+:::
+:::
+
+## Checking equal variances (homoskedasticity)
+
+
+Can you spot the difference?
+
+::: columns
+::: {.column width="50%"}
+**Equal variances**
+```{r eq_var}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+set.seed(123)
+x <- runif(n = 80, min = 0, max = 5)
+y <- rnorm(n = 80, mean = 1 + 2 * x)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = y)) +
+  geom_point(size = 1.5) +
+  geom_abline(
+    slope = lm_res$coefficients[2], 
+    intercept = lm_res$coefficients[1],
+    color = "red"
+  ) + 
+  theme_minimal()
+```
+:::
+
+::: {.column width="50%"}
+**Unequal variances**
+```{r uneq_var}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+set.seed(123)
+x <- runif(n = 80, min = 0, max = 5)
+y <- rnorm(n = 80, mean = 1 + 2 * x, sd = .4 * x)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = y)) +
+  geom_point(size = 1.5) +
+  geom_abline(
+    slope = lm_res$coefficients[2], 
+    intercept = lm_res$coefficients[1],
+    color = "red"
+  ) + 
+  theme_minimal()
+```
+:::
+:::
+
+## Checking equal variances (homoskedasticity) with residual plot
+
+Can you spot the difference using the residual plot?
+
+::: columns
+::: {.column width="50%"}
+**Equal variances**
+```{r eq_var_resid}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+set.seed(123)
+x <- runif(n = 80, min = 0, max = 5)
+y <- rnorm(n = 80, mean = 1 + 2 * x)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = resid(lm_res))) +
+  geom_point(size = 1.5) +
+  geom_hline(
+    yintercept = 0,
+    color = "red"
+  ) + 
+  ylab("Residual") +
+  theme_minimal()
+```
+:::
+
+::: {.column width="50%"}
+**Unequal variances**
+```{r uneq_var_resid}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+set.seed(123)
+x <- runif(n = 80, min = 0, max = 5)
+y <- rnorm(n = 80, mean = 1 + 2 * x, sd = .4 * x)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = resid(lm_res))) +
+  geom_point(size = 1.5) +
+  geom_hline(
+    yintercept = 0,
+    color = "red"
+  ) + 
+  ylab("Residual") +
+  theme_minimal()
+```
+:::
+:::
+
+
 ## Multiple linear regression
 
 What if we have multiple input variables?
@@ -279,7 +717,7 @@ data(mtcars)
 head(mtcars)
 ```
 
-## Linear Regression
+## Multiple linear regression
 
 Given our response $Y$ and our predictors $X_1, \ldots, X_p$, a **linear regression model** takes the form:
 
@@ -292,7 +730,7 @@ $$
 
 **Note:** If we wish to include a categorical covariate, we can add indicator variables for each category.
 
-## Linear Regression
+## Multiple linear regression
 
 $$
 \begin{align}
@@ -306,6 +744,255 @@ $$
 -   $\beta_0$: Intercept
 -   $\beta_j$: coefficient, the expected difference in the response between two observations differing by one unit in $X_j$, with all other covariates identical.
 -   $\epsilon$: error, noise, with mean $0$ and variance $\sigma^2$
+
+## Multiple linear regression: example
+
+Consider the following example using the `penguins` data.
+
+```{r penguins}
+#| echo: true
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "60%"
+#| fig.align: "center"
+#| fig-cap: ""
+library(palmerpenguins)
+data(penguins)
+head(penguins)
+```
+
+## Multiple linear regression: example
+
+Suppose we are interested in predicting `body_mass_g` using `flipper_length_mm`.
+
+```{r penguins2}
+#| echo: true
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "60%"
+#| fig.align: "center"
+#| fig-cap: ""
+ggplot(penguins, mapping = aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+## Multiple linear regression: example
+
+
+```{r movies3}
+#| echo: true
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "60%"
+#| fig.align: "center"
+#| fig-cap: ""
+lm_res <- lm(body_mass_g ~ flipper_length_mm, data = penguins)
+summary(lm_res)
+```
+
+## Multiple linear regression: example
+
+Consider the following residual plot, where we define the **residual** as follows:
+$$\mathrm{Residual} = \mathrm{Observed} - \mathrm{Predicted}=y -\widehat{y}$$
+```{r penguins_resid}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 7
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+plot(na.omit(penguins$flipper_length_mm), resid(lm_res), col = match(penguins$species, c("Adelie", "Chinstrap", "Gentoo")),
+     ylab = "Observed - Predicted",  xlab = "Flipper length", pch = 16)
+legend("topleft", col = c(1,2,3), legend = c("Adelie", "Chinstrap", "Gentoo"), pch = 16)
+abline(h = 0)
+```
+
+## Multiple linear regression: example
+
+What if I also want to include `species` in the model? There are a few ways to do so.
+
+```{r movies4}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+ggplot(penguins,
+       mapping = aes(x =  flipper_length_mm,
+                     y = body_mass_g, 
+                     color = species)) +
+  geom_point(alpha = .7) 
+```
+
+## Multiple linear regression: Group intercepts
+
+The first way is to add `species` into the formula for our linear regression model:
+
+```{r penguins_species}
+#| echo: true
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "60%"
+#| fig.align: "center"
+#| fig-cap: ""
+lm_species_res <- lm(body_mass_g ~ flipper_length_mm + species,
+                     data = penguins)
+summary(lm_species_res)
+```
+
+## Multiple linear regression: Group intercepts
+
+In this case, the model is as follows:
+$$Y=\beta_0+\beta_1x_1+\beta_2x_2+\beta_3x_3+\epsilon_i$$
+where:
+
+* $Y$ is `body_mass_g`
+* $x_1$ is `flipper_length_mm`
+* $x_2$ is a **dummy variable** equal to 1 if the penguin is Chinstrap and 0 otherwise.
+* $x_3$ is a **dummy variable** equal to 1 if the penguin is Gentoo and 0 otherwise.
+
+What happened to the Adelie penguins?
+
+## Multiple linear regression: Group intercepts
+
+When including a categorical variable in a linear regression model, R automatically treats one category as the **reference group**.
+
+The value of the intercept $\beta_0$ thus represents the expected value of $Y$ when $x_1$ is zero for an Adelie penguin.
+
+How do we interpret the other $\beta$ parameters?
+
+## Multiple linear regression: Group intercepts
+
+* $\beta_1$ represents the expected change in $Y$ when flipper length increases by 1 mm.
+* $\beta_2+\beta_0$ represents the expected value of $Y$ when $x_1$ is zero for a Chinstrap penguin.
+* $\beta_2+\beta_0$ represents the expected value of $Y$ when $x_1$ is zero for a Gentoo penguin.
+
+## Multiple linear regression: Group intercepts
+
+This model thus yields three parallel lines, one for each group.
+
+```{r penguins_species_2}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "60%"
+#| fig.align: "center"
+#| fig-cap: ""
+ggplot(penguins,
+       mapping = aes(x =  flipper_length_mm,
+                     y = body_mass_g, 
+                     color = species)) +
+  geom_point(alpha = .7) +
+  geom_abline(aes(slope = lm_species_res$coefficients[2], intercept = lm_species_res$coefficients[1],color = "Adelie")) +
+  geom_abline(aes(slope = lm_species_res$coefficients[2], intercept = lm_species_res$coefficients[1] + lm_species_res$coefficients[3], color = "Chinstrap")) +
+  geom_abline(aes(slope = lm_species_res$coefficients[2], intercept = lm_species_res$coefficients[1] + lm_species_res$coefficients[4], color = "Gentoo"))
+```
+
+## Multiple linear regression: example
+
+Now we obtain the following residual plot:
+
+```{r penguins_resid_2}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 7
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+plot(na.omit(penguins$flipper_length_mm), resid(lm_species_res), col = match(penguins$species, c("Adelie", "Chinstrap", "Gentoo")),
+     ylab = "Observed - Predicted", xlab = "Flipper length", pch = 16)
+legend("topleft", col = c(1,2,3), legend = c("Adelie", "Chinstrap", "Gentoo"), pch = 16)
+abline(h = 0)
+```
+
+
+## Multiple linear regression: Group-specific slopes 
+
+The previous model gave us group-specific intercepts, resulting in parallel lines. What if we want to let the slope vary across each species?
+
+```{r penguins_slopes}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 7
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+ggplot(penguins,
+       mapping = aes(x =  flipper_length_mm,
+                     y = body_mass_g, 
+                     color = species)) +
+  geom_point(alpha = .7) +
+  geom_smooth(method = "lm")
+```
+
+## Multiple linear regression: Group-specific slopes
+
+The standard approach is to introduce interaction terms:
+
+```{r penguins_int}
+#| echo: true
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "60%"
+#| fig.align: "center"
+#| fig-cap: ""
+lm_int_res <- lm(body_mass_g ~ flipper_length_mm * species,
+                     data = penguins)
+summary(lm_int_res)
+```
+
+## Multiple linear regression: Group-specific slopes 
+
+The standard approach is to introduce interaction terms:
+
+$$Y=\beta_0+\beta_1x_1+\beta_2x_2+\beta_3x_3+\beta_4(x_1 * x_2) + \beta_5(x_1*x_3)+\epsilon_i$$
+where:
+
+* $\beta_1$ is now the slope for our reference group (Adelie)
+* $\beta_1+\beta_4$ is the slope for Chinstrap
+* $\beta_1+\beta_5$ is the slope for Gentoo
 
 ## Linear Regression
 
@@ -620,6 +1307,236 @@ $$ \widehat{\beta}=\left(\mathbf{X}^T \mathbf{X} \right)^{-1}\mathbf{X}^T \mathb
 
 Note: In statistics, once we have estimated a parameter we put a "hat" on it, e.g. $\widehat{\beta_0}$ is the estimate of the true parameter $\beta_0$.
 
+
+## Overview of today
+
+- Review of linear regression 
+- Why use a linear model?
+- Pitfalls of linear regression: breaking assumptions and more
+
+
+
+## Why linear regression?
+
+Regression methods focus on modeling the relationship between response $Y$ and explanatory variables $X_1,\ldots, X_p$. 
+
+Linear regression proposes a model of the form
+$$Y=\beta_0+\beta_1X_1+\cdots +\beta_p X_p+\epsilon; \hspace{1em} \epsilon\sim N(0, \sigma^2)$$
+Sometimes, the following weaker form is used (why is this weaker?)
+$$E(Y\mid X_1,\ldots, X_p)=\beta_0+\beta_1X_1+\cdots +\beta_p X_p$$
+In other words, the expected value of $Y$ (given $X_1,\ldots, X_p$) is a linear transformation of $X_1,\ldots, X_p$.
+
+
+## Why linear regression?
+
+1. **Simplicity**: Easy to fit, usually gets the general trend correct, hard to **overfit**
+2. **Interpretability**: Consider the following log-normal model:
+$$Y=\exp(\beta_0+\beta_1X_1+\cdots +\beta_p X_p+\epsilon); \hspace{1em} \epsilon\sim N(0, \sigma^2)$$
+How do we interpret $\beta_1$? 
+
+## Additivity
+
+Note that linear regression can often be generalized to encompass other models. Consider the following model:
+$$Y=\beta_0+\beta_1X_1 +\beta_2X_1^2$$
+This is an example of polynomial regression, but the methods for fitting this model are essentially the same as ordinary least squares, using $X_1^2$ as an extra covariate.
+
+Many alternative models can be written in this form by transforming the covariates or transforming the response $Y$.
+
+## Assumptions of linear regression
+
+
+- **Linearity**: The relationship between $X$ and $E(Y\mid X)$ is linear: $$E(Y_i\mid X_i= x_i)= \beta_0+\beta_1x_i$$
+- **Independence**: The observations $Y_1,\ldots, Y_n$ are independent of each other.
+- **Normality**: $$Y_i\mid X_i= x_i\sim N(\beta_0+\beta_1x_i, \sigma^2)$$
+- **Equal variance**: The variance of the errors $\epsilon_i$ is the same for all values of $x_i$.
+
+## All assumptions true
+
+::: columns
+::: {.column width="60%"}
+::: {.smaller}
+```{r lm_ex_dummy}
+#| echo: true
+#| eval: false
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "60%"
+#| fig.align: "center"
+#| fig-cap: ""
+library(tidyverse)
+x <- runif(n = 40, min = 0, max = 5)
+y <- rnorm(n = 40, mean = 1 + 2 * x)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = y)) +
+  geom_point(size = 1.5) +
+  geom_abline(
+    slope = lm_res$coefficients[2], 
+    intercept = lm_res$coefficients[1],
+    color = "red"
+  ) + 
+  theme_minimal()
+```
+:::
+:::
+
+::: {.column width="40%"}
+```{r lm_ex}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+library(tidyverse)
+x <- runif(n = 40, min = 0, max = 5)
+y <- rnorm(n = 40, mean = 1 + 2 * x)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = y)) +
+  geom_point(size = 1.5) +
+  geom_abline(
+    slope = lm_res$coefficients[2], 
+    intercept = lm_res$coefficients[1],
+    color = "red"
+  ) + 
+  theme_minimal()
+```
+:::
+:::
+
+## All assumptions true
+
+::: columns
+::: {.column width="45%"}
+::: {.smaller}
+**Inference**: Asymptotically valid confidence intervals and hypothesis tests for $\beta_0$ and $\beta_1$.
+:::
+:::
+
+::: {.column width="55%"}
+```{r lm_res_inf}
+#| echo: true
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+summary(lm_res)
+```
+:::
+:::
+
+
+## All assumptions true
+
+::: columns
+::: {.column width="45%"}
+::: {.smaller}
+**Prediction**: Assuming the model holds for new data, unbiased point predictions and asymptotically valid prediction intervals for $Y_{n+1}$.
+:::
+:::
+
+::: {.column width="55%"}
+```{r lm_res_pred}
+#| echo: true
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 3.5
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+predict(lm_res, 
+        newdata = list(x = 1), 
+        interval = "prediction")
+```
+:::
+:::
+
+## Breaking linearity
+
+What if $E(Y_i\mid X_i= x_i)\not= \beta_0+\beta_1x_i$?
+
+
+::: columns
+::: {.column width="60%"}
+::: {.smaller}
+```{r cubic_ex_dummy}
+#| echo: true
+#| eval: false
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+#| out.width: "60%"
+#| fig.align: "center"
+#| fig-cap: ""
+x <- runif(n = 40, min = 0, max = 5)
+y <- rnorm(n = 40, mean = 1 + 2 * x^3)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = y)) +
+  geom_point(size = 1.5) +
+  geom_abline(
+    slope = lm_res$coefficients[2], 
+    intercept = lm_res$coefficients[1],
+    color = "red"
+  ) + 
+  theme_minimal()
+```
+:::
+:::
+
+::: {.column width="40%"}
+```{r cubic_ex}
+#| echo: false
+#| eval: true
+#| cache: true
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 4
+#| out.width: "100%"
+#| fig.align: "center"
+#| fig-cap: ""
+x <- runif(n = 40, min = 0, max = 5)
+y <- rnorm(n = 40, mean = 1 + 2 * x^3)
+lm_res <- lm(y ~ x)
+ggplot(mapping = aes(x = x, y = y)) +
+  geom_point(size = 1.5) +
+  geom_abline(
+    slope = lm_res$coefficients[2], 
+    intercept = lm_res$coefficients[1],
+    color = "red"
+  ) + 
+  theme_minimal()
+```
+:::
+:::
+
+
+## Breaking linearity
+
+Our standard inference and prediction strategies no longer work in general.
+
+**Inference**: Confidence intervals and hypothesis tests for $\beta_0$ and $\beta_1$ are no longer valid.
+
+**Prediction**: Point predictions are no longer unbiased and prediction intervals are no longer valid.
+
+
+
 ## Collinearity
 
 What if our predictor variables are closely related? Consider the following simulation:
@@ -649,7 +1566,6 @@ What if our predictor variables are closely related? Consider the following simu
 x2b <- x1 * 2 + rnorm(n, sd = .01)
 lm(y ~ x1 + x2b)
 ```
-
 
 ```{r}
 knitr::knit_exit()

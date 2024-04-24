@@ -1,1 +1,11 @@
 ggplot2
+palmerpenguins
+tidyverse
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+lubridate
