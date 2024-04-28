@@ -95,10 +95,11 @@ The structure of your report may depend on your selected project topic, but shou
 
 ## Part Four: Class Presentation (15 points), on 5/8 and 5/13
 
-At the end of the semester, you will deliver a brief lightning talk in class. You should rehearse your presentation in advance and it should include:
+At the end of the semester, you will deliver a brief lightning talk (8-10 minutes) in class. You should rehearse your presentation in advance and it should include:
 
 -   A quick introduction to your dataset and research questions of interest.
--   An overview of your favorite visualization/descriptive summary/result from your project.
+-   An overview of your favorite visualization(s)/descriptive summary/result from your project.
+-   If you worked with a partner or group, each group member should present at least one visualization/result.
 
 ## Part Five: Reflection and Self-evaluation (5 points), due 5/13
 
