@@ -71,25 +71,25 @@ When training predictive algorithms, it is common to split your data into two ca
 
 **Test data:** data used to evaluate/test the performance of our model
 
-Suppose we have training data $X_{i1}, \ \ldots,\ X_{ip}, Y_i, \ i = 1,\ldots,n$ which we use to estimate regression coefficents $\hat\beta_0, \ \hat\beta_1, \ldots \hat\beta_p$ (Recall: we use $\hat{}$ "hats" to indicate **estimates**).
+Suppose we have training data $X_{i1}, \ \ldots,\ X_{ip}, Y_i, \ i = 1,\ldots,n$ which we use to estimate regression coefficents $\widehat\beta_0, \ \widehat\beta_1, \ldots \widehat\beta_p$ (Recall: we use $\widehat{}$ "hats" to indicate **estimates**).
 
 ## Making predictions
 
-Now suppose we are given new testing data $X^*_1,\ \ldots, X^*_{p}$ and asked to predict the associated $Y^∗$. Using our estimated linear model, the prediction is: $$\widehat{Y}^* = \hat\beta_0 + \hat{\beta}_1 X^*_1 + \cdots + \hat{\beta}_p X^*_p$$
+Now suppose we are given new testing data $X^*_1,\ \ldots, X^*_{p}$ and asked to predict the associated $Y^∗$. Using our estimated linear model, the prediction is: $$\widehat{Y}^* = \widehat\beta_0 + \widehat{\beta}_1 X^*_1 + \cdots + \widehat{\beta}_p X^*_p$$
 
 Given our prediction
 
-$$\hat{Y} = \hat\beta_0 + \hat{\beta}_1 X^*_1 + \cdots + \hat{\beta}_p X^*_p$$ We define the **mean squared error**, or **mean squared prediction error**, as
+$$\widehat{Y} = \widehat\beta_0 + \widehat{\beta}_1 X^*_1 + \cdots + \widehat{\beta}_p X^*_p$$ We define the **mean squared error**, or **mean squared prediction error**, as
 
-$$\mathbb{E}[(Y^* -\hat{Y}^*)^2].$$
+$$\mathbb{E}[(Y^* -\widehat{Y}^*)^2].$$
 
 In other words, the test error is defined as the expected squared difference between a new prediction and the truth, where the expectation is taken over the population distribution of test data.
 
 ## Test error
 
-**Mean squared prediction error:** $\mathbb{E}[(Y^* -\hat{Y}^*)^2],$ the expected squared difference between a new prediction and the truth.
+**Mean squared prediction error:** $\mathbb{E}[(Y^* -\widehat{Y}^*)^2],$ the expected squared difference between a new prediction and the truth.
 
-The MSPE quantifies the predictive power of our model, but we do not actually have access to the full poulation distribution.
+The MSPE quantifies the predictive power of our model, but we do not actually have access to the full population distribution.
 
 As such, we must estimate the MSPE using our data in order to use it to assess our model.
 
@@ -102,7 +102,7 @@ In particular, we could use the MSPE for:
 
 A natural estimator for the test error might be the observed average **training error:**
 
-$$\dfrac{1}{n}\sum_{i=1}^n (Y_i - \hat{Y}_i)^2.$$
+$$\dfrac{1}{n}\sum_{i=1}^n (Y_i - \widehat{Y}_i)^2.$$
 
 Can you think of a problem with this approach?
 
@@ -398,9 +398,9 @@ The formula for test error can be decomposed as a function of the bias and varia
 
 For example, suppose $Y^*=\mu+\epsilon$ where $\epsilon$ is mean zero random error with variance $\sigma^2$:
 
-$$\begin{align}\mathbb{E}[(Y^* -\hat{Y}^*)^2]&=\mathbb{E}(Y^{*2})-2\mathbb{E}(Y^*\hat{Y}^*)+\mathbb{E}(\hat{Y}^{*2})\\
-&=\mu^2+\sigma^2-2\mu\mathbb{E}(\hat{Y}^*)+\mathrm{Var}(\hat{Y}^{*})+\mathbb{E}(\hat{Y}^{*2})\\
-&=(\mu -\mathbb{E}(\hat{Y}^*))^2+\sigma^2+\mathrm{Var}(\hat{Y}^{*}) \end{align}$$
+$$\begin{align}\mathbb{E}[(Y^* -\widehat{Y}^*)^2]&=\mathbb{E}(Y^{*2})-2\mathbb{E}(Y^*\widehat{Y}^*)+\mathbb{E}(\widehat{Y}^{*2})\\
+&=\mu^2+\sigma^2-2\mu\mathbb{E}(\widehat{Y}^*)+\mathrm{Var}(\widehat{Y}^{*})+\mathbb{E}(\widehat{Y}^{*2})\\
+&=(\mu -\mathbb{E}(\widehat{Y}^*))^2+\sigma^2+\mathrm{Var}(\widehat{Y}^{*}) \end{align}$$
 
 ## Bias-Variance Tradeoff
 
@@ -453,7 +453,7 @@ y <- 2*x + 2*rnorm(n)
 
 # Randomly split data into two parts
 inds <- sample(rep(1:2, length = n))
-split <- as.factor(inds) %>%
+split <- as.factor(inds) |>
   fct_recode(Training = "1", Test = "2")
 data <- data.frame("x" = x, "y" = y, "split" = split)
 
@@ -474,7 +474,7 @@ y <- 2*x + 2*rnorm(n)
 
 # Randomly split data into two parts
 inds <- sample(rep(1:2, length = n))
-split <- as.factor(inds) %>%
+split <- as.factor(inds) |>
   fct_recode(Training = "1", Test = "2")
 data <- data.frame("x" = x, "y" = y, "split" = split)
 
@@ -487,7 +487,7 @@ g_split
 
 ```{r, echo = TRUE, eval = TRUE, fig.align = "center", fig.height = 6}
 # Train on the training split
-data_train <- data %>% filter(split == "Training")
+data_train <- data |> dplyr::filter(split == "Training")
 lm_1 <- lm(y ~ x, data = data_train)
 lm_10 <- lm(y ~ poly(x, 10), data = data_train)
 
@@ -565,7 +565,7 @@ Commonly, we use $k=5$ and $k=10$.
 
 For each split, we calculate the out-of-sample mean squared prediction error. For example, for the first split, we calculate
 
-$$MSE_1 = \dfrac{1}{m}\sum_{j = 1}^{m} (Y_{j,test} - \hat{Y}_{j,test})^2,$$ where $m$ is the number of observations in the test set.
+$$MSE_1 = \dfrac{1}{m}\sum_{j = 1}^{m} (Y_{j,test} - \widehat{Y}_{j,test})^2,$$ where $m$ is the number of observations in the test set.
 
 Then we calculate the **cross-validation estimate** of our test error
 
@@ -635,7 +635,7 @@ line_fit_1 <- data.frame(x = x_fit, y = predict(lm_1, newdata = x_fit))
 line_fit_10 <- data.frame(x = x_fit, y = predict(lm_10, newdata = x_fit))
 
 # Recode split for legend
-data <- data %>% 
+data <- data |> 
   mutate(Fold = fct_recode(as.factor(split), "Fold 1" = "1", "Fold 2" = "2",
                            "Fold 3" = "3", "Fold 4" = "4", "Fold 5" = "5"))
 
@@ -664,7 +664,7 @@ line_fit_1 <- data.frame(x = x_fit, y = predict(lm_1, newdata = x_fit))
 line_fit_10 <- data.frame(x = x_fit, y = predict(lm_10, newdata = x_fit))
 
 # Recode split for legend
-data <- data %>% 
+data <- data |> 
   mutate(Fold = fct_recode(as.factor(split), "Fold 1" = "1", "Fold 2" = "2",
                            "Fold 3" = "3", "Fold 4" = "4", "Fold 5" = "5"))
 
@@ -698,7 +698,7 @@ k-nearest neighbors is a non-parametric prediction algorithm.
 -   **Input:** training data $X_i = (X_{i1}, \ldots, X_{ip})$ and output class $Y_i$ for $i = 1,\ldots, n$
 -   **Input:** test data $X^* = (X^*_1, \ldots, X^*_p)$ with unknown output class $Y^*$
 -   **Algorithm:** Find $X_{(1)},\ldots, X_{(k)}$, the $k$ nearest points to $X^*$
--   **Output:** Predicted class $\hat{Y}^*$, the most common class from $X_{(1)},\ldots, X_{(k)}$
+-   **Output:** Predicted class $\widehat{Y}^*$, the most common class from $X_{(1)},\ldots, X_{(k)}$
 
 
 
@@ -750,7 +750,7 @@ Instead of classifying based on neighboring data points in the training data, we
 -   **Input:** training data $X_i = (X_{i1}, \ldots, X_{ip})$ and output class/value $Y_i$ for $i = 1,\ldots, n$
 -   **Input:** test data $X^* = (X^*_1, \ldots, X^*_p)$ with unknown output class/value $Y^*$
 -   **Algorithm:** Identify splits in $X_i$ that best predict $Y_i$
--   **Output:** Predicted class/value $\hat{Y}^*$ using splits
+-   **Output:** Predicted class/value $\widehat{Y}^*$ using splits
 
 ## Trees
 

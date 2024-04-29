@@ -469,20 +469,20 @@ Y &amp;= \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \epsilon,\\
 <p>When training predictive algorithms, it is common to split your data into two categories:</p>
 <p><strong>Training data:</strong> data used to train/fit our model</p>
 <p><strong>Test data:</strong> data used to evaluate/test the performance of our model</p>
-<p>Suppose we have training data <span class="math inline">\(X_{i1}, \ \ldots,\ X_{ip}, Y_i, \ i = 1,\ldots,n\)</span> which we use to estimate regression coefficents <span class="math inline">\(\hat\beta_0, \ \hat\beta_1, \ldots \hat\beta_p\)</span> (Recall: we use <span class="math inline">\(\hat{}\)</span> “hats” to indicate <strong>estimates</strong>).</p>
+<p>Suppose we have training data <span class="math inline">\(X_{i1}, \ \ldots,\ X_{ip}, Y_i, \ i = 1,\ldots,n\)</span> which we use to estimate regression coefficents <span class="math inline">\(\widehat\beta_0, \ \widehat\beta_1, \ldots \widehat\beta_p\)</span> (Recall: we use <span class="math inline">\(\widehat{}\)</span> “hats” to indicate <strong>estimates</strong>).</p>
 </section>
 <section id="making-predictions" class="slide level2">
 <h2>Making predictions</h2>
-<p>Now suppose we are given new testing data <span class="math inline">\(X^*_1,\ \ldots, X^*_{p}\)</span> and asked to predict the associated <span class="math inline">\(Y^∗\)</span>. Using our estimated linear model, the prediction is: <span class="math display">\[\widehat{Y}^* = \hat\beta_0 + \hat{\beta}_1 X^*_1 + \cdots + \hat{\beta}_p X^*_p\]</span></p>
+<p>Now suppose we are given new testing data <span class="math inline">\(X^*_1,\ \ldots, X^*_{p}\)</span> and asked to predict the associated <span class="math inline">\(Y^∗\)</span>. Using our estimated linear model, the prediction is: <span class="math display">\[\widehat{Y}^* = \widehat\beta_0 + \widehat{\beta}_1 X^*_1 + \cdots + \widehat{\beta}_p X^*_p\]</span></p>
 <p>Given our prediction</p>
-<p><span class="math display">\[\hat{Y} = \hat\beta_0 + \hat{\beta}_1 X^*_1 + \cdots + \hat{\beta}_p X^*_p\]</span> We define the <strong>mean squared error</strong>, or <strong>mean squared prediction error</strong>, as</p>
-<p><span class="math display">\[\mathbb{E}[(Y^* -\hat{Y}^*)^2].\]</span></p>
+<p><span class="math display">\[\widehat{Y} = \widehat\beta_0 + \widehat{\beta}_1 X^*_1 + \cdots + \widehat{\beta}_p X^*_p\]</span> We define the <strong>mean squared error</strong>, or <strong>mean squared prediction error</strong>, as</p>
+<p><span class="math display">\[\mathbb{E}[(Y^* -\widehat{Y}^*)^2].\]</span></p>
 <p>In other words, the test error is defined as the expected squared difference between a new prediction and the truth, where the expectation is taken over the population distribution of test data.</p>
 </section>
 <section id="test-error" class="slide level2">
 <h2>Test error</h2>
-<p><strong>Mean squared prediction error:</strong> <span class="math inline">\(\mathbb{E}[(Y^* -\hat{Y}^*)^2],\)</span> the expected squared difference between a new prediction and the truth.</p>
-<p>The MSPE quantifies the predictive power of our model, but we do not actually have access to the full poulation distribution.</p>
+<p><strong>Mean squared prediction error:</strong> <span class="math inline">\(\mathbb{E}[(Y^* -\widehat{Y}^*)^2],\)</span> the expected squared difference between a new prediction and the truth.</p>
+<p>The MSPE quantifies the predictive power of our model, but we do not actually have access to the full population distribution.</p>
 <p>As such, we must estimate the MSPE using our data in order to use it to assess our model.</p>
 <p>In particular, we could use the MSPE for:</p>
 <ul>
@@ -493,7 +493,7 @@ Y &amp;= \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \epsilon,\\
 <section id="training-error" class="slide level2">
 <h2>Training Error</h2>
 <p>A natural estimator for the test error might be the observed average <strong>training error:</strong></p>
-<p><span class="math display">\[\dfrac{1}{n}\sum_{i=1}^n (Y_i - \hat{Y}_i)^2.\]</span></p>
+<p><span class="math display">\[\dfrac{1}{n}\sum_{i=1}^n (Y_i - \widehat{Y}_i)^2.\]</span></p>
 <p>Can you think of a problem with this approach?</p>
 <div class="fragment">
 <p>In general, this will be <em>too optimistic</em>. Why? We obtained parameter estimates <span class="math inline">\(\widehat{\beta}_0,\ \ldots,\ \widehat{\beta}_p\)</span> based on our training data.</p>
@@ -670,9 +670,9 @@ Y &amp;= \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \epsilon,\\
 <section id="bias-variance-tradeoff-1" class="slide level2">
 <h2>Bias-Variance Tradeoff</h2>
 <p>For example, suppose <span class="math inline">\(Y^*=\mu+\epsilon\)</span> where <span class="math inline">\(\epsilon\)</span> is mean zero random error with variance <span class="math inline">\(\sigma^2\)</span>:</p>
-<p><span class="math display">\[\begin{align}\mathbb{E}[(Y^* -\hat{Y}^*)^2]&amp;=\mathbb{E}(Y^{*2})-2\mathbb{E}(Y^*\hat{Y}^*)+\mathbb{E}(\hat{Y}^{*2})\\
-&amp;=\mu^2+\sigma^2-2\mu\mathbb{E}(\hat{Y}^*)+\mathrm{Var}(\hat{Y}^{*})+\mathbb{E}(\hat{Y}^{*2})\\
-&amp;=(\mu -\mathbb{E}(\hat{Y}^*))^2+\sigma^2+\mathrm{Var}(\hat{Y}^{*}) \end{align}\]</span></p>
+<p><span class="math display">\[\begin{align}\mathbb{E}[(Y^* -\widehat{Y}^*)^2]&amp;=\mathbb{E}(Y^{*2})-2\mathbb{E}(Y^*\widehat{Y}^*)+\mathbb{E}(\widehat{Y}^{*2})\\
+&amp;=\mu^2+\sigma^2-2\mu\mathbb{E}(\widehat{Y}^*)+\mathrm{Var}(\widehat{Y}^{*})+\mathbb{E}(\widehat{Y}^{*2})\\
+&amp;=(\mu -\mathbb{E}(\widehat{Y}^*))^2+\sigma^2+\mathrm{Var}(\widehat{Y}^{*}) \end{align}\]</span></p>
 </section>
 <section id="bias-variance-tradeoff-2" class="slide level2">
 <h2>Bias-Variance Tradeoff</h2>
@@ -725,7 +725,7 @@ Y &amp;= \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \epsilon,\\
 <span id="cb6-7"><a href="#cb6-7"></a></span>
 <span id="cb6-8"><a href="#cb6-8"></a><span class="co"># Randomly split data into two parts</span></span>
 <span id="cb6-9"><a href="#cb6-9"></a>inds <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">length =</span> n))</span>
-<span id="cb6-10"><a href="#cb6-10"></a>split <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(inds) <span class="sc">%&gt;%</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a>split <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(inds) <span class="sc">|&gt;</span></span>
 <span id="cb6-11"><a href="#cb6-11"></a>  <span class="fu">fct_recode</span>(<span class="at">Training =</span> <span class="st">"1"</span>, <span class="at">Test =</span> <span class="st">"2"</span>)</span>
 <span id="cb6-12"><a href="#cb6-12"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">"x"</span> <span class="ot">=</span> x, <span class="st">"y"</span> <span class="ot">=</span> y, <span class="st">"split"</span> <span class="ot">=</span> split)</span>
 <span id="cb6-13"><a href="#cb6-13"></a></span>
@@ -742,7 +742,7 @@ Y &amp;= \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \epsilon,\\
 <h2>Sample-splitting</h2>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Train on the training split</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>data_train <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(split <span class="sc">==</span> <span class="st">"Training"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a>data_train <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(split <span class="sc">==</span> <span class="st">"Training"</span>)</span>
 <span id="cb7-3"><a href="#cb7-3"></a>lm_1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> data_train)</span>
 <span id="cb7-4"><a href="#cb7-4"></a>lm_10 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> <span class="fu">poly</span>(x, <span class="dv">10</span>), <span class="at">data =</span> data_train)</span>
 <span id="cb7-5"><a href="#cb7-5"></a></span>
@@ -803,7 +803,7 @@ Y &amp;= \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \epsilon,\\
 <section id="k-fold-cross-validation-2" class="slide level2">
 <h2>k-fold Cross-validation</h2>
 <p>For each split, we calculate the out-of-sample mean squared prediction error. For example, for the first split, we calculate</p>
-<p><span class="math display">\[MSE_1 = \dfrac{1}{m}\sum_{j = 1}^{m} (Y_{j,test} - \hat{Y}_{j,test})^2,\]</span> where <span class="math inline">\(m\)</span> is the number of observations in the test set.</p>
+<p><span class="math display">\[MSE_1 = \dfrac{1}{m}\sum_{j = 1}^{m} (Y_{j,test} - \widehat{Y}_{j,test})^2,\]</span> where <span class="math inline">\(m\)</span> is the number of observations in the test set.</p>
 <p>Then we calculate the <strong>cross-validation estimate</strong> of our test error</p>
 <p><span class="math display">\[CV_{(k)} = \dfrac{1}{k}\sum_{i=1}^{k}MSE_i.\]</span></p>
 <p>In words, our cross-validation estimate of the test error is the average of the mean squared errors across the splits!</p>
@@ -865,7 +865,7 @@ Y &amp;= \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \epsilon,\\
 <span id="cb10-8"><a href="#cb10-8"></a>line_fit_10 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x_fit, <span class="at">y =</span> <span class="fu">predict</span>(lm_10, <span class="at">newdata =</span> x_fit))</span>
 <span id="cb10-9"><a href="#cb10-9"></a></span>
 <span id="cb10-10"><a href="#cb10-10"></a><span class="co"># Recode split for legend</span></span>
-<span id="cb10-11"><a href="#cb10-11"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb10-11"><a href="#cb10-11"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
 <span id="cb10-12"><a href="#cb10-12"></a>  <span class="fu">mutate</span>(<span class="at">Fold =</span> <span class="fu">fct_recode</span>(<span class="fu">as.factor</span>(split), <span class="st">"Fold 1"</span> <span class="ot">=</span> <span class="st">"1"</span>, <span class="st">"Fold 2"</span> <span class="ot">=</span> <span class="st">"2"</span>,</span>
 <span id="cb10-13"><a href="#cb10-13"></a>                           <span class="st">"Fold 3"</span> <span class="ot">=</span> <span class="st">"3"</span>, <span class="st">"Fold 4"</span> <span class="ot">=</span> <span class="st">"4"</span>, <span class="st">"Fold 5"</span> <span class="ot">=</span> <span class="st">"5"</span>))</span>
 <span id="cb10-14"><a href="#cb10-14"></a></span>
@@ -901,7 +901,7 @@ Y &amp;= \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \epsilon,\\
 <li><strong>Input:</strong> training data <span class="math inline">\(X_i = (X_{i1}, \ldots, X_{ip})\)</span> and output class <span class="math inline">\(Y_i\)</span> for <span class="math inline">\(i = 1,\ldots, n\)</span></li>
 <li><strong>Input:</strong> test data <span class="math inline">\(X^* = (X^*_1, \ldots, X^*_p)\)</span> with unknown output class <span class="math inline">\(Y^*\)</span></li>
 <li><strong>Algorithm:</strong> Find <span class="math inline">\(X_{(1)},\ldots, X_{(k)}\)</span>, the <span class="math inline">\(k\)</span> nearest points to <span class="math inline">\(X^*\)</span></li>
-<li><strong>Output:</strong> Predicted class <span class="math inline">\(\hat{Y}^*\)</span>, the most common class from <span class="math inline">\(X_{(1)},\ldots, X_{(k)}\)</span></li>
+<li><strong>Output:</strong> Predicted class <span class="math inline">\(\widehat{Y}^*\)</span>, the most common class from <span class="math inline">\(X_{(1)},\ldots, X_{(k)}\)</span></li>
 </ul>
 </section>
 <section id="k-nearest-neighbors-1" class="slide level2">
@@ -951,7 +951,7 @@ Y &amp;= \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \epsilon,\\
 <li><strong>Input:</strong> training data <span class="math inline">\(X_i = (X_{i1}, \ldots, X_{ip})\)</span> and output class/value <span class="math inline">\(Y_i\)</span> for <span class="math inline">\(i = 1,\ldots, n\)</span></li>
 <li><strong>Input:</strong> test data <span class="math inline">\(X^* = (X^*_1, \ldots, X^*_p)\)</span> with unknown output class/value <span class="math inline">\(Y^*\)</span></li>
 <li><strong>Algorithm:</strong> Identify splits in <span class="math inline">\(X_i\)</span> that best predict <span class="math inline">\(Y_i\)</span></li>
-<li><strong>Output:</strong> Predicted class/value <span class="math inline">\(\hat{Y}^*\)</span> using splits</li>
+<li><strong>Output:</strong> Predicted class/value <span class="math inline">\(\widehat{Y}^*\)</span> using splits</li>
 </ul>
 </section>
 <section id="trees-1" class="slide level2">
