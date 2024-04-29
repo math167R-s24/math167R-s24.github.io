@@ -474,8 +474,7 @@ Y &amp;= \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \epsilon,\\
 <section id="making-predictions" class="slide level2">
 <h2>Making predictions</h2>
 <p>Now suppose we are given new testing data <span class="math inline">\(X^*_1,\ \ldots, X^*_{p}\)</span> and asked to predict the associated <span class="math inline">\(Y^∗\)</span>. Using our estimated linear model, the prediction is: <span class="math display">\[\widehat{Y}^* = \widehat\beta_0 + \widehat{\beta}_1 X^*_1 + \cdots + \widehat{\beta}_p X^*_p\]</span></p>
-<p>Given our prediction</p>
-<p><span class="math display">\[\widehat{Y} = \widehat\beta_0 + \widehat{\beta}_1 X^*_1 + \cdots + \widehat{\beta}_p X^*_p\]</span> We define the <strong>mean squared error</strong>, or <strong>mean squared prediction error</strong>, as</p>
+<p>We define the <strong>mean squared error</strong>, or <strong>mean squared prediction error</strong>, as</p>
 <p><span class="math display">\[\mathbb{E}[(Y^* -\widehat{Y}^*)^2].\]</span></p>
 <p>In other words, the test error is defined as the expected squared difference between a new prediction and the truth, where the expectation is taken over the population distribution of test data.</p>
 </section>
@@ -932,17 +931,8 @@ Y &amp;= \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \epsilon,\\
 <img data-src="images/choosek.png" class="r-stretch quarto-figure-center"></section>
 <section id="choosing-k-2" class="slide level2">
 <h2>Choosing k</h2>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/doubledescent.png"></p>
-</figure>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="https://en.wikipedia.org/wiki/Double_descent#/media/File:Double_descent_in_a_two-layer_neural_network_(Figure_3a_from_Rocks_et_al._2022).png"></p>
-<figcaption>Image Credit</figcaption>
-</figure>
-</div>
+
+<img data-src="images/doubledescent.png" class="r-stretch quarto-figure-center"><p><a href="https://en.wikipedia.org/wiki/Double_descent#/media/File:Double_descent_in_a_two-layer_neural_network_(Figure_3a_from_Rocks_et_al._2022).png">Image Credit</a></p>
 </section>
 <section id="trees" class="slide level2">
 <h2>Trees</h2>

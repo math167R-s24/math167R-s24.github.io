@@ -77,9 +77,7 @@ Suppose we have training data $X_{i1}, \ \ldots,\ X_{ip}, Y_i, \ i = 1,\ldots,n$
 
 Now suppose we are given new testing data $X^*_1,\ \ldots, X^*_{p}$ and asked to predict the associated $Y^∗$. Using our estimated linear model, the prediction is: $$\widehat{Y}^* = \widehat\beta_0 + \widehat{\beta}_1 X^*_1 + \cdots + \widehat{\beta}_p X^*_p$$
 
-Given our prediction
-
-$$\widehat{Y} = \widehat\beta_0 + \widehat{\beta}_1 X^*_1 + \cdots + \widehat{\beta}_p X^*_p$$ We define the **mean squared error**, or **mean squared prediction error**, as
+We define the **mean squared error**, or **mean squared prediction error**, as
 
 $$\mathbb{E}[(Y^* -\widehat{Y}^*)^2].$$
 
@@ -738,9 +736,7 @@ Cross-validation is a great tool to choose values for tuning parameters across a
 
 ![](images/doubledescent.png){fig-align="center"}
 
-
-
-![Image Credit](https://en.wikipedia.org/wiki/Double_descent#/media/File:Double_descent_in_a_two-layer_neural_network_(Figure_3a_from_Rocks_et_al._2022).png)
+[Image Credit](https://en.wikipedia.org/wiki/Double_descent#/media/File:Double_descent_in_a_two-layer_neural_network_(Figure_3a_from_Rocks_et_al._2022).png)
 
 
 ## Trees
