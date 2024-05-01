@@ -35,6 +35,18 @@ $$\text{logit}(p(x))=\log\left(\frac{p(x)}{1-p(x)}\right)=\beta_0+\beta_1 x$$
 
 where $p(x)$ represents the probability that an individual with covariate value $x$ experiences the response/event of interest.
 
+What is the interpretation of $\beta_0$? What about $\beta_1$?
+
+## Logistic regression
+
+Consider the model $$\log\left(\frac{p}{1-p}\right)=\beta_0+\beta_1 x$$ implies $$\frac{p}{1-p}=\exp(\beta_0+\beta_1 x)=\exp(\beta_0)\exp(\beta_1 x)=\exp(\beta_0)\exp(\beta_1)^x$$ When $x$ increases by one unit, the odds are multiplied by a factor of $\exp(\beta_1)$.
+
+## Odds vs. probability
+
+If the probability of rain tomorrow is 60%, what are the odds of rain occurring tomorrow?
+
+If the odds of rain occurring are 2:1, what is the probability of rain occurring?
+
 ## Example: *Challenger* disaster
 
 On January 28, 1986, the Challenger space shuttle suffered an accident shortly after launch, killing all crew members on board. An investigation suspected that damage to a set of critical parts called O-rings caused the disaster. It is believed that the damage is related to the temperature at launch time. The following data summarize data on O-rings for 23 shuttle missions.
@@ -79,13 +91,13 @@ summary(orings_res)
 
 ## Example: *Challenger* disaster
 
-Here, our estimate of $\beta_0$ is $b_0=15.04$ and our estimate of $\beta_1$ is $b_1=-.23$.
+Here, our estimate of $\beta_0$ is $\widehat{\beta}_0=15.04$ and our estimate of $\beta_1$ is $\widehat{\beta}_1=-.23$.
 
 We can interpret $\beta_1$ as follows: for each additional degree of ambient temperature, the log-odds of experiencing an O-ring failure decreases by $.23$.
 
 In other words, the odds changes by a factor of $\exp(.23)\approx.79$ as temperature increases by one degree.
 
-Note that the $p$-value for $\beta_1$ is significant at the $.05$ level, suggesting evidence that temperature is associated with O-ring failure.
+Note that the $p$-value for $\beta_1$ is significant at the $.05$ level, suggesting that we can reject the null hypothesis that $\beta_1=0$ (that temperature is not associated with O-ring failure).
 
 ## Example: *Challenger* disaster
 
@@ -119,27 +131,6 @@ fitted(orings_res)
 base_res <- glm((damaged > 0) ~ 1, data = orings, family = binomial)
 anova(orings_res, base_res, test = "F")
 ```
-
-# Other hypothesis tests
-
-## Fisher's exact test
-
-*Agresti (1990): A British woman claimed to be able to distinguish whether milk or tea was added to the cup first. To test, she was given 8 cups of tea, in four of which milk was added first. The null hypothesis is that there is no association between the true order of pouring and the woman's guess. The alternative that there is a positive association (that the odds ratio is greater than 1).*
-
-## Fisher's exact test
-
-```{r}
-#| echo: TRUE
-#| eval: TRUE
-#| cache: TRUE
-TeaTasting <-
-  matrix(c(3, 1, 1, 3),
-         nrow = 2,
-         dimnames = list(Guess = c("Milk", "Tea"),
-                         Truth = c("Milk", "Tea")))
-fisher.test(TeaTasting, alternative = "greater")
-```
-
 
 ## Analysis of Variance
 
@@ -264,6 +255,7 @@ $$y_i = (\beta_0+\beta_1x_{i1})+\epsilon_i$$
 with a **reduced** model:
 
 $$y_i=\beta_0+\epsilon_i$$
+## The General Linear $F$-test
 
 **Hypotheses**:
 
@@ -324,6 +316,8 @@ anova(my_lm)
 
 When we have more than one explanatory variable, the $F$-test is different from the univariate Wald test.
 
+## Example: `mtcars`
+
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
@@ -342,4 +336,24 @@ We can explicitly specify the full and reduced models:
 my_lm_full <- lm(mpg ~ hp + wt, data = mtcars)
 my_lm_reduced <- lm(mpg ~ 1, data = mtcars)
 anova(my_lm_full, my_lm_reduced)
+```
+
+# Other hypothesis tests
+
+## Fisher's exact test
+
+*Agresti (1990): A British woman claimed to be able to distinguish whether milk or tea was added to the cup first. To test, she was given 8 cups of tea, in four of which milk was added first. The null hypothesis is that there is no association between the true order of pouring and the woman's guess. The alternative that there is a positive association (that the odds ratio is greater than 1).*
+
+## Fisher's exact test
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| cache: TRUE
+TeaTasting <-
+  matrix(c(3, 1, 1, 3),
+         nrow = 2,
+         dimnames = list(Guess = c("Milk", "Tea"),
+                         Truth = c("Milk", "Tea")))
+fisher.test(TeaTasting, alternative = "greater")
 ```
