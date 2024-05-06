@@ -213,7 +213,7 @@ Suppose we perform a two-sided hypothesis test using a normal distribution and o
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
-2 * pnorm(q = 2.12, mean = 0, sd = 1)
+2 * pnorm(q = -2.12, mean = 0, sd = 1)
 ```
 
 ## The `r`, `p`, `d`, and `q` functions: binomial distribution
